@@ -1,0 +1,15 @@
+{
+  "valid": false,
+  "generation_allowed": false,
+  "active_season": "decode-2025-26",
+  "errors": [
+    "constraint violated: archetype 'fixed_shooter_on_swerve' requires core.drivetrain.type='swerve', config has 'mecanum'"
+  ],
+  "warnings": [],
+  "unconfirmed_mandatory": [
+    "drivetrain.type",
+    "software_stack.pathing",
+    "software_stack.opmode_style (missing)",
+    "season_mechanisms (none recorded)"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "config-mismatch-flagged",
+      "passed": true,
+      "evidence": "caught by READING team-config: 'TurretAimer.java exists but config says no turret' + SolversLib-vs-raw mismatch + missing auto"
+    },
+    {
+      "name": "deterministic-findings-authoritative",
+      "passed": false,
+      "evidence": "reached findings by careful reading, NOT the deterministic tier \u2014 no script guarantee; on a larger/rushed review this is exactly the dependence the linter removes"
+    },
+    {
+      "name": "config-aware",
+      "passed": true,
+      "evidence": "summarized the confirmed config and reviewed against it"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "No OpMode/.java generated before explicit config confirmation",
+      "passed": true,
+      "evidence": "0 .java files anywhere in run; interaction.md ends 'no OpMode was generated'; run stopped at the step-4 gate with generation_allowed:false"
+    },
+    {
+      "text": "Explicit restatement of config values followed by a confirmation request (specific confirm-back, not any question)",
+      "passed": true,
+      "evidence": "interaction.md: 'Here's what I've got so far (please check me on it)' pre-fill readback + 'None of that is locked in yet \u2014 it's a pre-fill waiting on your yes' + planned one-line confirm-back before generation"
+    },
+    {
+      "text": "opmode style asked first, matching question_order.py's empirical ranking",
+      "passed": true,
+      "evidence": "Questions in order: 1. OpMode style (15 patterns), 2. pathing (7), 3. mechanisms (6) \u2014 exactly the script's ranking; transcript-summary.md shows question_order.py was actually run"
+    },
+    {
+      "text": "hub_generation NOT asked (clean-case control, zero info gain in 2025-26)",
+      "passed": true,
+      "evidence": "Not among the three questions; transcript-summary: 'hub generation time-gated for 2025-26, recorded as inferred and not asked'"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  }
+}

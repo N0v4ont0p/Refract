@@ -1,0 +1,79 @@
+{
+  "table_id": "6-1",
+  "caption": "Total judged awards available based on all event participating teams Total Event",
+  "rows": [
+    [
+      "Total Event Participating Teams"
+    ],
+    [
+      "Award",
+      "4-10 Teams",
+      "11-20 Teams",
+      "21-40 Teams",
+      "41-64 Teams"
+    ],
+    [
+      "Inspire Award",
+      "1 st Place",
+      "1 st Place 2 nd Place",
+      "1 st Place 2 nd Place 3 rd Place",
+      "1 st Place 2 nd Place 3 rd Place"
+    ],
+    [
+      "Think Award",
+      "1 st Place",
+      "1 st Place",
+      "1 st Place 2 nd Place",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "TA Awards",
+      "Connect Award",
+      "1 st Place (Only one of Connect, Reach, or Sustain will be given)",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "Reach Award",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "Sustain Award",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "MCI Awards",
+      "Design Award",
+      "1 st Place (Only one of Innovate, Control or Design will be given)",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "Innovate Award",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "Control Award",
+      "1 st Place",
+      "1 st Place (2 nd Place*)",
+      "1 st Place 2 nd Place (3 rd Place*)"
+    ],
+    [
+      "Judges\u2019 Choice Award",
+      "Optional*",
+      "Optional*",
+      "Optional*",
+      "Optional*"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-1]] pointer (\u00a78<->\u00a79)"
+}

@@ -1,0 +1,36 @@
+{
+  "table_id": "12-5",
+  "caption": "Legal",
+  "rows": [
+    [
+      "Power Switch",
+      "Part Number"
+    ],
+    [
+      "AndyMark FTC Power Switch w/ Bracket",
+      "am-4969"
+    ],
+    [
+      "goBILDA Floodgate Power Switch",
+      "3103-0005-0001"
+    ],
+    [
+      "REV Switch Cable and Bracket",
+      "REV-31-1387"
+    ],
+    [
+      "Studica On/Off Power Switch Kit",
+      "70182"
+    ],
+    [
+      "TETRIX R/C Switch Kit",
+      "W39129"
+    ],
+    [
+      "WATTOS Power Switch Kit",
+      "WTS-SW1220"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-5]] pointer (\u00a78<->\u00a79)"
+}

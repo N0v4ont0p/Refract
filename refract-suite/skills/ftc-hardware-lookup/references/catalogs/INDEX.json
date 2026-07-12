@@ -1,0 +1,16 @@
+{
+  "purpose": "Coverage map + the abstain rule for the hardware catalog SEED. This seed is deliberately SMALL and deliberately honest: it holds only parts whose specs were verified against a manufacturer source, each value citing that source. It is expected to grow. What matters is that a gap is an ABSTENTION, never a guess.",
+  "abstain_rule": "If a requested part, spec, or field is NOT present in these catalog files, the answer is 'I don't have a verified spec for that — it's not in the catalog' plus a pointer to the manufacturer page. NEVER fill the gap from model memory. A confidently-recalled spec is exactly the failure this skill exists to prevent (see the gravity 385->386.4 and 21813 matrix cases in standing-principles.md). Coverage gaps are safe; fabricated specs are not.",
+  "covered": {
+    "catalogs/motors.json": ["5203-2402-0019 (goBILDA 5203 19.2:1)", "5203-2402-0014 (goBILDA 5203 13.7:1)", "REV-41-1291 (HD Hex bare)", "REV-41-1300 (Core Hex)"],
+    "catalogs/servos.json": ["2000-0025-0002 (goBILDA 2000 25-2 dual-mode servo)"]
+  },
+  "known_gaps_abstain_here": [
+    "Other 5203/5202 ratios (confirmed to exist: 1:1, 3.7, 26.9, 50.9, 99.5, 139; more may exist) — NOT seeded; abstain + point to gobilda.com. Do not interpolate an unseen ratio's stall torque from a seeded one (gearbox efficiency is measured per-ratio, not linear). NOTE: do not assume a ratio exists just because it is arithmetically plausible — e.g. there is NO 43.7:1 in this series (verified 2026-07-05); part existence is itself a lookup, not a guess.",
+    "REV UltraPlanetary assembled ratios beyond the bare HD Hex — abstain; the bare motor + a chosen cartridge ratio can be computed by motor_math.py, but assembled published figures are not seeded.",
+    "Batteries — for LEGALITY use the rules layer (manual-tables/table-12-4.json via ftc-rule-check), not this catalog. Detailed electrical specs: abstain.",
+    "Wheels — wheel_diameter_mm comes from the team's confirmed config (core-feature-model.yaml), not this catalog; motor_math.py takes it as a parameter.",
+    "Sensors (Limelight, Pinpoint, distance/color sensors) — not seeded; abstain."
+  ],
+  "math_note": "Numeric answers (gear-ratio output RPM/torque, wheel linear speed, encoder ticks per unit distance) are produced ONLY by scripts/motor_math.py reading these files — never generated. The script itself abstains (errors clearly) on a part not in the catalog."
+}

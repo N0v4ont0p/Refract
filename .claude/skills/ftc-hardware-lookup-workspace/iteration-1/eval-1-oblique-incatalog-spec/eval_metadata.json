@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "oblique-incatalog-spec",
+  "prompt": "quick sanity check before i wire up odometry \u2014 the 5203 19.2:1 yellowjackets we're running, whats their free speed and encoder resolution? need the ticks for a 96mm wheel",
+  "assertions": [
+    {
+      "name": "routed-to-data-not-memory",
+      "text": "The free speed (312 RPM) and encoder CPR (537.7) are sourced from the catalog / motor_math.py output, not stated from memory \u2014 the transcript shows the catalog file read or the script run"
+    },
+    {
+      "name": "source-cited",
+      "text": "The specs are presented with their source (the goBILDA page / catalog _source), not as bare numbers"
+    },
+    {
+      "name": "cpr-from-published-not-recomputed",
+      "text": "Encoder CPR is given as the published 537.7 (output shaft), NOT recomputed as 28*19.2=537.6; ticks/meter uses the published value (~1782.9 for 96mm)"
+    }
+  ]
+}

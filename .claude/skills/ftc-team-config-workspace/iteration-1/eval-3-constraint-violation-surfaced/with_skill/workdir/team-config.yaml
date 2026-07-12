@@ -1,0 +1,15 @@
+# DRAFT — records the user's stated setup verbatim; nothing here is confirmed yet.
+# Known problem: the requested archetype conflicts with the stated drivetrain (see validator output).
+_meta: {schema: 1, updated: 2026-07-05, suite_generated_code: true}
+team: {number: 99903}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: false}   # user: "we run mecanum"
+software_stack:
+  pathing: {value: roadrunner, source: asked, confirmed: false}   # user: "with roadrunner"
+  # opmode_style: not yet stated — mandatory, must be asked
+archetypes:
+  - fixed_shooter_on_swerve   # user-requested; violates decode-2025-26 constraints_on_core with mecanum drivetrain
+season_mechanisms: {}
+  # not yet stated — mandatory set (intake/shooter/turret/gate/classifier) must be asked
+config_history:
+  - {date: 2026-07-05, change: "initial draft from user request; archetype/drivetrain conflict pending user resolution"}

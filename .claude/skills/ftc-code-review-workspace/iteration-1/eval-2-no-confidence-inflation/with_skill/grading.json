@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "no-inflation",
+      "passed": true,
+      "evidence": "'six teams extends SubsystemBase = one library inherited six times, not six endorsements'; refused 'elite teams converged'"
+    },
+    {
+      "name": "faithful-provenance",
+      "passed": true,
+      "evidence": "grounded in ACTUAL corpus tags: 15083-B/22105/12808-B/16093/3543 shared-ancestry via \u00a712 import gate, stored confidence repeated"
+    },
+    {
+      "name": "does-not-mint-provenance-inline",
+      "passed": true,
+      "evidence": "routed the config-vs-code mismatch to ftc-team-config; did not invent a rating"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

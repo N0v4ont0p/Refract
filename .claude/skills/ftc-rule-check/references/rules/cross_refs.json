@@ -1,0 +1,792 @@
+{
+  "meta": {
+    "manual": "DECODE Competition Manual (2025-2026)",
+    "incorporates_through": "Team Update 32",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "retrieved": "2026-07-03",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "edges": [
+    {
+      "from_rule": "I102",
+      "to_rule": "E105",
+      "cite_text": "ted by the Event Director per E105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I103",
+      "to_rule": "A203",
+      "cite_text": "d structured interview time ( A203 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I103",
+      "to_rule": "A202",
+      "cite_text": "ested by the Event Director ( A202 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I103",
+      "to_rule": "I302",
+      "cite_text": "OT has passed inspection, per I302 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I301",
+      "to_rule": "R301",
+      "cite_text": "ations or companies. Also see R301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I304",
+      "to_rule": "I305",
+      "cite_text": "HES without re-inspection per I305 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I305",
+      "to_rule": "I304",
+      "cite_text": "HANISMS already inspected per I304 V",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I306",
+      "to_rule": "I305",
+      "cite_text": "the re-inspection process in I305 t",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "I308",
+      "to_rule": "A211",
+      "cite_text": "not assigned to any team. See A211 f",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "E802",
+      "to_rule": "A201",
+      "cite_text": "ard at the current event. Per A201 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "E802",
+      "to_rule": "A205",
+      "cite_text": "at least 10 minutes long, per A205 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A204",
+      "to_rule": "A208",
+      "cite_text": "al), D. 1 silent observer per A208 (",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A204",
+      "to_rule": "A209",
+      "cite_text": "fill accommodation needs per A209 (",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A209",
+      "to_rule": "A208",
+      "cite_text": "ion to the silent observer in A208 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A210",
+      "to_rule": "E117",
+      "cite_text": "dition to the restrictions of E117 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "T204",
+      "cite_text": "onsistent with each other per T204 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G304",
+      "cite_text": "S have set-up for the MATCH ( G304 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G301",
+      "cite_text": "tions is at risk of violating G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G301",
+      "cite_text": "et up is at risk of violating G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G304",
+      "cite_text": "heir ROBOT in accordance with G304 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G301",
+      "cite_text": "ments is at risk of violating G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "A215",
+      "to_rule": "G432",
+      "cite_text": "ING ELEMENTS must follow rule G432 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G101",
+      "to_rule": "G301",
+      "cite_text": "e-loaded SCORING ELEMENTS per G301 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G101",
+      "to_rule": "G303",
+      "cite_text": "d SCORING ELEMENTS per G301 , G303 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G101",
+      "to_rule": "G304",
+      "cite_text": "LEMENTS per G301 , G303 , and G304 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G101",
+      "to_rule": "G211",
+      "cite_text": "uring a MATCH, are covered by G211 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G206",
+      "to_rule": "G417",
+      "cite_text": "other\u2019s GATE in violation of G417 r",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G207",
+      "to_rule": "E102",
+      "cite_text": "using signaling devices. See E102 f",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G210",
+      "to_rule": "G408",
+      "cite_text": "ch that it is in violation of G408 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G211",
+      "to_rule": "G201",
+      "cite_text": "outlined in the orange box of G201 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G301",
+      "to_rule": "T206",
+      "cite_text": "FIELD, whichever is later. If T206 i",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G301",
+      "to_rule": "T206",
+      "cite_text": "s the later of the end of the T206 t",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G301",
+      "to_rule": "G208",
+      "cite_text": "ady. Teams that have violated G208 o",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G302",
+      "to_rule": "G301",
+      "cite_text": "y MATCH start in violation of G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G303",
+      "to_rule": "I305",
+      "cite_text": "pection, it is compliant with I305 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G303",
+      "to_rule": "R402",
+      "cite_text": "e correct ALLIANCE color (see R402 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G304",
+      "to_rule": "R101",
+      "cite_text": "s STARTING CONFIGURATION (see R101 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G304",
+      "to_rule": "R102",
+      "cite_text": "G CONFIGURATION (see R101 and R102 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G401",
+      "to_rule": "T202",
+      "cite_text": "ction of the Head REFEREE per T202 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G401",
+      "to_rule": "G211",
+      "cite_text": "ered egregious behavior under G211 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G403",
+      "to_rule": "G211",
+      "cite_text": "ered egregious behavior under G211 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G408",
+      "to_rule": "G211",
+      "cite_text": "vel of egregious to trigger a G211 v",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G410",
+      "to_rule": "T202",
+      "cite_text": "their ROBOT by a REFEREE per T202 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G412",
+      "to_rule": "G407",
+      "cite_text": "ge is specifically covered in G407 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G412",
+      "to_rule": "G407",
+      "cite_text": "pecifically covered in G407 . G407 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G412",
+      "to_rule": "R205",
+      "cite_text": "a liquid or fine solid as in R205 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G412",
+      "to_rule": "R201",
+      "cite_text": "in R205 , - damaging TILE in R201 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G413",
+      "to_rule": "G407",
+      "cite_text": "ept for SCORING ELEMENTS (per G407 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G414",
+      "to_rule": "R105",
+      "cite_text": "expansion limits outlined in R105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G414",
+      "to_rule": "R105",
+      "cite_text": "pansion limit as described in R105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G415",
+      "to_rule": "R105",
+      "cite_text": "expansion limits outlined in R105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G415",
+      "to_rule": "R105",
+      "cite_text": "pansion limit as described in R105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G418",
+      "to_rule": "G417",
+      "cite_text": "al of 6 MAJOR FOULS - 1 under G417.A",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G418",
+      "to_rule": "G417",
+      "cite_text": "eing awarded PATTERN RP under G417.A",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G419",
+      "to_rule": "G420",
+      "cite_text": ".5 Opponent Interaction Note, G420 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G419",
+      "to_rule": "G421",
+      "cite_text": "nt Interaction Note, G420 and G421 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G420",
+      "to_rule": "R609",
+      "cite_text": "switch so it is protected per R609 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G424",
+      "to_rule": "G425",
+      "cite_text": "r the exception in G424 . A , G425 w",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G424",
+      "to_rule": "G423",
+      "cite_text": "der other penalties including G423 o",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G424",
+      "to_rule": "G211",
+      "cite_text": "including G423 or escalate to G211 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G426",
+      "to_rule": "G423",
+      "cite_text": "der other penalties including G423 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G428",
+      "to_rule": "G430",
+      "cite_text": "o so without violating G428 , G430 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G428",
+      "to_rule": "G434",
+      "cite_text": "t violating G428 , G430 , and G434 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G428",
+      "to_rule": "G432",
+      "cite_text": "ING ELEMENTS must follow rule G432 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G432",
+      "to_rule": "G431",
+      "cite_text": "nd any humans in violation of G431 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "G434",
+      "to_rule": "G211",
+      "cite_text": "ious behavior and handled per G211 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R101",
+      "to_rule": "I304",
+      "cite_text": "nterchangeable MECHANISMS per I304 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R101",
+      "to_rule": "R105",
+      "cite_text": "compliance with this rule and R105 i",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R104",
+      "to_rule": "G209",
+      "cite_text": "ng a MATCH will be handled by G209 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R105",
+      "to_rule": "G414",
+      "cite_text": "0 cm) when fully expanded per G414 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R105",
+      "to_rule": "G415",
+      "cite_text": "C. Within the limitations per G415 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R105",
+      "to_rule": "G414",
+      "cite_text": "ubject to penalties listed in G414 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R105",
+      "to_rule": "G415",
+      "cite_text": "penalties listed in G414 and G415 f",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R206",
+      "to_rule": "G407",
+      "cite_text": "e violations of this rule and G407 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R301",
+      "to_rule": "I301",
+      "cite_text": "JOR MECHANISMS (as defined in I301 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R307",
+      "to_rule": "E107",
+      "cite_text": "and off-site work. Note that E107 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R307",
+      "to_rule": "E108",
+      "cite_text": "site work. Note that E107 and E108 i",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R402",
+      "to_rule": "R403",
+      "cite_text": "ibited: A. those required per R403 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R502",
+      "to_rule": "R505",
+      "cite_text": "are ultimately used with (per R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R503",
+      "to_rule": "R501",
+      "cite_text": "allowable actuator lists per R501 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R503",
+      "to_rule": "R502",
+      "cite_text": "e actuator lists per R501 and R502 f",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R504",
+      "to_rule": "R503",
+      "cite_text": "onal wiring may be added (per R503 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R505",
+      "to_rule": "R501",
+      "cite_text": "omputing devices permitted in R501 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R605",
+      "to_rule": "R601",
+      "cite_text": "other than those allowed per R601 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R605",
+      "to_rule": "R602",
+      "cite_text": "an those allowed per R601 and R602 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R609",
+      "to_rule": "R602",
+      "cite_text": "ROBOT (except as specified by R602 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R612",
+      "to_rule": "R505",
+      "cite_text": "power regulating devices (per R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R613",
+      "to_rule": "R501",
+      "cite_text": "not an actuator (specified in R501 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R613",
+      "to_rule": "R505",
+      "cite_text": "gulation device (specified in R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R614",
+      "to_rule": "R505",
+      "cite_text": "ll power regulating devices ( R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R617",
+      "to_rule": "R602",
+      "cite_text": "ved COTS USB battery Pack per R602 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R618",
+      "to_rule": "R609",
+      "cite_text": "power regulating device (per R609 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R618",
+      "to_rule": "R613",
+      "cite_text": "power regulating devices (per R613 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R618",
+      "to_rule": "R505",
+      "cite_text": "ower (except those allowed by R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R619",
+      "to_rule": "R505",
+      "cite_text": "power regulation device (per R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R619",
+      "to_rule": "R614",
+      "cite_text": "power regulation device (per R614 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R619",
+      "to_rule": "R617",
+      "cite_text": "ernally powered USB hubs (per R617 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R702",
+      "to_rule": "R703",
+      "cite_text": "ermitted in this rule or rule R703 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R703",
+      "to_rule": "R702",
+      "cite_text": "y than other coprocessors per R702 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R703",
+      "to_rule": "R702",
+      "cite_text": "y than other coprocessors per R702 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R703",
+      "to_rule": "R715",
+      "cite_text": "sors that are prohibited. See R715 f",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R709",
+      "to_rule": "R706",
+      "cite_text": "T, except those specified per R706 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R709",
+      "to_rule": "R708",
+      "cite_text": "those specified per R706 and R708 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R714",
+      "to_rule": "R715",
+      "cite_text": "nd optical vision sensors per R715 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R715",
+      "to_rule": "R703",
+      "cite_text": "sion coprocessors allowed per R703 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R801",
+      "to_rule": "R207",
+      "cite_text": "or those explicitly listed in R207 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "R901",
+      "to_rule": "R704",
+      "cite_text": "oved Android Device from rule R704 w",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T203",
+      "to_rule": "T201",
+      "cite_text": "ority of the Head REFEREE per T201 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T206",
+      "to_rule": "G301",
+      "cite_text": "next MATCH for the purpose of G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T206",
+      "to_rule": "G301",
+      "cite_text": "next MATCH for the purpose of G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T206",
+      "to_rule": "G301",
+      "cite_text": "next MATCH for the purpose of G301 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T207",
+      "to_rule": "T206",
+      "cite_text": "es. Regardless of play order, T206 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T207",
+      "to_rule": "G301",
+      "cite_text": "dless of play order, T206 and G301 r",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T302",
+      "to_rule": "T401",
+      "cite_text": "ruling or MATCH results, per T401 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T402",
+      "to_rule": "T401",
+      "cite_text": "a MATCH using the process per T401 t",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T403",
+      "to_rule": "I102",
+      "cite_text": "included in the schedule per I102 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T403",
+      "to_rule": "E105",
+      "cite_text": "in the schedule per I102 and E105 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T403",
+      "to_rule": "T206",
+      "cite_text": "l receive a minimum break per T206 b",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T705",
+      "to_rule": "T206",
+      "cite_text": "MATCH, whichever is later per T206 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T705",
+      "to_rule": "T206",
+      "cite_text": "all teams are ready sooner ( T206 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "A201",
+      "cite_text": "io Submissions As outlined in A201 a",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "A202",
+      "cite_text": "sions As outlined in A201 and A202 ,",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "E117",
+      "cite_text": "ides restrictions outlined in E117 d",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "G301",
+      "cite_text": "ay the start of the MATCH per G301 b",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "T704",
+      "cite_text": "er team support functions per T704 .",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "R501",
+      "cite_text": "not an actuator (specified in R501 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "R505",
+      "cite_text": "gulation device (specified in R505 )",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "R901",
+      "cite_text": "communicate with a ROBOT per R901 F",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "A201",
+      "cite_text": "with requirements outlined in A201 R",
+      "to_rule_found": true
+    },
+    {
+      "from_rule": "T803",
+      "to_rule": "R701",
+      "cite_text": "ntrol the ROBOT as defined in R701 R",
+      "to_rule_found": true
+    }
+  ]
+}

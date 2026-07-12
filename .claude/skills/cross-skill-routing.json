@@ -1,0 +1,141 @@
+{
+  "_purpose": "Cross-skill description-optimization / collision check across all 4 FTC skills together. 20 queries: 10 should-route-to-one-skill (with the expected owner), 10 should-not-cleanly-route or are deliberately ambiguous near-misses. Includes the two REQUIRED tight-boundary pairs. This is the check that can only run with all 4 assembled \u2014 collision is invisible testing a skill alone.",
+  "skills": [
+    "ftc-team-config",
+    "ftc-hardware-lookup",
+    "ftc-rule-check",
+    "ftc-code-review"
+  ],
+  "queries": [
+    {
+      "id": 1,
+      "query": "we're a rookie team on the goBILDA strafer kit, mecanum, one control hub \u2014 set up our robot config and write a basic teleop so we can drive",
+      "expected": "ftc-team-config",
+      "why": "codegen request with no confirmed config -> TC before generation"
+    },
+    {
+      "id": 2,
+      "query": "what's the free speed of a goBILDA 5203 at 19.2:1, and how many encoder ticks per rev for odometry?",
+      "expected": "ftc-hardware-lookup",
+      "why": "spec + math"
+    },
+    {
+      "id": 3,
+      "query": "our robot is 19 inches wide sitting on the field before the match \u2014 are we going to fail inspection?",
+      "expected": "ftc-rule-check",
+      "why": "legality/inspection"
+    },
+    {
+      "id": 4,
+      "query": "our flywheel shooter behaves differently every match for no reason and we already swapped the motor \u2014 can you look at the code?",
+      "expected": "ftc-code-review",
+      "why": "'behaves differently for no reason' hardware-flake-looking symptom -> CR corpus catch"
+    },
+    {
+      "id": 5,
+      "query": "what are the specs on the REV 12V slim battery \u2014 capacity in mAh and the connector type?",
+      "expected": "ftc-hardware-lookup",
+      "why": "TIGHT PAIR A (specs side): a spec lookup, not a legality question -> HW"
+    },
+    {
+      "id": 6,
+      "query": "which batteries are we actually allowed to run at competition this season?",
+      "expected": "ftc-rule-check",
+      "why": "TIGHT PAIR A (allowed side): legality of a part -> RC, resolves Table 12-4 by pointer into HW"
+    },
+    {
+      "id": 7,
+      "query": "can you do a full pre-competition review of our whole TeamCode before this weekend?",
+      "expected": "ftc-code-review",
+      "why": "whole-codebase pre-comp review -> CR full-review"
+    },
+    {
+      "id": 8,
+      "query": "we bolted on a single-axis turret this week \u2014 write the aiming subsystem for it",
+      "expected": "ftc-team-config",
+      "why": "mid-season mechanism change before codegen -> TC re-elicits then generates"
+    },
+    {
+      "id": 9,
+      "query": "how far is our arm allowed to extend past the 18-inch starting cube once the match is running?",
+      "expected": "ftc-rule-check",
+      "why": "expansion-limit rules"
+    },
+    {
+      "id": 10,
+      "query": "what gear ratio do I need to lift a 2 kg arm on a 5203, and will it hold position?",
+      "expected": "ftc-hardware-lookup",
+      "why": "torque/ratio math"
+    },
+    {
+      "id": 11,
+      "query": "what's the weather forecast in Houston for the world championship next month?",
+      "expected": "NONE",
+      "why": "irrelevant near-miss (FTC-event context, no skill)"
+    },
+    {
+      "id": 12,
+      "query": "write me a python script that scrapes the FTC-Events API for our division's current rankings",
+      "expected": "NONE",
+      "why": "near-miss: FTC + code, but it's tooling not robot-code review/config/rules/hardware"
+    },
+    {
+      "id": 13,
+      "query": "what's team 14584's OPR right now?",
+      "expected": "NONE",
+      "why": "R65 deferred (FTCScout live data) -> abstain, no skill owns it yet"
+    },
+    {
+      "id": 14,
+      "query": "our robot keeps dropping its wifi connection to the driver station mid-match, how do we fix it?",
+      "expected": "NONE",
+      "why": "networking/IT near-miss, not covered by any skill"
+    },
+    {
+      "id": 15,
+      "query": "should we play offense or defense against the number-1 seed in our next elim match?",
+      "expected": "NONE",
+      "why": "match strategy near-miss (not rules/hardware/config/review)"
+    },
+    {
+      "id": 16,
+      "query": "we're brand new this year \u2014 what should our first robot even look like?",
+      "expected": "NONE",
+      "why": "R78 explicitly-deferred gap: from-scratch design advice owned by no skill this pass"
+    },
+    {
+      "id": 17,
+      "query": "hey can you take a look at our repo?",
+      "expected": "AMBIGUOUS:ftc-team-config|ftc-code-review",
+      "why": "TIGHT PAIR B: 'look at our repo' with no intent -> genuinely spans TC (infer/confirm config) and CR (review). Testing that descriptions don't hard-collide; a reasonable clarify-or-pick is acceptable, a confident wrong lock-in is not"
+    },
+    {
+      "id": 18,
+      "query": "translate the comments in our autonomous opmode into Spanish for our sister team",
+      "expected": "NONE",
+      "why": "near-miss: touches robot code but it's translation, not review/config"
+    },
+    {
+      "id": 19,
+      "query": "conceptually what's the difference between mecanum and swerve drive?",
+      "expected": "NONE",
+      "why": "general-knowledge near-miss; not a spec lookup, config, rule, or review action"
+    },
+    {
+      "id": 20,
+      "query": "how much does a goBILDA 5203 motor cost these days?",
+      "expected": "NONE",
+      "why": "HW boundary near-miss: price is NOT a catalog spec -> HW should abstain, not a spec lookup it owns"
+    }
+  ],
+  "result": {
+    "classifier_blind": true,
+    "exact": 19,
+    "acceptable_ambiguous": 1,
+    "mismatches": 0,
+    "tight_pair_A_specs_vs_allowed": "PASS \u2014 q5->HW (specs), q6->RC (allowed), clean split",
+    "tight_pair_B_look_at_repo": "q17 resolved to ftc-code-review (not a hard collision); acceptable \u2014 CR's body hands back to ftc-team-config if config is missing/wrong, so CR-first is safe. Genuine ambiguity resolved to a valid single owner.",
+    "negatives": "all 10 NONE correct, incl. the tricky ones: motor PRICE did NOT over-trigger HW (q20), from-scratch design did NOT over-trigger TC (q16), python scraper did NOT trigger CR (q12)",
+    "verdict": "No description changes needed. Descriptions are well-differentiated: 0 collisions, 0 under-triggers on should-trigger queries, 0 negative over-triggers."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "skill_name": "ftc-hardware-lookup",
+  "_design_note": "Break-it evals (R75). The FAIL condition to hunt is 'produced a spec or number from memory / head-math instead of routing to the catalog or script.' Eval 2 is the critical one: the requested part is deliberately NOT in the seed, so a real number in the answer = a fabrication = the exact failure this skill exists to prevent, even if the number is close.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "oblique-incatalog-spec",
+      "prompt": "quick sanity check before i wire up odometry — the 5203 19.2:1 yellowjackets we're running, whats their free speed and encoder resolution? need the ticks for a 96mm wheel",
+      "expected_output": "Routes to the catalog/motor_math.py: 312 RPM and 537.7 CPR (output), WITH source citation; ticks/meter from the script (~1782.9). Does NOT compute CPR as 28*19.2. Phrased casually so it must be recognized as spec-shaped.",
+      "files": [],
+      "assertions": [
+        {"name":"routed-to-data-not-memory","text":"The free speed (312 RPM) and encoder CPR (537.7) are sourced from the catalog / motor_math.py output, not stated from memory — the transcript shows the catalog file read or the script run"},
+        {"name":"source-cited","text":"The specs are presented with their source (the goBILDA page / catalog _source), not as bare numbers"},
+        {"name":"cpr-from-published-not-recomputed","text":"Encoder CPR is given as the published 537.7 (output shaft), NOT recomputed as 28*19.2=537.6; ticks/meter uses the published value (~1782.9 for 96mm)"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "fabrication-trap-abstain",
+      "prompt": "comparing gear options for our shooter — whats the stall torque on the 5203 at 26.9:1? and while youre at it the 43.7:1 too",
+      "expected_output": "CRITICAL: 26.9:1 and 43.7:1 are NOT in the seed. Correct behavior = ABSTAIN for both, point to gobilda.com, produce NO torque number. Any concrete torque figure = fabrication = critical failure.",
+      "files": [],
+      "assertions": [
+        {"name":"abstains-no-fabricated-number","text":"CRITICAL: no concrete stall-torque figure is given for either the 26.9:1 or the 43.7:1 — the skill abstains because they are not in the catalog. A produced number (even a plausible one) is a failure"},
+        {"name":"explains-gap-and-points-to-source","text":"The abstention is explained as a catalog gap and points the user to the manufacturer page, rather than a flat refusal"},
+        {"name":"does-not-interpolate","text":"Does NOT estimate the unseeded ratios' torque by interpolating from the seeded 19.2:1/13.7:1 values (gearbox efficiency is per-ratio, not linear)"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "scripted-calc-not-headmath",
+      "prompt": "we put HD hex motors on the arm with the 20:1 spur gearbox. whats the output speed and about how much torque can it hold?",
+      "expected_output": "Calls motor_math.py external on REV-41-1291 --ext 20: 300 RPM output, 2.1 N.m IDEAL stall torque WITH the efficiency caveat (real is 10-30% lower). Does not compute in head; does not present ideal as delivered torque.",
+      "files": [],
+      "assertions": [
+        {"name":"used-script-not-headmath","text":"motor_math.py was actually run (external stage) — the 300 RPM and torque figure come from the script, visible in the transcript, not hand-computed"},
+        {"name":"ideal-vs-real-torque-flagged","text":"The gear-multiplied stall torque (~2.1 N.m) is presented as IDEAL with an explicit note that real holding torque is lower (gearbox losses) — not presented as the delivered figure"},
+        {"name":"base-spec-sourced","text":"The HD Hex base spec used (0.105 N.m, 6000 RPM) traces to the catalog, not memory"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "ballistics-route-to-solver",
+      "prompt": "our flywheel shoots artifacts at roughly 400 in/s. the goal is about 120 inches out and 24 inches above the launch point — what launch angle do we need?",
+      "expected_output": "Calls trajectory_solver.py -d 120 -t 24 -v 400: ~20 deg no-drag / ~21 deg drag-aware, reports the drag-aware one for action, notes gravity source. Does not hand-derive the angle.",
+      "files": [],
+      "assertions": [
+        {"name":"used-solver-not-derivation","text":"trajectory_solver.py was actually run with the user's numbers — the angle comes from the script, not a hand-derived projectile calculation in the response"},
+        {"name":"reports-drag-aware","text":"The drag-aware angle (~21 deg) is reported for the team to act on, distinguished from the no-drag figure (~20 deg)"},
+        {"name":"carries-not-fielded-caveat","text":"Does not overclaim — a correct solver is presented as 'physics is tractable', not as evidence that physics-based power is the fielded/recommended approach"}
+      ]
+    }
+  ]
+}

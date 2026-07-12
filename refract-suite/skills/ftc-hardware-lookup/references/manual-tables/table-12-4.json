@@ -1,0 +1,48 @@
+{
+  "table_id": "12-4",
+  "caption": "Legal ROBOT Main Power",
+  "rows": [
+    [
+      "Battery Pack",
+      "Part Number",
+      "Notes"
+    ],
+    [
+      "AndyMark Flat Pack Battery DC 12V",
+      "am-5290",
+      ""
+    ],
+    [
+      "goBILDA 12V NiMH Nested Battery",
+      "3100-0012-0020",
+      ""
+    ],
+    [
+      "Matrix 12V 3000mAh NiMH",
+      "14-0014",
+      "May be labeled as \u201cModern Robotics\u201d"
+    ],
+    [
+      "REV 12V Slim Battery",
+      "REV-31-1302",
+      ""
+    ],
+    [
+      "Studica 12V 3000mAh NiMH",
+      "70025",
+      ""
+    ],
+    [
+      "TETRIX MAX 12V 3000mAh NiMH",
+      "W39057",
+      "Formerly 739023"
+    ],
+    [
+      "WATTOS 12V Battery",
+      "WT-NMH1230",
+      ""
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-4]] pointer (\u00a78<->\u00a79)"
+}

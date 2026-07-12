@@ -1,0 +1,28 @@
+{
+  "table_id": "10-5",
+  "caption": "YELLOW and RED CARD application",
+  "rows": [
+    [
+      "Time YELLOW or RED CARDS earned:",
+      "MATCH to which CARD is applied:"
+    ],
+    [
+      "Prior to Qualification MATCHES",
+      "REFEREES may or may not be present at the FIELD before the start of Qualification MATCHES. With input from event staff, the Head REFEREE may opt to perpetuate a VERBAL WARNING or YELLOW CARD earned prior to Qualification MATCHES to the first Qualification MATCH for particularly egregious behavior."
+    ],
+    [
+      "during the Qualification MATCHES",
+      "team\u2019s current (or just completed) MATCH in which they are not a SURROGATE. For SURROGATE MATCHES the card is applied to the team\u2019s previous Qualification MATCH."
+    ],
+    [
+      "between the end of Qualification MATCHES and the start of Playoff MATCHES",
+      "ALLIANCE\u2019S first Playoff MATCH"
+    ],
+    [
+      "during the Playoff MATCHES",
+      "ALLIANCE\u2019S current (or just completed) MATCH"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-5]] pointer (\u00a78<->\u00a79)"
+}

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "CRITICAL: no fabricated torque for 26.9 or 43.7 \u2014 abstains",
+      "passed": true,
+      "evidence": "motor_math.py spec returned abstain/exit3 for both SKUs; zero torque number produced; the load-bearing pass"
+    },
+    {
+      "text": "Explains gap + points to source",
+      "passed": true,
+      "evidence": "named the catalog gap, pointed to gobilda.com, offered to compute once verified numbers supplied"
+    },
+    {
+      "text": "Does not interpolate from seeded ratios",
+      "passed": true,
+      "evidence": "explicitly did NOT interpolate; cited only the seeded 19.2:1 as a sourced contrast with ideal-vs-real caveat"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

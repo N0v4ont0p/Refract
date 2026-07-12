@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "citation-verify-trap",
+  "prompt": "our robot measures about 19 inches wide sitting on the field right before the match starts. are we gonna pass inspection or is that a problem?",
+  "assertions": [
+    {
+      "name": "correct-verdict-R101",
+      "text": "Verdict is illegal/non-compliant, grounded in R101 (STARTING CONFIGURATION 18-inch cube) \u2014 the real governing rule, retrieved not recalled"
+    },
+    {
+      "name": "every-citation-verified-exists",
+      "text": "Every rule ID cited in the answer actually exists in the manual (would pass rules.py verify); no hallucinated/fabricated rule number appears"
+    },
+    {
+      "name": "grounded-not-from-memory",
+      "text": "The rule text/number came from rules.py lookup (visible in transcript), not stated from memory"
+    }
+  ]
+}

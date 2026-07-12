@@ -1,0 +1,87 @@
+{
+  "table_id": "13-3",
+  "caption": "2-ALLIANCE playoff bracket typical timing",
+  "rows": [
+    [
+      "Round",
+      "MATCH",
+      "Upper/ Lower",
+      "",
+      "",
+      "",
+      "Gap (min)",
+      "Next MATCH (MATCH # (ALLIANCE color))",
+      ""
+    ],
+    [
+      "FIELD",
+      "Blue",
+      "Red",
+      "Blue",
+      "Red",
+      "Winner",
+      "Loser",
+      "Estimated Start (min)"
+    ],
+    [
+      "8-minute break",
+      "Judges\u2019 Choice* (1), Innovate/Design/Control Award (1)",
+      "0"
+    ],
+    [
+      "Finals",
+      "1",
+      "",
+      "1",
+      "A2",
+      "A1",
+      "",
+      "",
+      "M2",
+      "M2",
+      "15"
+    ],
+    [
+      "8-minute break",
+      "Sustain/Reach/Connect Award (1)",
+      "18"
+    ],
+    [
+      "Finals",
+      "2",
+      "",
+      "1",
+      "A2",
+      "A1",
+      "0:15",
+      "0:15",
+      "M3*",
+      "M3*",
+      "33"
+    ],
+    [
+      "8-minute break",
+      "Think Award (1)",
+      "36"
+    ],
+    [
+      "Finals",
+      "3*",
+      "",
+      "1",
+      "A2",
+      "A1",
+      "0:10",
+      "0:10",
+      "",
+      "",
+      "46"
+    ],
+    [
+      "Awards: Compass*, Finalists, Winners, and Inspire Award (1)",
+      "49"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:13-3]] pointer (\u00a78<->\u00a79)"
+}

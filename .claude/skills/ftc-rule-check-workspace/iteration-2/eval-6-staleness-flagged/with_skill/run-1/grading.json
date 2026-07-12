@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "staleness-surfaced",
+      "passed": true,
+      "evidence": "check_freshness --live-tu 34 -> STALE (32<34); answer explicitly flags corpus is behind TU33/34"
+    },
+    {
+      "name": "not-silently-answered",
+      "passed": true,
+      "evidence": "pointed user to live manual with a 30s verify step; did not present snapshot as current"
+    },
+    {
+      "name": "still-gives-local-verdict",
+      "passed": true,
+      "evidence": "gave R101 18-in verdict WITH caveat; did not downgrade to false ambiguous"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

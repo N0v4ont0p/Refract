@@ -1,0 +1,62 @@
+{
+  "_schema": "Every numeric spec is a manufacturer-published value. Each part carries a `_source` block (url, tier, retrieved date). No field may be surfaced to a user without its source — that is the whole point of this file (R28/R35/R68). Values are stored AS PUBLISHED; unit conversions (kg.cm -> N.m etc.) are done deterministically by scripts/motor_math.py, never pre-baked here, so the catalog stays a pure record of sourced facts.",
+  "_tier_legend": {"1": "manufacturer product page / official docs", "2": "community/third-party — must be labeled tier-2 downstream"},
+  "parts": {
+    "5203-2402-0019": {
+      "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+      "type": "brushed_dc_gearmotor",
+      "motor_base": "RS-555",
+      "nominal_voltage_v": 12,
+      "gear_ratio_label": "19.2:1",
+      "no_load_rpm_output": 312,
+      "no_load_current_a": 0.25,
+      "stall_torque_published": {"value": 24.3, "unit": "kg.cm", "also": {"value": 338, "unit": "oz-in"}},
+      "stall_current_a": 9.2,
+      "encoder_cpr_output": 537.7,
+      "encoder_cpr_output_note": "Published at the OUTPUT shaft; reflects the exact (non-rounded) gear ratio. Do NOT recompute from the rounded 19.2 label — 537.7/28 = 19.20 exact. goBILDA labels this 'PPR' but it is counts/rev.",
+      "_source": {"url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/", "tier": 1, "retrieved": "2026-07-05", "note": "manufacturer product page; max output power not listed"}
+    },
+    "5203-2402-0014": {
+      "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 13.7:1",
+      "type": "brushed_dc_gearmotor",
+      "motor_base": "RS-555",
+      "nominal_voltage_v": 12,
+      "gear_ratio_label": "13.7:1",
+      "no_load_rpm_output": 435,
+      "no_load_current_a": 0.25,
+      "stall_torque_published": {"value": 18.7, "unit": "kg.cm", "also": {"value": 260, "unit": "oz-in"}},
+      "stall_current_a": 9.2,
+      "encoder_cpr_output": 384.5,
+      "encoder_cpr_output_note": "384.5/28 = 13.73 exact ratio; the 13.7 label is rounded. Use this published value for tick math, not 28*13.7.",
+      "_source": {"url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/", "tier": 1, "retrieved": "2026-07-05", "note": "manufacturer product page; max output power not listed"}
+    },
+    "REV-41-1291": {
+      "name": "REV Robotics HD Hex Motor (bare, no gearbox)",
+      "type": "brushed_dc_motor",
+      "motor_base": "550-class",
+      "nominal_voltage_v": 12,
+      "gear_ratio_label": "1:1 (bare motor)",
+      "free_speed_rpm": 6000,
+      "no_load_current_a": 0.4,
+      "stall_torque_published": {"value": 0.105, "unit": "N.m"},
+      "stall_current_a": 8.5,
+      "max_output_power_w": 15,
+      "encoder_cpr_motor": 28,
+      "encoder_cpr_motor_note": "28 counts/rev at the MOTOR shaft (bare). With a gearbox, output CPR = 28 * gearbox_ratio — computed by motor_math.py from the chosen ratio, since this bare motor ships without one.",
+      "gearbox_options_listed": {"ultraplanetary_cartridges": ["4:1", "5:1"], "spur": ["20:1", "40:1"]},
+      "_source": {"url": "https://docs.revrobotics.com/duo-build/motion/motors/hd-hex-motor", "tier": 1, "retrieved": "2026-07-05", "note": "official REV docs"}
+    },
+    "REV-41-1300": {
+      "name": "REV Robotics Core Hex Motor",
+      "type": "brushed_dc_gearmotor",
+      "nominal_voltage_v": 12,
+      "gear_ratio_label": "72:1",
+      "no_load_rpm_output": 125,
+      "stall_torque_published": {"value": 3.2, "unit": "N.m"},
+      "stall_current_a": 4.4,
+      "encoder_cpr_output": 288,
+      "encoder_cpr_output_note": "288 counts/rev at the OUTPUT shaft (integrated gearbox).",
+      "_source": {"url": "https://www.revrobotics.com/rev-41-1300/", "tier": 1, "retrieved": "2026-07-05", "note": "manufacturer product page; free current not listed"}
+    }
+  }
+}

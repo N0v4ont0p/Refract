@@ -1,0 +1,12 @@
+_meta: {schema: 1}
+team: {number: 45021, experience: veteran}
+drivetrain: {type: {value: mecanum, confirmed: true}}
+software_stack: {opmode_style: {value: raw_linear_opmode, confirmed: true}, pathing: {value: none, confirmed: true}}
+fabrication: {capability: {value: cnc_aluminum_or_carbon, confirmed: true}}
+season_mechanisms:
+  intake: {value: roller, confirmed: true}
+  shooter: {value: flywheel, confirmed: true}
+  turret: {value: none, confirmed: true}
+  gate_mechanism: {value: none, confirmed: true}
+  classifier_interaction: {value: none, confirmed: true}
+  endgame_parking: {value: mandatory, confirmed: true}

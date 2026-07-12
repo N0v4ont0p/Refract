@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Traverses to G414/G415 limit rules",
+      "passed": true,
+      "evidence": "cited R105 + G414 (horizontal) + G415 (vertical, 38in endgame exception) + R101 via one-hop cluster; gave 18in hard-stop-not-software (R105.A) and 38in final-20s detail"
+    },
+    {
+      "text": "Citations verified",
+      "passed": true,
+      "evidence": "all 4 rules.py verify exit 0"
+    },
+    {
+      "text": "Grounded not memory",
+      "passed": true,
+      "evidence": "lookup, not recall"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

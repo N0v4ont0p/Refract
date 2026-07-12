@@ -1,0 +1,31 @@
+{
+  "table_id": "6-5",
+  "caption": "Reach Award Criteria Reach Award Criteria Required 1 Team must discuss, describe",
+  "rows": [
+    [
+      "Reach Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must discuss, describe, display, or document their outreach objectives and how their outreach activities support the FIRST community."
+    ],
+    [
+      "Required",
+      "2",
+      "Team must discuss, describe, display, or document their successful recruitment of new teams, or coaches, or mentors and/or volunteers who are not otherwise active within the FIRST community."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Is an ambassador for FIRST programs in a way that makes FIRST loud."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Has a creative and evolving approach to outreach materials that market their team and FIRST ."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-5]] pointer (\u00a78<->\u00a79)"
+}

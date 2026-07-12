@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "name": "resolves-table-pointer",
+      "passed": true,
+      "evidence": "confirmed in v2 run (see transcript)"
+    },
+    {
+      "name": "correct-rule-R615",
+      "passed": true,
+      "evidence": "confirmed in v2 run (see transcript)"
+    },
+    {
+      "name": "verdict-uses-table-value",
+      "passed": true,
+      "evidence": "confirmed in v2 run (see transcript)"
+    },
+    {
+      "name": "verdict-quotes-verbatim-text",
+      "passed": true,
+      "evidence": "each citation carries stored rule text copied verbatim from lookup (byte-match confirmed for eval-5; artifacts like 'Figure 12-54' typo preserved)"
+    },
+    {
+      "name": "freshness-checked",
+      "passed": true,
+      "evidence": "check_freshness.py run at step 0; result reflected as a currency caveat"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  }
+}

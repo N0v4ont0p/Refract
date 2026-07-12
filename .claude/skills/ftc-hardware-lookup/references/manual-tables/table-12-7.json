@@ -1,0 +1,43 @@
+{
+  "table_id": "12-7",
+  "caption": "Power Regulation Device Power Requirements",
+  "rows": [
+    [
+      "Power Regulating Device",
+      "Part Number",
+      "Method of Powering"
+    ],
+    [
+      "goBILDA 6V Servo Power Injector",
+      "3125-0001-0001",
+      "Only powered using the XT30 connectors on the device by the ROBOT main battery"
+    ],
+    [
+      "REV Control Hub / REV Expansion Hub",
+      "REV-31-1153 / REV-31-1595",
+      "Only powered using the XT30 connectors on the device by the ROBOT main battery"
+    ],
+    [
+      "REV Servo Power Module",
+      "REV-11-1144",
+      "Only powered using the screw terminals and must only be powered by the ROBOT main battery"
+    ],
+    [
+      "REV Robotics Servo Hub",
+      "REV-11-1855",
+      "Only powered using the power terminals and must only be powered by the ROBOT main battery"
+    ],
+    [
+      "REV SPARKmini",
+      "REV-31-1230",
+      "Only powered by the Power input and must only be powered by the ROBOT main battery"
+    ],
+    [
+      "Studica Servo Power Block",
+      "75005",
+      "Only powered by JST-VH power connector, and must only be powered by the ROBOT main battery"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-7]] pointer (\u00a78<->\u00a79)"
+}

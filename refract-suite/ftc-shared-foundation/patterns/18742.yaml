@@ -1,0 +1,351 @@
+# Distilled patterns — Team 18742 (WoEN: AiR), DECODE, master branch
+# License: MIT-style. Provenance via narrowed provenance-checker (Opus xhigh),
+# human-reviewed and approved 2026-07-03. Feature-vector corrections applied
+# (see corpus-staging/feature-vectors/18742.json manual_corrections).
+#
+# ARCHITECTURE / EVOLUTION (confirmed by git, bounded claim only):
+#   master = single-threaded, synchronous, event-driven "attach-module" architecture.
+#   It DELIBERATELY downscaled from a multithreaded/atomics design that is preserved
+#   on the Final-MultiThread branch (which master descends from — merge-base confirms
+#   Final-MultiThread IS an ancestor of master). Removal commit: 9088caf (2026-03-15).
+#   Stated intent: b9c3c0a "wip on migrating to single-thread, away for atomics and
+#   downscaling architecture", c78813c "wip on migrating to single core architecture".
+#   BOUNDED: the record documents a deliberate SIMPLIFICATION ("downscaling"); it does
+#   NOT state that threading was concluded wrong/buggy. Deeper rationale (bugs vs.
+#   maintainability vs. deemed-unnecessary) is NOT on record. Do not claim more.
+#   Caveat: documentation/architecture.md is STALE — it describes the abandoned
+#   threaded design (3 hardware threads, HardwareLink), not master.
+#
+# Sibling repos Decode17517 / Decode33333 are the SAME TEAM (one lineage), not
+# independent data points — relevant if they are ever mined.
+
+meta:
+  team: "18742"
+  branch: master
+  paths_root: "TeamCode/src/main/kotlin/org/woen"
+
+patterns:
+  - id: 18742-A-collector-attach-module
+    problem: >
+      Coupling OpMode control flow to hardware/subsystem logic yields monolithic
+      God-OpMode classes hard to test or reuse across TeleOp/Auto.
+    solution_approach: >
+      A central Collector object holds shared state (hardwareMap, runMode,
+      telemetry, battery, EventBus) plus four lifecycle multicast delegates
+      (start/initUpdate/update/stop). Each subsystem is a free function
+      attachX(collector) that reads hardware once, subscribes per-loop behavior
+      into the lifecycle events, and exposes state only via EventBus. TeleOp.kt
+      (45 lines) and Auto.kt (83 lines) are thin entry points.
+    code_reference: { file: "collector/Collector.kt", lines: "28-84" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && architecture.subsystem_pattern == module_attach_functions"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "No FTCLib (0 imports); not a library Subsystem/Command pattern. Distinctive free-function attach idiom traces to no known quickstart/GM0 template."
+      collapses_with: []
+    notes: "Composition-over-inheritance subsystem convention; strong subsystem-separation signal (thin OpModes, no God-OpMode) per the failure-mode taxonomy lens."
+
+  - id: 18742-B-eventbus
+    problem: >
+      Modules must query/notify each other's state without hard dependencies or
+      import cycles.
+    solution_approach: >
+      A KClass-keyed EventBus: subscribe(eventClass, cb) registers per-type
+      callbacks; invoke(eventInstance) dispatches to all subscribers and RETURNS
+      the (possibly mutated) event object — used both fire-and-forget
+      (SetDriveVelocityEvent) and as a mutable request/response query
+      (GetRobotOdometry(): the event's own fields are the return channel).
+    code_reference: { file: "utils/events/EventBus.kt", lines: "1-25" }
+    applicable_when: "architecture.messaging == request_response_event_bus && software_stack.opmode_style == raw_linear_opmode"
+    source_team: "18742"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "INTRA-TEAM lineage: master's synchronous EventBus is the single-threaded SUCCESSOR to the threaded ThreadedEventBus on Final-MultiThread (same team — one data point, two coats, not two independent inventions). KClass-reflection dispatch is custom; no external library ancestry."
+      collapses_with: []
+    notes: >
+      THREAD-SAFETY CAVEAT (contingent, and NON-hypothetical for THIS team): the
+      EventBus is a plain HashMap (hashMapOf) — NOT thread-safe. It is safe ONLY
+      under master's current single-threaded contract, and that safety is
+      contingent, not inherent. This is not a theoretical risk for 18742
+      specifically: they have already run a fully multithreaded architecture once
+      (preserved on Final-MultiThread, from which master descends), so any return
+      to threading would turn this EventBus into a real data race. Team
+      reputation/capability must not upgrade the pattern. Medium: sound within its
+      single-threaded contract, but the thread-safety footgun is real and this is
+      one team's design.
+
+  - id: 18742-C-iaction-actionrunner
+    problem: >
+      Autonomous must interleave drive-to-point motion with mechanism actions,
+      sequentially or in parallel, without blocking the single OpMode loop.
+    solution_approach: >
+      A cooperative IAction interface (start/update/isEnd/stop) polled once per
+      tick by attachActionRunner, holding a FIFO ArrayDeque<IAction> and advancing
+      only when the current action reports isEnd()==true; ParallelActions (AND/OR
+      exit) and DriveAction compose behavior trees from small IActions, all
+      non-blocking, routed through the EventBus.
+    code_reference: { file: "modules/actions/ActionRunner.kt", lines: "39-249" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && architecture.autonomous_orchestration == cooperative_action_queue"
+    source_team: "18742"
+    confidence: medium-high
+    convergence_ref: orchestration-nonblocking   # see references/cross-team-findings.yaml (this is the platform-forced-capped FTC leg)
+    provenance:
+      classification: independently-derived
+      cross_team_convergence: >
+        THREE teams solve non-blocking orchestration via VISIBLY DIFFERENT,
+        template-free mechanisms: 18742 `interface IAction`+EventBus, 15993
+        `abstract class Task` state-machine (+ separate ActionQueue), 3543
+        `extends TrcAutoTask<State>` (trc492's own framework). All FTCLib-free, no
+        shared class names/template — genuinely independent implementations.
+      environmental_temper: >
+        HELD BACK FROM "high": the convergence is PARTLY PLATFORM-FORCED — all
+        three lean on the LinearOpMode loop (72/13/58 files), and cooperative
+        per-tick scheduling is what the FTC iterative model rewards. So this is
+        convergence on a principle the platform pushes toward, not three teams
+        independently cracking a non-obvious insight. Reserve "high" for
+        convergence WITHOUT an environmental push toward one answer.
+      collapses_with: []
+    related:
+      - { id: 15993-A-task-framework, why: "same orchestration principle, different mechanism (state machine)" }
+      - { id: 15993-G-actionqueue, why: "15993's second, overlapping scheduler for the same problem" }
+    notes: >
+      Confidence (medium-high) is on the PRINCIPLE — cooperative per-tick
+      step-functions over blocking sleeps — corroborated by divergent mechanisms
+      across 3 independent teams, NOT vote-counting identical code. The specific
+      EventBus-coupled IAction implementation itself is 18742's own; adopt the
+      principle, not necessarily this wiring.
+
+  - id: 18742-D-guarded-phase-state-machines
+    problem: >
+      Multi-step, hardware-timed scoring sequences must run in strict order, be
+      interruptible-safe, and reject new commands while busy, without blocking.
+    solution_approach: >
+      An explicit named-phase enum state machine per concern (SortingPhase P1..P9,
+      ShootingPhase P0..P6) advanced by a when(phase) dispatch called once per
+      updateEvent tick, with transition guards on hardware-status helpers + elapsed
+      time. An isStateMachineIdle() guard on every "try start X" entry point
+      rejects overlapping commands (logged) rather than corrupting state.
+    code_reference: { file: "scoringSystem/ScoringModulesConnector.kt", lines: "461-623" }
+    applicable_when: "architecture.orchestration == guarded_enum_phase_state_machine"
+    source_team: "18742"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      cross_team_convergence: "Same convergence family as 18742-C (15993/3543 reach guarded-phase machines by different routes). No shared code ancestry; no FTCLib."
+      collapses_with: []
+    notes: >
+      The CONCRETE instance (ScoringModulesConnector:461-623) is SEASON-SPECIFIC
+      (Decode sort/shoot) — preserved verbatim, does NOT transfer. Only the
+      guarded-phase-machine PATTERN transfers. Medium (not higher): the guard idiom,
+      though convergent, is a fairly generic engineering move — less distinctive
+      than 18742-C's cooperative-scheduler convergence.
+
+  - id: 18742-E-pid-segment-runner
+    problem: >
+      An on-robot autonomous path/point follower decoupled from PID tuning and
+      reusable between TeleOp (driver-relative power) and Auto (field-relative
+      regulated velocity).
+    solution_approach: >
+      A custom ITrajectorySegment (Move/Turn/Drive) queued via RunSegmentsEvent
+      into attachRunner, which runs three independent PID Regulators (x, y,
+      heading) against live odometry each tick and publishes SetDriveVelocityEvent
+      consumed by attachDriveTrain (dual-mode: POWER for MANUAL, REGULATOR PID for
+      AUTO, selected at attach-time).
+    code_reference: { file: "modules/drivetrain/Runner.kt", lines: "39-239" }
+    applicable_when: "drivetrain.type == custom_holonomic_mecanum && software_stack.pathing == custom_pid_segment_runner"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "RoadRunner is BUILD-DEP-ONLY (imported in exactly 2 files: Vec2.kt for Vector2d, Regulator.kt for clamp — neither is the path runner). Deployed follower is the team's own segment-runner, not a quickstart MecanumDrive/TrajectorySequenceRunner."
+      collapses_with: []
+    notes: >
+      VERBATIM CAVEAT: RoadRunner build-dep-only (Vector2d + clamp + offline
+      MeepMeep viz), NOT the on-robot pathing. A per-segment PID follower vs a
+      spline/motion-profiled follower is a real design trade-off — flag, not endorse.
+
+  - id: 18742-F-pidf-regulator
+    problem: >
+      Apply battery-voltage compensation consistently across every subsystem's
+      PID/feedforward output without each module re-reading/converting voltage.
+    solution_approach: >
+      A shared Regulator class: generic PIDF + gravity + static-gravity + power
+      term (kP,kI,kD,kPow,kF,kG,kSG), integral reset-on-error-sign-change
+      (err*_errOld<0), configurable output clamp, and voltage→power conversion via
+      collector.battery. Every subsystem constructs its own Regulator from tunable
+      RegulatorParameters but shares the voltage-comp math.
+    code_reference: { file: "utils/regulator/Regulator.kt", lines: "9-79" }
+    applicable_when: "architecture.control == shared_generic_pidf_regulator_class"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Only RoadRunner touchpoint is clamp() (build-dep-only). kG/kSG gravity + kPow squared-error + reset-I-on-sign-change are hand-written; not FTCLib's PIDFController, not a quickstart controller."
+      collapses_with: []
+    notes: >
+      VERBATIM CAVEAT: voltage compensation only fires when the full
+      update(err, target, battery) overload is called with LIVE battery voltage —
+      update(err) defaults battery=12.0. A reader copying this must not assume
+      automatic voltage-comp. Distinctive but unreplicated in-batch → single-source.
+
+  # ---- Batch 2 (infra / UX / sensing), approved 2026-07-03 ----
+
+  - id: 18742-G-logmanager
+    problem: >
+      Debug/telemetry needs per-module, per-severity filtering toggleable without
+      recompiling or littering call sites with if-checks, while driving both
+      Driver Station and FTC Dashboard.
+    solution_approach: >
+      A Telemetry wrapper fans addData/addLine to opMode.telemetry + a Dashboard
+      TelemetryPacket (with field-overlay draw helpers: circle/polygon/rect in
+      inch field coords), flushing per tick. On top, LogManager supports per-module
+      named configs (Config(moduleName=…)) with a bitmask of debug levels and
+      show/hide strategies (SHOW_SELECTED_LEVELS, SHOW_ABOVE_SELECTED_INCLUSIVE, …),
+      so each subsystem has independently tunable verbosity.
+    code_reference: { file: "utils/debug/LogManager.kt", lines: "1-179" }
+    applicable_when: "telemetry.dashboard == ftc_dashboard && architecture.logging == leveled_per_module_log_config"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "FTCLib=0; no shared observability framework; bespoke DebugSetting enum + bitmask levels fanning through the team's own Telemetry module. Git: authored in-repo (Gyro)."
+      collapses_with: []
+    notes: "STRONG observability signal (Phase 9 taxonomy positive) — genuinely-used, not token telemetry. Fully transferable, season-agnostic. Signal-quality ≠ provenance breadth → single-source."
+
+  - id: 18742-H-gamepad-wake-start
+    problem: >
+      Let the driver "wake" the OpMode into RUNNING via controller input instead of
+      the physical INIT/START buttons (e.g. re-run after a crash/reset).
+    solution_approach: >
+      In the pre-START loop, any gamepad1 activity (stick past deadband, trigger,
+      bumper, specific buttons) calls
+      OpModeManagerImpl.getOpModeManagerOfActivity(...).startActiveOpMode().
+    code_reference: { file: "opModes/TeleOp.kt", lines: "17-25" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "FTCLib=0; small self-evident SDK trick using SDK internals only. Git: authored in-repo (tikho)."
+      collapses_with: []
+    notes: >
+      CAVEATS (verbatim): (1) this is a LIGHTWEIGHT trick, NOT the elaborate
+      resource-preserving "HotRun" system documented in architecture.md — HotRun's
+      source is only on the Final-MultiThread branch, absent from master; do not
+      conflate. (2) Relies on the INTERNAL SDK class OpModeManagerImpl — a real
+      portability/fragility caveat (may break across SDK versions); a mild
+      anti-pattern, flagged not endorsed.
+
+  - id: 18742-I-auto-config-select-chain
+    problem: >
+      Give the drive team a pre-match, on-field way to pick a start position/strategy
+      without reflashing, and auto-continue into TeleOp at match end.
+    solution_approach: >
+      Pre-START, gamepad bumper edge-transitions cycle a StartOrientation enum
+      (each entry encodes start pose, basket/park poses, alliance color, and an
+      odometry-cal pose), mirrored to DS + Dashboard. After the main loop ends, it
+      calls OpModeManagerImpl(...).initOpMode(TeleOp::simpleName) to auto-queue TeleOp.
+    code_reference: { file: "opModes/Auto.kt", lines: "16-83" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "FTCLib=0; the auto-chain-to-TeleOp via initOpMode is a distinctive integration choice, not a known template. Git: authored in-repo (tikho/tikhonsmovzh)."
+      collapses_with: []
+    notes: >
+      CAVEATS (verbatim): (1) same INTERNAL-SDK OpModeManagerImpl reliance as
+      18742-H (portability/fragility). (2) The bumper edge-detect is INLINED here
+      (oldLeft/RightBumperState) instead of reusing 18742-J's listener registry — a
+      minor internal inconsistency. Pre-START menu selection is a widespread idea;
+      the specific pose-enum + init-chaining realization is one team's design.
+
+  - id: 18742-J-gamepad-listener-registry
+    problem: >
+      Reuse gamepad edge/hold/analog handling across many subsystems without each
+      re-implementing "old button state" bookkeeping.
+    solution_approach: >
+      An IGamepadListener interface with ClickGamepadListener (edge, tracks
+      _oldState), HoldGamepadListener (level), AnalogGamepadListener (passthrough),
+      registered via AddGamepad{1,2}ListenerEvent on the EventBus; attachGamepad
+      updates all registered listeners once per tick, only in RunMode.MANUAL.
+    code_reference: { file: "modules/Gamepad.kt", lines: "7-75" }
+    applicable_when: "architecture.input_handling == listener_registry_via_event_bus && software_stack.opmode_style == raw_linear_opmode"
+    source_team: "18742"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      cross_team_convergence: >
+        15993 solves the same "reusable edge-detecting input" need via a String-keyed
+        GamepadEx wrapper — a genuinely DIFFERENT mechanism (map/key lookup vs.
+        lambda-supplier listener objects on an EventBus). Divergent mechanisms →
+        independence. 15993 does NOT collapse into WoEN's design.
+      environmental_temper: >
+        Edge detection is a near-universal FTC COMMODITY need — this convergence
+        rides a platform/commodity push, so per the standing rule (reserve high for
+        convergence WITHOUT an environmental push) it is capped. Independence lifts it
+        above single-source to medium; the commodity push blocks higher.
+      collapses_with: []
+    related:
+      - { id: 15993-E-gamepadex, why: "same input-abstraction capability, different mechanism (string-keyed wrapper vs EventBus listener registry)" }
+    notes: "Convergence is on the CAPABILITY (edge/hold/analog abstraction), not on the design. WoEN's EventBus-registered listener-object design remains single-team. Transferable, season-agnostic."
+
+  - id: 18742-K-odometry-republish
+    problem: >
+      Provide field-relative pose+velocity for driver-relative TeleOp and closed-loop
+      Auto from a dedicated odometry computer, not drivetrain encoders.
+    solution_approach: >
+      attachOdometry wraps GoBildaPinpointDriver, applies a fixed pod-offset +
+      zeroing transform once at attach, and each tick republishes pose+velocity via
+      a GetRobotOdometry request/response event over the EventBus. A dpad_down
+      ClickGamepadListener re-zeros odometry to a known field pose mid-match.
+    code_reference: { file: "modules/drivetrain/Odometry.kt", lines: "58-197" }
+    applicable_when: "sensing.odometry == goBILDA_pinpoint && architecture.messaging == request_response_event_bus"
+    source_team: "18742"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "FTCLib=0; RoadRunner not used here (raw GoBildaPinpointDriver SDK). Git: 19 commits, heavily hand-iterated in-repo (tikho/tikhonsmovzh)."
+      collapses_with: []
+    notes: >
+      TRANSFERABLE sub-pattern (season-agnostic): "wrap Pinpoint once with a fixed
+      pod-offset/zeroing transform and republish pose+velocity on an event each tick."
+      SEASON-SPECIFIC (verbatim flag): the SHOOT_SHORT_TRIANGLE / SHOOT_LONG_TRIANGLE
+      point-in-triangle inside-shooting-zone booleans are DECODE-specific geometry —
+      NOT transferable as-is. (velocity turn uses zeroingOrientation.angl — a possible
+      field-name quirk, carried not evaluated.)
+
+  - id: 18742-L-camera-pattern-latch
+    problem: >
+      Latch a one-time camera (Limelight AprilTag) "pattern discovered" result and
+      broadcast it to whichever subsystem needs it, tolerating a disabled camera.
+    solution_approach: >
+      attachLimelight polls ll.latestResult, on the first valid result maps fiducial
+      IDs to a hardcoded ball-color pattern array + StockPattern.Request enum,
+      latches isPatternDetected so the mapping happens once, then broadcasts
+      OnPatternDetectedEvent over the EventBus for consumers.
+    code_reference: { file: "modules/Camera.kt", lines: "19-93" }
+    applicable_when: "sensing.vision == limelight_3a && architecture.messaging == request_response_event_bus"
+    source_team: "18742"
+    confidence: single-source
+    status: disabled_wip
+    provenance:
+      classification: independently-derived
+      basis: "FTCLib=0; raw Limelight3A SDK; hand-developed in-repo (matrixik1337, 14 commits)."
+      collapses_with: []
+    notes: >
+      ⚠️ DISABLED/WIP (verbatim): attachLimelight(this) is COMMENTED OUT at
+      Collector.kt:69; a botpose read block and a startEvent broadcast in Camera.kt
+      are also commented out. Do NOT present as active.
+      REASON FOR DISABLING: **UNDOCUMENTED** — last commented out in commit 5c18f34
+      (tikho, 2026-06-22, message "трельба"/"shooting", no rationale); the call has
+      been toggled on/off repeatedly across history (also disabled in b05980a during
+      shooting iteration). No stated reason on record.
+      SEASON-SPECIFIC: fiducial IDs 21/22/23 → GPP/PGP/PPG and StockPattern.Request
+      are DECODE-specific pattern IDs, not transferable.
+      WHY KEPT (despite disabled): this is the ONLY documented instance of this
+      vision-pattern-latch integration shape in the corpus — that reference value is
+      what earns it a slot (contrast 15993-B, dropped only because it was redundant
+      with an already-ingested source, so nothing was lost).

@@ -1,0 +1,19 @@
+{
+  "eval_id": 6,
+  "eval_name": "staleness-flagged",
+  "prompt": "heads up \u2014 i'm pretty sure FIRST just pushed Team Update 34 this week. with that in mind, is our 18 inch robot still legal? our rules data might be behind.",
+  "assertions": [
+    {
+      "name": "staleness-surfaced",
+      "text": "The freshness check surfaces STALE (given live TU 34 > stored TU 32) and the answer EXPLICITLY flags that the local corpus may be behind the newest Team Update"
+    },
+    {
+      "name": "not-silently-answered",
+      "text": "Does NOT silently answer as if the snapshot is current; points the user to the live manual for the newer TU"
+    },
+    {
+      "name": "still-gives-local-verdict",
+      "text": "Still provides the local-corpus verdict (18-in cube, R101) WITH the staleness caveat \u2014 flags, not refuses"
+    }
+  ]
+}

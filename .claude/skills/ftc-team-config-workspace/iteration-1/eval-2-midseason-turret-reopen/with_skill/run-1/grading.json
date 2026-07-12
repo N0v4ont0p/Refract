@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Existing config read; turret contradiction surfaced and treated as re-opening, not silently assumed true",
+      "passed": true,
+      "evidence": "workdir team-config.yaml: turret {value: single_axis, source: asked, confirmed: FALSE}; also caught the transitive season constraint 'turret requires shooter != none' and re-opened shooter \u2014 a constraint validate_config.py does not machine-check (skill-gap finding, see analyst notes)"
+    },
+    {
+      "text": "config_history append with date + change; week-1 state not overwritten",
+      "passed": true,
+      "evidence": "config_history: [{date: 2026-07-05, change: 'user reported single-axis turret added this week; turret none->single_axis (unconfirmed)...'}]"
+    },
+    {
+      "text": "No aiming code generated before the changed field is confirmed",
+      "passed": true,
+      "evidence": "0 .java files; run stopped at interaction.md with generation_allowed:false (turret, shooter, pathing unconfirmed)"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

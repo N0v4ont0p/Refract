@@ -1,0 +1,26 @@
+{
+  "expectations": [
+    {
+      "name": "N1-turret-config-mismatch",
+      "passed": true,
+      "evidence": "caught (turret x3)"
+    },
+    {
+      "name": "N2-mutable-static-persistence",
+      "passed": true,
+      "evidence": "caught (static x3)"
+    },
+    {
+      "name": "N3-god-opmode",
+      "passed": true,
+      "evidence": "caught (god x2)"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "note": "Thorough baseline: read all 23 files (2343 lines)."
+}

@@ -1,0 +1,19 @@
+{
+  "eval_id": 5,
+  "eval_name": "verbatim-text-match",
+  "prompt": "do we actually have to display our team number on the robot? want to make sure we don't get dinged at inspection",
+  "assertions": [
+    {
+      "name": "quotes-rule-text",
+      "text": "The answer includes verbatim quoted rule text for the governing rule (expected R401 robot signs), read from the corpus"
+    },
+    {
+      "name": "quote-matches-corpus-verbatim",
+      "text": "The quoted text byte-matches the stored corpus text field for that rule (rules.py lookup) \u2014 not paraphrased or truncated-with-changes"
+    },
+    {
+      "name": "citation-verified",
+      "text": "The cited rule ID exists (rules.py verify)"
+    }
+  ]
+}

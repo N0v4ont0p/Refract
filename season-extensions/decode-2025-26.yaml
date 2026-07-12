@@ -1,0 +1,45 @@
+# =============================================================================
+# season-extensions/decode-2025-26.yaml  —  REPLACEABLE season layer
+# =============================================================================
+# This is the ONLY file that carries DECODE-specific content. The Season
+# Transition Protocol (§19) replaces this file (never core-feature-model.yaml)
+# when the game changes. Everything else in the system is unaffected.
+# This file is live only while season-extensions/ACTIVE contains its slug.
+# =============================================================================
+
+_meta:
+  slug: decode-2025-26                # must match the filename and the ACTIVE pointer
+  schema_version: 1
+  scope: season_specific
+  replaced_by: season_transition_protocol   # §19 — do not hand-edit across a season boundary
+
+season: DECODE presented by RTX (2025-2026)
+rules_current_through: Team Update 32 (Apr 2026)   # re-verify against the live manual — don't trust a stale TU number
+
+season_mechanisms:
+  intake: [roller, claw, other]
+  shooter: [flywheel, elastic_catapult, none]
+  turret: [none, single_axis, multi_axis]         # requires shooter != none — machine-checked below
+  gate_mechanism: [present, none]
+  classifier_interaction: [present, none]
+  endgame_parking: [mandatory]
+
+known_archetypes:
+  - turreted_shooter          # turret decouples aim from drivetrain heading, enables shoot-while-moving
+  - fixed_shooter_on_swerve   # the drivetrain itself provides aim
+
+constraints_on_core:
+  # A season concept constraining a core axis: the fixed-shooter archetype only
+  # makes sense on a swerve drivetrain (the drivetrain itself provides aim).
+  # Gives §11's constraint-checker and §20's evals a real entry to fire against.
+  - archetype: fixed_shooter_on_swerve
+    requires:
+      core.drivetrain.type: swerve
+
+constraints_on_mechanisms:
+  # Formalized (Session 2 assembly) from the schema comment "turret requires shooter != none".
+  # A constraint living only in a comment is enforced only by model diligence — the eval-2
+  # finding. Machine-checked by ftc-team-config/scripts/validate_config.py.
+  - if: {season_mechanisms.turret: {not: none}}
+    requires: {season_mechanisms.shooter: {not: none}}
+    reason: "a turret aims a shooter; a turret with no shooter is incoherent"

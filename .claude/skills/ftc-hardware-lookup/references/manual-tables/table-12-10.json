@@ -1,0 +1,36 @@
+{
+  "table_id": "12-10",
+  "caption": "Legal Android Smartphones",
+  "rows": [
+    [
+      "Phone",
+      "Notes"
+    ],
+    [
+      "Motorola Moto G4 Play",
+      "Sometimes noted as \u201c4th Generation\u201d"
+    ],
+    [
+      "Motorola Moto G5",
+      ""
+    ],
+    [
+      "Motorola Moto G5 Plus",
+      ""
+    ],
+    [
+      "Motorola Moto E4",
+      "USA versions only, includes SKUs XT1765, XT1765PP, XT1766, and XT1767"
+    ],
+    [
+      "Motorola Moto E5",
+      "XT1920"
+    ],
+    [
+      "Motorola Moto E5 Play",
+      "XT1921"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-10]] pointer (\u00a78<->\u00a79)"
+}

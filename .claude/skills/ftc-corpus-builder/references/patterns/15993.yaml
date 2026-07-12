@@ -1,0 +1,292 @@
+# Distilled patterns — Team 15993 (infO(1)Robotics, "Ryuu"), DECODE V1→V2
+# Provenance analysis: Batch 1 done inline (Opus 4.8 main session) after the
+# provenance-checker subagent hit an account session limit; grounded in concrete
+# checks (notably: 15993 imports FTCLib in 0 files → infra classes are independent
+# reimplementations, not derived code). Human-reviewed and approved 2026-07-03.
+#
+# Team-quality corroboration (15993 beat 19859 at the Turkey Istanbul Premier final)
+# is recorded as context ONLY and did not inflate any confidence tag (§12).
+# source repos: corpus-sources/tier1/15993-DECODE-V1, .../15993-Ryuu-DECODE-V2
+# feature-vector: corpus-staging/feature-vectors/15993-V2.json
+
+meta:
+  team: "15993"
+  season_scope_note: "Batch 1 = season-agnostic architecture/infrastructure. Batch 2 (season-specific mechanisms + evolution insights) tracked separately."
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+
+patterns:
+  - id: 15993-A-task-framework
+    problem: >
+      Sequence autonomous/teleop actions (movement + mechanism actuation) with
+      sequencing, parallelism, and conditional branching WITHOUT blocking the main
+      LinearOpMode loop.
+    solution_approach: >
+      A hand-rolled composable Task framework: abstract Task with a
+      DEFAULT/RUNNING/FINISHED state machine and start()/tick() lifecycle, plus
+      combinators — SerialTask (index-advancing sequential, restores children to
+      DEFAULT on completion for reuse), ParallelTask (all-children-concurrent,
+      finishes when all finish), ConditionalTask (Supplier<Boolean> guard),
+      SleepTask/SleepUntilTask, ExecuteTask, ActionTask — and a TaskBuilder DSL
+      (serial/parallel/conditional/execute/sleepms/sleepuntil) so routines read as
+      a nested tree in an OpMode's onInit().
+    code_reference: { file: "tasks/Task.kt", lines: "1-27", also: "tasks/SerialTask.kt:1-28" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && software_stack.task_scheduling == custom_composable_task_tree"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "No FTCLib import anywhere in repo (0 files); own state machine. The composable sequential/parallel command-tree PARADIGM is industry-standard (WPILib/FTCLib command groups, RoadRunner Actions) but this implementation is not derived from any of them."
+      collapses_with: []
+      convergence_ref: orchestration-nonblocking   # CONFIRMED — see references/cross-team-findings.yaml
+      convergence_status: >
+        CONFIRMED as a 3-leg finding: 15993-A (state-machine) + 18742-C (IAction/
+        ActionRunner + EventBus — NOT coroutines; 18742 master is single-threaded) +
+        3543-A (TrcAutoTask, the cross-platform leg that defeats the platform-forcing
+        discount). Finding tag = medium-high; 15993's OWN code stays single-source.
+    notes: >
+      RECOMMENDED single approach for non-blocking autonomous sequencing on
+      raw-LinearOpMode teams. See 15993-G (ActionQueue): present THIS as the
+      recommended approach and G as a documented alternative, not co-equal.
+
+  - id: 15993-D-autobase-lifecycle
+    problem: >
+      Avoid duplicating hardware init, follower/localizer setup, alliance-relative
+      pose, telemetry, and the main loop across every autonomous routine.
+    solution_approach: >
+      An abstract AutoBase(startPose, ...) extends LinearOpMode with
+      onInit/onInitTick/onStart/onStartTick hooks and a final runOpMode() that
+      sequences them; concrete Auto* subclasses pass a start Pose and override
+      onInit() to assign the task tree. Base centralizes follower creation,
+      subsystem init, init-gamepad polling, and per-tick telemetry.
+    code_reference: { file: "opmodes/AutoBase.kt", lines: "26-142" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && software_stack.pathing == pedro_pathing"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Generic template-method OO idiom; widely reinvented, no specific library source. Independently implemented here."
+      collapses_with: []
+    notes: "Common idiom; kept as a concrete reference instance, not a novel invention."
+
+  - id: 15993-E-gamepadex
+    problem: >
+      Debounce raw Gamepad input into edge-triggered (justPressed/justReleased)
+      signals with named lookups, reusable across driver and operator gamepads.
+    solution_approach: >
+      GamepadEx wraps a Gamepad, keeps previous/current BooleanArray buffers plus
+      derived rising/falling-edge arrays computed each update(), and exposes
+      String-keyed getButton/getButtonDown/getButtonUp/getAnalog backed by
+      companion name→index maps. Owner calls update() once per loop.
+    code_reference: { file: "common/GamepadEx.kt", lines: "8-92" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "NOT derived from FTCLib's GamepadEx — 15993 imports FTCLib in 0 files, and the API differs structurally (String-keyed BooleanArray buffers here vs FTCLib's enum Button + wasJustPressed/readButtons)."
+      collapses_with: []
+    notes: >
+      Applies specifically to the NON-FTCLib fallback path (raw LinearOpMode teams).
+      NOT a general recommendation over FTCLib's own GamepadEx — a team already on
+      FTCLib should prefer FTCLib's. Mild NIH (reimplements an existing library
+      class); recorded neutrally.
+
+  - id: 15993-F-log-multitelemetry
+    problem: >
+      Send the same telemetry to both the Driver Station and FTC Dashboard without
+      each subsystem/opmode constructing its own sink.
+    solution_approach: >
+      A singleton-style Log wraps MultipleTelemetry(driverStation,
+      FtcDashboard.getInstance().telemetry), exposes chainable add/tick/clear, and
+      stashes itself in a companion instance field for global log access. Used
+      pervasively (every opmode ticks log.tick() each loop).
+    code_reference: { file: "common/Log.kt", lines: "1-36" }
+    applicable_when: "software_stack.dashboard == ftc_dashboard"
+    source_team: "15993"
+    confidence: low
+    provenance:
+      classification: shared-ancestry
+      basis: "MultipleTelemetry is com.acmerobotics.dashboard.telemetry.MultipleTelemetry, designed for exactly this fan-out; the singleton wrapper is a thin convenience idiom."
+      collapses_with: [FTC-Dashboard]
+    notes: >
+      PHASE 9 ↔ PHASE 4 LINK: this is the concrete reference implementation behind
+      ftc-quickstart-builder's "telemetry ON by default" commitment
+      (.claude/skills/ftc-quickstart-builder/design-notes.md, countering the
+      Measurement/"no telemetry" failure mode in known-failure-modes.md). Kept in
+      the corpus specifically to make that link explicit, not coincidental.
+
+  - id: 15993-G-actionqueue
+    problem: >
+      Run deferred/delayed one-shot or conditionally-triggered actions inline in a
+      loop without Thread.sleep.
+    solution_approach: >
+      ActionQueue accumulates ScheduledRunnable entries (Runnable + delay-from-
+      construction + optional String tag + optional Supplier<Boolean> early
+      trigger); update() (once per loop) fires+removes any entry whose elapsed>=delay
+      OR condition is met. clear(type) bulk-cancels by tag.
+    code_reference: { file: "common/ActionQueue.kt", lines: "1-51" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && software_stack.task_scheduling includes non_blocking_delayed_action_queue"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Own utility; no external library source."
+      collapses_with: []
+    notes: >
+      CAUTION (not a passing mention): this OVERLAPS 15993's own Task-framework
+      SleepTask/SleepUntilTask (pattern 15993-A). When this surfaces to a team,
+      present 15993-A as the RECOMMENDED single scheduling approach and this
+      (ActionQueue) as a DOCUMENTED ALTERNATIVE — NOT two co-equal options. Two
+      overlapping schedulers in one codebase is itself a mild smell.
+
+  # ---- Batch 2 (season-specific mechanisms + evolution insights), approved 2026-07-03 ----
+
+  - id: 15993-H-autobase-evolution
+    problem: >
+      Make alliance-relative goal math (turret aim, hood angle, shooter RPM, all a
+      function of distance-to-goal which differs RED vs BLUE) available to every
+      autonomous without re-deriving it per Auto* subclass.
+    solution_approach: >
+      V2 extended AutoBase's ctor with allianceColour + turretOffset and hoisted
+      turretLock() (Pinpoint-pose-driven) plus continuous Hood/Shooter distance
+      calculation into the shared base's onStartTick(), so every auto aims/charges
+      each loop for free. (Evolution: V1's AutoBase took only a startPose.)
+    code_reference: { file: "opmodes/AutoBase.kt", lines: "90-171" }
+    applicable_when: "software_stack.opmode_style == raw_linear_opmode && season.has_alliance_relative_scoring == true && drivetrain.localization == odometry_pose_based_targeting"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Intra-team V1→V2 refactor; no FTCLib/quickstart Command-scheduler lineage (0 FTCLib imports). Pedro is a follower dependency, not the source of this design."
+      collapses_with: []
+    notes: >
+      Season-specific mechanism logic on a reusable lifecycle base. Minor: the
+      turretOffset ctor param exists on the base but AutoFarBlue passes only
+      Colours.BLUE (param not exercised there) — does not affect provenance.
+
+  - id: 15993-I-turret-odometry-aiming
+    problem: >
+      Aim a turret at a fixed field goal using robot ODOMETRY pose rather than
+      continuous vision, while a vision subsystem exists but is disabled.
+    solution_approach: >
+      Turret.lockToTarget computes field-frame atan2(dy,dx) to a hardcoded
+      per-alliance goal (BLUE 14,130 / RED 130,130), converts to robot frame by
+      subtracting heading, normalizes to ±PI, clamps to ±85°, and maps linearly to
+      a servo range; callers gate on a heading window else park FORWARD. Limelight
+      vision (Limelight.kt) is fully implemented but its init/start/stop are
+      commented out (AutoBase.kt 54,124,141) in favor of the Pinpoint-only path.
+    code_reference: { file: "subsystems/Turret.kt", lines: "54-94" }
+    applicable_when: "sensing.vision == limelight_3a (present-but-disabled) && sensing.odometry == goBILDA_pinpoint && season.has_fixed_field_goal_target == true"
+    source_team: "15993"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Design decision, not copied math; atan2/clamp/servo-map is commodity. No FTCLib, no framework lineage."
+      collapses_with: []
+    related:
+      - id: 15993-J-shooter-curve-fit-evolution
+        why: "Same underlying design instinct — RELIABILITY-FIRST: prefer the deterministic/validated path (odometry-pose targeting; empirically-fitted curve) over the theoretically-elegant-but-fragile one (live vision; first-principles physics). Link surfaced at review."
+    notes: >
+      The TRANSFERABLE part is the "odometry-first targeting, vision-as-disabled-
+      fallback" DESIGN DECISION (the DECODE goal coordinates themselves are
+      season-specific). Carry verbatim: vision present-but-disabled.
+
+  - id: 15993-J-shooter-curve-fit-evolution
+    finding_ref: shooter-empirical-vs-physics   # see references/cross-team-findings.yaml (empirical leg)
+    problem: >
+      Convert a measured distance-to-goal into a hood-angle / shooter-RPM setpoint
+      for variable-distance scoring, tunably, without a physics model.
+    solution_approach: >
+      V1 had BOTH a piecewise-linear lookup table (Glider.autoAim) AND a
+      first-principles projectile-physics solver (Alfa.kt, debug-only). V2 abandoned
+      BOTH for a fitted empirical curve — Hood.calculate/Shooter.calculate are
+      4-parameter logistic/sigmoid fits (non-round coefficients 43103.35, 2.41399,
+      168.7368, 3.657507 — unmistakable regression-tool output).
+    code_reference: { file: "subsystems/Glider.kt (V1)", lines: "14-72", evolved_to: "V2 Hood.kt:47-53, Shooter.kt:118-124; Alfa.kt removed V1→V2" }
+    applicable_when: "season.has_variable_distance_scoring == true"
+    source_team: "15993"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "Three visibly different approaches within 15993's own V1→V2 evolution (lookup / physics / empirical fit); Alfa.kt is an original Romanian-commented derivation, not a quickstart artifact."
+      cross_team: >
+        CORRECTED (source re-check, Session 1): 24089 was once recorded here as a physics
+        COUNTEREXAMPLE that "KEPT physics (proj_motion.py)." That was wrong — it restated a prior
+        conclusion without checking 24089's fielded code. Re-verified at 24089 Turret.java:148:
+        24089's fielded distance->power core is an EMPIRICAL LINEAR REGRESSION (24089-A), NOT a
+        gravity-ballistics solve; proj_motion.py was a broken, unintegrated offline prelim (24089-C).
+        So 15993 (empirical) and 24089 (empirical) CONVERGE, not diverge — 24089 is the FOURTH
+        empirical leg of shooter-empirical-vs-physics, no shared code lineage with 15993.
+      collapses_with: []
+    notes: >
+      Transferable insight: "empirical curve-fit over physics model for shooter tuning" —
+      15993's VALIDATED CHOICE. Tag = medium here (15993's OWN standalone code stays single-team);
+      the CROSS-TEAM finding shooter-empirical-vs-physics is now HIGH (four independent empirical
+      implementations; two independent gravity-ballistics attempts — 15993's Alfa.kt and 24089's
+      proj_motion.py — that never reached shipped power output). CORRECTED: 24089 is NOT a physics
+      counterexample to this pattern; on source re-check it confirms it. The corrected gravity
+      solver the corpus built (trajectory_solver.py) is a FEASIBILITY artifact only — "physics is
+      tractable" — explicitly NOT evidence any team fielded physics-based power.
+
+  - id: 15993-K-declarative-autos
+    problem: >
+      Author long multi-segment autonomous as a single declarative structure
+      rather than an imperative sequence of blocking calls.
+    solution_approach: >
+      Each Auto* builds `task` in onInit() as a nested serial(...) tree of named
+      reusable sub-sequences interleaved with sleepms(...) waits and goTo/turnTo
+      helpers wrapping follower.holdPoint(Pose(...)).
+    code_reference: { file: "opmodes/AutoFarBlue.kt", lines: "35-143" }
+    applicable_when: "software_stack.pathing == pedro_pathing && software_stack.task_scheduling == custom_composable_task_tree"
+    source_team: "15993"
+    confidence: single-source
+    depends_on: [15993-A-task-framework]
+    provenance:
+      classification: independently-derived
+      basis: "Built on 15993's own Task DSL (no FTCLib) + Pedro holdPoint (path-follow dependency only). Not a quickstart pattern."
+      collapses_with: []
+    notes: >
+      FRAGILITY CAVEAT (verbatim): sequencing uses hardcoded-duration timing (fixed
+      sleepms — 1200, 2200, 600, 2500, … terminal 999999999), NOT motion-completion
+      polling / at-pose-gated. Known-fragile (drifts if a move runs long/short).
+      Documented as 15993's ACTUAL approach, NOT endorsed — a mild anti-pattern.
+
+  - id: 15993-L-breakbeam-intake
+    finding_ref: sensing-modality   # see references/cross-team-findings.yaml (presence-only leg)
+    problem: >
+      Detect how many/which game pieces are held in an intake to gate shooter
+      firing, intake power, and driver rumble.
+    solution_approach: >
+      Two DigitalChannel break-beams (top+bottom); isEmptyBottom/isEmptyTop return
+      raw beam state (documented beam-NOT-broken polarity), isFull = AND of both
+      broken. Consumers confirmed in Teleop.kt (77-119) gating rumble + shooter/
+      transition logic.
+    code_reference: { file: "subsystems/Intake.kt", lines: "78-94", consumers: "opmodes/Teleop.kt:77-119" }
+    applicable_when: "season.game_piece_intake_detection == digital_break_beam_sensor"
+    source_team: "15993"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "Commodity DigitalChannel usage authored in-repo; no FTCLib/quickstart lineage."
+      cross_team_diversity: >
+        Three teams solve in-intake game-piece detection by DIFFERENT modalities:
+        15993 (2× digital break-beam), 22105 (REV ColorSensor, 11 files), 19043
+        (limelight/color, 12 files). They DIVERGE across modalities, not converge.
+      collapses_with: []
+    notes: >
+      Tag = medium: the PROBLEM (in-intake fill detection) is attested by 3
+      independent teams; the SOLUTION (break-beam) remains single-team. Do NOT
+      vote-count the three modalities into "high confidence in break-beam."
+      ADDITION (review): the divergence is NOT purely a reliability tradeoff — the
+      three sensors answer DIFFERENT QUESTIONS: break-beam = presence-only,
+      color-sensor = presence + type/color, vision = presence + type + position. A
+      team's actual INFORMATION NEED (presence-only vs presence+type) should drive
+      the sensor choice, not just which is "more robust." Season-specific sensing,
+      not a transferable algorithm.
+
+# Reviewed and DROPPED (recorded so they are not re-extracted or re-litigated):
+dropped:
+  - id: 15993-B-actiontask
+    reason: "Vestigial — no production opmode constructs an ActionTask (autos use execute{}/sleepms/serial around Pedro holdPoint, not RoadRunner Actions). Thin RoadRunner+Dashboard adapter; shared-ancestry, no corpus value."
+  - id: 15993-C-pedro-constants
+    reason: "Redundant with Pedro Pathing's own docs (already a direct §7 knowledge source). A distilled pattern must be more than restating official-docs usage. Not wrong — just not a pattern."

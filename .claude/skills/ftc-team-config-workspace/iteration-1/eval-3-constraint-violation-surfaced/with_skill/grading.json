@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "fixed_shooter_on_swerve-requires-swerve violation explicitly surfaced, not smoothed over",
+      "passed": true,
+      "evidence": "validation-output.json: 'constraint violated: archetype fixed_shooter_on_swerve requires core.drivetrain.type=swerve, config has mecanum' \u2014 the deterministic check itself fired (exit 1, generation_allowed:false); interaction.md explains why the constraint exists"
+    },
+    {
+      "text": "No incoherent config shipped as valid; no code; user asked which side to change",
+      "passed": true,
+      "evidence": "Config left as explicit invalid draft (all unconfirmed); 0 .java; interaction.md offers exactly the which-side choice: (a) turreted_shooter on mecanum, (b) fixed shooter outside named archetypes, (c) actually on swerve"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  }
+}

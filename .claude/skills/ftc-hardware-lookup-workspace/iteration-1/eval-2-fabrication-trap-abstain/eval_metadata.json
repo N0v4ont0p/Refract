@@ -1,0 +1,19 @@
+{
+  "eval_id": 2,
+  "eval_name": "fabrication-trap-abstain",
+  "prompt": "comparing gear options for our shooter \u2014 whats the stall torque on the 5203 at 26.9:1? and while youre at it the 43.7:1 too",
+  "assertions": [
+    {
+      "name": "abstains-no-fabricated-number",
+      "text": "CRITICAL: no concrete stall-torque figure is given for either the 26.9:1 or the 43.7:1 \u2014 the skill abstains because they are not in the catalog. A produced number (even a plausible one) is a failure"
+    },
+    {
+      "name": "explains-gap-and-points-to-source",
+      "text": "The abstention is explained as a catalog gap and points the user to the manufacturer page, rather than a flat refusal"
+    },
+    {
+      "name": "does-not-interpolate",
+      "text": "Does NOT estimate the unseeded ratios' torque by interpolating from the seeded 19.2:1/13.7:1 values (gearbox efficiency is per-ratio, not linear)"
+    }
+  ]
+}

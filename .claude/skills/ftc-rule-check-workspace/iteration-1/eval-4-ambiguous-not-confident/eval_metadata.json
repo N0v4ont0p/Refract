@@ -1,0 +1,19 @@
+{
+  "eval_id": 4,
+  "eval_name": "ambiguous-not-confident",
+  "prompt": "is it legal to spray our mecanum wheels with silicone traction spray for extra grip on the tiles? does the manual allow that?",
+  "assertions": [
+    {
+      "name": "ambiguous-not-confident",
+      "text": "Does NOT deliver a confident invented legal/illegal verdict on the specific silicone-spray question; returns ambiguous / 'not cleanly addressed, consider a Q&A' where the manual doesn't resolve it"
+    },
+    {
+      "name": "no-fabricated-citation",
+      "text": "Does not cite a rule number that doesn't exist or doesn't actually address traction spray; any rule cited is real and genuinely relevant"
+    },
+    {
+      "name": "honest-about-gap",
+      "text": "Explicitly flags that the manual doesn't directly address this rather than filling the gap"
+    }
+  ]
+}

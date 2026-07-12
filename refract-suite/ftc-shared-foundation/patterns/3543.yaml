@@ -1,0 +1,350 @@
+# Distilled patterns — Team 3543 (Titan Robotics Club), DECODE
+# License: MIT (Titan's own). Org note: trc492 = Titan Robotics Club = the SAME
+# org as FTC team 3543 (trc492 is their FRC-492 GitHub org). The trclib/ftclib
+# framework is Titan's OWN multi-year, cross-FRC/FTC library, pulled via git
+# submodules — see references/SOURCES.md (Phase-1 "no license" record corrected).
+# Provenance via narrowed provenance-checker (Opus xhigh), human-approved 2026-07-03.
+#
+# FRAMEWORK-LINEAGE RULE (applied to every layer:framework pattern): these are a
+# SINGLE Titan lineage. Maturity/popularity (many teams adopt TRC) and
+# design-validation are kept SEPARATE — adoption is NOT independent validation
+# (§12). Framework patterns are high-value single-source; not promoted on adoption.
+
+meta:
+  team: "3543"
+  org: "Titan Robotics Club (trc492 = FRC 492 / FTC 3543)"
+  license: MIT
+  framework: "trclib + ftclib (git submodules of trc492; multi-year, cross-FRC/FTC)"
+  paths_root: "TeamCode/src/main/java"
+
+patterns:
+  - id: 3543-A-trcautotask
+    layer: framework
+    problem: >
+      Run multi-step non-blocking auto-assist behaviors (aim-and-shoot, find-and-
+      pickup) startable from TeleOp or Auto, acquiring exclusive control of several
+      subsystems and cleanly cancelling/releasing them on preemption.
+    solution_approach: >
+      A generic abstract TrcAutoTask<T> wraps a TrcStateMachine<T> and registers
+      as a periodic task with the cooperative TrcTaskMgr scheduler; subclasses
+      implement acquireSubsystemsOwnership/releaseSubsystemsOwnership/stopSubsystems/
+      runTaskState while the base handles start/cancel/completion signaling and
+      enable/disable of the periodic hook uniformly.
+    code_reference: { file: "trclib/robotcore/TrcAutoTask.java", lines: "29-246" }
+    applicable_when: "software_stack.opmode_style == custom_cooperative_scheduler && autonomous.orchestration_style == task_state_machine"
+    source_team: "3543"
+    confidence: medium-high
+    convergence_ref: orchestration-nonblocking   # see references/cross-team-findings.yaml
+    provenance:
+      classification: independently-derived
+      basis: "Titan's own trclib (2022 copyright; TrcAutoTask split into the extracted lib 2024-05). Standalone weight = single Titan lineage."
+      collapses_with: []
+    maturity_note: "TRC is widely adopted (FTC+FRC) → MATURITY/POPULARITY only, NOT design validation (§12: adoption ≠ invention). Not promoted on adoption count."
+    notes: >
+      3rd leg of the orchestration-convergence finding (cross-team-findings.yaml).
+      The medium-high applies to the CONVERGENCE CLAIM — its standalone code is
+      single-source Titan lineage. Why it lifts the claim: TrcAutoTask is designed
+      CROSS-PLATFORM (FRC too), where FTC's LinearOpMode platform-forcing (which
+      capped the 18742 leg at medium-high) does NOT apply — so it is corroboration
+      of a different kind, ruling out "the platform just forced it."
+
+  - id: 3543-B-trcownershipmgr
+    layer: framework
+    problem: >
+      Multiple concurrent callers (auto-tasks, driver control) may command the same
+      subsystem, causing conflicting outputs; need single-owner-at-a-time guarantees
+      and preemption handling.
+    solution_approach: >
+      A singleton TrcOwnershipMgr holds a HashMap<TrcExclusiveSubsystem, ownerID>
+      with synchronized has/acquire/release; opt-in callers get exclusivity while
+      unaware callers still operate (backward-compat). Underpins TrcAutoTask's
+      acquire/release hooks.
+    code_reference: { file: "trclib/robotcore/TrcOwnershipMgr.java", lines: "34-80" }
+    applicable_when: "architecture.control == multiple_contending_control_sources"
+    source_team: "3543"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Titan framework internal (2022 lineage); competition-hardened (a 2025-11 commit changed validateOwnership to log-not-throw 'to prevent crashing during competition' — first-party authorship)."
+      collapses_with: []
+    maturity_note: "Mature adopted library — maturity only, not design validation. No independent same-shape invention elsewhere in the corpus → single-source (legitimate, high-value)."
+    notes: "High-value infra enabling preemptible exclusive subsystem control; season-agnostic."
+
+  - id: 3543-C-trcsubsystem
+    layer: framework
+    problem: >
+      Give OpModes a season-independent way to operate on "all subsystems" (cancel,
+      zero-calibrate on startup, reset-to-safe, report status, sync dashboard params)
+      without per-subsystem logic in the OpMode.
+    solution_approach: >
+      Abstract TrcSubsystem defines cancel/zeroCalibrate/resetState/updateStatus/
+      updateParamsTo|FromDashboard; each instance self-registers into a static list in
+      its constructor, enabling static fan-out (cancelAll, zeroCalibrateAll with
+      completion aggregation, resetStateAll, updateStatusAll, params sync).
+    code_reference: { file: "trclib/subsystem/TrcSubsystem.java", lines: "34-278" }
+    applicable_when: "architecture.subsystem_lifecycle == uniform_contract_with_static_fanout"
+    source_team: "3543"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Titan-authored 2025 generalization within the framework; a 2025-10 commit documents the FTC global-list-not-destroyed-on-reinit footgun — unambiguous first-party authorship."
+      collapses_with: []
+    maturity_note: "Part of the adopted TRC framework — maturity only. No cross-team independent invention → single-source, not promoted."
+    notes: "Uniform-lifecycle + 'all subsystems' fan-out is a strong reusable design; season-agnostic."
+
+  - id: 3543-D-drivebase-robottype
+    layer: framework
+    problem: >
+      Keep developing autonomous/vision/drive code across a season transition (or
+      before the competition robot is built) without coupling to one robot's wiring,
+      and support both mecanum and swerve via the same season application code.
+    solution_approach: >
+      A DriveBase.RobotType enum (VisionOnly, DecodeRobot[mecanum, current],
+      SwerveRobot, IntoTheDeepRobot[mecanum, PRIOR season]) selects — via
+      RobotParams.Preferences.robotType — which FtcRobotBase.RobotInfo subclass
+      (own PID coeffs, motor names, odometry/vision config) is built, and whether an
+      FtcMecanumBase or FtcSwerveBase is constructed. Doc rationale (verbatim):
+      "develop code on robots of previous seasons."
+    code_reference: { file: "teamcode/subsystems/DriveBase.java", lines: "49-302" }
+    applicable_when: "drivetrain.type in {mecanum, swerve} && season_transition_support == true"
+    source_team: "3543"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Titan team-code applying its own framework's RobotInfo abstraction; IntoTheDeepRobot (prior season) coexisting with DecodeRobot = concrete cross-season carryover evidence."
+      collapses_with: []
+    maturity_note: "Mature framework's config-selection idiom — maturity only; no independent cross-team invention of this enum-driven selection observed."
+    notes: >
+      ★ The single most on-thesis pattern in the corpus for season-agnostic design.
+      CORE = the SELECTION MECHANISM only. The concrete PID/motor constants in
+      DecodeRobotInfo/SwerveRobotInfo/IntoTheDeepRobotInfo (e.g. driveMotorVelPidCoeffs,
+      336.0*INCHES_PER_MM) are SEASON/ROBOT-SPECIFIC TUNING, not core-layer — several
+      are commented out. Preserve verbatim.
+
+  - id: 3543-E-ftcopmode
+    layer: framework
+    problem: >
+      Provide cooperative multitasking over the stock LinearOpMode loop — separating
+      main-thread periodic work from dedicated I/O threads, adding watchdog liveness
+      monitoring, and giving subclasses robotInit/startMode/stopMode hooks.
+    solution_approach: >
+      FtcOpMode extends LinearOpMode implements TrcRobot.RobotMode; reflectively reads
+      LinearOpMode's private runningNotifier, spawns/tracks the robot thread, registers
+      a TrcWatchdogMgr.Watchdog (heartbeat gated on Thread.currentThread()==robotThread),
+      and drives TrcTaskMgr's task types around robotInit/startMode/stopMode.
+    code_reference: { file: "ftclib/robotcore/FtcOpMode.java", lines: "50-105" }
+    applicable_when: "software_stack.opmode_style == custom_cooperative_scheduler && platform == FTC"
+    source_team: "3543"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Titan FTC platform bridge (ftclib, 2024-06 lineage). The FTC counterpart to the framework's FRC bridge; single Titan lineage."
+      collapses_with: []
+    maturity_note: "Core of the adopted TRC-on-FTC stack — maturity only; not independently reinvented in the corpus."
+    notes: >
+      THREAD→TASKTYPE TOPOLOGY (traced in TrcTaskMgr.java, RESOLVED — record it so a
+      future team does not build on a wrong assumption):
+        - MAIN robot thread: START_TASK, STOP_TASK, PRE_PERIODIC_TASK, POST_PERIODIC_TASK.
+        - ONE shared GLOBAL IO thread: INPUT_TASK AND OUTPUT_TASK both — despite the
+          docs naming an "input thread" and "output thread", TrcTaskMgr.java:249-252
+          states "There is only one global IO thread. All INPUT_TASKs and OUTPUT_TASKs
+          run on this thread." Do NOT assume input and output run on separate threads.
+        - OWN dedicated thread: each STANDALONE_TASK (for code that may block long).
+      Timing-sensitive code depending on input/output concurrency must account for the
+      SHARED IO thread. (runOpMode() body ~270-474 not line-by-line traced, but the
+      TaskType→thread mapping above is confirmed from the enum docs + registration code.)
+
+  - id: 3543-F-mechanism-templates
+    layer: framework
+    problem: >
+      Reuse game-piece-agnostic building blocks (flywheel/turret shooter, roller
+      intake, PID storage/indexer, servo claw, differential-servo wrist) instead of
+      rewriting mechanism control each season.
+    solution_approach: >
+      trclib/subsystem template classes (TrcShooter, TrcRollerIntake, TrcPidStorage,
+      TrcServoClaw, TrcDifferentialServoWrist) each implement TrcExclusiveSubsystem
+      with auto-assist methods (e.g. TrcShooter aim-by-pan/tilt + spin-to-velocity +
+      caller shoot callback + completion signaling), game-piece-agnostic. Season code
+      composes/configures them with season params.
+    code_reference: { file: "trclib/subsystem/TrcShooter.java", lines: "23-40" }
+    applicable_when: "architecture.mechanism_library == reusable_template_classes"
+    source_team: "3543"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Titan reusable mechanism library. TrcShooter carries a 2024 copyright (PREDATES 2025-26 DECODE) and a 2026-01 refactor generalizing TrcShootParam→TrcLookupTable 'to be not shooter specific' — literal cross-season carryover + active upkeep."
+      collapses_with: []
+    maturity_note: "Adopted framework, actively generalized — maturity/popularity only, not design validation."
+    notes: "Season/game-piece-agnostic mechanism templates that season code composes = high framework value. 2024 copyright on TrcShooter = literal season-carryover evidence (verbatim). Single Titan lineage."
+
+  # ---- Batch 2 (framework + season_app), approved 2026-07-03 ----
+
+  - id: 3543-G-swerve-mecanum-drivebase
+    layer: framework
+    problem: >
+      Support both mecanum and swerve drivetrains through one platform-independent
+      kinematics/pose-tracking layer, including swerve module state and steering.
+    solution_approach: >
+      TrcDriveBase is the common base; TrcMecanumDrive and TrcSwerveDrive extend it.
+      TrcSwerveModule models one corner as a drive motor + (mutually exclusive) steer
+      MOTOR or steer SERVO, using a TrcWarpSpace(0..360) helper to optimize steering
+      angle/direction. FtcSwerveBase adds a caller-supplied steer-power-compensation
+      callback to counter drive-accel torque on the steer axis.
+    code_reference: { file: "trclib/drivebase/TrcSwerveModule.java", lines: "31-67" }
+    applicable_when: "drivetrain.type in {mecanum, swerve}"
+    source_team: "3543"
+    confidence: high
+    provenance:
+      classification: independently-derived
+      basis: "Platform-independent trclib (trc492) shared across FRC+FTC; does NOT trace to any FTC quickstart. The unified DriveBase subsuming mecanum+swerve, plus steer-motor-OR-servo generality, is a distinctive in-house design."
+      collapses_with: []
+    maturity_note: "trclib maturity/adoption is team-quality/longevity corroboration, NOT design validation and NOT a promoter. HIGH is on single-source DESIGN MERIT (clean cross-drivetrain abstraction)."
+    notes: "steerPowerCompConstant (Dashboard.java:64) is season/robot tuning (defaulted 0.0); only the framework kinematics abstraction + the steer-power-comp CALLBACK HOOK is core. First STANDALONE high in the corpus (design merit, not convergence)."
+
+  - id: 3543-H-preferences-master-switches
+    layer: framework
+    problem: >
+      Enable/disable individual subsystems/features at one config point so code for a
+      not-yet-built/wired subsystem is safely skipped, and dashboard-heavy debug is
+      compiled-in but off during competition.
+    solution_approach: >
+      RobotParams.Preferences is a class of `public static final boolean` master
+      switches (useDriveBase/useIntake/useVision/…), consulted before constructing or
+      updating each subsystem; updateDashboard is coupled to !inCompetition.
+    code_reference: { file: "teamcode/RobotParams.java", lines: "36-87" }
+    applicable_when: "architecture.hardware_config == compile_time_feature_flags"
+    source_team: "3543"
+    confidence: high
+    provenance:
+      classification: independently-derived
+      basis: "Titan's own convention across FRC/FTC templates (repo bootstrapped from trc492 FtcTemplate). The final-boolean master-switch idiom + dev-safety rationale + competition-coupled dashboard flag is a distinctive design choice, not a quickstart artifact."
+      collapses_with: []
+    maturity_note: "Convention carried across many Titan seasons/templates — continuity is maturity evidence, held separate from design validation; not promoted on template reuse."
+    notes: "Flag NAMES (useSpindexer/useShooter/useAutoShoot…) are season-specific; the master-switch config PATTERN (final-boolean gates before subsystem construction, dev-safety, competition-coupled dashboard flag) is the core item. Second STANDALONE high."
+
+  - id: 3543-I-config-dashboard-usage
+    layer: framework
+    problem: >
+      Provide live, in-match-safe tunable parameters (PID, vision, drive scaling) from
+      FTC Dashboard without recompiling.
+    solution_approach: >
+      Per-subsystem nested static @Config classes (com.acmerobotics.dashboard.config.Config)
+      holding `public static` live-tunable fields.
+    code_reference: { file: "teamcode/Dashboard.java", lines: "43-99" }
+    applicable_when: "software_stack.telemetry == ftc_dashboard"
+    source_team: "3543"
+    confidence: medium
+    provenance:
+      classification: shared-ancestry
+      basis: "The @Config MECHANISM is the acmerobotics FTC-Dashboard idiom (import com.acmerobotics.dashboard.config.Config), widely shared across FTC — NOT a Titan invention. Same footing as 15993-F (library used as intended)."
+      collapses_with: [acmerobotics-FTC-Dashboard-@Config-idiom]
+    related:
+      - { id: 3543-J-observability-discipline, why: "the @Config surface (this entry, capped shared-ancestry) and the disciplined structure around it (3543-J, stronger) co-occur here but are SEPARABLE — a team wanting only the discipline should not inherit this cap" }
+    notes: "Capped at medium (shared-ancestry) — the eye-catching @Config surface is borrowed. The transferable VALUE lives in 3543-J, recorded separately so it isn't dragged down by this cap."
+
+  - id: 3543-J-observability-discipline
+    layer: framework
+    problem: >
+      Keep live-tunable params from drifting away from the compiled source-of-truth, and
+      make intermittent faults diagnosable after the fact.
+    solution_approach: >
+      (a) ORGANIZATION: one nested @Config class PER subsystem, each field initialized
+      FROM the compiled default (e.g. baseParams = DriveBase.DecodeRobotInfo.baseParams,
+      shootMotor1Pid = Shooter.shootMotor1PidParams) so the tunable MIRRORS rather than
+      duplicates the source of truth. (b) DISCIPLINE: real per-match trace logging
+      (useTraceLog, LOG_FOLDER_PATH, per-match filePrefix opened in robotInit) producing
+      an actual TraceLogs/ directory of per-event Auto/TeleOp logs from named competitions.
+    code_reference: { file: "teamcode/Dashboard.java", lines: "43-99", plus: "teamcode/FtcAuto.java:186-192 (TraceLog setup); TeamCode/src/main/TraceLogs/ (per-match logs)" }
+    applicable_when: "software_stack.telemetry == ftc_dashboard && architecture.observability == mirrored_tunables_plus_per_match_tracelogs"
+    source_team: "3543"
+    confidence: medium-high
+    provenance:
+      classification: independently-derived
+      basis: "The per-subsystem mirroring organization + per-match TraceLog discipline is Titan's own structuring around the borrowed @Config surface — stands on its own merit, separable from the mechanism (which is 3543-I)."
+      collapses_with: []
+    related:
+      - { id: 3543-I-config-dashboard-usage, why: "the borrowed @Config mechanism this discipline is built on top of" }
+    maturity_note: "Reflects a mature framework's tuning discipline; maturity held separate from the design-validation this tag rests on."
+    notes: "STRONG observability signal (Phase 9 taxonomy positive) — the compiled-default MIRRORING (not duplicating) + real competition TraceLogs are the transferable practice, tagged medium-high on its own merit (NOT inheriting 3543-I's shared-ancestry cap)."
+
+  - id: 3543-K-submodule-framework-discipline
+    layer: framework_meta
+    problem: >
+      Keep a multi-season, cross-FRC/FTC shared library evolving independently of any one
+      season's application code, with separate change histories.
+    solution_approach: >
+      trclib/ftclib are pinned git SUBMODULES (trc492/trclib, trc492/ftclib) bumped via
+      periodic "Updated trclib/ftclib" commits independently of season code — including
+      commits cross-pollinating fixes FROM FRC ("Sync'd vision changes from FRC. Updated
+      trclib, ftclib").
+    code_reference: { file: ".gitmodules", lines: "1-6" }
+    applicable_when: "software_stack.framework == custom_multiseason_library && repo.dependency_model == git_submodule"
+    source_team: "3543"
+    confidence: low
+    provenance:
+      classification: independently-derived
+      basis: "Git submodules are GENERIC SE — the mechanism is not novel and is redundant with common SE knowledge. What is evidenced and NON-generic is the DISCIPLINE: 127 independent bump commits across seasons, plus FRC↔FTC cross-pollination — a team actually sustaining its own library as a pinned dependency rather than vendoring/copy-pasting per season."
+      collapses_with: []
+    maturity_note: "The 127-bump multi-season cadence is strong MATURITY evidence of a real maintained framework — that is the point of this entry, kept separate from any design claim."
+    notes: >
+      KEEP-AS-META (not a droppable-in design pattern). The entry documents the specific
+      EVIDENCED DISCIPLINE (127 independent bumps, FRC↔FTC cross-pollination) that sustains
+      a cross-season framework — NOT "this team uses git submodules" as a general technique
+      (that half is redundant with common SE knowledge). Distinct from the 15993-B/C drops:
+      those were redundant with an ingested source; this documents HOW the cross-season
+      framework (the corpus's central season-agnostic thesis) is actually maintained.
+
+  - id: 3543-L-ftcmenu-match-config
+    layer: season_app
+    problem: >
+      Let the drive team pick match options (alliance, start position, delay) before the
+      match from the driver station, without a companion app.
+    solution_approach: >
+      FtcMenu.walkMenuTree(...) builds a driver-station-gamepad-navigable choice menu
+      (ftclib.driverio.FtcMenu/FtcChoiceMenu/FtcValueMenu), invoked from FtcAuto.robotInit()
+      into an AutoChoices object consumed by the autonomous sequencer.
+    code_reference: { file: "teamcode/FtcAuto.java", lines: "169-240", terminates_in: "FtcMenu.walkMenuTree at FtcAuto.java:474" }
+    applicable_when: >
+      driver_station.match_config_ui == gamepad_menu — TRC-ADOPTION-GATED: assumes an
+      FtcOpMode + ftclib.driverio.FtcMenu-shaped stack, NOT merely DECODE conditions. A
+      team WITHOUT TRC-shaped infra cannot drop this in; they must TRANSLATE the idea (a
+      DS-navigable pre-match config menu feeding a choices object) onto their own DS
+      primitives. season_app is not lesser, but its portability is gated on framework adoption.
+    source_team: "3543"
+    confidence: medium-high
+    provenance:
+      classification: independently-derived
+      basis: "Titan's own ftclib.driverio component (trc492/ftclib), reused every season; single Titan lineage, no shared-quickstart convergence."
+      collapses_with: []
+    maturity_note: "Long-standing ftclib infra reused every Titan season — maturity separate from design validation."
+    notes: "CAVEAT (verbatim): FtcMenu.walkMenuTree internals (ftclib/driverio/FtcMenu.java, 346 lines) NOT traced — only the call site (FtcAuto.java:474) and role confirmed; the tree-walk internals remain unverified."
+
+  - id: 3543-M-taskautoshoot
+    layer: season_app
+    problem: >
+      Combine vision tracking, a shooting-solution model, multi-artifact sequencing, and
+      motif logic into one resumable, cancelable auto-assist usable from Auto and TeleOp.
+    solution_approach: >
+      TaskAutoShoot extends TrcAutoTask<State> with a season State enum (START, DO_VISION,
+      AIM, SHOOT, SHOOT_NEXT, NEXT_EXIT_SLOT, DONE) and a builder-style TaskParams inner
+      class (fluent setters + an inAuto flag) parameterizing ONE reusable task for Auto vs TeleOp.
+    code_reference: { file: "teamcode/autotasks/TaskAutoShoot.java", lines: "49-140" }
+    applicable_when: >
+      TRC-ADOPTION-GATED: assumes a TrcAutoTask/TrcTaskMgr-shaped state-machine base exists,
+      NOT merely DECODE conditions. A team WITHOUT TRC-shaped infra must TRANSLATE the idea
+      (one reusable, param-object-driven auto-assist task shared between Auto and TeleOp via
+      an inAuto flag) onto their own state-machine framework. Portable idea, framework-gated drop-in.
+    source_team: "3543"
+    confidence: medium-high
+    depends_on: [3543-A-trcautotask]
+    provenance:
+      classification: independently-derived
+      basis: "Season CONSUMER of Titan's own TrcAutoTask primitive (3543-A), not a re-invention. Single Titan lineage."
+      collapses_with: []
+    notes: >
+      NOT INDEPENDENT ORCHESTRATION EVIDENCE: this is the season consumer of primitive
+      3543-A; it is explicitly NOT a fourth leg of the orchestration-nonblocking finding
+      (which requires three INDEPENDENTLY-DERIVED mechanisms — counting a consumer as a
+      leg would undermine the very discipline that makes the finding trustworthy). The
+      "extend TrcAutoTask + builder TaskParams" IDIOM is transferable; the State values +
+      game logic (artifacts/motifs/goal AprilTags/spindexer exit slots) are DECODE-specific.

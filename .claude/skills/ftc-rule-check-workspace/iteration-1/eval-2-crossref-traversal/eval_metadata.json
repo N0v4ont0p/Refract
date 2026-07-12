@@ -1,0 +1,19 @@
+{
+  "eval_id": 2,
+  "eval_name": "crossref-traversal",
+  "prompt": "once the match is going, how far is our robot actually allowed to expand past the starting size? want to make sure our arm extension is legal",
+  "assertions": [
+    {
+      "name": "traverses-to-limit-rules",
+      "text": "The answer incorporates the cross-referenced expansion-limit rules (G414 horizontal and/or G415 vertical), not just R105 alone \u2014 the one-hop traversal that carries the actual limits"
+    },
+    {
+      "name": "citations-verified",
+      "text": "All cited rule IDs are real (pass rules.py verify); none fabricated"
+    },
+    {
+      "name": "grounded-not-memory",
+      "text": "Limits come from retrieved rule text, not a recalled number"
+    }
+  ]
+}

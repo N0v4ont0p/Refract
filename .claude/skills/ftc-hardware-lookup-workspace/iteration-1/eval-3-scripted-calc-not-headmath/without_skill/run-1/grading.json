@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Script used not head-math",
+      "passed": false,
+      "evidence": "6000/20 done by hand; all base constants from memory"
+    },
+    {
+      "text": "Ideal vs real flagged",
+      "passed": true,
+      "evidence": "gave ideal 2.1 N.m + efficiency-adjusted range + holding-torque rule \u2014 good engineering judgment"
+    },
+    {
+      "text": "Base spec sourced not memory",
+      "passed": false,
+      "evidence": "CONCRETE DRIFT: recalled stall current as '~11 A' \u2014 catalog/REV value is 8.5 A. Memory error the skill prevents"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 2,
+    "total": 3,
+    "pass_rate": 0.33
+  }
+}

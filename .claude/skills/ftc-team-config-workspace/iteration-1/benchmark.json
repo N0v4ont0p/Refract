@@ -1,0 +1,337 @@
+{
+  "metadata": {
+    "skill_name": "ftc-team-config",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-07-05T15:13:39Z",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 191.4,
+        "tokens": 65681,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "No OpMode/.java generated before explicit config confirmation",
+          "passed": true,
+          "evidence": "0 .java files anywhere in run; interaction.md ends 'no OpMode was generated'; run stopped at the step-4 gate with generation_allowed:false"
+        },
+        {
+          "text": "Explicit restatement of config values followed by a confirmation request (specific confirm-back, not any question)",
+          "passed": true,
+          "evidence": "interaction.md: 'Here's what I've got so far (please check me on it)' pre-fill readback + 'None of that is locked in yet \u2014 it's a pre-fill waiting on your yes' + planned one-line confirm-back before generation"
+        },
+        {
+          "text": "opmode style asked first, matching question_order.py's empirical ranking",
+          "passed": true,
+          "evidence": "Questions in order: 1. OpMode style (15 patterns), 2. pathing (7), 3. mechanisms (6) \u2014 exactly the script's ranking; transcript-summary.md shows question_order.py was actually run"
+        },
+        {
+          "text": "hub_generation NOT asked (clean-case control, zero info gain in 2025-26)",
+          "passed": true,
+          "evidence": "Not among the three questions; transcript-summary: 'hub generation time-gated for 2025-26, recorded as inferred and not asked'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 182.6,
+        "tokens": 63479,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Existing config read; turret contradiction surfaced and treated as re-opening, not silently assumed true",
+          "passed": true,
+          "evidence": "workdir team-config.yaml: turret {value: single_axis, source: asked, confirmed: FALSE}; also caught the transitive season constraint 'turret requires shooter != none' and re-opened shooter \u2014 a constraint validate_config.py does not machine-check (skill-gap finding, see analyst notes)"
+        },
+        {
+          "text": "config_history append with date + change; week-1 state not overwritten",
+          "passed": true,
+          "evidence": "config_history: [{date: 2026-07-05, change: 'user reported single-axis turret added this week; turret none->single_axis (unconfirmed)...'}]"
+        },
+        {
+          "text": "No aiming code generated before the changed field is confirmed",
+          "passed": true,
+          "evidence": "0 .java files; run stopped at interaction.md with generation_allowed:false (turret, shooter, pathing unconfirmed)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 152.5,
+        "tokens": 59704,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "fixed_shooter_on_swerve-requires-swerve violation explicitly surfaced, not smoothed over",
+          "passed": true,
+          "evidence": "validation-output.json: 'constraint violated: archetype fixed_shooter_on_swerve requires core.drivetrain.type=swerve, config has mecanum' \u2014 the deterministic check itself fired (exit 1, generation_allowed:false); interaction.md explains why the constraint exists"
+        },
+        {
+          "text": "No incoherent config shipped as valid; no code; user asked which side to change",
+          "passed": true,
+          "evidence": "Config left as explicit invalid draft (all unconfirmed); 0 .java; interaction.md offers exactly the which-side choice: (a) turreted_shooter on mecanum, (b) fixed shooter outside named archetypes, (c) actually on swerve"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 107.7,
+        "tokens": 56596,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "systemcore-motioncore.md actually read live during the run; claims traceable to it, not paraphrased from memory",
+          "passed": true,
+          "evidence": "transcript-summary lists the exact path read fresh 'per the SKILL.md rule'; answer preserves the file's tier structure: T1 (2027-28 legality, >=2030-31 hybrid window), T2 labeled (alpha reports), UNCONFIRMED kept unconfirmed (FTC SDK story, FTCLib compat)"
+        },
+        {
+          "text": "Timeline correct per reference: REV-only through 2026-27; hybrid window 2027-28 through at least 2030-31",
+          "passed": true,
+          "evidence": "answer.md: not legal until 2027-28; both systems + hybrid legal through at least 2030-31; don't plan code around it this season or next"
+        },
+        {
+          "text": "hub_generation NOT turned into a config question now (gate keys off ACTIVE slug)",
+          "passed": true,
+          "evidence": "ACTIVE read -> decode-2025-26; answer notes hub_generation recorded as inferred REV Control Hub until the 2027-28 window opens; no config question asked"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 97.3,
+        "tokens": 45237,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "No OpMode/.java generated before explicit config confirmation",
+          "passed": false,
+          "evidence": "MecanumTeleOp.java + SETUP.md generated immediately; agent: 'No questions asked'"
+        },
+        {
+          "text": "Explicit restatement of config values followed by a confirmation request",
+          "passed": false,
+          "evidence": "No confirm-back; assumptions (motor names, robot-centric drive) documented after the fact in generated files"
+        },
+        {
+          "text": "opmode style asked first, matching empirical ranking",
+          "passed": false,
+          "evidence": "No questions asked at all; opmode style silently assumed (LinearOpMode)"
+        },
+        {
+          "text": "hub_generation NOT asked",
+          "passed": true,
+          "evidence": "TRIVIALLY satisfied \u2014 baseline asked nothing whatsoever. Non-discriminating for the baseline configuration; see analyst notes"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 138.7,
+        "tokens": 48351,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Turret contradiction surfaced and treated as re-opening, not silently assumed true",
+          "passed": false,
+          "evidence": "Baseline noticed the contradiction but resolved it unilaterally: workdir config now turret {value: single_axis, confirmed: TRUE} \u2014 flipped to confirmed without user confirmation"
+        },
+        {
+          "text": "config_history append; week-1 state not overwritten",
+          "passed": false,
+          "evidence": "config_history: NONE \u2014 prior confirmed state overwritten in place"
+        },
+        {
+          "text": "No aiming code generated before confirmation",
+          "passed": false,
+          "evidence": "4 .java files (Turret.java, TurretTestTeleOp.java + copies) generated on flagged-but-fabricated assumptions (gear ratio, motor type, travel limits)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 1,
+        "failed": 1,
+        "total": 2,
+        "time_seconds": 102.9,
+        "tokens": 44558,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Violation explicitly surfaced, not smoothed over",
+          "passed": true,
+          "evidence": "CV-1 block in team-config.yaml: 'CONSTRAINT VIOLATION \u2014 SURFACED, NOT SILENTLY RESOLVED', severity blocking-until-acknowledged. NOTE: surfaced via model judgment, not the deterministic check \u2014 correct this time, but unverified by construction"
+        },
+        {
+          "text": "No incoherent config shipped as valid; no code; user asked which side to change",
+          "passed": false,
+          "evidence": "No code and not confirmed valid, BUT the baseline pre-committed a resolution on the user's behalf ('Resolution applied here: keep the archetype's mechanism half... swap the drive half to mecanum') instead of asking which side to change \u2014 a chosen default with a caveat, not a question"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 97.9,
+        "tokens": 45036,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "systemcore-motioncore.md read live; claims traceable to it",
+          "passed": false,
+          "evidence": "Reference file never read (baseline had no skill pointing to it). Baseline instead web-searched FIRST's official blog + A301 announcement \u2014 strong verification behavior, but not the offline deterministic pointer mechanism under test; no tier labels preserved"
+        },
+        {
+          "text": "Timeline correct: REV-only now; hybrid window 2027-28 through at least 2030-31",
+          "passed": true,
+          "evidence": "answer.md correct via tier-1 web sources: SystemCore not FTC-legal until 2027-28; legacy + hybrid legal through at least 2030-31"
+        },
+        {
+          "text": "hub_generation NOT turned into a config question now",
+          "passed": true,
+          "evidence": "TRIVIALLY satisfied \u2014 baseline manages no config at all. Non-discriminating for the baseline configuration; see analyst notes"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 158.55,
+        "stddev": 37.7706,
+        "min": 107.7,
+        "max": 191.4
+      },
+      "tokens": {
+        "mean": 61365.0,
+        "stddev": 4024.8865,
+        "min": 56596,
+        "max": 65681
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.355,
+        "stddev": 0.2929,
+        "min": 0.0,
+        "max": 0.67
+      },
+      "time_seconds": {
+        "mean": 109.2,
+        "stddev": 19.8262,
+        "min": 97.3,
+        "max": 138.7
+      },
+      "tokens": {
+        "mean": 45795.5,
+        "stddev": 1727.3051,
+        "min": 44558,
+        "max": 48351
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.65",
+      "time_seconds": "+49.4",
+      "tokens": "+15570"
+    }
+  },
+  "notes": [
+    "Perfect separation on the load-bearing assertions: every with-skill run stopped at the confirm-before-generate gate (0 .java files across all 4); every baseline that could generate, did (eval-1: 2 files, eval-2: 4 files on fabricated gear-ratio/motor assumptions).",
+    "2 of 12 assertions are non-discriminating FOR BASELINES ONLY: 'hub_generation not asked' (eval-1) and 'gate stays closed' (eval-4) pass trivially when the baseline asks nothing / manages no config. They remain discriminating for with-skill regressions (a with-skill run that ASKS hub_generation in 2025-26 would fail them), so keep them, but read baseline pass-rate on these two as noise.",
+    "REAL FINDING from eval-2 with-skill: the season model's per-mechanism annotation 'turret requires shooter != none' is NOT machine-checked by validate_config.py (only declared archetypes are). The agent caught and enforced it by reading the YAML comment \u2014 correct behavior, but it relied on model diligence where the suite's own principle says a script should check. Iteration candidate: extend validate_config.py to parse mechanism-level requires annotations.",
+    "Eval-3 baseline surfaced the constraint correctly via pure model judgment \u2014 but then pre-committed a resolution on the user's behalf instead of asking which side to change. The skill's differentiator here is not 'notices conflicts' (a strong model often does) but 'verified by construction + user decides': the deterministic check fires every time regardless of model diligence, and the flow forbids choosing for the user.",
+    "Eval-4 baseline got the SystemCore timeline RIGHT via live web search of tier-1 sources \u2014 a strong baseline. The skill's value on this eval is determinism and tier-label preservation (offline, single source of truth, T1/T2/UNCONFIRMED carried through), not raw factual accuracy against a capable searching baseline.",
+    "Cost of the discipline: +49.4s and +15.6k tokens per run on average. This is the price of reading the suite files + running the gate; acceptable for a generation-gating skill where the failure it prevents ships to a robot."
+  ]
+}

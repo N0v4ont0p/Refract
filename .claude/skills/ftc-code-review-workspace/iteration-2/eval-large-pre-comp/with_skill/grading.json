@@ -1,0 +1,26 @@
+{
+  "expectations": [
+    {
+      "name": "N1-turret-config-mismatch",
+      "passed": true,
+      "evidence": "config_lint.py -> turret / TurretController.java (deterministic, verified via Bash)"
+    },
+    {
+      "name": "N2-mutable-static-persistence",
+      "passed": true,
+      "evidence": "failure_mode_lint.py -> mutable_static_opmode_write (low) on autoAlignOffset (deterministic)"
+    },
+    {
+      "name": "N3-god-opmode",
+      "passed": true,
+      "evidence": "failure_mode_lint.py -> god_opmode (medium) on TeleOpMain (deterministic)"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "note": "Graded from guaranteed script output, not a subagent (subagent runs died on session limit; the linter result is reproducible and does not depend on model reading)."
+}

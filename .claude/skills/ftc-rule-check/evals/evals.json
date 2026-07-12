@@ -1,0 +1,54 @@
+{
+  "skill_name": "ftc-rule-check",
+  "_design_note": "Break-it evals. FAIL to hunt: a rule verdict citing a rule number NOT verified to exist (or from memory), a verdict that misses the cross-referenced rule the real answer depends on, table specs paraphrased instead of resolved by pointer, or a confident verdict where the honest answer is 'ambiguous/file a Q&A'.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "citation-verify-trap",
+      "prompt": "our robot measures about 19 inches wide sitting on the field right before the match starts. are we gonna pass inspection or is that a problem?",
+      "expected_output": "Verdict illegal: R101 limits STARTING CONFIGURATION to an 18-inch cube. Every cited rule ID verified to exist (rules.py verify). No fabricated rule number.",
+      "files": [],
+      "assertions": [
+        {"name":"correct-verdict-R101","text":"Verdict is illegal/non-compliant, grounded in R101 (STARTING CONFIGURATION 18-inch cube) — the real governing rule, retrieved not recalled"},
+        {"name":"every-citation-verified-exists","text":"Every rule ID cited in the answer actually exists in the manual (would pass rules.py verify); no hallucinated/fabricated rule number appears"},
+        {"name":"grounded-not-from-memory","text":"The rule text/number came from rules.py lookup (visible in transcript), not stated from memory"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "crossref-traversal",
+      "prompt": "once the match is going, how far is our robot actually allowed to expand past the starting size? want to make sure our arm extension is legal",
+      "expected_output": "Answer rests on R105 expansion limits AND the cross-referenced G414 (horizontal) / G415 (vertical, with exceptions) — the one-hop traversal. A verdict citing only R105 without the actual limit rules is incomplete.",
+      "files": [],
+      "assertions": [
+        {"name":"traverses-to-limit-rules","text":"The answer incorporates the cross-referenced expansion-limit rules (G414 horizontal and/or G415 vertical), not just R105 alone — the one-hop traversal that carries the actual limits"},
+        {"name":"citations-verified","text":"All cited rule IDs are real (pass rules.py verify); none fabricated"},
+        {"name":"grounded-not-memory","text":"Limits come from retrieved rule text, not a recalled number"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "table-pointer-resolve",
+      "prompt": "we want to run 30 AWG wire for our drive motor power leads to save weight. is that within spec?",
+      "expected_output": "R615 governs wire sizing and points to Table 12-8. Correct behavior resolves the [[TABLE:12-8]] pointer into the hardware skill's manual-tables/table-12-8.json for the actual gauge requirement — not a paraphrase of wire specs from memory.",
+      "files": [],
+      "assertions": [
+        {"name":"resolves-table-pointer","text":"The wire-gauge requirement is resolved from manual-tables/table-12-8.json (read by path), reached via R615's [[TABLE:12-8]] pointer — not paraphrased from rule prose or memory"},
+        {"name":"correct-rule-R615","text":"R615 (wire sizing) is identified as the governing rule and verified to exist"},
+        {"name":"verdict-uses-table-value","text":"The legal/illegal call about 30 AWG rests on the actual table value, not an invented gauge threshold"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "ambiguous-not-confident",
+      "prompt": "is it legal to spray our mecanum wheels with silicone traction spray for extra grip on the tiles? does the manual allow that?",
+      "expected_output": "The base manual does not cleanly enumerate silicone traction spray; the honest verdict is ambiguous — point to the relevant traction/field-damage rule if one is retrieved, flag the uncertainty, and suggest filing a Q&A. NOT a confident invented yes/no.",
+      "files": [],
+      "assertions": [
+        {"name":"ambiguous-not-confident","text":"Does NOT deliver a confident invented legal/illegal verdict on the specific silicone-spray question; returns ambiguous / 'not cleanly addressed, consider a Q&A' where the manual doesn't resolve it"},
+        {"name":"no-fabricated-citation","text":"Does not cite a rule number that doesn't exist or doesn't actually address traction spray; any rule cited is real and genuinely relevant"},
+        {"name":"honest-about-gap","text":"Explicitly flags that the manual doesn't directly address this rather than filling the gap"}
+      ]
+    }
+  ]
+}

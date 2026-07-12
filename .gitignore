@@ -1,0 +1,24 @@
+# --- Secrets: never commit ---
+.env
+.env.*
+*.pem
+*.key
+*.keystore
+id_rsa*
+credentials*
+
+# --- Third-party mining input: raw clones of other teams' PUBLIC repos (reproducible; not a
+#     deliverable; also carries their FTC debug keystores). The distilled corpus ships in the plugin. ---
+corpus-sources/
+
+# --- OS / editor / tool caches ---
+.DS_Store
+__pycache__/
+*.pyc
+.impeccable/
+
+# --- Packaged build artifacts (rebuilt from source) ---
+*.skill
+
+# --- Stray third-party team code (not part of the Refract deliverable; same rationale as corpus-sources) ---
+32008teamcode/

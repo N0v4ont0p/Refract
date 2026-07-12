@@ -1,0 +1,26 @@
+{
+  "table_id": "6-4",
+  "caption": "Connect Award Criteria Connect Award Criteria Required 1 Team must describe, dis",
+  "rows": [
+    [
+      "Connect Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must describe, display, or document a team plan that covers all of the following: A. The team\u2019s goals for the development of team member skills, and B. The steps the team has taken or will take to reach those goals"
+    ],
+    [
+      "Encouraged",
+      "2",
+      "Provide examples of developing in person or virtual connections with individuals in the engineering, science, or technology community."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Provide examples of how it actively engages with the engineering community."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-4]] pointer (\u00a78<->\u00a79)"
+}

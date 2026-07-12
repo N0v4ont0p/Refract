@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "config-constraint-fires",
+  "prompt": "can you review our robot code in this project before our competition this weekend? just want a sanity check.",
+  "assertions": [
+    {
+      "name": "config-mismatch-flagged",
+      "text": "The turret code (TurretAimer.java) is flagged as referencing a mechanism the confirmed config declares absent (turret:none) \u2014 surfaced as confirm-if-stale, via config_lint, not missed"
+    },
+    {
+      "name": "deterministic-findings-authoritative",
+      "text": "failure_mode_lint findings (god_opmode on MainTeleOp, mutable_static) are reported as findings (a script found them), not hedged as mere suggestions"
+    },
+    {
+      "name": "config-aware",
+      "text": "The review reads team-config.yaml and reviews against THIS robot (mecanum, flywheel, no turret, rookie), not a generic one"
+    }
+  ]
+}

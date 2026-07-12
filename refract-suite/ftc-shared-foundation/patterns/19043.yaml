@@ -1,0 +1,294 @@
+# Distilled patterns — Team 19043 (Clueless), DECODE
+# License: BSD-3-Clause (permissive; still file+line refs only). Java, raw LinearOpMode
+# (verified: no FTCLib/CommandScheduler, no roadrunner/pedro — custom drivetrain + pathing).
+# Provenance via narrowed provenance-checker (Opus xhigh), human-approved 2026-07-03.
+#
+# FEATURE-VECTOR CORRECTIONS (approved): drivetrain = custom mecanum (GVF follower);
+# pathing = custom Guided-Vector-Field spline follower (NOT pedro/roadrunner). Odometry:
+# goBILDA Pinpoint is LIVE (fused in the EKF); SparkFun OTOS driver present but VESTIGIAL
+# (0 instantiations). REVColorSensorV3 driver present but VESTIGIAL (0 instantiations);
+# the live color sensing is an analog light sensor (see Batch 2).
+#
+# BATCH-RECORD NOTE — "sophistication did NOT inflate confidence" (cuts both ways, a
+# demonstration of the provenance discipline on real data, alongside Tier 1's convergence
+# finding). This is one of the most sophisticated repos in the set (priority scheduler,
+# EKF fusion, GVF pathing) and NOTHING rated above medium — correctly:
+#   * EKF (19043-C) and GVF (19043-D): established-technique + independent-implementation
+#     CORRECTLY DECOMPOSED — sophistication was NOT read as novelty-evidence.
+#   * HardwareQueue (19043-A): the sharper case — a developed subsystem arriving on an
+#     "initial transfers" (season carry-forward) commit is itself the correct signal of
+#     ADOPTION, not invention, and the system read it right (undetermined, not promoted).
+# Both directions of the same discipline.
+
+meta:
+  team: "19043"
+  name: Clueless
+  license: BSD-3-Clause
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+
+patterns:
+  - id: 19043-A-hardwarequeue
+    problem: >
+      Writing to many motors/servos every loop can blow the loop-time budget; schedule
+      hardware WRITES so the most-needed device is serviced within a time budget.
+    solution_approach: >
+      A central HardwareQueue holds PriorityDevices; each loop it repeatedly picks the
+      highest getPriority(timeRemaining) device and does ONLY that hardware write, until
+      no device reports positive priority OR measured loop time exceeds targetLoopLength
+      (0.016s). Priority = base + (staleness since last physical update) × (magnitude of
+      pending change) — a staleness×urgency metric, explicitly NOT I2C bus arbitration.
+    code_reference: { file: "utils/priority/HardwareQueue.java", lines: "35-64" }
+    applicable_when: "software_stack.hardware_write_scheduling == custom && opmode_style == raw_linear_opmode && actuator_count_high"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: undetermined
+      basis: >
+        VERIFIED as 19043's own multi-year iterated code (PriorityDevice base +
+        getPriority(timeRemaining) + staleness×urgency), with MotorPriority as the
+        VESTIGIAL V0 predecessor (0 live refs, same-commit birth). BUT it arrived on the
+        2024-09-12 "initial transfers/first commit" (a season-to-season CARRY-FORWARD, not
+        a from-scratch write), and the priority-hardware-queue ARCHITECTURE is a recognized
+        shared FTC idiom, NOT a unique 19043 invention.
+      lineage_unverified: >
+        The provenance-checker associated the skeleton with an "Iron Reign / KookyBotz-style"
+        priority-scheduler family from RECALL. A Rule-7 web search (3 queries, incl. the
+        distinctive class names PriorityDevice/nPriorityServo) did NOT locate a specific
+        published source to confirm OR refute that attribution. So the specific external
+        lineage is UNVERIFIED — do NOT record Iron Reign/KookyBotz as fact. Classification
+        remains undetermined: cannot confirm 19043-original OR external-derived.
+      collapses_with: []
+    notes: >
+      If another corpus repo shows the same PriorityDevice/getPriority skeleton, treat it as
+      a POSSIBLE shared-idiom collapse, not independent confirmation — revisit this lineage
+      then. Season-agnostic. Medium (shared community idiom + unresolved provenance).
+
+  - id: 19043-B-npriorityservo
+    problem: >
+      Apply the priority-write scheme to servos, whose motion is not instantaneous and
+      whose "reached target" state has no hardware feedback.
+    solution_approach: >
+      nPriorityServo extends PriorityDevice and SIMULATES the servo's physical position
+      over time via a per-ServoType enum (positionPerRadian + angular speed constants),
+      advancing currentIntermediateTargetAngle toward targetAngle each getPriority() poll
+      so priority + inPosition() stay accurate between hardware writes.
+    code_reference: { file: "utils/priority/nPriorityServo.java", lines: "139-256" }
+    applicable_when: "software_stack.hardware_write_scheduling == custom && actuator.type == servo"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "The servo physics-simulation layer on top of the (shared-idiom) PriorityDevice base is 19043's own bespoke, multi-year-iterated code; no external attribution/import."
+      collapses_with: []
+    notes: >
+      VERBATIM developer caveats preserved: "// STUPID STUPID HACK I HATE YOU" (:187),
+      "// Dawg what the hell??" (:239), "// Ong trust this function." (:244), the HITEC
+      double-set workaround "I kid you not this must happen" (:170-174), AXON_MICRO
+      "// TODO need to tune" (:22), and the known `first`-boolean issue (:45) "servos won't
+      get set at the start if theyre set to 0". Self-assessed hacky/partly-untuned →
+      medium. ServoType speed/position constants are hardware tuning, not asserted here.
+
+  - id: 19043-C-ekf-localizer
+    problem: >
+      Fuse heterogeneous asynchronous localization sources (3-wheel odometry, Pinpoint,
+      AprilTag vision) with different rates/noise/latency into one robust pose estimate.
+    solution_approach: >
+      nMergeLocalizer runs an EKF (RobotEKF): odometry deltas → predict each loop; Pinpoint
+      → one update step (hard-reset vs soft-correct by a Mahalanobis-style distance);
+      AprilTag → a second update whose innovation is computed against the TIME-INTERPOLATED
+      PAST pose (findPastInterpolatedPose) so camera-pipeline latency isn't misread as a
+      position jump.
+    code_reference: { file: "subsystems/drive/localizers/nMergeLocalizer.java", lines: "78-215" }
+    applicable_when: "sensing.odometry == goBILDA_pinpoint && vision.provides_pose == apriltag && localization.fusion == multi_sensor_ekf"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: >
+        EKF/Kalman is an ESTABLISHED technique (shared CONCEPT, not 19043-invented) — say so
+        explicitly; do NOT credit convergence with other EKF teams as independent invention.
+        The FTC IMPLEMENTATION is 19043's verified in-house V1→V2 evolution: MergeLocalizer V1
+        (2025-11-29) → RobotEKF+nMergeLocalizer V2 (2026-03-15), with the latency-compensated
+        past-pose innovation and hard-reset-vs-soft-correct branch custom.
+      collapses_with: []
+    notes: >
+      LIVE localizer (feeds ROBOT_POSITION); MergeLocalizer is the retained-not-live V1
+      (evolution evidence). Author-flagged interim: commit "now kalman filter exists,
+      hopefully it works??" + a commented-out alternate Pinpoint-update block. Covariance
+      constants (Q_*, pinpointResetDist, maxVisionErrorThresh) are season/robot tuning.
+      Medium: novel-for-FTC integration but self-described unproven + tuning-dependent.
+
+  - id: 19043-D-gvf-pathfollower
+    problem: >
+      Follow spline paths in autonomous with dynamic re-routing around obstacles, rather
+      than committing to a rigid pre-planned trajectory.
+    solution_approach: >
+      A hand-rolled Guided Vector Field follower: per loop, sum a tangential traverse vector
+      (from path velocity), a curvature-based lateral correction (traverse.mag²/radius ×
+      correctScalar), and RepulsionPoint obstacle vectors into one move vector; fall back to
+      a PID-to-point state once the segment is exhausted, with stuck-detection segment-skip.
+    code_reference: { file: "subsystems/drive/Drivetrain.java", lines: "187-245" }
+    applicable_when: "drivetrain.type == mecanum && software_stack.pathing == custom_gvf_spline_follower"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "GVF (Guided Vector Field) is an ESTABLISHED robotics technique — the CONCEPT is shared, NOT 19043-invented. The FTC IMPLEMENTATION is 19043's own hand-rolled code (verified custom pathing, no roadrunner/pedro import)."
+      collapses_with: []
+    notes: >
+      VERBATIM: "// TODO: Tune these values" (correctScalar/rotScalar/decelThresh) and the
+      self-assessed-interim stuck comment "Timeout / stuck protection (looks good? will check
+      more in depth. consider switching to PID to point…". PID gains are tuning-dependent;
+      author flags stuck-skip as not-fully-validated → medium. Season-agnostic pathing.
+
+  - id: 19043-E-composition-root
+    problem: >
+      Keep OpModes thin and subsystems independently testable, avoiding a monolithic OpMode.
+    solution_approach: >
+      A central Robot owns one instance per subsystem + the shared HardwareQueue; a single
+      update() sequences sensors → subsystem updates → hardwareQueue.update() (the actual
+      hardware write-flush) → telemetry. OpModes issue reqX() calls, never touch hardware.
+    code_reference: { file: "Robot.java", lines: "28-75" }
+    applicable_when: "opmode_style == raw_linear_opmode && architecture.subsystem_separation == composition_root"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "19043's own code, but the composition-root idiom is NEAR-UNIVERSAL in FTC (cf 18742-A, 3543 Robot) — commodity-architecture convergence, NOT independent invention. Do NOT up-credit the cross-team agreement."
+      collapses_with: []
+    notes: "The distinctive/creditable part is the coupling to the priority HardwareQueue as the SINGLE write-flush point (Robot.java:72), not the composition root itself (commodity). Medium. Season-agnostic."
+
+  - id: 19043-F-request-state-machine
+    problem: >
+      Sequence multi-step subsystem behaviors driven by async gamepad/auto requests without
+      blocking the main loop.
+    solution_approach: >
+      Shooter/Intake each have an enum State + boolean reqX() flags consumed in a
+      switch(state) in their own update(); transitions gate on readiness (turret.inPosition()
+      && atVel() && hood.inPosition()), decoupling request timing from completion.
+    code_reference: { file: "subsystems/shooter/Shooter.java", lines: "127-243" }
+    applicable_when: "architecture.subsystem_control == request_flag_plus_readiness_gated_state_machine"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "19043's own code, but subsystem-level readiness-gated state machines are a NEAR-UNIVERSAL FTC idiom (same shape as 18742-D). Commodity convergence — explicitly NOT credited as independent invention."
+      collapses_with: []
+    notes: "Do NOT over-credit convergence with 18742-D or others — commodity FTC architecture. The request-flag + readiness-gate PATTERN is season-agnostic; AIMING/SHOOT content is season-specific. Medium."
+
+  # ---- Batch 2 (mechanisms + sensing), approved 2026-07-03 ----
+
+  - id: 19043-G-shooter-empirical-table
+    problem: >
+      Turn distance-to-goal into flywheel-velocity + hood-angle setpoints for a
+      distance-variable shooter, without solving closed-form ballistics at runtime.
+    solution_approach: >
+      ShotTable2: an outer TreeMap<distance, flywheelVel> plus, per breakpoint, an inner
+      TreeMap<actual-flywheelVel, hoodAngle>, both linearly interpolated (tableLerp). No
+      physics solved live. V1 ShotTable -> V2 ShotTable2 added the second axis conditioned
+      on ACTUAL (not commanded) flywheel velocity.
+    code_reference: { file: "subsystems/shooter/ShotTable2.java", lines: "9-153", live_table: "70-107 (dated 2026-03-12)" }
+    applicable_when: "season.mechanism == flywheel_shooter && shooter.aiming_model == empirical_lookup_table"
+    source_team: "19043"
+    confidence: medium-high
+    finding_ref: shooter-empirical-vs-physics   # see references/cross-team-findings.yaml
+    provenance:
+      classification: independently-derived
+      basis: >
+        GIT-PROVEN independent physics->empirical abandonment (SECOND team, alongside 15993-J;
+        NOT shared ancestry). 19043 built a FULL solver aimLauncherV8 (gravity kinematics +
+        moving-shot velocity comp + rotational-velocity cross-product), 2025-12-20..2026-02-04,
+        then COMMENTED IT OUT (Shooter.java:147) for this empirical table. Reached by a
+        different code path than 15993-J, and 19043's abandoned solver was MORE complete.
+      collapses_with: []
+    notes: >
+      VERBATIM: "// TODO Find new values. These are placeholders." guards an OLD commented
+      table (14-69); the LIVE table (70-107) dated "// 2026-03-12" was tuned through late March.
+      Season-specific mechanism; the transferable idiom is the empirical 2-axis lookup +
+      interpolation (with physics kept in git as a reference). medium-high per the shooter
+      finding (domain-forcing discount + 24089 counterexample cap it below high).
+
+  - id: 19043-H-flywheel-control
+    problem: >
+      Hold flywheel velocity accurately across battery sag and a wide range, avoiding
+      belt-slip at low speed.
+    solution_approach: >
+      PID on filtered velocity error + linear feedforward from an empirical velocity-vs-power
+      sweep (hand-recorded in-comment "Tuned 2/25/26") + output scaled by
+      flywheelScaleVoltage/currentBatteryVoltage (sag comp) + an asymmetric exponential filter
+      (different smoothing above/below a velocity-jump threshold) + a max-accel clamp below a
+      low-velocity threshold to avoid belt "skip" (velocityNoSkipThresh/NoSkipAccel).
+    code_reference: { file: "subsystems/shooter/Flywheel.java", lines: "65-92" }
+    applicable_when: "season.mechanism == flywheel_shooter && actuator.control_model == pidf_with_voltage_compensation"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "Self-authored (velocityNoSkip* constants unique to this file). The voltage-sag comp ECHOES 18742-F but that is a COMMON SHARED IDIOM (nominal-voltage scaling), NOT shared lineage — do NOT count 19043 as independent confirmation of the voltage-comp pattern. The distinctive contribution is the belt-skip max-accel clamp + asymmetric error-keyed filter."
+      collapses_with: []
+    notes: "Season-specific mechanism; transferable control idiom. Kept medium: velocity PID+FF and voltage scaling are individually commonplace; the value is the belt-skip-aware clamp."
+
+  - id: 19043-I-turret-lead-prediction
+    problem: >
+      Compensate servo slew-rate lag when tracking a continuously moving target angle, rather
+      than always commanding the instantaneous target and lagging behind.
+    solution_approach: >
+      Command the servo to a LEAD-predicted angle: targetAngle + (filtered targetAngleVel,
+      clamped +/-150 deg/s) x loopTime x targetPredictNumLoops, so the servo chases a point
+      ahead of the current aim solution.
+    code_reference: { file: "subsystems/shooter/Turret.java", lines: "38-50" }
+    applicable_when: "season.mechanism == turret && actuator.type == servo && target.motion == continuous_tracking"
+    source_team: "19043"
+    confidence: medium
+    provenance:
+      classification: independently-derived
+      basis: "Self-authored (commit 'turret target predict ff'); standard lead/lookahead (derivative-of-target x dt) independently reinvented — trivial enough to be genuinely independent, distinctive enough (filtered target angular velocity, tunable prediction horizon in loop-counts) to be a real contribution."
+      collapses_with: []
+    notes: "Season-specific turret; transferable servo-lag-compensation technique. Medium (broadly-recognized control idiom, no cross-team replication in-batch to lift higher)."
+
+  - id: 19043-J-balldetection-field-position
+    problem: >
+      Detect game-piece (artifact) presence and FIELD POSITION from a distance, to drive
+      intake path-planning / auto-aim.
+    solution_approach: >
+      Limelight 3A neural-net detector (pipelineSwitch(7), getDetectorResults); area->distance
+      via an empirical inverse-cube fit (d = 70 - 100*cbrt(ta - 0.005)); polar->cartesian into
+      a FIELD-FRAME ball position using robot pose; field-bounds filter + a hand-tuned ranking
+      heuristic (x-proximity + neighbor-clustering + first/last penalty) to pick a best ball.
+    code_reference: { file: "vision/BallDetection.java", lines: "48-158", inverse_cube_fit: "77" }
+    applicable_when: "vision.system == limelight_3a && vision.task == game_piece_field_localization"
+    source_team: "19043"
+    confidence: medium
+    finding_ref: sensing-modality   # answers "WHERE on the field" (presence + 2D position)
+    provenance:
+      classification: independently-derived
+      basis: "Self-authored inverse-cube area->distance fit + field-frame projection + ranking heuristic; stock Limelight3A SDK, no shared vision framework."
+      collapses_with: []
+    notes: >
+      VERBATIM: "confidenceThresh = 0; // Todo - Tune" — the confidence filter is a live NO-OP
+      (getConfidence()>0 always true); the field-bounds filter IS live. Sensing-modality:
+      answers "WHERE are artifacts on the FIELD" (presence + 2D position). Season-specific
+      target, but the Limelight-detector->field-position technique transfers.
+
+  - id: 19043-K-analog-held-color
+    problem: >
+      Classify the COLOR/type of an artifact currently HELD in the intake (distinct from the
+      field-position detection above).
+    solution_approach: >
+      A single AnalogInput light sensor, raw-voltage read, exponentially filtered, thresholded
+      against two hardcoded cutoffs to classify held artifact green/purple/none; drives two
+      indicator LEDs for driver feedback.
+    code_reference: { file: "sensors/Sensors.java", lines: "130-142", thresholds: "133-134" }
+    applicable_when: "sensing.held_piece_type == analog_light_sensor && season.artifact_has_color_variants == true"
+    source_team: "19043"
+    confidence: single-source
+    finding_ref: sensing-modality   # answers "WHAT COLOR am I holding" (presence + type)
+    provenance:
+      classification: independently-derived
+      basis: "Self-authored (replaced an earlier intake sensor, commit 'Changed intake sensor to analog light sensor'); inline thresholds + filter, no shared library."
+      collapses_with: []
+    notes: >
+      VERBATIM: thresholds 0.008V (isGreen) / 0.007V (isPurple when !isGreen) are undocumented
+      magic numbers. single-source (a one-repo, minimally-generalizable hand-tuned classifier
+      on one analog sensor) — NOT silently promoted. Its main VALUE is the PAIRING with
+      19043-J: two modalities, two information-needs, in ONE repo (see sensing-modality finding).

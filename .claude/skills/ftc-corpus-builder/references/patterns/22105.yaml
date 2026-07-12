@@ -1,0 +1,115 @@
+# Distilled patterns — Team 22105 (Runtime Terror / "el-skibo"), DECODE
+# License: not stated → default-copyright (file+line refs only).
+# Provenance: INLINE (main-session Opus xhigh) — the extractor subagent hit the account
+# session limit; key lineage facts deterministically verified, file-depth lighter than a full
+# subagent pass. 22105-D queued for a post-midnight subagent re-run (see REVIEW-QUEUE.md).
+# Human-approved 2026-07-03.
+#
+# META NOTES:
+# - Command framework = SolversLib (com.seattlesolvers.solverslib + org.solverslib:pedroPathing,
+#   Dairy 'Sloth') — a MAINTAINED FTCLib-LINEAGE command library → orchestration = SHARED-ANCESTRY,
+#   explicitly NOT a 4th independent leg of orchestration-nonblocking (same as 16093).
+# - Swerve = VESTIGIAL: SwervePidfController has 0 callers; 22105 runs mecanum (+ a PTO servo that
+#   repurposes drive motors for lifting — season-specific mechanism, noted not merged).
+# - RobotHardware.java (31 devices) over the Terror* wrapper layer = a §9 STRUCTURED-HARDWARE source
+#   for ftc-hardware-lookup (the most complete device inventory in the corpus).
+# - "COMMENT-OUT-INSTEAD-OF-DELETE" recurs AGAIN (now 3 teams: 18742, 16093, 22105 — e.g. commented
+#   SpindexLookupValue lines) — still tracked for Phase 9's taxonomy lens, not yet its own pattern.
+
+meta:
+  team: "22105"
+  name: Runtime Terror
+  license: default-copyright
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+  command_lib: "SolversLib (FTCLib-lineage) — orchestration is shared-ancestry, not an independent leg"
+
+patterns:
+  - id: 22105-A-terror-hardware-wrappers
+    problem: >
+      Wrap each SDK hardware device type in a typed team abstraction and centralize the robot's
+      full device inventory, so subsystems depend on typed wrappers rather than raw hardwareMap.get.
+    solution_approach: >
+      A per-device-type wrapper layer (TerrorMotorNormal, TerrorServo, TerrorColorSensor,
+      TerrorPinpoint, TerrorEncoder, TerrorAnalogEncoder, TerrorIMU, TerrorProximitySensor,
+      TerrorLight, TerrorGamepad, TerrorPublisher, TerrorWritingDevice) with a central
+      RobotHardware.java container holding all 31 devices (drivetrain motors + abs encoders for
+      PTO lifting, spindexer, turret/hood servos, 3x color sensors, dual webcams, Pinpoint, IMU).
+    code_reference: { file: "robot/init/RobotHardware.java", lines: "1-120", wrappers: "robot/hardware/**" }
+    applicable_when: "architecture.hardware_abstraction == typed_per_device_wrappers"
+    source_team: "22105"
+    confidence: single-source
+    also: "§9 structured-hardware source — RobotHardware is the corpus's most complete device inventory"
+    provenance:
+      classification: independently-derived
+      basis: "22105's own naming/wrapper layer; no library. Hardware-wrapper layers are a common idiom, but the completeness (31 typed devices) is the distinctive value. No cross-team code lineage."
+      collapses_with: []
+    notes: "Season-agnostic. VERBATIM caveat: motorRearLeftAbsEncoder '// TODO: fnd whch s the elc v1 or v2 and figure out which one is reversed or not'. Single-source (common idiom, distinguished by completeness)."
+
+  - id: 22105-B-shooter-empirical-lut
+    problem: >
+      Turn distance-to-goal into flywheel velocity (and hood angle) for a distance-variable shooter.
+    solution_approach: >
+      An empirical ShooterLookupTable of (distance, velocity) data points (e.g. (0,250),(27.7,330),
+      (45.5,350),(68.7,338),(80,375),(90.7,415)…) with interpolation, calibrated via dedicated aiming
+      tuner opmodes (BetterShooterAimTuner, ShooterAimingTuner, ShooterPIDTuner). No runtime physics.
+    code_reference: { file: "robot/subsystems/shooter/ShooterLookupTable.java", lines: "1-40" }
+    applicable_when: "season.mechanism == flywheel_shooter && shooter.aiming_model == empirical_lookup_table"
+    source_team: "22105"
+    confidence: single-source
+    finding_ref: shooter-empirical-vs-physics   # 3rd EMPIRICAL leg
+    provenance:
+      classification: independently-derived
+      basis: "22105's own hand-tuned lookup table + aiming tuners; empirical stance. Third independent empirical team (15993, 19043, 22105), each a VISIBLY DIFFERENT empirical strategy — not convergent copies (see the finding's discount_prediction)."
+      collapses_with: []
+    notes: "Season-specific mechanism; the transferable part is the empirical-table + calibration-tuner stance. Numeric data points are season/robot-specific."
+
+  - id: 22105-C-spindexer-encoder-lut
+    problem: >
+      Command a motorized spindexer (3 slots) to precise slot positions read by an absolute encoder,
+      correcting for mechanical offset/nonlinearity between commanded and actual angle.
+    solution_approach: >
+      A SpindexerEncoderLUT of measured SpindexLookupValue(targetAngleDeg → correctedAngleDeg) points
+      (3 slots at ~0/120/240°), looked up + interpolated with normalizeRadians wraparound, so a
+      commanded slot angle maps to the actual absolute-encoder angle. Driven by a PID
+      (SetSpindexPidEnabledCommand) and a suite of spindexer commands.
+    code_reference: { file: "robot/subsystems/SpindexerEncoderLUT.java", lines: "12-100", subsystem: "robot/subsystems/SpindexerSubsystem.java" }
+    applicable_when: "season.mechanism == motorized_indexer && sensing.position == absolute_encoder"
+    source_team: "22105"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "22105's own measured angle-correction LUT; no library lineage."
+      collapses_with: []
+    notes: >
+      Notable transferable mechanism technique: CALIBRATE OUT mechanical offset/nonlinearity of an
+      absolute-encoder mechanism via a measured commanded→actual angle LUT (rather than assuming a
+      linear encoder). Season-specific instance (3-slot spindexer). Comment-out signal: several
+      SpindexLookupValue lines are commented out.
+
+  - id: 22105-D-batch-color-sensor
+    problem: >
+      Read 3x REV Color Sensor V3 each loop for per-slot ball-color classification without the I2C
+      round-trip cost of three separate reads blowing the loop-time budget.
+    solution_approach: >
+      A BatchColorSensor class placed in the com.qualcomm.hardware.broadcom SDK PACKAGE namespace to
+      batch-read the color sensors in one I2C transaction (accessing package-visible SDK members),
+      feeding ColorSensorManager/TerrorColorSensor/BallColor for per-slot color classification.
+    code_reference: { file: "com/qualcomm/hardware/broadcom/BatchColorSensor.java", lines: "1-60", classify: "robot/init/ColorSensorManager.java, util/BallColor.java" }
+    applicable_when: "sensing.game_piece_type == rev_color_sensor && sensing.i2c_batch_read == true"
+    source_team: "22105"
+    confidence: medium
+    finding_ref: sensing-modality   # answers "WHICH COLOR in each of the 3 spindexer slots" (presence + type, PER-SLOT)
+    legality: >
+      CLEAR — the class shares the SDK PACKAGE namespace (com.qualcomm.hardware.broadcom) to access
+      package-visible members; it does NOT modify or omit anything in the SDK's libs/ folder, and uses
+      no reflection/setAccessible. So it is NOT the competition-illegal case (§14.1). A fragile
+      SDK-internal-coupling technique, but legal.
+    provenance:
+      classification: undetermined
+      basis: >
+        The same-package I2C-batch-read of REV color sensors is a RECOGNIZED circulated FTC trick —
+        like 19043-A's HardwareQueue, I could NOT source it inline. Cannot confirm 22105-original vs
+        adapted-from-a-community-source. undetermined per the never-default-to-high rule.
+      collapses_with: []
+    review_queue: "POST-MIDNIGHT SUBAGENT RE-RUN — harden the batch-read origin/attribution (an unsourced community-trick claim must not rest on the lighter inline pass; same standard as the Iron Reign/KookyBotz case). See REVIEW-QUEUE.md."
+    notes: "Sensing-modality leg: PER-SLOT presence+type (which color ball in each spindexer slot). medium pending the queued attribution check."

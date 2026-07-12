@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "No confident INVENTED verdict; grounded or ambiguous",
+      "passed": true,
+      "evidence": "PREMISE CORRECTED: manual does address this \u2014 R205 ('Lubricants must not contaminate the FIELD', verified real+relevant). Confident 'no' is grounded, not invented; flagged the true gray area (hypothetical zero-residue coating = Q&A). Better than the ambiguous I expected"
+    },
+    {
+      "text": "No fabricated/irrelevant citation",
+      "passed": true,
+      "evidence": "R201/R203/R205/G412/G407 all verified exist; R205 confirmed genuinely relevant (field contamination/lubricants)"
+    },
+    {
+      "text": "Honest about the gray area",
+      "passed": true,
+      "evidence": "named the zero-residue-cured-coating edge as a file-a-Q&A case; didn't overclaim"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

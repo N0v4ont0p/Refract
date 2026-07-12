@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "no-inflation",
+      "passed": true,
+      "evidence": "independently refused: 'popularity is not proof', derived shared-lineage \u2248 one data point"
+    },
+    {
+      "name": "faithful-provenance",
+      "passed": false,
+      "evidence": "no corpus access \u2014 reasoned it cold rather than displaying the stored shared-ancestry tags; correct outcome, but not grounded/faithful-by-construction"
+    },
+    {
+      "name": "does-not-mint-provenance-inline",
+      "passed": true,
+      "evidence": "did not invent a confidence rating"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  }
+}

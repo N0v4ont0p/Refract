@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "quotes-rule-text",
+      "passed": true,
+      "evidence": "R403/R401/R402 quoted with stored text"
+    },
+    {
+      "name": "quote-matches-corpus-verbatim",
+      "passed": true,
+      "evidence": "BYTE-MATCH confirmed: stored slices of R403/R401/R402 found verbatim in answer; preserved 'Figure 12-54' typo proves paste-not-paraphrase"
+    },
+    {
+      "name": "citation-verified",
+      "passed": true,
+      "evidence": "rules.py verify all_valid"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

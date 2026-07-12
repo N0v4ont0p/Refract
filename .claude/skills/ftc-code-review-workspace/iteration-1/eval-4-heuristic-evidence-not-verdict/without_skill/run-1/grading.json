@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "smell-shown-with-evidence",
+      "passed": true,
+      "evidence": "grounded every claim in line numbers; god-opmode, no main loop, orphaned subsystems \u2014 evidence-first"
+    },
+    {
+      "name": "explains-why-for-rookie",
+      "passed": true,
+      "evidence": "explained the why with a prioritized fix list"
+    },
+    {
+      "name": "config-aware-no-turret",
+      "passed": true,
+      "evidence": "flagged TurretAimer config mismatch; did not recommend adding turret"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

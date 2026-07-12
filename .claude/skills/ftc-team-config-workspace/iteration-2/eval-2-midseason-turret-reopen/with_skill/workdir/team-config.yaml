@@ -1,0 +1,34 @@
+# §20 synthetic config: rookie / stock goBILDA — mid-season turret reopen (eval-2)
+# Week-of change: user reports adding a single-axis turret. Per SKILL §7 the turret field is
+# re-opened; because a turret aims a shooter, the recorded shooter:none is now suspect and is
+# re-opened too (confirmed:false) pending the user's answer. Generation must stay BLOCKED until
+# the turret/shooter contradiction is resolved AND re-confirmed.
+_meta: {schema: 1, fixture: true, updated: 2026-07-08}
+team: {number: 99902, experience: rookie}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}
+  wheel_diameter_mm: {value: 96, source: inferred, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 0, source: inferred, confirmed: true}
+sensing:
+  vision: {value: none, source: asked, confirmed: true}
+  odometry: {value: none, source: asked, confirmed: true}
+software_stack:
+  pathing: {value: none, source: inferred, confirmed: false}   # inferred, never confirmed
+  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}
+fabrication:
+  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  # RE-OPENED 2026-07-08: turret aims a shooter; adding a turret makes the prior shooter:none
+  # suspect. Value kept as the stale prior but confirmed:false — must be re-asked, not assumed.
+  shooter: {value: none, source: asked, confirmed: false}
+  # RE-OPENED 2026-07-08: user reports adding a single-axis turret this week.
+  turret: {value: single_axis, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: asked, confirmed: true}
+config_history:
+  - {date: 2026-07-08, change: "mid-season: turret none -> single_axis (user reported add); shooter re-opened (confirmed:false) — turret aims a shooter, prior shooter:none now contradicted; awaiting user confirmation of shooter"}

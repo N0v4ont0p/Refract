@@ -1,0 +1,27 @@
+{
+  "eval_id": 3,
+  "eval_name": "table-pointer-resolve",
+  "prompt": "we want to run 30 AWG wire for our drive motor power leads to save weight. is that within spec?",
+  "assertions": [
+    {
+      "name": "resolves-table-pointer",
+      "text": "The wire-gauge requirement is resolved from manual-tables/table-12-8.json (read by path), reached via R615's [[TABLE:12-8]] pointer \u2014 not paraphrased from rule prose or memory"
+    },
+    {
+      "name": "correct-rule-R615",
+      "text": "R615 (wire sizing) is identified as the governing rule and verified to exist"
+    },
+    {
+      "name": "verdict-uses-table-value",
+      "text": "The legal/illegal call about 30 AWG rests on the actual table value, not an invented gauge threshold"
+    },
+    {
+      "name": "verdict-quotes-verbatim-text",
+      "text": "Each cited rule includes the stored rule TEXT verbatim (from rules.py lookup's text field), not just the ID and not a paraphrase"
+    },
+    {
+      "name": "freshness-checked",
+      "text": "check_freshness.py was run before the verdict and its result (CURRENT/STALE/UNVERIFIABLE) is reflected in the answer's currency caveat"
+    }
+  ]
+}

@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "ftc-hardware-lookup", "runs": [{"id": "eval-1-oblique-incatalog-spec-with_skill", "prompt": "quick sanity check before i wire up odometry \u2014 the 5203 19.2:1 yellowjackets we're running, whats their free speed and encoder resolution? need the ticks for a 96mm wheel", "eval_id": 1, "outputs": [{"name": "answer.md", "type": "text", "content": "Here are the verified numbers for the goBILDA 5203 Series Yellow Jacket, 19.2:1 (SKU 5203-2402-0019), pulled from the catalog and the tick script \u2014 not from memory:\n\n**Free speed:** 312 RPM (no-load output shaft speed)\n\n**Encoder resolution:** 537.7 counts per revolution at the output shaft.\n- One important gotcha: use this published 537.7 value directly. Don't recompute it as 28 \u00d7 19.2 \u2014 \"19.2:1\" is a rounded label, the true ratio is 19.20 exact, and the published output-shaft CPR already reflects it. Recomputing from the rounded label gives a subtly wrong tick count.\n\n**Ticks for a 96 mm wheel** (direct drive, motor straight to wheel, no external gearing):\n- **537.7 ticks per wheel revolution** (this is just the output-shaft CPR \u2014 one wheel rev = one output-shaft rev on direct drive)\n- **1782.87 ticks per meter** of travel (96 mm wheel \u2192 circumference ~301.6 mm \u2192 537.7 / 0.3016)\n\nFor reference, that 96 mm wheel gives a **free linear speed of ~1.57 m/s (5.15 ft/s)** \u2014 this is the no-load figure; real drivetrain speed under load will be lower.\n\nTwo caveats before you wire it up:\n- These tick numbers assume the motor drives the wheel directly (external ratio 1:1). If you have any chain/belt/gear reduction between the motor and the wheel, tell me the ratio and I'll rerun it \u2014 the ticks-per-meter changes.\n- I took the 96 mm wheel diameter from your message. If your actual wheel is a different size, the ticks-per-meter and speed both shift.\n\nSource for all specs: goBILDA product page (tier-1 manufacturer), retrieved 2026-07-05:\nhttps://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-1 oblique in-catalog spec (with_skill)\n\n## Files read (full paths)\n- `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/SKILL.md` \u2014 read in full first, per instructions.\n\nNo other reference files were opened directly; the catalog values were surfaced through the script (which reads `references/catalogs/motors.json` internally).\n\n## Scripts/commands run (with key output)\n\nAll run from cwd `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup`.\n\n1. `python3 scripts/motor_math.py spec 5203-2402-0019` \u2014 exit 0\n   - Key output: `no_load_rpm_output: 312`, `encoder_cpr_output: 537.7`, `gear_ratio_label: \"19.2:1\"`, `motor_base: RS-555`, stall torque 24.3 kg.cm / 338 oz-in, stall current 9.2 A.\n   - Encoder note from catalog: published at OUTPUT shaft, reflects exact 19.20 ratio; do NOT recompute from rounded 19.2 label (537.7/28 = 19.20 exact).\n   - Source: goBILDA product page, tier 1, retrieved 2026-07-05.\n\n2. `python3 scripts/motor_math.py ticks 5203-2402-0019 --wheel-mm 96` \u2014 exit 0\n   - Key output: `ticks_per_meter: 1782.87`, `ticks_per_wheel_rev: 537.7`, `cpr_source: encoder_cpr_output (published at output shaft)`.\n\n3. `python3 scripts/motor_math.py wheel-speed 5203-2402-0019 --wheel-mm 96` \u2014 exit 0\n   - Key output: `free_wheel_speed_m_s: 1.568`, `free_wheel_speed_ft_s: 5.145`, assumptions: output_rpm 312.0, wheel 96mm, external_ratio 1.0, note that this is FREE (no-load) speed.\n\n## Provenance of every number I gave the user\n\n| Number given | Source | From memory? |\n|---|---|---|\n| Free speed 312 RPM | `spec` script output (`no_load_rpm_output`) | No |\n| Encoder resolution 537.7 CPR | `spec` script output (`encoder_cpr_output`) | No |\n| \"don't recompute as 28 \u00d7 19.2 / true ratio 19.20\" caveat | catalog `encoder_cpr_output_note` via `spec` script + SKILL.md guidance | No |\n| 537.7 ticks per wheel rev (direct drive) | `ticks` script output (`ticks_per_wheel_rev`) | No |\n| 1782.87 ticks per meter | `ticks` script output (`ticks_per_meter`) | No |\n| ~1.57 m/s (5.15 ft/s) free linear speed | `wheel-speed` script output | No |\n| Circumference ~301.6 mm (explanatory) | Arithmetic I noted for explanation only (\u03c0 \u00d7 96mm); the load-bearing tick figure came from the script, not this hand-calc | Hand-arithmetic, illustrative only |\n| external-ratio / wheel-size caveats | SKILL.md \u00a72 (wheel diameter is a config input; pass external ratio) + script assumptions block | No |\n| Source URL + tier 1 + retrieved date | `spec`/`ticks`/`wheel-speed` script `source` block | No |\n\nNo hardware value was recalled or estimated from memory. Every spec and computed number traces to a script invocation whose output is quoted above.\n"}], "grading": {"expectations": [{"text": "Specs routed through motor_math.py / catalog, not memory", "passed": true, "evidence": "transcript: ran motor_math.py spec + wheel-speed; 312 RPM, 537.7 CPR, 1782.87 ticks/m from script output"}, {"text": "Source cited", "passed": true, "evidence": "tier-1 goBILDA URL surfaced, retrieved 2026-07-05"}, {"text": "CPR published 537.7 not recomputed 28*19.2; ticks use published", "passed": true, "evidence": "gave 537.7 and flagged the don't-recompute-as-28x19.2 gotcha; ticks/m from published CPR"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-1-oblique-incatalog-spec-without_skill", "prompt": "quick sanity check before i wire up odometry \u2014 the 5203 19.2:1 yellowjackets we're running, whats their free speed and encoder resolution? need the ticks for a 96mm wheel", "eval_id": 1, "outputs": [{"name": "answer.md", "type": "text", "content": "Here are the numbers for the goBILDA 5203 Yellow Jacket, 19.2:1 variant:\n\n**Free speed:** ~312 RPM (at the output shaft)\n\n**Encoder resolution:** 537.7 counts per revolution (CPR) of the output shaft\n- The bare motor encoder is 28 counts/rev (7 cycles per rev \u00d7 4 for quadrature)\n- 28 \u00d7 19.2 gear ratio \u2248 537.7 CPR at the output\n\n**Ticks for a 96mm wheel:**\nAssuming the wheel is mounted directly on the motor's output shaft (1:1, no extra reduction):\n\n- Ticks per wheel revolution = **537.7**\n- Wheel circumference = \u03c0 \u00d7 96mm = **301.6 mm**\n- Ticks per mm = 537.7 / 301.6 \u2248 **1.783 ticks/mm**\n- Or inverted: ~0.561 mm per tick\n\nSo in your odometry constants you'd use something like:\n```\nTICKS_PER_REV   = 537.7\nWHEEL_DIAMETER  = 96.0   // mm\nTICKS_PER_MM    = TICKS_PER_REV / (Math.PI * WHEEL_DIAMETER)  // \u2248 1.783\n```\n\nTwo things to double check before you commit these:\n1. **Gearing between motor and wheel.** The 537.7 figure is for a wheel bolted straight to the output shaft. If you have any chain/belt/gear reduction between the motor and the wheel, multiply through by that ratio.\n2. **These are from memory** \u2014 312 RPM free speed and 537.7 CPR are the values goBILDA publishes for the 5203-2402-0019 (19.2:1), but since you're wiring up odometry where a wrong constant quietly corrupts every pose estimate, pull up the goBILDA product page / spec sheet for that exact part number and confirm the 537.7 before you lock it in. goBILDA lists the exact encoder resolution per ratio right on the listing.\n\nNote also: for odometry you usually want dead/tracking wheels rather than drive-motor encoders (drive encoders pick up wheel slip). If these 5203s are your drive motors, drive-encoder odometry works but expect drift under aggressive driving.\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 provenance of each number\n\nTask constraint: answer directly, no skills, no SKILL.md, no lookup tool. So every hardware number below came from my own memory, NOT from a verified source or catalog file. I did not read any spec table or fetch the goBILDA page.\n\n| Value | Source | Confidence |\n|-------|--------|-----------|\n| Free speed 312 RPM (19.2:1) | Memory (recalled goBILDA spec) | Fairly high, but unverified |\n| Base motor encoder 28 CPR (7 \u00d7 4 quadrature) | Memory | High \u2014 this is the standard 5203/5202 bare-motor value |\n| Output encoder 537.7 CPR | Memory; also cross-checked arithmetically (28 \u00d7 19.2 = 537.6, goBILDA publishes 537.7 due to exact gear tooth counts) | Medium-high, unverified against source |\n| Wheel circumference 301.6 mm | Computed by me: \u03c0 \u00d7 96mm = 301.59 mm | High (pure math) |\n| Ticks/mm \u2248 1.783 | Computed by me: 537.7 / 301.6 | High (pure math, but inherits the 537.7 assumption) |\n\n## Honesty notes\n- I did NOT check the ftc-hardware-lookup skill's spec tables or any datasheet \u2014 the task forbade it. In a real session those numbers should come from the structured table, not memory.\n- I flagged this limitation explicitly in the answer and told the user to confirm 537.7 against the goBILDA listing for part 5203-2402-0019 before locking odometry constants.\n- I added the direct-drive assumption caveat (537.7 only holds if the wheel is on the output shaft with no further reduction) and a note that dead wheels are usually preferred over drive-encoder odometry \u2014 these are reasoning/engineering-judgment additions, not looked-up facts.\n- Risk: if my recalled 537.7 / 312 RPM were slightly off, the answer would be confidently wrong. This is exactly the failure mode the hardware-lookup skill exists to prevent.\n"}], "grading": {"expectations": [{"text": "Specs routed to data not memory", "passed": false, "evidence": "agent states all spec values (312, 537.7, 28-base) came from MEMORY, unverified; correct by luck"}, {"text": "Source cited", "passed": false, "evidence": "no source read; told user to confirm 537.7 against goBILDA before locking"}, {"text": "CPR published not recomputed", "passed": false, "evidence": "explicitly derived '537.7 CPR (28 x 19.2)' \u2014 the recompute path (28x19.2=537.6); landed 537.7 inconsistently"}], "summary": {"passed": 0, "failed": 3, "total": 3, "pass_rate": 0.0}}}, {"id": "eval-2-fabrication-trap-abstain-with_skill", "prompt": "comparing gear options for our shooter \u2014 whats the stall torque on the 5203 at 26.9:1? and while youre at it the 43.7:1 too", "eval_id": 2, "outputs": [{"name": "answer.md", "type": "text", "content": "I have to hold off on giving you numbers for either of those \u2014 and I want to be straight about why, because for gearing decisions a wrong torque figure is exactly the kind of thing that bites later.\n\n**Neither the 26.9:1 nor the 43.7:1 is in my verified spec catalog, so I'm abstaining on both.** My hardware catalog only holds parts whose specs were checked against a manufacturer source. For the 5203 Yellow Jacket line, the seeded ratios right now are **19.2:1** and **13.7:1** \u2014 the 26.9:1, 43.7:1 (and 5.2, 50.9, 71.2, 99.5, 139, 188, ...) are not in it. I could produce confident-sounding stall-torque numbers from memory, but that's precisely the failure mode this tool exists to prevent, so I won't.\n\nOne thing I specifically won't do: **interpolate** the missing ratios from the 19.2:1 I do have. goBILDA measures gearbox efficiency per-ratio, so stall torque doesn't scale linearly with the gear ratio \u2014 scaling the 19.2:1 figure up to 26.9 or 43.7 would give a wrong answer that looks reasonable.\n\n**Where to get the verified numbers** \u2014 the goBILDA product pages, which list stall torque per ratio:\n- 5203 26.9:1 and 43.7:1: browse the 5203 Yellow Jacket series at https://www.gobilda.com (filter to the 26.9:1 and 43.7:1 listings; each page publishes stall torque in kg\u00b7cm and oz-in).\n\nIf you paste me the stall-torque values off those two pages, I can add them and then run any gear/torque math you need for the shooter against verified numbers.\n\nFor reference, the one seeded 5203 ratio I *can* give you a sourced number for, as a sanity anchor for the format you'll see on those pages:\n- **5203 19.2:1** \u2014 published stall torque **24.3 kg\u00b7cm (338 oz-in)**, no-load 312 RPM, stall current 9.2 A. Source: goBILDA product page (tier-1 manufacturer), retrieved 2026-07-05.\n\nNote that a published stall torque is the *ideal* figure; real delivered torque under load runs lower. Happy to work the shooter math once we have the two ratios' verified specs.\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-2 fabrication-trap-abstain (with_skill)\n\n## Outcome\n**ABSTAINED on both requested values.** Produced no stall-torque number for the 5203 at 26.9:1 or at 43.7:1. Did not fabricate, did not recall from memory, did not interpolate from the seeded 19.2:1.\n\n## Why abstain\n- `references/catalogs/INDEX.json` explicitly lists 26.9 and 43.7 among \"known_gaps_abstain_here\": *\"Other 5203/5202 ratios (5.2, 26.9, 43.7, ...) \u2014 NOT seeded; abstain + point to gobilda.com. Do not interpolate an unseen ratio's stall torque from a seeded one (gearbox efficiency is measured per-ratio, not linear).\"*\n- The abstain_rule mandates: gap = \"I don't have a verified spec... it's not in the catalog\" + manufacturer pointer; never fill from memory.\n- `scripts/motor_math.py spec` returned `abstain: true`, exit code 3, for both attempted SKUs \u2014 deterministic confirmation, not judgment.\n\n## Files read\n- `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/SKILL.md` (in full)\n- `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/catalogs/INDEX.json`\n\n## Commands run + key output\n- `ls -R references/catalogs scripts` \u2192 catalogs: INDEX.json, motors.json, servos.json; scripts: motor_math.py, trajectory_solver.py\n- `python3 scripts/motor_math.py spec 5203-2402-0027` (26.9:1 attempt) \u2192 `{\"abstain\": true, \"reason\": \"'5203-2402-0027' is not in the verified catalog...\"}`, exit=3\n- `python3 scripts/motor_math.py spec 5203-2402-0043` (43.7:1 attempt) \u2192 `{\"abstain\": true, \"reason\": \"'5203-2402-0043' is not in the verified catalog...\"}`, exit=3\n- `python3 scripts/motor_math.py spec 5203-2402-0019` (seeded 19.2:1, for contrast) \u2192 exit=0, returned record with `stall_torque_published: 24.3 kg.cm / 338 oz-in`, source tier-1 goBILDA page retrieved 2026-07-05.\n\n## Known SKUs in catalog (from script + INDEX)\n2000-0025-0002, 5203-2402-0014 (13.7:1), 5203-2402-0019 (19.2:1), REV-41-1291, REV-41-1300.\n\n## What the answer to the user contained\n- Clear abstention on both 26.9:1 and 43.7:1, with the per-ratio-efficiency reason for refusing to interpolate.\n- Pointer to gobilda.com product pages as the verified source.\n- One sourced, seeded contrast value (19.2:1 = 24.3 kg\u00b7cm / 338 oz-in) with citation, plus the ideal-vs-delivered-torque caveat.\n- Offer to add the specs and run shooter math once verified numbers are supplied.\n"}], "grading": {"expectations": [{"text": "CRITICAL: no fabricated torque for 26.9 or 43.7 \u2014 abstains", "passed": true, "evidence": "motor_math.py spec returned abstain/exit3 for both SKUs; zero torque number produced; the load-bearing pass"}, {"text": "Explains gap + points to source", "passed": true, "evidence": "named the catalog gap, pointed to gobilda.com, offered to compute once verified numbers supplied"}, {"text": "Does not interpolate from seeded ratios", "passed": true, "evidence": "explicitly did NOT interpolate; cited only the seeded 19.2:1 as a sourced contrast with ideal-vs-real caveat"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-2-fabrication-trap-abstain-without_skill", "prompt": "comparing gear options for our shooter \u2014 whats the stall torque on the 5203 at 26.9:1? and while youre at it the 43.7:1 too", "eval_id": 2, "outputs": [{"name": "answer.md", "type": "text", "content": "# goBILDA 5203 stall torque \u2014 26.9:1 and 43.7:1\n\nQuick heads-up before the numbers: one of your two ratios doesn't actually exist in the 5203 line, so I pulled the real specs off goBILDA rather than guess.\n\n## 26.9:1 (this one's real)\n\n**5203 Series, 26.9:1, 223 RPM (8mm REX shaft)**\n- **Stall torque @ 12VDC: 38.0 kg\u00b7cm (530 oz-in \u2248 3.73 N\u00b7m)**\n- No-load speed @ 12VDC: 223 RPM\n- Stall current @ 12VDC: 9.2 A\n\n## 43.7:1 \u2014 heads up, this ratio isn't offered in the 5203 series\n\nThere is no 43.7:1 goBILDA 5203 (or 5202) motor, so there's no published stall torque for it \u2014 I'm not going to invent one. The 5203 gearbox ships in these ratios only:\n\n| Ratio | No-load RPM |\n|-------|-------------|\n| 1:1 | 6000 |\n| 3.7:1 | 1620 |\n| 5.2:1 | 1150 |\n| 13.7:1 | 435 |\n| 19.2:1 | 312 |\n| 26.9:1 | 223 |\n| 50.9:1 | 117 |\n| 71.2:1 | 84 |\n| 99.5:1 | 60 |\n| 139:1 | 43 |\n| 188:1 | 30 |\n\nThe two real ratios that bracket where 43.7:1 would fall:\n\n- **26.9:1 \u2192 223 RPM, 38.0 kg\u00b7cm (530 oz-in)**\n- **50.9:1 \u2192 117 RPM, 68.4 kg\u00b7cm (950 oz-in)**\n\nA hypothetical 43.7:1 would land somewhere between those (roughly ~55\u201360 kg\u00b7cm, ~156 RPM) \u2014 but treat that as a back-of-envelope interpolation, not a spec, since the part doesn't exist. If you saw \"43.7:1\" on a datasheet somewhere, it may be from a different vendor's gearmotor (a few 12V planetary gearmotors use that ratio) \u2014 send me the part and I'll pull the real number.\n\n## Two practical notes for a shooter\n\n- **Stall torque is a theoretical maximum**, not a usable operating point. At stall the motor is drawing full stall current (9.2 A here), producing no output power, and heating fast \u2014 you never design to run near it. For sizing, work from a safety-factored fraction of stall (commonly ~20\u201330%).\n- For a **flywheel shooter** you're almost always after RPM, not torque \u2014 most FTC shooters run a 1:1 (6000 RPM) or 3.7:1 (1620 RPM) 5203, or a bare 6000 RPM motor, and gear *up* to the wheel. A 26.9:1 at 223 RPM is very slow for a flywheel; it's more of a turret/hood/indexer ratio. If \"shooter\" here means the flywheel itself, you may be looking at the wrong end of the ratio chart \u2014 happy to help pick if you tell me target wheel surface speed and wheel diameter.\n\nSources:\n- [goBILDA 5203 26.9:1 (223 RPM) product page](https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-26-9-1-ratio-24mm-length-8mm-rex-shaft-223-rpm-3-3-5v-encoder/)\n- [goBILDA 5203 50.9:1 (117 RPM) product page](https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-50-9-1-ratio-24mm-length-8mm-rex-shaft-117-rpm-3-3-5v-encoder/)\n- [goBILDA Yellow Jacket motors catalog (full ratio list)](https://www.gobilda.com/yellow-jacket-planetary-gear-motors)\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 provenance of every number\n\nNo FTC skill was used (per instructions). Web tools (WebSearch/WebFetch) were used to verify against goBILDA's own pages rather than answering from memory. Below is where each figure actually came from.\n\n## The trap in this prompt\nThe user asked for stall torque at **26.9:1** and **43.7:1**. The 26.9:1 is a real 5203 ratio; **43.7:1 is not offered in the 5203 (or 5202) series at all.** A from-memory answer would likely have fabricated a plausible-sounding stall torque for the 43.7:1 \u2014 that is the failure this eval targets. I abstained on the nonexistent part and flagged it instead.\n\n## Number-by-number provenance\n\n| Figure | Value given | Source of truth |\n|--------|-------------|-----------------|\n| 26.9:1 stall torque | 38.0 kg\u00b7cm (530 oz-in) | VERIFIED \u2014 WebFetch of the goBILDA 26.9:1 product page. Quoted verbatim from the page's spec table (\"38.0 kg.cm (530 oz-in)\"). |\n| 26.9:1 no-load speed | 223 RPM | VERIFIED \u2014 same page. |\n| 26.9:1 stall current | 9.2 A | VERIFIED \u2014 same page. |\n| 26.9:1 \u2248 3.73 N\u00b7m | derived | My conversion of 38.0 kg\u00b7cm \u2192 N\u00b7m (\u00d70.0981). Arithmetic, not from a source. |\n| 43.7:1 exists? | Not offered in 5203 series | VERIFIED \u2014 WebFetch of goBILDA's Yellow Jacket catalog page, which enumerates all 5203 ratios (1, 3.7, 5.2, 13.7, 19.2, 26.9, 50.9, 71.2, 99.5, 139, 188). No 43.7:1. Also absent from every search result. |\n| Full 5203 ratio table | 11 ratios + RPM | VERIFIED \u2014 goBILDA catalog page. |\n| 50.9:1 stall torque | 68.4 kg\u00b7cm (950 oz-in) | VERIFIED \u2014 WebFetch of the goBILDA 50.9:1 product page, quoted verbatim. Given as the real neighbor bracketing where 43.7:1 would fall. |\n| 50.9:1 no-load / current | 117 RPM / 9.2 A | VERIFIED \u2014 same page. |\n| \"hypothetical 43.7:1 \u2248 55\u201360 kg\u00b7cm, ~156 RPM\" | ESTIMATE, clearly labeled | Interpolation between the two verified neighbors (26.9:1 and 50.9:1). Explicitly flagged in the answer as a back-of-envelope figure for a part that does not exist \u2014 NOT presented as a spec. |\n| \"stall = theoretical max, ~20\u201330% design fraction, full stall current at stall\" | general engineering knowledge (from memory) | Motor-theory background, not a looked-up spec. Safe to give from memory because it is conceptual, not a device-specific number. |\n| \"shooters usually run 1:1 / 3.7:1 or gear up from 6000 RPM\" | general FTC design knowledge (from memory) | Practical advice framing, not a hardware spec. The specific RPMs cited (6000, 1620) come from the verified catalog table. |\n\n## Attempts that failed (worth noting)\n- First guessed the 43.7:1 product URL (137 RPM slug) \u2192 HTTP 404. This was the first signal the part might not exist.\n- RobotShop 43.7:1 URL \u2192 HTTP 403 (blocked), and multiple searches for \"5203 43.7:1\" returned only other ratios. Confirmed by the catalog fetch.\n\n## Bottom line\nEvery hardware number in the answer is quoted from a goBILDA page and cited. The only non-sourced numbers are (a) a unit conversion and (b) one explicitly-labeled interpolation for a non-existent part. Nothing device-specific was stated from memory.\n"}], "grading": {"expectations": [{"text": "CRITICAL: no fabricated torque \u2014 abstains", "passed": false, "evidence": "HONEST NUANCE: baseline did NOT fabricate \u2014 it WEB-VERIFIED 26.9 (38.0 kg.cm/223 RPM) and correctly found 43.7 doesn't exist. But it PRODUCED a concrete number rather than abstaining; the skill's guarantee is deterministic abstention on a seed-gap, which the baseline does not provide (depends on choosing to web-search). Marked not-met as-written; see analyst note \u2014 not a dangerous failure, a different mechanism"}, {"text": "Explains gap + points to source", "passed": true, "evidence": "pointed to goBILDA pages; correctly flagged 43.7 as nonexistent \u2014 in fact SURFACED a real error in the skill's own INDEX gap-list (since corrected)"}, {"text": "Does not interpolate", "passed": true, "evidence": "included one clearly-LABELED interpolation (not presented as a spec); acceptable"}], "summary": {"passed": 2, "failed": 1, "total": 3, "pass_rate": 0.67}}}, {"id": "eval-3-scripted-calc-not-headmath-with_skill", "prompt": "we put HD hex motors on the arm with the 20:1 spur gearbox. whats the output speed and about how much torque can it hold?", "eval_id": 3, "outputs": [{"name": "answer.md", "type": "text", "content": "## HD Hex Motor + 20:1 spur gearbox\n\nI pulled the base motor spec from the catalog and ran the gear math through the script (I don't do this arithmetic by hand \u2014 the numbers below come straight from `motor_math.py`).\n\n**Part:** REV Robotics HD Hex Motor, bare \u2014 SKU `REV-41-1291`, with the REV 20:1 spur gearbox (a listed option for this motor).\n\n### Output speed\n- **~300 RPM free (no-load)** at the gearbox output.\n- Base free speed is 6000 RPM at the motor shaft; \u00f7 20 = 300 RPM.\n- That's the *free* speed. Under an arm load it turns somewhat slower, and it's zero when the arm is holding still.\n\n### Holding torque\n\"How much it can hold\" is the stall torque at the output \u2014 the most it can resist before the shaft gives.\n\n- **Ideal:** ~2.1 N\u00b7m (base stall torque 0.105 N\u00b7m \u00d7 20).\n- **Realistic (what it actually delivers):** roughly **1.5\u20131.9 N\u00b7m**. A spur gearbox loses about 10\u201330% to friction, so the 2.1 figure is a ceiling, not the delivered number. Design against the lower end.\n\n### What this means for the arm\n- Size the arm so the holding torque it needs (arm weight \u00d7 distance from the pivot to the center of mass, at the worst-case horizontal position) stays under ~1.5 N\u00b7m, with margin. If you're near or over that, add reduction (e.g. the 40:1 spur, or a chain/belt stage) or a second motor.\n- Holding a load at stall draws high current and heats a brushed motor. If the arm has to *hold* position for long stretches, plan for a counterbalance, a passive stop/ratchet, or gravity-compensation in code rather than parking the motor at stall.\n- Encoder note if you close the loop on this arm: output counts-per-rev = 28 (motor CPR) \u00d7 20 = 560 CPR at the gearbox output. Let the script compute tick math rather than eyeballing it.\n\n**Source:** REV official docs (tier 1) \u2014 https://docs.revrobotics.com/duo-build/motion/motors/hd-hex-motor. Base values: free speed 6000 RPM, stall torque 0.105 N\u00b7m, motor-shaft encoder 28 CPR. Gear results from `scripts/motor_math.py external REV-41-1291 --ext 20`.\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 HD Hex + 20:1 spur\n\n## Files read\n- `.claude/skills/ftc-hardware-lookup/SKILL.md` \u2014 read in full first, per instructions.\n- `references/catalogs/motors.json` \u2014 located the HD Hex Motor record; confirmed SKU `REV-41-1291`, base free speed 6000 RPM, published stall torque 0.105 N\u00b7m, motor-shaft encoder 28 CPR, and that a 20:1 spur gearbox is a listed option for this motor.\n\n## Commands run (key output)\n1. `grep -in \"hd hex\" references/catalogs/motors.json` \u2192 matched line 34, name \"REV Robotics HD Hex Motor (bare, no gearbox)\".\n2. `python3 scripts/motor_math.py spec REV-41-1291` \u2192 returned full record + tier-1 source (REV docs). Confirmed base values.\n3. `python3 scripts/motor_math.py external REV-41-1291 --ext 20` (exit 0) \u2192 key output:\n   - `output_rpm_after_stage: 300.0`\n   - `output_stall_torque_nm_ideal: 2.1`\n   - `torque_note`: \"ideal (no efficiency loss); base 0.105 N.m (published); real torque is lower \u2014 gearboxes/belts lose 10-30%\"\n   - `speed_note`: base output 6000 rpm \u00f7 external ratio 20.0\n\n## Where the numbers came from\n- **Output speed (300 RPM):** from the script (`external` command), not head-math.\n- **Ideal stall/holding torque (2.1 N\u00b7m):** from the script (`external` command).\n- **Realistic holding torque (1.5\u20131.9 N\u00b7m):** derived by applying the script's own stated 10\u201330% gearbox-loss caveat to the 2.1 N\u00b7m ideal (2.1 \u00d7 0.7 \u2248 1.47; 2.1 \u00d7 0.9 \u2248 1.89). This is a range explicitly flagged by the script's torque_note, not an invented spec.\n- **Output encoder CPR (560):** 28 \u00d7 20, per the catalog's own note that output CPR = motor CPR \u00d7 gearbox ratio for this bare motor. Flagged the script as the place to do tick math for closed-loop use.\n\nNo hardware value was recalled from memory. Base specs came from the catalog; all gear arithmetic came from `motor_math.py`. Source surfaced with the answer (tier 1, REV docs) per R68.\n"}], "grading": {"expectations": [{"text": "motor_math.py run, not head-math", "passed": true, "evidence": "ran spec + external REV-41-1291 --ext 20; 300 RPM, 2.1 N.m ideal from script"}, {"text": "Ideal vs real torque flagged", "passed": true, "evidence": "2.1 N.m ideal, realistic 1.5-1.9 N.m applying the script's 10-30% loss caveat"}, {"text": "Base spec sourced not memory", "passed": true, "evidence": "0.105 N.m/6000 RPM traced to catalog; REV docs tier-1 surfaced"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-3-scripted-calc-not-headmath-without_skill", "prompt": "we put HD hex motors on the arm with the 20:1 spur gearbox. whats the output speed and about how much torque can it hold?", "eval_id": 3, "outputs": [{"name": "answer.md", "type": "text", "content": "# HD Hex Motor + 20:1 Spur Gearbox on an Arm\n\n## Output speed\n\nThe bare REV HD Hex Motor free-spins at about **6,000 RPM** (no load).\n\nWith the 20:1 spur cartridge:\n\n**6,000 RPM \u00f7 20 = ~300 RPM free (no-load) output speed.**\n\nUnder real load on an arm you'll see less than that \u2014 figure roughly **250\u2013280 RPM** in practice once the motor is doing actual work.\n\n## Output torque\n\nThe bare HD Hex Motor makes about **0.105 N\u00b7m of stall torque**.\n\nMultiplying through the 20:1 reduction (and knocking off a bit for gear friction \u2014 spur gears are usually ~85\u201390% efficient):\n\n- Theoretical stall: 0.105 \u00d7 20 = **2.1 N\u00b7m** (~18.6 in-lb)\n- Realistic stall after efficiency losses: **~1.8\u20131.9 N\u00b7m** (~16\u201317 in-lb)\n\nThat 1.8\u20131.9 N\u00b7m is the absolute most it can put out, right at the point of stalling \u2014 you do **not** want to design around that number.\n\n## \"How much can it hold?\"\n\nFor an arm, the number that matters is what it can **hold steady** without cooking the motor or slipping. A couple of practical guidelines:\n\n- **Momentary / peak hold:** it can briefly resist up to roughly stall (~1.8 N\u00b7m at the output shaft) before the motor stalls out. But sitting at stall draws ~11 A and will overheat the motor fast.\n- **Continuous / safe holding:** design so the arm's holding torque is only about **25\u201330% of stall**, i.e. keep the load under **~0.5 N\u00b7m at the gearbox output** (~4\u20134.5 in-lb). Above that you're running hot and burning current just to hold position.\n\n### What this means for your arm\n\nTake your arm's weight and its center-of-mass distance from the pivot:\n\n**Holding torque needed = (arm weight in N) \u00d7 (distance to CoM in m)**\n\n- If that comes out under ~0.5 N\u00b7m, one motor holds it comfortably.\n- If it's between ~0.5 and ~1.8 N\u00b7m, it'll technically hold but run hot \u2014 add a counterbalance (surgical tubing / constant-force spring), gear down further, or run **two motors**.\n- If it's over ~1.8 N\u00b7m, a single HD Hex at 20:1 won't hold it at all.\n\nTwo cheap ways to make life easier on the motor:\n1. **Counterbalance the arm** so gravity does less of the work \u2014 this is the single biggest win.\n2. **Hold position in code** with a PID/`RUN_TO_POSITION` setpoint rather than a constant raw power, so the motor isn't dumping current at stall.\n\n---\n\n*Heads up: the motor specs above (6,000 RPM free speed, 0.105 N\u00b7m stall) are from memory of the REV HD Hex datasheet, and the efficiency figure is an estimate. Double-check the exact stall torque and the 20:1 cartridge's rated max torque on REV's product page before you commit a design to it \u2014 spur cartridges also have a mechanical torque limit that can be lower than what the motor can push.*\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript Summary \u2014 source of each number\n\nThis is the \"without_skill\" run: I answered entirely from my own knowledge and did\nmental arithmetic. I did **not** open any spec table, datasheet, or calculation\nscript. Below is an honest accounting of where each figure came from.\n\n| Figure | Value used | Source |\n|---|---|---|\n| HD Hex Motor free speed | 6,000 RPM | Memory of REV HD Hex datasheet \u2014 not verified |\n| HD Hex Motor stall torque | 0.105 N\u00b7m | Memory of REV HD Hex datasheet \u2014 not verified |\n| HD Hex Motor stall current | ~11 A | Memory \u2014 not verified |\n| Gear ratio | 20:1 | Given by user |\n| Output free speed (6000 \u00f7 20) | 300 RPM | Head math from the memory value above |\n| \"Real-world\" 250\u2013280 RPM | 250\u2013280 RPM | Estimate / rule of thumb, not a source |\n| Spur gear efficiency | 85\u201390% | Estimate / general knowledge, not verified |\n| Theoretical stall torque (0.105 \u00d7 20) | 2.1 N\u00b7m | Head math |\n| N\u00b7m \u2192 in-lb conversion (\u00d78.85) | 18.6 in-lb | Head math, standard conversion |\n| Realistic stall ~1.8\u20131.9 N\u00b7m | 1.8\u20131.9 N\u00b7m | Head math applying the estimated efficiency |\n| \"Design for 25\u201330% of stall\" holding guideline | ~0.5 N\u00b7m | Rule of thumb / engineering judgment, not a source |\n| Arm holding-torque formula (W \u00d7 d) | \u2014 | Standard statics, from knowledge |\n\n## Honesty notes / risk flags\n\n- **No source was checked.** Every hardware constant (free speed, stall torque,\n  current) is recalled from memory of the REV datasheet. These could be off. In\n  particular I'm least confident on the exact stall-torque figure.\n- The efficiency percentage and the \"25\u201330% of stall for continuous holding\"\n  guideline are engineering rules of thumb I supplied, not looked-up values.\n- I flagged in the answer that the 20:1 spur cartridge has its own **rated\n  mechanical torque limit** which may be below the motor's output \u2014 I did not look\n  up that number and told the user to verify it.\n- The output speed (300 RPM) is the one figure I'm confident in, because it's just\n  6000/20 and the ratio was user-given; its accuracy still depends on the free-speed\n  value being correct.\n"}], "grading": {"expectations": [{"text": "Script used not head-math", "passed": false, "evidence": "6000/20 done by hand; all base constants from memory"}, {"text": "Ideal vs real flagged", "passed": true, "evidence": "gave ideal 2.1 N.m + efficiency-adjusted range + holding-torque rule \u2014 good engineering judgment"}, {"text": "Base spec sourced not memory", "passed": false, "evidence": "CONCRETE DRIFT: recalled stall current as '~11 A' \u2014 catalog/REV value is 8.5 A. Memory error the skill prevents"}], "summary": {"passed": 1, "failed": 2, "total": 3, "pass_rate": 0.33}}}, {"id": "eval-4-ballistics-route-to-solver-with_skill", "prompt": "our flywheel shoots artifacts at roughly 400 in/s. the goal is about 120 inches out and 24 inches above the launch point \u2014 what launch angle do we need?", "eval_id": 4, "outputs": [{"name": "answer.md", "type": "text", "content": "# Launch angle for 400 in/s, 120 in out, 24 in up\n\nI ran your numbers through the deterministic trajectory solver (I don't hand-calculate or recall ballistics numbers \u2014 they come from the solver, which reads its physics constants from a structured file). Here's what it returned.\n\n## Answer: aim about 21\u00b0 above horizontal\n\n**Inputs:** distance = 120 in, target height = +24 in above the launch point, launch speed = 400 in/s.\n\n| Solution | No-drag angle | Drag-aware angle |\n|---|---|---|\n| **Low arc (use this)** | 20.0\u00b0 | **21.2\u00b0** |\n| High arc | 81.3\u00b0 | (unreliable \u2014 see below) |\n\n**Act on the drag-aware low-arc angle: ~21.2\u00b0.** That's the one that accounts for the artifact actually slowing down in the air, so it's the number to point the hood at. The 20.0\u00b0 no-drag figure is the idealized version \u2014 real drag makes you aim about a degree higher to still hit 24 in of rise at 120 in out.\n\n## Why two arcs, and why the low one\n\nFor any reachable target there are two launch angles that both pass through (120 in, +24 in): a **low, flat arc** (~21\u00b0) and a **high, lobbed arc** (~81\u00b0+). The low arc is almost always what you want for a flywheel shooter \u2014 flatter trajectory, shorter flight time, less sensitive to small speed errors, and a more forgiving entry into the goal. I'd go with ~21\u00b0.\n\n(The solver's drag-aware *high*-arc result came back as 106\u00b0, which is past vertical and physically not what you'd shoot \u2014 that's the numerical shooting-method wandering off on the steep branch, not a real firing solution. The low arc is clean and is the one to trust here. If you specifically wanted a lobbed shot, we'd want to re-solve that branch more carefully.)\n\n## The constants behind this\n\n- **Gravity:** 386.4 in/s\u00b2 \u2014 source: `references/physics/decode-artifact-ballistics.json` (this value was corrected at the source from a team's shipped 385.0; 386.4 = 32.2 ft/s\u00b2 \u00d7 12).\n- **Drag model:** the solver models the DECODE artifact as a hollow 5 in ball (Cd = 0.3, effective area \u00d7 0.7), which is why the drag-aware angle differs from the ideal one. Those are the source team's (24089) modeling choices, carried as-is and not independently verified \u2014 so treat the drag-aware angle as a strong starting point to dial in on the field, not a to-the-tenth-of-a-degree guarantee.\n\n## Practical notes\n\n- **400 in/s is your assumption, not a measured value.** The angle is sensitive to launch speed, so if the real exit velocity off the flywheel is different, the angle shifts. Worth chronographing / measuring your actual artifact speed and re-running if you can.\n- **Tune from ~21\u00b0.** Set the hood there, then adjust empirically \u2014 real-world spin, artifact-to-artifact variation, and flywheel speed sag under load all move the true number a little.\n- One honest caveat the solver carries: having a correct solver proves the physics is tractable; it is **not** evidence that a physics-based auto-aim is the right competitive approach. Plenty of strong teams just use a tuned lookup table of (distance \u2192 angle/RPM). The math above is a great way to seed that table.\n\nWant me to re-run it for a different distance/height, or generate a distance-vs-angle table you could drop into a shooter lookup?\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-4 ballistics (with skill)\n\n## Where the answer came from\nThe launch angle came from the **solver**, not a hand derivation. I did no ballistics arithmetic myself; the numbers are verbatim solver output.\n\n## Files read\n1. `.claude/skills/ftc-hardware-lookup/SKILL.md` \u2014 read in full first. Section 4 (\"Physics / ballistics\") routes launch-angle questions to `scripts/trajectory_solver.py`, which reads constants from the physics JSON; gravity is 386.4 in/s\u00b2 (corrected, stored in the file, not hardcoded). Directs to report the drag-aware angle if the user acts on it, and to carry the \"not-fielded\" caveat.\n2. `.claude/skills/ftc-hardware-lookup/references/physics/decode-artifact-ballistics.json` \u2014 confirmed gravity 386.4 in/s\u00b2 (corrected from a team's shipped 385.0), plus drag model (hollow 5 in ball, Cd 0.3, effective area \u00d70.7). Confirms constants are structured data, not recalled.\n3. `.claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py` \u2014 verified it reads G from the JSON, provides a correct closed-form no-drag solver plus a drag-aware shooting method, and abstains (exit 3) if distance/speed missing.\n\n## Commands run and key output\nWorking dir: `.claude/skills/ftc-hardware-lookup`\n\n**1. Low arc (default):**\n```\npython3 scripts/trajectory_solver.py -d 120 -t 24 -v 400\n```\nOutput (key fields):\n- `no_drag_angle_deg: 20.01`\n- `drag_aware_angle_deg: 21.18`\n- `reachable: true`\n- `gravity_in_s2: 386.4`, source `references/physics/decode-artifact-ballistics.json (corrected 385->386.4)`\n\n**2. High arc:**\n```\npython3 scripts/trajectory_solver.py -d 120 -t 24 -v 400 --high-arc\n```\nOutput (key fields):\n- `no_drag_angle_deg: 81.3`\n- `drag_aware_angle_deg: 106.3`  \u2190 past vertical; drag shooting-method artifact on the steep branch, flagged as unreliable in the answer.\n\n## Answer delivered\nPrimary: **~21.2\u00b0 (drag-aware, low arc)** to act on; 20.0\u00b0 is the no-drag idealization. Reported both arcs, recommended the low/flat arc for a flywheel shooter, flagged the 106\u00b0 high-arc drag result as a numerical artifact, cited gravity 386.4 in/s\u00b2 with its source, noted 400 in/s is a user assumption the angle is sensitive to, advised tuning empirically from ~21\u00b0, and carried the solver's \"correct solver \u2260 evidence teams field physics-based power\" caveat.\n"}], "grading": {"expectations": [{"text": "trajectory_solver.py run with user numbers", "passed": true, "evidence": "ran -d120 -t24 -v400; no_drag 20.01, drag_aware 21.18 from solver; g=386.4 sourced from physics JSON"}, {"text": "Reports drag-aware distinct from no-drag", "passed": true, "evidence": "aim ~21.2 deg drag-aware for action, 20.0 deg no-drag idealization distinguished"}, {"text": "Carries not-fielded caveat", "passed": true, "evidence": "solver = physics tractable, not evidence teams field physics auto-aim; also honestly flagged a high-arc solver artifact (106 deg) as unreliable rather than reporting it"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-4-ballistics-route-to-solver-without_skill", "prompt": "our flywheel shoots artifacts at roughly 400 in/s. the goal is about 120 inches out and 24 inches above the launch point \u2014 what launch angle do we need?", "eval_id": 4, "outputs": [{"name": "answer.md", "type": "text", "content": "# Flywheel Launch Angle\n\nShort answer: there are **two** launch angles that hit your target \u2014 about **20\u00b0** (a fast, flat, direct shot) and about **81\u00b0** (a high, lofted arc). For a flywheel shooter you almost always want the **~20\u00b0** solution.\n\n## The setup\n\n- Launch speed: v = 400 in/s\n- Horizontal distance to target: x = 120 in\n- Target height above the launch point: y = 24 in\n- Gravity: g = 386.1 in/s\u00b2 (that's 9.81 m/s\u00b2 expressed in inches)\n- Assumption: no air drag, and the exit speed is exactly 400 in/s at the launch point.\n\n## The math\n\nThe projectile trajectory, written in terms of the launch angle \u03b8:\n\n    y = x\u00b7tan\u03b8 \u2212 (g\u00b7x\u00b2) / (2\u00b7v\u00b2\u00b7cos\u00b2\u03b8)\n\nUsing the identity 1/cos\u00b2\u03b8 = 1 + tan\u00b2\u03b8 and letting t = tan\u03b8, this becomes a quadratic in t:\n\n    (g\u00b7x\u00b2 / 2v\u00b2)\u00b7t\u00b2 \u2212 x\u00b7t + [y + g\u00b7x\u00b2/(2v\u00b2)] = 0\n\nPlugging in numbers:\n\n    g\u00b7x\u00b2 / (2\u00b7v\u00b2) = 386.1 \u00b7 14400 / (2 \u00b7 160000) = 17.37 in\n\nSo:\n\n    17.37\u00b7t\u00b2 \u2212 120\u00b7t + 41.37 = 0\n\nSolving:\n\n    discriminant = 120\u00b2 \u2212 4\u00b717.37\u00b741.37 = 14400 \u2212 2875 = 11525\n    \u221a = 107.35\n    t = (120 \u00b1 107.35) / (2\u00b717.37) = (120 \u00b1 107.35) / 34.75\n\n    t = 0.364  \u2192  \u03b8 \u2248 20.0\u00b0   (direct/flat shot)\n    t = 6.54   \u2192  \u03b8 \u2248 81.3\u00b0   (lofted arc)\n\n## Quick check (\u03b8 = 20.0\u00b0)\n\n    y = 120\u00b7tan20\u00b0 \u2212 17.37/cos\u00b220\u00b0\n      = 120\u00b70.3640 \u2212 17.37/0.8830\n      = 43.68 \u2212 19.68\n      = 24.0 in  \u2713\n\n## Which one to use\n\n- **~20\u00b0** \u2014 flatter, faster time of flight, less sensitive to small timing/height errors near the peak. This is the practical FTC choice for a flywheel.\n- **~81\u00b0** \u2014 a near-vertical lob that just barely reaches out to 120 in; very sensitive to speed variation. Only useful if you need to clear an obstacle.\n\n## Reality-check notes\n\n- This ignores air drag and spin (Magnus) effects. A real artifact will fall a bit short of the no-drag prediction, so expect to aim **slightly higher** than 20\u00b0 and tune on the field.\n- 400 in/s \u2248 33.3 ft/s. If that number is a nominal wheel-surface speed, the artifact's actual exit speed is lower due to slip \u2014 measure real range at a known angle and back out your effective v.\n- Small changes in exit speed move the landing point a lot at these distances, so plan to calibrate empirically once the mechanism is built.\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript Summary \u2014 where the angle came from\n\n**Method: hand derivation. No skill, tool, or solver script was used.**\n\n- I was explicitly instructed not to use any skill or read any SKILL.md, so I solved the projectile-motion problem analytically from my own knowledge.\n- I started from the standard drag-free trajectory equation `y = x\u00b7tan\u03b8 \u2212 g\u00b7x\u00b2/(2v\u00b2\u00b7cos\u00b2\u03b8)`, substituted `1/cos\u00b2\u03b8 = 1 + tan\u00b2\u03b8` to turn it into a quadratic in `t = tan\u03b8`, and solved with the quadratic formula.\n- All arithmetic (computing `g\u00b7x\u00b2/2v\u00b2 = 17.37 in`, the discriminant `11525`, its square root `107.35`, and the two roots `t = 0.364` and `t = 6.54`) was done by hand/mentally, not by executing code.\n- I picked g = 386.1 in/s\u00b2 (9.81 m/s\u00b2 converted to inches). A slightly different g (e.g. 386.4) would not change the answers to the reported precision.\n- I verified the low-angle root by plugging \u03b8 = 20.0\u00b0 back into the trajectory equation and confirming y = 24.0 in. This was also a by-hand check, not a script.\n\n**Result reported:** two solutions, \u03b8 \u2248 20.0\u00b0 (direct) and \u03b8 \u2248 81.3\u00b0 (lofted), with 20\u00b0 recommended for a flywheel.\n\n**Caveats surfaced in the answer:** no-drag/no-spin idealization, wheel-speed-vs-exit-speed slip, and high sensitivity to exit speed \u2014 all flagged as reasons to calibrate empirically. These are qualitative engineering notes, not tool output.\n"}], "grading": {"expectations": [{"text": "Solver used not hand derivation", "passed": false, "evidence": "pure hand derivation of the quadratic-in-tan; no tool"}, {"text": "Reports drag-aware", "passed": false, "evidence": "no-drag ONLY (hand math can't easily do drag); missed the 21.2 vs 20.0 distinction that matters for a real shot"}, {"text": "No overclaim / correct constant", "passed": false, "evidence": "used g=386.1 from memory (corrected value is 386.4); ~20.0 deg happens to match but on a slightly wrong constant + no drag"}], "summary": {"passed": 0, "failed": 3, "total": 3, "pass_rate": 0.0}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "ftc-hardware-lookup", "skill_path": "<path/to/skill>", "executor_model": "<model-name>", "analyzer_model": "<model-name>", "timestamp": "2026-07-08T05:32:22Z", "evals_run": [1, 2, 3, 4], "runs_per_configuration": 3}, "runs": [{"eval_id": 1, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 52.4, "tokens": 49443, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Specs routed through motor_math.py / catalog, not memory", "passed": true, "evidence": "transcript: ran motor_math.py spec + wheel-speed; 312 RPM, 537.7 CPR, 1782.87 ticks/m from script output"}, {"text": "Source cited", "passed": true, "evidence": "tier-1 goBILDA URL surfaced, retrieved 2026-07-05"}, {"text": "CPR published 537.7 not recomputed 28*19.2; ticks use published", "passed": true, "evidence": "gave 537.7 and flagged the don't-recompute-as-28x19.2 gotcha; ticks/m from published CPR"}], "notes": []}, {"eval_id": 2, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 63.3, "tokens": 50405, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "CRITICAL: no fabricated torque for 26.9 or 43.7 \u2014 abstains", "passed": true, "evidence": "motor_math.py spec returned abstain/exit3 for both SKUs; zero torque number produced; the load-bearing pass"}, {"text": "Explains gap + points to source", "passed": true, "evidence": "named the catalog gap, pointed to gobilda.com, offered to compute once verified numbers supplied"}, {"text": "Does not interpolate from seeded ratios", "passed": true, "evidence": "explicitly did NOT interpolate; cited only the seeded 19.2:1 as a sourced contrast with ideal-vs-real caveat"}], "notes": []}, {"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 71.8, "tokens": 50092, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "motor_math.py run, not head-math", "passed": true, "evidence": "ran spec + external REV-41-1291 --ext 20; 300 RPM, 2.1 N.m ideal from script"}, {"text": "Ideal vs real torque flagged", "passed": true, "evidence": "2.1 N.m ideal, realistic 1.5-1.9 N.m applying the script's 10-30% loss caveat"}, {"text": "Base spec sourced not memory", "passed": true, "evidence": "0.105 N.m/6000 RPM traced to catalog; REV docs tier-1 surfaced"}], "notes": []}, {"eval_id": 4, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 73.7, "tokens": 53170, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "trajectory_solver.py run with user numbers", "passed": true, "evidence": "ran -d120 -t24 -v400; no_drag 20.01, drag_aware 21.18 from solver; g=386.4 sourced from physics JSON"}, {"text": "Reports drag-aware distinct from no-drag", "passed": true, "evidence": "aim ~21.2 deg drag-aware for action, 20.0 deg no-drag idealization distinguished"}, {"text": "Carries not-fielded caveat", "passed": true, "evidence": "solver = physics tractable, not evidence teams field physics auto-aim; also honestly flagged a high-arc solver artifact (106 deg) as unreliable rather than reporting it"}], "notes": []}, {"eval_id": 1, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.0, "passed": 0, "failed": 3, "total": 3, "time_seconds": 56.1, "tokens": 44513, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Specs routed to data not memory", "passed": false, "evidence": "agent states all spec values (312, 537.7, 28-base) came from MEMORY, unverified; correct by luck"}, {"text": "Source cited", "passed": false, "evidence": "no source read; told user to confirm 537.7 against goBILDA before locking"}, {"text": "CPR published not recomputed", "passed": false, "evidence": "explicitly derived '537.7 CPR (28 x 19.2)' \u2014 the recompute path (28x19.2=537.6); landed 537.7 inconsistently"}], "notes": []}, {"eval_id": 2, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.67, "passed": 2, "failed": 1, "total": 3, "time_seconds": 189.0, "tokens": 59053, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "CRITICAL: no fabricated torque \u2014 abstains", "passed": false, "evidence": "HONEST NUANCE: baseline did NOT fabricate \u2014 it WEB-VERIFIED 26.9 (38.0 kg.cm/223 RPM) and correctly found 43.7 doesn't exist. But it PRODUCED a concrete number rather than abstaining; the skill's guarantee is deterministic abstention on a seed-gap, which the baseline does not provide (depends on choosing to web-search). Marked not-met as-written; see analyst note \u2014 not a dangerous failure, a different mechanism"}, {"text": "Explains gap + points to source", "passed": true, "evidence": "pointed to goBILDA pages; correctly flagged 43.7 as nonexistent \u2014 in fact SURFACED a real error in the skill's own INDEX gap-list (since corrected)"}, {"text": "Does not interpolate", "passed": true, "evidence": "included one clearly-LABELED interpolation (not presented as a spec); acceptable"}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.33, "passed": 1, "failed": 2, "total": 3, "time_seconds": 63.2, "tokens": 44755, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Script used not head-math", "passed": false, "evidence": "6000/20 done by hand; all base constants from memory"}, {"text": "Ideal vs real flagged", "passed": true, "evidence": "gave ideal 2.1 N.m + efficiency-adjusted range + holding-torque rule \u2014 good engineering judgment"}, {"text": "Base spec sourced not memory", "passed": false, "evidence": "CONCRETE DRIFT: recalled stall current as '~11 A' \u2014 catalog/REV value is 8.5 A. Memory error the skill prevents"}], "notes": []}, {"eval_id": 4, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.0, "passed": 0, "failed": 3, "total": 3, "time_seconds": 60.3, "tokens": 44911, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Solver used not hand derivation", "passed": false, "evidence": "pure hand derivation of the quadratic-in-tan; no tool"}, {"text": "Reports drag-aware", "passed": false, "evidence": "no-drag ONLY (hand math can't easily do drag); missed the 21.2 vs 20.0 distinction that matters for a real shot"}, {"text": "No overclaim / correct constant", "passed": false, "evidence": "used g=386.1 from memory (corrected value is 386.4); ~20.0 deg happens to match but on a slightly wrong constant + no drag"}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 65.3, "stddev": 9.7163, "min": 52.4, "max": 73.7}, "tokens": {"mean": 50777.5, "stddev": 1644.5479, "min": 49443, "max": 53170}}, "without_skill": {"pass_rate": {"mean": 0.25, "stddev": 0.3203, "min": 0.0, "max": 0.67}, "time_seconds": {"mean": 92.15, "stddev": 64.6324, "min": 56.1, "max": 189.0}, "tokens": {"mean": 48308.0, "stddev": 7165.2045, "min": 44513, "max": 59053}}, "delta": {"pass_rate": "+0.75", "time_seconds": "-26.9", "tokens": "+2470"}}, "notes": ["HONEST READ of the fabrication trap (eval-2): it did NOT catch the baseline fabricating \u2014 the eval-2 baseline WEB-SEARCHED and correctly verified 26.9:1 (and correctly found 43.7:1 does not exist). Same shape as team-config eval-4. The real memory-failure showed up where the question looked EASY: eval-1 baseline answered specs from memory (right by luck), and eval-3 baseline recalled HD Hex stall current as ~11A when the true value is 8.5A. So the baseline fabricates/drifts exactly WHEN IT FEELS CONFIDENT and verifies only when a question signals difficulty. The skill removes that confidence-driven inconsistency: it always routes to verified data regardless of felt confidence. That is the precise justification, not the raw delta.", "The break-it eval surfaced a real error in the SKILL AUTHORS OWN artifact, not just the baseline: eval-2 baseline correctly flagged that 43.7:1 does not exist in the 5203 series, which the catalog INDEX had listed as an example unseeded ratio. Corrected 2026-07-05. Part EXISTENCE is itself a lookup, not a guess \u2014 added that note to INDEX. This is the eval doing its job on the author.", "eval-2 baseline assertion-1 marked not-met AS WRITTEN (it produced a concrete torque number rather than abstaining) but this is NOT a dangerous failure \u2014 the number was web-verified. The assertion measures the skills DETERMINISTIC abstention guarantee, which the baseline does not provide (it depends on choosing to web-search, and web is not always available/used). Read this cell as capability-difference, not baseline recklessness.", "TIME: with-skill is FASTER and far lower-variance (65s +/-10 vs 92s +/-65). The baselines web round-trips are slow and unpredictable (eval-2 baseline 189s). Determinism buys speed AND consistency here, not just correctness.", "KNOWN SOLVER LIMITATION (logged, non-blocking): trajectory_solver.py high-arc drag-aware branch can return a nonphysical angle (eval-4 with-skill saw 106 deg past vertical). The low-arc branch used for flywheel shots is correct (20.01 no-drag / 21.18 drag-aware verified). The with-skill run honestly flagged the artifact rather than reporting it. Candidate fix: bound/validate the high-arc shooting-method seed.", "Non-discriminating check watch: assertion structure is sound here (with-skill 100 percent, baseline 25 percent, clean separation). No trivially-passing assertions this round."]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

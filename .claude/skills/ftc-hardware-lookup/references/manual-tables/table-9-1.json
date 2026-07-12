@@ -1,0 +1,48 @@
+{
+  "table_id": "9-1",
+  "caption": "Audio cues",
+  "rows": [
+    [
+      "Event",
+      "Timer Value",
+      "Audio Cue"
+    ],
+    [
+      "MATCH start",
+      "2:30",
+      "\u201cCavalry Charge\u201d"
+    ],
+    [
+      "AUTO ends",
+      "2:00",
+      "\u201cBuzzer x 3\u201d"
+    ],
+    [
+      "AUTO to TELEOP Transition",
+      "0:07 to 0:01",
+      "\u201cDrivers, pick up your controllers, 3-2-1\u201d"
+    ],
+    [
+      "TELEOP begins",
+      "2:00",
+      "\u201c3 Bells\u201d"
+    ],
+    [
+      "Final 20 seconds",
+      "0:20",
+      "\u201cTrain Whistle\u201d"
+    ],
+    [
+      "MATCH end",
+      "0:00",
+      "\u201c3-second Buzzer\u201d"
+    ],
+    [
+      "MATCH stopped",
+      "N/A",
+      "\u201cFoghorn\u201d"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:9-1]] pointer (\u00a78<->\u00a79)"
+}

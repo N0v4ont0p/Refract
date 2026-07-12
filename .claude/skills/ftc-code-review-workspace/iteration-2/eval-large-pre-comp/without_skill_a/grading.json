@@ -1,0 +1,26 @@
+{
+  "expectations": [
+    {
+      "name": "N1-turret-config-mismatch",
+      "passed": true,
+      "evidence": "caught (grep: turret x2) \u2014 read all 23 files"
+    },
+    {
+      "name": "N2-mutable-static-persistence",
+      "passed": true,
+      "evidence": "caught (autoAlignOffset/static x3)"
+    },
+    {
+      "name": "N3-god-opmode",
+      "passed": true,
+      "evidence": "caught (god/TeleOpMain x2)"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "note": "Thorough baseline: transcript reports reading ALL 23 files (2343 lines) before answering."
+}

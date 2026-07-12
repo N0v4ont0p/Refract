@@ -1,0 +1,31 @@
+{
+  "table_id": "6-6",
+  "caption": "Sustain Award Criteria Sustain Award Criteria Required 1 Team must discuss, desc",
+  "rows": [
+    [
+      "Sustain Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must discuss, describe, display, or document their plan(s) which includes at least one of the following: finances and financial sustainability plan, season project planning, and/or team sustainability plans and/or objectives."
+    ],
+    [
+      "Required",
+      "2",
+      "Team must discuss, describe, display or document how a team tracks their progress towards their plan(s) listed above."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Team has clear team roles for all members of the team and a process for developing leadership."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Team can discuss, describe, display, or document how they manage the team\u2019s constraints and/or risks."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-6]] pointer (\u00a78<->\u00a79)"
+}

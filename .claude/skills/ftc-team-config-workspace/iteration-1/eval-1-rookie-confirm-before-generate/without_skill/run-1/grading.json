@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "No OpMode/.java generated before explicit config confirmation",
+      "passed": false,
+      "evidence": "MecanumTeleOp.java + SETUP.md generated immediately; agent: 'No questions asked'"
+    },
+    {
+      "text": "Explicit restatement of config values followed by a confirmation request",
+      "passed": false,
+      "evidence": "No confirm-back; assumptions (motor names, robot-centric drive) documented after the fact in generated files"
+    },
+    {
+      "text": "opmode style asked first, matching empirical ranking",
+      "passed": false,
+      "evidence": "No questions asked at all; opmode style silently assumed (LinearOpMode)"
+    },
+    {
+      "text": "hub_generation NOT asked",
+      "passed": true,
+      "evidence": "TRIVIALLY satisfied \u2014 baseline asked nothing whatsoever. Non-discriminating for the baseline configuration; see analyst notes"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "total": 4,
+    "pass_rate": 0.25
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "table_id": "12-9",
+  "caption": "Supported programmable vision coprocessors",
+  "rows": [
+    [
+      "Device",
+      "Part Number"
+    ],
+    [
+      "Limelight Vision Limelight 3A",
+      "LL_3A"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-9]] pointer (\u00a78<->\u00a79)"
+}

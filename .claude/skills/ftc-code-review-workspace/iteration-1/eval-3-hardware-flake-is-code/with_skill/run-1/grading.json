@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "mutable-static-root-cause",
+      "passed": true,
+      "evidence": "identified flywheelOffset static as prime suspect via failure_mode_lint, WITH the honest reset caveat ('unconditionally reset before first read is safe')"
+    },
+    {
+      "name": "not-blamed-on-hardware",
+      "passed": true,
+      "evidence": "'it's the code, not the motor'; swapping motor won't fix"
+    },
+    {
+      "name": "finding-is-authoritative",
+      "passed": true,
+      "evidence": "framed as deterministic finding tied to known-failure-modes.md (12808 cross-opmode persistence case)"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

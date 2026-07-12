@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Resolves table pointer",
+      "passed": false,
+      "evidence": "no table read; ampacity reasoning from memory"
+    },
+    {
+      "text": "Correct rule R615 verified",
+      "passed": false,
+      "evidence": "no rule ID cited at all; told user to look it up"
+    },
+    {
+      "text": "Verdict uses table value",
+      "passed": false,
+      "evidence": "conclusion right direction via ampacity ~0.5-2A vs stall, but no manual gauge value; the 18 AWG rule floor never surfaced"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

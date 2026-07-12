@@ -1,0 +1,92 @@
+{
+  "team": "19043",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "java",
+  "language_file_counts": {
+    "java": 99,
+    "kotlin": 0
+  },
+  "drivetrain": {
+    "type": {
+      "value": "unknown",
+      "evidence": []
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:8",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:29",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:41"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": "limelight_3a",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/vision/BallDetection.java:10",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/vision/BallDetection.java:11",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/vision/BallDetection.java:12"
+      ]
+    },
+    "odometry": {
+      "value": [
+        "goBILDA_pinpoint",
+        "otos"
+      ],
+      "evidence": {
+        "otos": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/utils/SparkFunOTOS.java:18",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/utils/SparkFunOTOS.java:19",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/utils/SparkFunOTOS.java:21"
+        ],
+        "goBILDA_pinpoint": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/subsystems/drive/localizers/RobotEKF.java:13",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/subsystems/drive/localizers/RobotEKF.java:87",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/subsystems/drive/localizers/MergeLocalizer.java:30"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": "unknown",
+      "evidence": []
+    },
+    "opmode_style": {
+      "value": "raw_linear_opmode",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/BlueGoalGateAuto.java:22",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/Teleop.java:26",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/BlueTunnelCycleAuto.java:20"
+      ]
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  }
+}

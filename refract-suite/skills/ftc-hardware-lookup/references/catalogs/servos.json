@@ -1,0 +1,23 @@
+{
+  "_schema": "Same rules as motors.json: every value manufacturer-published, each part carries _source, no field surfaced without it.",
+  "parts": {
+    "2000-0025-0002": {
+      "name": "goBILDA 2000 Series Dual Mode Servo (25-2)",
+      "type": "servo",
+      "operating_voltage_v": {"min": 4.8, "max": 7.4},
+      "stall_torque_by_voltage": {
+        "4.8v": {"value": 240, "unit": "oz-in", "also": {"value": 17.2, "unit": "kg.cm"}},
+        "6.0v": {"value": 300, "unit": "oz-in", "also": {"value": 21.6, "unit": "kg.cm"}},
+        "7.4v": {"value": 350, "unit": "oz-in", "also": {"value": 25.2, "unit": "kg.cm"}}
+      },
+      "no_load_speed_by_voltage": {
+        "4.8v": {"value": 0.25, "unit": "sec/60deg"},
+        "6.0v": {"value": 0.20, "unit": "sec/60deg"},
+        "7.4v": {"value": 0.17, "unit": "sec/60deg"}
+      },
+      "rotation_range_standard_mode_deg": 300,
+      "continuous_mode": "available via programmer; rotation-range value not listed on page",
+      "_source": {"url": "https://www.gobilda.com/2000-series-dual-mode-servo-25-2-torque/", "tier": 1, "retrieved": "2026-07-05", "note": "manufacturer product page; torque/speed are voltage-dependent — never quote a single figure without stating the voltage"}
+    }
+  }
+}

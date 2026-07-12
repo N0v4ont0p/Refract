@@ -1,0 +1,53 @@
+{
+  "skill_name": "ftc-team-config",
+  "evals": [
+    {
+      "id": 1,
+      "name": "rookie-confirm-before-generate",
+      "prompt": "hi! we're team 99902, rookie team on the gobilda strafer kit with mecanum wheels, just a control hub. can you write us a teleop opmode so we can drive?",
+      "expected_output": "Stops before generating: asks residual questions (opmode style among the first, per empirical ranking), states the config back for explicit confirmation; no .java generated. hub_generation NOT asked (2025-26 = REV-only, zero info gain).",
+      "files": [],
+      "assertions": [
+        {"name": "no-code-before-confirmation", "text": "No OpMode/.java file is generated before the config is explicitly confirmed — the run ends with questions and/or a confirm-back statement, not generated code"},
+        {"name": "specific-confirm-back-claim", "text": "The output contains an explicit restatement of the config values followed by a request for confirmation (the specific confirm-before-generate behavior, not merely the presence of any question)"},
+        {"name": "empirical-question-order", "text": "Among the questions asked, opmode style appears first or among the first, matching question_order.py's real branching-factor ranking (opmode_style=15 is the top-ranked feature), not an arbitrary order"},
+        {"name": "hub-generation-not-asked", "text": "hub_generation is NOT asked as a question (clean-case control: REV Control Hub is the sole legal system in 2025-26, so the question has zero information gain)"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "midseason-turret-reopen",
+      "prompt": "we just added a single-axis turret to our robot this week — write the aiming subsystem skeleton. our team-config.yaml is in this directory.",
+      "expected_output": "Reads existing config (turret: none, confirmed), detects the contradiction, re-opens that part of the config with a config_history append proposal, asks for confirmation of the change; no aiming code generated yet.",
+      "files": ["team-config.yaml (rookie fixture, turret: none confirmed)"],
+      "assertions": [
+        {"name": "stale-config-detected", "text": "The existing team-config.yaml is actually read and the turret contradiction (config says none/confirmed, user says single-axis added) is explicitly surfaced — the change is treated as re-opening the config, not silently assumed true"},
+        {"name": "history-preserved", "text": "The config change is staged as an append to config_history (or an explicit proposal of one) with date and change description — the week-1 state is not silently overwritten"},
+        {"name": "no-code-before-reconfirmation", "text": "No aiming subsystem code is generated before the changed turret field is confirmed"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "constraint-violation-surfaced",
+      "prompt": "set us up for the fixed-shooter-on-swerve archetype — we run mecanum with roadrunner. team 99903.",
+      "expected_output": "The deterministic constraint check fires (fixed_shooter_on_swerve requires drivetrain=swerve, config says mecanum); the conflict is surfaced explicitly and the user is asked which side to change; no valid config is written and no code is generated.",
+      "files": [],
+      "assertions": [
+        {"name": "constraint-fires-and-surfaces", "text": "The fixed_shooter_on_swerve-requires-swerve constraint violation is explicitly surfaced (via validate_config.py or the season extension's constraints_on_core), not smoothed over or silently 'fixed'"},
+        {"name": "no-incoherent-config-shipped", "text": "No config is written/confirmed as valid with the contradiction intact, and no code is generated; the user is asked which side to change (drivetrain or archetype)"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "hub-generation-pointer",
+      "prompt": "quick question while we set up: we're on the REV control hub now, but our mentor heard SystemCore is coming and wants to know if we should plan our code around it this season or next. what's the deal?",
+      "expected_output": "Answers from a LIVE read of ftc-hardware-lookup's systemcore-motioncore.md (R60/R77 pointer mechanism): REV-only legality now, hybrid window from 2027-28 through at least 2030-31, tier-tagged claims preserved. hub_generation is NOT added as a config question now.",
+      "files": [],
+      "assertions": [
+        {"name": "briefing-read-live-not-paraphrased", "text": "The transcript shows the file .claude/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md being actually read during the run, and the answer's specific claims (dates, hybrid window, tier labels) are traceable to that file's content — not a from-memory paraphrase"},
+        {"name": "timeline-correct-per-reference", "text": "The answer states REV Control Hub is the sole legal system through 2026-27 and that the SystemCore transition opens a hybrid-legal window (2027-28 through at least 2030-31), consistent with the reference file"},
+        {"name": "gate-stays-closed-now", "text": "hub_generation is NOT turned into a config question for the current season (the time gate keys off the ACTIVE season slug, which is 2025-26 → zero information gain), even though the user raised the topic"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "eval_id": 3,
+  "eval_name": "scripted-calc-not-headmath",
+  "prompt": "we put HD hex motors on the arm with the 20:1 spur gearbox. whats the output speed and about how much torque can it hold?",
+  "assertions": [
+    {
+      "name": "used-script-not-headmath",
+      "text": "motor_math.py was actually run (external stage) \u2014 the 300 RPM and torque figure come from the script, visible in the transcript, not hand-computed"
+    },
+    {
+      "name": "ideal-vs-real-torque-flagged",
+      "text": "The gear-multiplied stall torque (~2.1 N.m) is presented as IDEAL with an explicit note that real holding torque is lower (gearbox losses) \u2014 not presented as the delivered figure"
+    },
+    {
+      "name": "base-spec-sourced",
+      "text": "The HD Hex base spec used (0.105 N.m, 6000 RPM) traces to the catalog, not memory"
+    }
+  ]
+}

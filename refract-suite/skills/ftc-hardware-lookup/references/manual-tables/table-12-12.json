@@ -1,0 +1,47 @@
+{
+  "table_id": "12-12",
+  "caption": "Allowed",
+  "rows": [
+    [
+      "Gamepad",
+      "Part Number",
+      "Notes"
+    ],
+    [
+      "Logitech F310 gamepad",
+      "940-00010",
+      ""
+    ],
+    [
+      "Xbox 360 Controller for Windows",
+      "52A-00004",
+      ""
+    ],
+    [
+      "Sony DualShock 4 Wireless Controller for PS4",
+      "N/A",
+      "Operating in wired mode only (i.e., connected through USB cable without being Bluetooth paired to any device) This DOES NOT include the Sony DualSense Edge Wireless Controller in any configuration"
+    ],
+    [
+      "Sony DualSense Wireless Controller for PS5",
+      "N/A"
+    ],
+    [
+      "Etpark Wired Controller for PS4",
+      "REV-39-1865",
+      "Newer versions of this device may not support all functionality provided by the FTC SDK"
+    ],
+    [
+      "REV Robotics USB PS4 Compatible Gamepad",
+      "REV-31-2983",
+      ""
+    ],
+    [
+      "Quadstick game controller in Xbox 360 Emulation Mode",
+      "any model",
+      ""
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-12]] pointer (\u00a78<->\u00a79)"
+}

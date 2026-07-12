@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Specs routed to data not memory",
+      "passed": false,
+      "evidence": "agent states all spec values (312, 537.7, 28-base) came from MEMORY, unverified; correct by luck"
+    },
+    {
+      "text": "Source cited",
+      "passed": false,
+      "evidence": "no source read; told user to confirm 537.7 against goBILDA before locking"
+    },
+    {
+      "text": "CPR published not recomputed",
+      "passed": false,
+      "evidence": "explicitly derived '537.7 CPR (28 x 19.2)' \u2014 the recompute path (28x19.2=537.6); landed 537.7 inconsistently"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

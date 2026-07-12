@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "motor_math.py run, not head-math",
+      "passed": true,
+      "evidence": "ran spec + external REV-41-1291 --ext 20; 300 RPM, 2.1 N.m ideal from script"
+    },
+    {
+      "text": "Ideal vs real torque flagged",
+      "passed": true,
+      "evidence": "2.1 N.m ideal, realistic 1.5-1.9 N.m applying the script's 10-30% loss caveat"
+    },
+    {
+      "text": "Base spec sourced not memory",
+      "passed": true,
+      "evidence": "0.105 N.m/6000 RPM traced to catalog; REV docs tier-1 surfaced"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

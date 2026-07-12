@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "trajectory_solver.py run with user numbers",
+      "passed": true,
+      "evidence": "ran -d120 -t24 -v400; no_drag 20.01, drag_aware 21.18 from solver; g=386.4 sourced from physics JSON"
+    },
+    {
+      "text": "Reports drag-aware distinct from no-drag",
+      "passed": true,
+      "evidence": "aim ~21.2 deg drag-aware for action, 20.0 deg no-drag idealization distinguished"
+    },
+    {
+      "text": "Carries not-fielded caveat",
+      "passed": true,
+      "evidence": "solver = physics tractable, not evidence teams field physics auto-aim; also honestly flagged a high-arc solver artifact (106 deg) as unreliable rather than reporting it"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

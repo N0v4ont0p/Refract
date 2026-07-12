@@ -1,0 +1,19 @@
+{
+  "eval_id": 2,
+  "eval_name": "midseason-turret-reopen",
+  "prompt": "we just added a single-axis turret to our robot this week \u2014 write the aiming subsystem skeleton. our team-config.yaml is in this directory.",
+  "assertions": [
+    {
+      "name": "stale-config-detected",
+      "text": "The existing team-config.yaml is actually read and the turret contradiction (config says none/confirmed, user says single-axis added) is explicitly surfaced \u2014 the change is treated as re-opening the config, not silently assumed true"
+    },
+    {
+      "name": "history-preserved",
+      "text": "The config change is staged as an append to config_history (or an explicit proposal of one) with date and change description \u2014 the week-1 state is not silently overwritten"
+    },
+    {
+      "name": "no-code-before-reconfirmation",
+      "text": "No aiming subsystem code is generated before the changed turret field is confirmed"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Resolves [[TABLE:12-8]] pointer into manual-tables/",
+      "passed": true,
+      "evidence": "read table-12-8.json by path; 18 AWG min for motor power, 22 special-case, 28 signal \u2014 not paraphrased from prose"
+    },
+    {
+      "text": "Correct rule R615 verified",
+      "passed": true,
+      "evidence": "R615 + R607 rules.py verify all_valid"
+    },
+    {
+      "text": "Verdict uses actual table value",
+      "passed": true,
+      "evidence": "30 AWG illegal because thinner than the 18 AWG table floor, not an invented threshold"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

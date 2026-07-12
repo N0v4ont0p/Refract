@@ -1,0 +1,16 @@
+{
+  "table_id": "13-7",
+  "caption": "Dual Division Playoff Advancement Points",
+  "rows": [
+    [
+      "Category",
+      "Advancement Points Earned"
+    ],
+    [
+      "Playoff Advancement",
+      "40 points for 1 st Place (Winners) 20 points for 2 nd Place (Finalists) 10 points for all Division Finalists 5 points for all Division 3 rd Places"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:13-7]] pointer (\u00a78<->\u00a79)"
+}

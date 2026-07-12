@@ -1,0 +1,99 @@
+{
+  "team": "18742",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "kotlin",
+  "language_file_counts": {
+    "java": 1,
+    "kotlin": 67
+  },
+  "drivetrain": {
+    "type": {
+      "value": "unknown",
+      "evidence": []
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/tests/DeviceTest.java:9",
+        "TeamCode/src/main/java/tests/DeviceTest.java:10",
+        "TeamCode/src/main/java/tests/DeviceTest.java:11"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": "limelight_3a",
+      "evidence": [
+        "TeamCode/src/main/kotlin/org/woen/modules/Camera.kt:3",
+        "TeamCode/src/main/kotlin/org/woen/modules/Camera.kt:21"
+      ]
+    },
+    "odometry": {
+      "value": "goBILDA_pinpoint",
+      "evidence": [
+        "TeamCode/src/main/kotlin/org/woen/tests/DriveTest.kt:4",
+        "TeamCode/src/main/kotlin/org/woen/tests/DriveTest.kt:34",
+        "TeamCode/src/main/kotlin/org/woen/tests/DriveTest.kt:36"
+      ]
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": "roadrunner",
+      "evidence": [
+        "TeamCode/src/main/kotlin/org/woen/utils/regulator/Regulator.kt:3",
+        "TeamCode/src/main/kotlin/org/woen/utils/units/Vec2.kt:4",
+        "MeepMeepTesting/src/main/java/com/example/meepmeeptesting/Extensions.kt:3"
+      ]
+    },
+    "opmode_style": {
+      "value": "raw_linear_opmode",
+      "evidence": [
+        "TeamCode/src/main/java/tests/DeviceTest.java:19",
+        "TeamCode/src/main/kotlin/org/woen/AxonTest.kt:10",
+        "TeamCode/src/main/kotlin/org/woen/opModes/TeleOp.kt:13"
+      ]
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  },
+  "manual_corrections": {
+    "reviewed": "2026-07-03 (Phase 4, human-approved)",
+    "note": "Usage-level corrections to the import-based deterministic pass (imports present != feature in use).",
+    "software_stack.pathing": {
+      "was": "roadrunner",
+      "corrected_to": "custom_pid_segment_runner",
+      "why": "RoadRunner is a BUILD DEP ONLY on master \u2014 Vector2d type (utils/units/Vec2.kt), clamp() (Regulator.kt), offline MeepMeep viz. On-robot pathing is a custom ITrajectorySegment/attachRunner PID runner."
+    },
+    "drivetrain.type": {
+      "was": "unknown",
+      "corrected_to": "custom_holonomic_mecanum",
+      "why": "Custom mecanum-geometry 4-motor drive on raw DcMotorEx with dual-mode (POWER teleop / PID-REGULATOR auto); not any library MecanumDrive class, so signatures didn't match \u2014 'unknown' was the correct deterministic output, resolved by usage analysis."
+    },
+    "architecture.note": "master = single-threaded synchronous attach-module/EventBus; deliberately downscaled from a multithreaded design preserved on the Final-MultiThread branch (intent documented in commits b9c3c0a/c78813c; deeper rationale not spelled out)."
+  }
+}

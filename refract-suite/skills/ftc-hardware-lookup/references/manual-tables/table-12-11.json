@@ -1,0 +1,58 @@
+{
+  "table_id": "12-11",
+  "caption": "Recommended Software for Control System",
+  "rows": [
+    [
+      "Device",
+      "Software and Minimum Recommended Versions",
+      "How to Update"
+    ],
+    [
+      "REV Control Hub (REV-31-1595)",
+      "Control Hub OS Recommended: 1.1.2",
+      "Updating the Control Hub OS"
+    ],
+    [
+      "REV Control Hub (REV-31-1595)",
+      "Hub Firmware Recommended: 1.8.2",
+      "Updating the Hub Firmware"
+    ],
+    [
+      "REV Control Hub (REV-31-1595)",
+      "ROBOT CONTROLLER App Recommended: 11.0",
+      "Updating the ROBOT CONTROLLER App"
+    ],
+    [
+      "REV Expansion Hub (REV-31-1153)",
+      "Hub Firmware Recommended: 1.8.2",
+      "Updating the Hub Firmware"
+    ],
+    [
+      "Android Smartphone (ROBOT CONTROLLER device)",
+      "ROBOT CONTROLLER App Recommended: 11.0",
+      "Updating the ROBOT CONTROLLER App"
+    ],
+    [
+      "Android Smartphone (DRIVER STATION device)",
+      "DRIVER STATION App Recommended: 11.0",
+      "Updating the DRIVER STATION App"
+    ],
+    [
+      "REV Driver Hub (REV-31-1596)",
+      "Driver Hub OS Recommended: 1.2.0",
+      "Updating the Driver Hub OS"
+    ],
+    [
+      "REV Driver Hub (REV-31-1596)",
+      "DRIVER STATION App Recommended: 11.0",
+      "Updating the DRIVER STATION App"
+    ],
+    [
+      "REV Servo Hub (REV-11-1855)",
+      "REV Servo Hub Firmware Recommended: 25.0.2",
+      "Updating the REV Servo Hub"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-11]] pointer (\u00a78<->\u00a79)"
+}

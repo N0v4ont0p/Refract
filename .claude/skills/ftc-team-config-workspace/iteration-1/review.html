@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "ftc-team-config", "runs": [{"id": "eval-1-rookie-confirm-before-generate-with_skill", "prompt": "hi! we're team 99902, rookie team on the gobilda strafer kit with mecanum wheels, just a control hub. can you write us a teleop opmode so we can drive?", "eval_id": 1, "outputs": [{"name": "interaction.md", "type": "text", "content": "# What I would say to the user (verbatim) \u2014 and where I stopped\n\nHi team 99902, welcome to FTC! I can absolutely write you a driving TeleOp. Before I generate\nany robot code, I need to confirm a few things about your robot \u2014 a wrong guess that compiles\nis worse than a question that costs one turn, so bear with me for one quick round.\n\n## Here's what I've got so far (please check me on it)\n\nFrom your message I've penciled in:\n\n- **Drivetrain:** mecanum, on the goBILDA Strafer chassis kit\n- **Wheels:** stock goBILDA mecanum wheels, **96mm** diameter (that's what the Strafer kit\n  ships with \u2014 if yours came with a different size, tell me)\n- **Control system:** REV Control Hub, **no Expansion Hub** (just the one hub, like you said \u2014\n  that means all 4 drive motors plug into the Control Hub's 4 motor ports, which works fine)\n- **Team:** 99902, rookie\n\nNone of that is locked in yet \u2014 it's a pre-fill waiting on your yes.\n\n## Three questions I still need answered\n\nThese three actually change what code I write, which is why I'm asking instead of guessing:\n\n**1. OpMode style \u2014 how do you want the code structured?**\nAn \"OpMode\" is the program that runs on your robot during a match. There are two common ways\nto structure it:\n\n- **Raw LinearOpMode** \u2014 one Java file, top-to-bottom: read the gamepad, set motor powers,\n  repeat in a loop. Everything in one place; this is what the official FTC samples and most\n  tutorials use.\n- **FTCLib command-based** \u2014 a library that splits the robot into \"subsystems\" and \"commands\".\n  More structure up front, pays off as the robot grows, but there's an extra library to install\n  and more concepts to learn.\n\nBoth are fully legal and both work great \u2014 which would you like? (If you have no preference,\nsay so and I'll lay out the tradeoff in one more sentence and let you pick.)\n\n**2. Path-following library \u2014 are you using one?**\nLibraries like **Road Runner** or **Pedro Pathing** help robots drive precise paths in the\nautonomous period. They don't matter much for a driver-controlled TeleOp, but I record it now\nbecause it shapes everything I generate later. For a rookie team that hasn't set one up,\n**\"none\"** is a completely normal answer.\n\n**3. Mechanisms \u2014 is there anything on the robot besides the drivetrain?**\nThis season (DECODE 2025-26), robots commonly have some of: an **intake** (roller or claw),\na **shooter** (flywheel or elastic catapult), a **turret** (only if there's a shooter),\na **gate mechanism**, or a **classifier interaction** mechanism. If it's just the Strafer\nchassis right now \u2014 \"nothing yet, just the drivetrain\" is a perfectly good answer, and I'll\ngenerate drive-only code with no extra stubs cluttering it up.\n\n## Confirm-back\n\nOnce you answer, I'll read the full picture back to you in one line \u2014 something like:\n*\"mecanum on stock goBILDA 96mm Strafer, REV Control Hub only, raw LinearOpMode, no pathing\nlibrary, no mechanisms yet \u2014 rookie team 99902\"* \u2014 and after you say **yes**, I'll write the\nTeleOp OpMode file for you.\n\n---\n\n*Session note: this run is non-interactive, so I stopped here \u2014 no OpMode was generated.\nThe config gate (`validate_config.py`) reports `generation_allowed: false` with\n`drivetrain.type` unconfirmed and `software_stack.pathing`, `software_stack.opmode_style`,\nand `season_mechanisms` missing. Code generation waits for the answers above and an explicit\n\"yes\" on the confirm-back.*\n"}, {"name": "team-config.yaml", "type": "text", "content": "# team-config.yaml \u2014 Team 99902 (PRE-FILL, not yet confirmed)\n# Written by the ftc-team-config skill. Nothing here is a decision until the\n# team confirms it back \u2014 see interaction.md. generation_allowed is false.\n_meta:\n  schema: 1\n  updated: 2026-07-05\n  suite_generated_code: true\n  status: awaiting_confirmation   # confirm-back pending; no code generates until then\n\nteam:\n  number: 99902\n  experience: rookie   # user-stated; affects explanation depth only, never recommendations\n\ndrivetrain:\n  type: {value: mecanum, source: asked, confirmed: false}          # user-stated (\"gobilda strafer kit with mecanum wheels\"); mandatory \u2014 confirm back before generation\n  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: false}   # inferred from \"goBILDA Strafer kit\"\n  wheel_diameter_mm: {value: 96, source: inferred, confirmed: false}         # Strafer Chassis Kit ships with 96mm mecanum wheels \u2014 confirm\n\ncontrol_hardware:\n  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: false}\n  # time-gated: season decode-2025-26 \u2192 REV Control Hub is the sole legal control\n  # system through 2026-27, so this was recorded as inferred, not asked (zero information gain)\n  expansion_hub_count: {value: 0, source: asked, confirmed: false}  # user-stated (\"just a control hub\")\n\n# software_stack: MISSING \u2014 mandatory (pathing, opmode_style); asked in interaction.md\n# season_mechanisms: MISSING \u2014 mandatory (season set as a whole); asked in interaction.md\n\nconfig_history:\n  - {date: 2026-07-05, change: \"initial pre-fill from user message + empty-repo extractor run; awaiting confirmation\"}\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-1-rookie-confirm-before-generate (with_skill)\n\n## Files read (full paths, in order)\n\n1. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/SKILL.md` \u2014 read in full first, per task instructions.\n2. `/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md` \u2014 required by SKILL.md before acting (deterministic-first, abstention, source tiering, ask-don't-guess).\n3. `/Users/georgehu/Desktop/FTC Training AI/core-feature-model.yaml` \u2014 the legal vocabulary for config values; identified the mandatory axes (drivetrain.type, hub_generation, pathing, opmode_style).\n4. `/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE` \u2014 resolved to `decode-2025-26`.\n5. `/Users/georgehu/Desktop/FTC Training AI/season-extensions/decode-2025-26.yaml` \u2014 season mechanism set (intake, shooter, turret, gate_mechanism, classifier_interaction, endgame_parking) and constraints_on_core.\n6. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/scripts/validate_config.py` \u2014 read to learn the exact schema and mandatory set the validator enforces before writing team-config.yaml.\n\nNot read: `.claude/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md` \u2014 the hub-generation briefing is only read at ask-time, and hub generation is time-gated off for this season (2025 start year \u2192 REV Control Hub is the sole legal control system; recorded as inferred, never asked).\n\nStep 0 check: `team-config.yaml` did not exist in the team's project root (workdir was empty), so the whole config was the working set.\n\n## Scripts/commands run (with key output)\n\n1. `python3 .claude/skills/ftc-corpus-builder/scripts/extract_feature_vector.py <workdir>` (from suite root) \u2014 deterministic inference before asking anything. Key output: every field `\"unknown\"` with empty evidence (0 java / 0 kotlin files \u2014 the team repo is empty). So all pre-fills came from the user's message, not the repo.\n2. `python3 .claude/skills/ftc-team-config/scripts/question_order.py` \u2014 empirical question ordering. Key output: `software_stack.opmode_style` branches on 15 patterns (top), `software_stack.pathing` 7, `season.mechanism` 6, `drivetrain.type` 5.\n3. `python3 .claude/skills/ftc-team-config/scripts/validate_config.py <workdir>/team-config.yaml` \u2014 run after writing the pre-fill. Key output: `valid: true`, `generation_allowed: false`, `unconfirmed_mandatory: [\"drivetrain.type\", \"software_stack.pathing (missing)\", \"software_stack.opmode_style (missing)\", \"season_mechanisms (none recorded)\"]`. This is the authoritative gate that blocked code generation.\n\n## Files written\n\n- `<workdir>/team-config.yaml` \u2014 pre-fill only, all fields `confirmed: false`, `_meta.status: awaiting_confirmation`. User-stated values recorded as `source: asked` (mecanum drivetrain, expansion_hub_count 0, rookie); kit-derived values as `source: inferred` (goBILDA_stock wheels, 96mm, REV_Control_Hub). Copied to outputs/.\n- `outputs/interaction.md` \u2014 the verbatim message to the user (pre-fill read-back + three questions + confirm-back plan).\n- This file.\n\nNo `.java` files were generated \u2014 generation is gated on `generation_allowed: true`, which requires the user's answers and an explicit confirm-back \"yes\".\n\n## Question order and why\n\nMandatory-set questions only \u2014 every one of these gates generation per the validator; nothing optional earned a slot (e.g. sensing/odometry branches on 4 patterns but does not change a drive-only TeleOp, so it was not asked).\n\n1. **Confirm-back of pre-filled facts first** (drivetrain = mecanum Strafer, 96mm goBILDA wheels, Control Hub only, rookie) \u2014 presented as \"check me on this\" rather than re-asked, because the user already stated most of it; drivetrain.type still requires explicit confirmation as one of the three always-confirm items.\n2. **OpMode style** \u2014 first real question because it tops the empirical ranking (15 patterns branch on it) and directly changes the structure of the requested TeleOp file.\n3. **Pathing library** \u2014 second per ranking (7 patterns); mandatory regardless of inferability even though it barely affects a TeleOp, with \"none\" explicitly offered as a normal rookie answer (abstention-friendly framing).\n4. **Season mechanism set** \u2014 third per ranking (6 patterns); asked as a whole per the DECODE extension's declared mechanisms, with \"nothing yet, just the drivetrain\" offered as a valid answer so no undeclared-feature code gets generated.\n\nRationale for the order overall: highest-information-first per `question_order.py`, so if the user's patience ran out, the questions that mattered most got asked. Rookie experience widened the explanations (terms defined inline) but did not change which questions were asked or what would be recommended.\n\n## Where it stopped\n\nStopped after writing `interaction.md` \u2014 at the step-4 confirm-back gate. Non-interactive session: no user answers were fabricated, no fields were flipped to `confirmed: true`, and no OpMode was generated.\n"}], "grading": {"expectations": [{"text": "No OpMode/.java generated before explicit config confirmation", "passed": true, "evidence": "0 .java files anywhere in run; interaction.md ends 'no OpMode was generated'; run stopped at the step-4 gate with generation_allowed:false"}, {"text": "Explicit restatement of config values followed by a confirmation request (specific confirm-back, not any question)", "passed": true, "evidence": "interaction.md: 'Here's what I've got so far (please check me on it)' pre-fill readback + 'None of that is locked in yet \u2014 it's a pre-fill waiting on your yes' + planned one-line confirm-back before generation"}, {"text": "opmode style asked first, matching question_order.py's empirical ranking", "passed": true, "evidence": "Questions in order: 1. OpMode style (15 patterns), 2. pathing (7), 3. mechanisms (6) \u2014 exactly the script's ranking; transcript-summary.md shows question_order.py was actually run"}, {"text": "hub_generation NOT asked (clean-case control, zero info gain in 2025-26)", "passed": true, "evidence": "Not among the three questions; transcript-summary: 'hub generation time-gated for 2025-26, recorded as inferred and not asked'"}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}}}, {"id": "eval-1-rookie-confirm-before-generate-without_skill", "prompt": "hi! we're team 99902, rookie team on the gobilda strafer kit with mecanum wheels, just a control hub. can you write us a teleop opmode so we can drive?", "eval_id": 1, "outputs": [{"name": "MecanumTeleOp.java", "type": "text", "content": "/*\n * Team 99902 - Mecanum TeleOp\n * ---------------------------\n * Drive OpMode for the goBILDA Strafer Chassis Kit (4 mecanum wheels,\n * 4x goBILDA 5203 Yellow Jacket motors) running on a REV Control Hub.\n *\n * CONTROLS (gamepad 1):\n *   Left stick Y  -> drive forward / backward\n *   Left stick X  -> strafe left / right\n *   Right stick X -> turn left / right\n *   Right bumper (hold) -> slow mode (30% speed) for fine control\n *\n * ROBOT CONFIGURATION (on the Driver Station app):\n *   Create a configuration with these four DC motors, all \"GoBILDA 5202/3/4 series\":\n *     Control Hub motor port 0 -> \"frontLeft\"\n *     Control Hub motor port 1 -> \"backLeft\"\n *     Control Hub motor port 2 -> \"frontRight\"\n *     Control Hub motor port 3 -> \"backRight\"\n *   (If you plugged motors into different ports, that's fine \u2014 just make sure\n *   each name matches the physical motor it's wired to.)\n *\n * FIRST TEST CHECKLIST (robot on blocks, wheels off the ground!):\n *   1. Push left stick forward -> all 4 wheels should spin so the robot would go forward.\n *      If ONE wheel spins the wrong way, flip that motor's direction below.\n *   2. Then place on the floor and check strafe: left stick right should move the robot right.\n */\n\npackage org.firstinspires.ftc.teamcode;\n\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\nimport com.qualcomm.robotcore.eventloop.opmode.TeleOp;\nimport com.qualcomm.robotcore.hardware.DcMotor;\nimport com.qualcomm.robotcore.hardware.DcMotorSimple;\n\n@TeleOp(name = \"Mecanum TeleOp (99902)\", group = \"Drive\")\npublic class MecanumTeleOp extends LinearOpMode {\n\n    // Speed multipliers\n    private static final double NORMAL_SPEED = 1.0;\n    private static final double SLOW_SPEED   = 0.3;\n\n    @Override\n    public void runOpMode() {\n        // --- Hardware map: names must match your robot configuration exactly ---\n        DcMotor frontLeft  = hardwareMap.get(DcMotor.class, \"frontLeft\");\n        DcMotor backLeft   = hardwareMap.get(DcMotor.class, \"backLeft\");\n        DcMotor frontRight = hardwareMap.get(DcMotor.class, \"frontRight\");\n        DcMotor backRight  = hardwareMap.get(DcMotor.class, \"backRight\");\n\n        // On the Strafer kit the left-side motors face the opposite direction\n        // from the right side, so reverse the left side. If your robot drives\n        // backwards or a wheel fights the others, flip the direction of that motor.\n        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);\n        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);\n        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);\n        backRight.setDirection(DcMotorSimple.Direction.FORWARD);\n\n        // Brake when the sticks are released (robot stops instead of coasting)\n        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);\n        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);\n        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);\n        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);\n\n        telemetry.addLine(\"Initialized - waiting for start\");\n        telemetry.addLine(\"Hold RIGHT BUMPER for slow mode\");\n        telemetry.update();\n\n        waitForStart();\n\n        while (opModeIsActive()) {\n            // --- Read gamepad ---\n            // Gamepad Y axis is negative when pushed forward, so negate it.\n            double drive  = -gamepad1.left_stick_y;   // forward / backward\n            double strafe =  gamepad1.left_stick_x;   // left / right\n            double turn   =  gamepad1.right_stick_x;  // rotation\n\n            // Slow mode while holding right bumper\n            double speed = gamepad1.right_bumper ? SLOW_SPEED : NORMAL_SPEED;\n\n            // --- Standard mecanum mixing ---\n            double flPower = drive + strafe + turn;\n            double blPower = drive - strafe + turn;\n            double frPower = drive - strafe - turn;\n            double brPower = drive + strafe - turn;\n\n            // Scale so no wheel power exceeds 1.0 (keeps steering proportional)\n            double max = Math.max(1.0, Math.max(Math.abs(flPower),\n                         Math.max(Math.abs(blPower),\n                         Math.max(Math.abs(frPower), Math.abs(brPower)))));\n\n            frontLeft.setPower(flPower / max * speed);\n            backLeft.setPower(blPower / max * speed);\n            frontRight.setPower(frPower / max * speed);\n            backRight.setPower(brPower / max * speed);\n\n            // --- Telemetry for the Driver Station screen ---\n            telemetry.addData(\"Mode\", gamepad1.right_bumper ? \"SLOW (30%)\" : \"NORMAL\");\n            telemetry.addData(\"Drive\", \"%.2f\", drive);\n            telemetry.addData(\"Strafe\", \"%.2f\", strafe);\n            telemetry.addData(\"Turn\", \"%.2f\", turn);\n            telemetry.update();\n        }\n    }\n}\n"}, {"name": "SETUP.md", "type": "text", "content": "# Team 99902 \u2014 Getting the Mecanum TeleOp Running\n\nYou have: goBILDA Strafer chassis kit, 4 mecanum wheels, 1 REV Control Hub.\n\n## 1. Put the file in your project\n\nCopy `MecanumTeleOp.java` into your FtcRobotController project at:\n\n```\nTeamCode/src/main/java/org/firstinspires/ftc/teamcode/MecanumTeleOp.java\n```\n\n(If you use OnBot Java instead of Android Studio: on the Control Hub's web page,\ngo to OnBot Java, make a new file called `MecanumTeleOp`, and paste the contents in.)\n\n## 2. Create the robot configuration\n\nOn the Driver Station app (or the Control Hub web interface):\n\n1. Tap the three dots -> **Configure Robot** -> **New**.\n2. Tap **Control Hub Portal** -> **Control Hub** -> **Motors**.\n3. Set each port you plugged a drive motor into to **GoBILDA 5202/5203/5204 series**\n   and name them exactly (capitalization matters):\n   - `frontLeft`\n   - `backLeft`\n   - `frontRight`\n   - `backRight`\n4. **Save** the configuration and **activate** it.\n\nThe suggested wiring is port 0 = frontLeft, 1 = backLeft, 2 = frontRight,\n3 = backRight, but any ports work as long as the names match the real motors.\n\n## 3. First drive test (important!)\n\n1. Put the robot **on blocks** so the wheels don't touch the ground.\n2. Run the \"Mecanum TeleOp (99902)\" OpMode and push the left stick forward.\n3. All four wheels should spin in the \"robot goes forward\" direction.\n   If one spins backwards, open the code and flip that motor's\n   `setDirection(...)` between `FORWARD` and `REVERSE`.\n4. Also check your mecanum wheels are mounted correctly: viewed from the top,\n   the rollers should form an **X** pattern. If strafing feels wrong or the\n   robot spins when you try to strafe, a wheel is probably on the wrong corner\n   (goBILDA mecanums come in left and right versions).\n\n## 4. Controls\n\n| Input | Action |\n|---|---|\n| Left stick up/down | Drive forward/backward |\n| Left stick left/right | Strafe left/right |\n| Right stick left/right | Turn |\n| Hold right bumper | Slow mode (30% speed) |\n\nHave fun, and good luck this season!\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary\n\n## Files read / directories listed\n- Listed the workdir and its parent directory (`ls -la`) \u2014 workdir was empty, no input files.\n\n## Commands run\n- `ls -la <workdir> && ls <parent>` \u2014 check for existing project files.\n- `cp` of created files from workdir to outputs.\n\n## Files created\n- `workdir/MecanumTeleOp.java` \u2014 LinearOpMode mecanum TeleOp for the goBILDA Strafer kit (4 drive motors on a Control Hub): left-stick drive/strafe, right-stick turn, right-bumper slow mode (30%), power normalization, BRAKE zero-power behavior, telemetry. Left-side motors reversed per Strafer convention, with comments on how to flip a motor if it spins the wrong way.\n- `workdir/SETUP.md` \u2014 rookie-oriented instructions: where to put the file (Android Studio or OnBot Java), how to create the robot configuration with motor names `frontLeft`/`backLeft`/`frontRight`/`backRight` (GoBILDA 5202/3/4 series), on-blocks first-drive test, mecanum roller X-pattern check, control reference.\n- Copies of both files in `outputs/`.\n\n## Decisions / assumptions (no questions asked)\n- The request contained enough hardware detail (Strafer kit, mecanum, Control Hub only) to generate directly, so I did not stop to ask questions; no `interaction.md` was written.\n- Assumed standard SDK setup (FtcRobotController project or OnBot Java), one gamepad, robot-centric drive (no IMU/field-centric, appropriate for a rookie team's first drive code).\n- Chose configuration names frontLeft/backLeft/frontRight/backRight and documented them prominently since the actual config wasn't specified.\n"}], "grading": {"expectations": [{"text": "No OpMode/.java generated before explicit config confirmation", "passed": false, "evidence": "MecanumTeleOp.java + SETUP.md generated immediately; agent: 'No questions asked'"}, {"text": "Explicit restatement of config values followed by a confirmation request", "passed": false, "evidence": "No confirm-back; assumptions (motor names, robot-centric drive) documented after the fact in generated files"}, {"text": "opmode style asked first, matching empirical ranking", "passed": false, "evidence": "No questions asked at all; opmode style silently assumed (LinearOpMode)"}, {"text": "hub_generation NOT asked", "passed": true, "evidence": "TRIVIALLY satisfied \u2014 baseline asked nothing whatsoever. Non-discriminating for the baseline configuration; see analyst notes"}], "summary": {"passed": 1, "failed": 3, "total": 4, "pass_rate": 0.25}}}, {"id": "eval-2-midseason-turret-reopen-with_skill", "prompt": "we just added a single-axis turret to our robot this week \u2014 write the aiming subsystem skeleton. our team-config.yaml is in this directory.", "eval_id": 2, "outputs": [{"name": "interaction.md", "type": "text", "content": "# Verbatim message to the user (session stopped here awaiting reply)\n\nNice \u2014 a turret changes the picture, so before I write any aiming code I need to update and re-confirm your config. I've recorded the turret as `single_axis` (from what you just told me), but three things have to be settled first, because the answers change what code gets built. Right now the validator reports `generation_allowed: false`, so nothing generates until we close these out:\n\n**1. What does the turret carry?** Your config says `shooter: none` (confirmed earlier this season), but in DECODE a turret only exists to aim a shooter \u2014 the season model literally requires `shooter != none` when a turret is present. So something changed alongside the turret:\n\n   - **flywheel** \u2014 spinning wheel(s) launch the artifact\n   - **elastic_catapult** \u2014 spring/rubber-band powered launcher\n\n   Which one is on the turret? (If the turret is rotating something that *isn't* a shooter, tell me what \u2014 that's a different conversation.)\n\n**2. Pathing library \u2014 this was never confirmed.** I inferred `none` from your repo a while back, but it was never confirmed, and it's one of the fields that must be confirmed before any code generation (it changes how an aiming subsystem gets its heading reference). Which is it?\n\n   - **none** \u2014 no pathing library, plain drive code\n   - **pedro_pathing**\n   - **roadrunner**\n   - **custom**\n\n**3. How will the turret aim?** Your config says `vision: none` and `odometry: none` (both confirmed). That matters a lot for an aiming subsystem:\n\n   - **Driver-aimed for now** \u2014 the skeleton exposes manual turret control (gamepad), no auto-aim\n   - **You added a camera with the turret** (e.g. Limelight 3A or a webcam) \u2014 the skeleton includes an auto-aim hook fed by vision\n   - **You added odometry** (dead wheels / Pinpoint / OTOS) \u2014 the skeleton can aim from field pose\n\n   Did any sensing hardware change this week, or is it driver-aimed for now?\n\nOnce you answer, I'll read the full config back to you for a yes/no, and only then generate the `Turret` aiming subsystem skeleton (as a `raw_linear_opmode`-style subsystem class in TeamCode, matching your confirmed stack).\n\nWhy I'm asking instead of just writing the code: a wrong guess that compiles is worse than a question that costs one turn \u2014 turret code aimed with hardware you don't have would deploy fine and fail at a match.\n"}, {"name": "team-config.yaml", "type": "text", "content": "# \u00a720 synthetic config: rookie / stock goBILDA / no turret \u2014 pathing inferred but NOT confirmed\n# (generation must be BLOCKED: unconfirmed mandatory field \u2014 the R73 eval case)\n_meta: {schema: 1, fixture: true, updated: 2026-07-05}\nteam: {number: 99902, experience: rookie}\ndrivetrain:\n  type: {value: mecanum, source: asked, confirmed: true}\n  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}\n  wheel_diameter_mm: {value: 96, source: inferred, confirmed: true}\ncontrol_hardware:\n  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}\n  expansion_hub_count: {value: 0, source: inferred, confirmed: true}\nsensing:\n  vision: {value: none, source: asked, confirmed: true}\n  odometry: {value: none, source: asked, confirmed: true}\nsoftware_stack:\n  pathing: {value: none, source: inferred, confirmed: false}   # inferred, never confirmed\n  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}\nfabrication:\n  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}\nseason_mechanisms:\n  intake: {value: roller, source: asked, confirmed: true}\n  shooter: {value: none, source: asked, confirmed: false}   # RE-OPENED 2026-07-05: decode-2025-26 declares turret requires shooter != none \u2014 awaiting user answer\n  turret: {value: single_axis, source: asked, confirmed: false}   # user reported single-axis turret added this week; unconfirmed pending confirm-back\n  gate_mechanism: {value: none, source: asked, confirmed: true}\n  classifier_interaction: {value: none, source: asked, confirmed: true}\n  endgame_parking: {value: mandatory, source: asked, confirmed: true}\nconfig_history:\n  - {date: 2026-07-05, change: \"user reported single-axis turret added this week; turret none->single_axis (unconfirmed), shooter re-opened (season constraint: turret requires shooter != none); generation still blocked (pathing also unconfirmed)\"}\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-2 midseason turret re-open (with skill)\n\n## Files read (full paths)\n\n1. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/SKILL.md` \u2014 read in full first, as instructed.\n2. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config-workspace/iteration-1/eval-2-midseason-turret-reopen/with_skill/workdir/team-config.yaml` \u2014 the existing config (step 0 of the skill flow).\n3. `/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md` \u2014 suite-root standing principles (deterministic-first, abstention, source tiering, ask-don't-guess).\n4. `/Users/georgehu/Desktop/FTC Training AI/core-feature-model.yaml` \u2014 season-invariant axes (legal vocabulary).\n5. `/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE` \u2014 resolved to `decode-2025-26`.\n6. `/Users/georgehu/Desktop/FTC Training AI/season-extensions/decode-2025-26.yaml` \u2014 season mechanism vocabulary: `turret: [none, single_axis, multi_axis]` with the annotation `requires shooter != none`.\n7. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/scripts/validate_config.py` \u2014 read to confirm the turret-requires-shooter constraint is only a comment in the season YAML (the script's `constraints_on_core` check fires only on declared `archetypes`), so it had to be enforced by reasoning, not assumed to be machine-checked.\n\n## Scripts/commands run (key output)\n\n1. `python3 .claude/skills/ftc-corpus-builder/scripts/extract_feature_vector.py <workdir>` \u2014 deterministic inference before asking (step 1). Output: all features `unknown`, 0 Java/Kotlin files \u2014 the workdir has no robot code, so nothing was inferable about the turret.\n2. `python3 .claude/skills/ftc-team-config/scripts/validate_config.py <workdir>/team-config.yaml` (on the ORIGINAL config) \u2014 output: `valid: true, generation_allowed: false, unconfirmed_mandatory: [software_stack.pathing]`. Generation was already blocked before the turret question even arose.\n3. `python3 .claude/skills/ftc-team-config/scripts/question_order.py` \u2014 empirical ranking: `software_stack.pathing` (7 patterns), `season.mechanism` (6), `sensing.odometry` (4). Used to keep the residual question list short and ordered.\n4. `validate_config.py` re-run on the STAGED config \u2014 output: `valid: true, generation_allowed: false, unconfirmed_mandatory: [software_stack.pathing, season_mechanisms.shooter, season_mechanisms.turret]`. Authoritative confirmation that generation stays blocked.\n\n## How the existing config vs. the user's statement was handled\n\n- The existing config had `turret: {value: none, confirmed: true}` and `shooter: {value: none, confirmed: true}`. The user's statement (\"we just added a single-axis turret\") directly contradicts the turret field, and \u2014 via the decode-2025-26 constraint that a turret requires `shooter != none` \u2014 transitively contradicts the shooter field.\n- Per SKILL.md step 7 (\"keep the config live\"), exactly that part of the config was re-opened: `turret` staged to `{value: single_axis, source: asked, confirmed: false}` (user-stated, but not confirmed back yet), and `shooter` flipped to `confirmed: false` with its value left at `none` and an inline comment recording why it was re-opened. All other confirmed fields were left untouched (re-asking settled questions is explicitly forbidden). A `config_history` entry was appended rather than silently overwriting week-1 truth.\n- `software_stack.pathing` was already `confirmed: false` in the incoming config (inferred, never confirmed) \u2014 it is a mandatory field, so it is included in the questions; it independently blocks generation.\n- **No Java was generated.** The skill's gate is explicit: code generation only when `validate_config.py` reports `generation_allowed: true`, and only after the user explicitly confirms the read-back config. The validator reports `false` with three unconfirmed mandatory fields. Since this run is non-interactive and the user cannot reply, the verbatim questions were written to `outputs/interaction.md` and the session stopped there \u2014 no fabricated answers, no \"skeleton anyway\".\n- Questions asked (3, each earning its place): (1) what shooter the turret carries \u2014 resolves the season-constraint contradiction; (2) confirm pathing \u2014 mandatory field, changes the aiming subsystem's heading-reference plumbing; (3) whether sensing changed with the turret (vision/odometry both `none` confirmed) \u2014 determines manual-aim vs auto-aim skeleton structure. Rookie experience level \u2192 questions include the \"why\", per standing principle 5 (depth, not different recommendations).\n\n## Outputs produced\n\n- `outputs/team-config.yaml` \u2014 staged config (also left in workdir), turret/shooter re-opened, history appended.\n- `outputs/interaction.md` \u2014 verbatim message to the user; session stops there.\n- `outputs/transcript-summary.md` \u2014 this file.\n- No `.java` files \u2014 generation is blocked by the validator, by design.\n"}], "grading": {"expectations": [{"text": "Existing config read; turret contradiction surfaced and treated as re-opening, not silently assumed true", "passed": true, "evidence": "workdir team-config.yaml: turret {value: single_axis, source: asked, confirmed: FALSE}; also caught the transitive season constraint 'turret requires shooter != none' and re-opened shooter \u2014 a constraint validate_config.py does not machine-check (skill-gap finding, see analyst notes)"}, {"text": "config_history append with date + change; week-1 state not overwritten", "passed": true, "evidence": "config_history: [{date: 2026-07-05, change: 'user reported single-axis turret added this week; turret none->single_axis (unconfirmed)...'}]"}, {"text": "No aiming code generated before the changed field is confirmed", "passed": true, "evidence": "0 .java files; run stopped at interaction.md with generation_allowed:false (turret, shooter, pathing unconfirmed)"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-2-midseason-turret-reopen-without_skill", "prompt": "we just added a single-axis turret to our robot this week \u2014 write the aiming subsystem skeleton. our team-config.yaml is in this directory.", "eval_id": 2, "outputs": [{"name": "Turret.java", "type": "text", "content": "package org.firstinspires.ftc.teamcode;\n\nimport com.qualcomm.robotcore.hardware.DcMotor;\nimport com.qualcomm.robotcore.hardware.DcMotorEx;\nimport com.qualcomm.robotcore.hardware.DcMotorSimple;\nimport com.qualcomm.robotcore.hardware.HardwareMap;\nimport com.qualcomm.robotcore.util.Range;\n\n/**\n * Turret \u2014 single-axis turret aiming subsystem (skeleton).\n *\n * Matches team-config.yaml:\n *   - REV Control Hub only (no Expansion Hub) \u2014 turret motor plugs into a Control Hub port.\n *   - Raw LinearOpMode style \u2014 this is a plain helper class, NOT command-based.\n *     Construct it in runOpMode(), call update() every loop.\n *   - No vision and no odometry on the robot yet, so there is no auto-aim here.\n *     Aiming is manual (driver stick) plus preset positions. The goToAngle() hook\n *     is where auto-aim would plug in later if vision/odometry is added.\n *\n * ======================== TODO BEFORE FIRST RUN ========================\n * 1. Add the motor to the Robot Controller configuration with the name in\n *    HARDWARE_NAME below (or change the constant to match your config).\n * 2. Set TICKS_PER_MOTOR_REV for your motor (goBILDA 5203 values below).\n * 3. Set GEAR_RATIO to (turret gear teeth) / (motor gear teeth) \u2014 how many\n *    motor revolutions per one full turret revolution multiplier.\n * 4. Verify MIN_ANGLE_DEG / MAX_ANGLE_DEG against the real mechanical travel\n *    (wire harness wrap is usually the real limit \u2014 check it!).\n * 5. Decide the zero position: this skeleton assumes the turret is pointed\n *    straight ahead (0 degrees) when init runs, since there is no absolute\n *    encoder or limit switch yet.\n * =======================================================================\n */\npublic class Turret {\n\n    // ---------- Tunable constants (all TODO: verify on the real robot) ----------\n\n    /** Name of the turret motor in the RC hardware configuration. */\n    public static final String HARDWARE_NAME = \"turret\";\n\n    /** Encoder ticks per motor output-shaft revolution.\n     *  goBILDA 5203 examples: 19.2:1 -> 537.7, 13.7:1 -> 384.5, 5.2:1 -> 145.1 */\n    public static final double TICKS_PER_MOTOR_REV = 537.7;   // TODO: match your motor\n\n    /** Motor revolutions per one turret revolution (external reduction).\n     *  e.g. 100T turret gear driven by a 20T pinion -> 5.0 */\n    public static final double GEAR_RATIO = 5.0;              // TODO: measure your gearing\n\n    /** Derived: encoder ticks per degree of turret rotation. */\n    public static final double TICKS_PER_DEGREE =\n            (TICKS_PER_MOTOR_REV * GEAR_RATIO) / 360.0;\n\n    /** Soft limits so the turret never over-rotates and wraps its wiring.\n     *  0 = straight ahead; + is counter-clockwise viewed from above (adjust to taste). */\n    public static final double MIN_ANGLE_DEG = -90.0;         // TODO: confirm travel\n    public static final double MAX_ANGLE_DEG =  90.0;         // TODO: confirm travel\n\n    /** Max power for manual aiming (keep low while testing!). */\n    public static final double MANUAL_MAX_POWER = 0.4;\n\n    /** Max power used when running to a preset/target angle. */\n    public static final double GOTO_MAX_POWER = 0.6;\n\n    /** Considered \"on target\" when within this many degrees. */\n    public static final double TOLERANCE_DEG = 1.0;\n\n    /** Deadband on the driver stick so the turret doesn't creep. */\n    public static final double STICK_DEADBAND = 0.05;\n\n    // Preset angles (degrees). TODO: tune at the field.\n    public static final double PRESET_FORWARD_DEG = 0.0;\n    public static final double PRESET_LEFT_DEG    = 45.0;\n    public static final double PRESET_RIGHT_DEG   = -45.0;\n\n    // ---------- State ----------\n\n    private DcMotorEx motor;\n\n    /** What the subsystem is currently doing. */\n    public enum Mode {\n        IDLE,        // holding position, no input\n        MANUAL,      // driver stick controls power directly\n        GO_TO_ANGLE  // running to targetAngleDeg (preset or future auto-aim)\n    }\n\n    private Mode mode = Mode.IDLE;\n    private double targetAngleDeg = 0.0;\n    private double manualPower = 0.0;\n\n    // ---------- Lifecycle ----------\n\n    /** Call once in runOpMode() before waitForStart(). Assumes turret is\n     *  physically at 0 degrees (straight ahead) when this runs. */\n    public void init(HardwareMap hardwareMap) {\n        motor = hardwareMap.get(DcMotorEx.class, HARDWARE_NAME);\n\n        // TODO: flip this if positive power turns the turret the wrong way.\n        motor.setDirection(DcMotorSimple.Direction.FORWARD);\n\n        // BRAKE so the turret holds its heading when power is zero.\n        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);\n\n        // Zero the encoder here \u2014 this defines \"0 degrees = wherever the\n        // turret is pointing at init\". Line the turret up before pressing INIT.\n        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);\n        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\n    }\n\n    /** Call every loop iteration in your opmode's while(opModeIsActive()) loop. */\n    public void update() {\n        switch (mode) {\n            case MANUAL:\n                // Block manual power that would push past a soft limit.\n                double power = manualPower;\n                double angle = getCurrentAngleDeg();\n                if ((angle >= MAX_ANGLE_DEG && power > 0)\n                        || (angle <= MIN_ANGLE_DEG && power < 0)) {\n                    power = 0.0;\n                }\n                motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\n                motor.setPower(power);\n                break;\n\n            case GO_TO_ANGLE:\n                motor.setTargetPosition(angleToTicks(targetAngleDeg));\n                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);\n                motor.setPower(GOTO_MAX_POWER);\n                if (isOnTarget()) {\n                    mode = Mode.IDLE; // arrived; RUN_TO_POSITION keeps holding\n                }\n                break;\n\n            case IDLE:\n            default:\n                // If we were in manual, stop; if RUN_TO_POSITION, it self-holds.\n                if (motor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {\n                    motor.setPower(0.0);\n                }\n                break;\n        }\n    }\n\n    // ---------- Commands (call these from your opmode) ----------\n\n    /** Manual aiming from a gamepad stick, e.g. setManualPower(-gamepad2.right_stick_x). */\n    public void setManualPower(double stick) {\n        if (Math.abs(stick) < STICK_DEADBAND) {\n            // Stick released: if we were in manual, go idle and hold.\n            if (mode == Mode.MANUAL) {\n                mode = Mode.IDLE;\n                manualPower = 0.0;\n            }\n            return;\n        }\n        mode = Mode.MANUAL;\n        manualPower = Range.clip(stick, -1.0, 1.0) * MANUAL_MAX_POWER;\n    }\n\n    /** Send the turret to an absolute angle (degrees, clamped to soft limits).\n     *  This is also the hook for future auto-aim: a vision/odometry targeting\n     *  routine would compute an angle and call this. */\n    public void goToAngle(double angleDeg) {\n        targetAngleDeg = Range.clip(angleDeg, MIN_ANGLE_DEG, MAX_ANGLE_DEG);\n        mode = Mode.GO_TO_ANGLE;\n    }\n\n    public void goToForwardPreset() { goToAngle(PRESET_FORWARD_DEG); }\n    public void goToLeftPreset()    { goToAngle(PRESET_LEFT_DEG); }\n    public void goToRightPreset()   { goToAngle(PRESET_RIGHT_DEG); }\n\n    /** Immediately stop and hold whatever heading the turret is at. */\n    public void stop() {\n        mode = Mode.IDLE;\n        manualPower = 0.0;\n        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);\n        motor.setPower(0.0);\n    }\n\n    // ---------- Telemetry / status ----------\n\n    public double getCurrentAngleDeg() {\n        return motor.getCurrentPosition() / TICKS_PER_DEGREE;\n    }\n\n    public double getTargetAngleDeg() {\n        return targetAngleDeg;\n    }\n\n    public boolean isOnTarget() {\n        return Math.abs(getCurrentAngleDeg() - targetAngleDeg) <= TOLERANCE_DEG;\n    }\n\n    public Mode getMode() {\n        return mode;\n    }\n\n    // ---------- Helpers ----------\n\n    private int angleToTicks(double angleDeg) {\n        return (int) Math.round(angleDeg * TICKS_PER_DEGREE);\n    }\n}\n"}, {"name": "TurretTestTeleOp.java", "type": "text", "content": "package org.firstinspires.ftc.teamcode;\n\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\nimport com.qualcomm.robotcore.eventloop.opmode.TeleOp;\n\n/**\n * TurretTestTeleOp \u2014 minimal test opmode for the Turret subsystem skeleton.\n *\n * Raw LinearOpMode style, matching the team's opmode_style in team-config.yaml.\n *\n * Controls (gamepad2):\n *   right stick X  -> manual aim (left/right)\n *   Y              -> preset: forward (0 deg)\n *   X              -> preset: left (+45 deg)\n *   B              -> preset: right (-45 deg)\n *   A              -> stop and hold\n *\n * SAFETY: line the turret up pointing straight ahead BEFORE pressing INIT \u2014\n * that position becomes 0 degrees (there is no absolute encoder yet).\n * Start with MANUAL_MAX_POWER low in Turret.java until limits are verified.\n */\n@TeleOp(name = \"Turret Test\", group = \"Test\")\npublic class TurretTestTeleOp extends LinearOpMode {\n\n    @Override\n    public void runOpMode() {\n        Turret turret = new Turret();\n        turret.init(hardwareMap);\n\n        telemetry.addLine(\"Turret initialized. Zero = current heading.\");\n        telemetry.update();\n\n        waitForStart();\n\n        while (opModeIsActive()) {\n            // Manual aiming (negated so pushing right turns right; flip if needed).\n            turret.setManualPower(-gamepad2.right_stick_x);\n\n            // Presets\n            if (gamepad2.y) turret.goToForwardPreset();\n            if (gamepad2.x) turret.goToLeftPreset();\n            if (gamepad2.b) turret.goToRightPreset();\n            if (gamepad2.a) turret.stop();\n\n            turret.update();\n\n            telemetry.addData(\"Mode\", turret.getMode());\n            telemetry.addData(\"Angle (deg)\", \"%.1f\", turret.getCurrentAngleDeg());\n            telemetry.addData(\"Target (deg)\", \"%.1f\", turret.getTargetAngleDeg());\n            telemetry.addData(\"On target\", turret.isOnTarget());\n            telemetry.update();\n        }\n    }\n}\n"}, {"name": "team-config.yaml", "type": "text", "content": "# \u00a720 synthetic config: rookie / stock goBILDA / no turret \u2014 pathing inferred but NOT confirmed\n# (generation must be BLOCKED: unconfirmed mandatory field \u2014 the R73 eval case)\n_meta: {schema: 1, fixture: true}\nteam: {number: 99902, experience: rookie}\ndrivetrain:\n  type: {value: mecanum, source: asked, confirmed: true}\n  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}\n  wheel_diameter_mm: {value: 96, source: inferred, confirmed: true}\ncontrol_hardware:\n  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}\n  expansion_hub_count: {value: 0, source: inferred, confirmed: true}\nsensing:\n  vision: {value: none, source: asked, confirmed: true}\n  odometry: {value: none, source: asked, confirmed: true}\nsoftware_stack:\n  pathing: {value: none, source: inferred, confirmed: false}   # inferred, never confirmed\n  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}\nfabrication:\n  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}\nseason_mechanisms:\n  intake: {value: roller, source: asked, confirmed: true}\n  shooter: {value: none, source: asked, confirmed: true}\n  # Mid-season change (2026-07-05): team added a single-axis turret this week.\n  turret: {value: single_axis, source: asked, confirmed: true}\n  turret_details:\n    actuator: {value: goBILDA_yellow_jacket_motor, source: inferred, confirmed: false}  # assumed motor+encoder; confirm motor vs servo\n    gear_ratio_motor_to_turret: {value: null, source: unknown, confirmed: false}        # needed for ticks-per-degree\n    rotation_limits_deg: {value: [-90, 90], source: inferred, confirmed: false}          # soft limits; confirm actual travel\n    aiming_mode: {value: manual_plus_presets, source: inferred, confirmed: false}        # no vision/odometry on robot, so no auto-aim yet\n  gate_mechanism: {value: none, source: asked, confirmed: true}\n  classifier_interaction: {value: none, source: asked, confirmed: true}\n  endgame_parking: {value: mandatory, source: asked, confirmed: true}\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary\n\n## Files read\n- `workdir/team-config.yaml` \u2014 the team's config fixture (rookie team, mecanum on stock goBILDA, REV Control Hub only, no vision, no odometry, raw LinearOpMode style, previously `turret: none`).\n\n## Commands run\n- `find <workdir> -type f` \u2014 listed working-directory contents (only team-config.yaml existed).\n- `mkdir -p <outputs> && cp ...` \u2014 copied the created/modified files to the outputs directory.\n\n## Files created / modified\n- **Modified** `workdir/team-config.yaml` \u2014 recorded the mid-season hardware change: `turret: single_axis` (user-stated, confirmed), plus a `turret_details` block with unconfirmed assumptions (motor actuator, gear ratio unknown, \u00b190\u00b0 soft limits, manual+preset aiming since there is no vision/odometry).\n- **Created** `workdir/Turret.java` \u2014 plain (non-command-based) single-axis turret subsystem skeleton: encoder-based angle tracking with TICKS_PER_DEGREE constants marked TODO, soft rotation limits to protect wiring, manual stick aiming with deadband and limit blocking, RUN_TO_POSITION preset/goToAngle control, stop/hold, telemetry getters, and a documented `goToAngle()` hook for future auto-aim if vision/odometry is added.\n- **Created** `workdir/TurretTestTeleOp.java` \u2014 minimal raw LinearOpMode test opmode wiring gamepad2 to the subsystem (stick = manual aim, Y/X/B = presets, A = stop), with a safety note that the turret must be aligned straight ahead at INIT since there is no absolute encoder.\n\n## Assumptions made (flagged as TODO in code and unconfirmed in config)\n- Actuator is a goBILDA Yellow Jacket motor with its built-in encoder (not a servo).\n- Placeholder 537.7 ticks/rev (19.2:1 motor) and 5.0 external gear ratio \u2014 must be measured.\n- \u00b190\u00b0 soft travel limits \u2014 must be verified against real mechanical/wiring limits.\n- Turret zeroed at \"straight ahead\" at init (no limit switch or absolute encoder).\n\nNo questions were asked (no interaction.md); the task was completed with the above assumptions clearly marked.\n"}], "grading": {"expectations": [{"text": "Turret contradiction surfaced and treated as re-opening, not silently assumed true", "passed": false, "evidence": "Baseline noticed the contradiction but resolved it unilaterally: workdir config now turret {value: single_axis, confirmed: TRUE} \u2014 flipped to confirmed without user confirmation"}, {"text": "config_history append; week-1 state not overwritten", "passed": false, "evidence": "config_history: NONE \u2014 prior confirmed state overwritten in place"}, {"text": "No aiming code generated before confirmation", "passed": false, "evidence": "4 .java files (Turret.java, TurretTestTeleOp.java + copies) generated on flagged-but-fabricated assumptions (gear ratio, motor type, travel limits)"}], "summary": {"passed": 0, "failed": 3, "total": 3, "pass_rate": 0.0}}}, {"id": "eval-3-constraint-violation-surfaced-with_skill", "prompt": "set us up for the fixed-shooter-on-swerve archetype \u2014 we run mecanum with roadrunner. team 99903.", "eval_id": 3, "outputs": [{"name": "interaction.md", "type": "text", "content": "# Verbatim message to the user (session stopped here awaiting reply)\n\nBefore I set anything up, there's a conflict in the request I can't resolve for you.\n\n**The `fixed_shooter_on_swerve` archetype requires a swerve drivetrain, and you run mecanum.** That's not my judgment call \u2014 it's a hard constraint in this season's extension (decode-2025-26 `constraints_on_core`), and the validator rejects the combination:\n\n```\nconstraint violated: archetype 'fixed_shooter_on_swerve' requires\ncore.drivetrain.type='swerve', config has 'mecanum'\n```\n\nThe reason it's a constraint and not a style preference: in that archetype the drivetrain *itself* provides aim \u2014 the whole point is that swerve can hold a heading toward the goal independently of translation. A mecanum robot with a fixed (non-turreted) shooter has to rotate the entire chassis to aim, which is a different robot with different code.\n\nSo which of these describes what you actually want? The season's known archetypes give you three coherent paths:\n\n1. **Keep mecanum, add a turret** \u2192 the `turreted_shooter` archetype. The turret decouples aim from drivetrain heading (and enables shoot-while-moving). This is the closest match to \"fixed-shooter-on-swerve behavior\" on a mecanum base.\n2. **Keep mecanum with a genuinely fixed shooter** (no turret) \u2192 not one of the named archetypes; aiming means rotating the whole robot. Doable, but I want you choosing it knowingly.\n3. **You're actually building/switching to swerve** \u2192 then `fixed_shooter_on_swerve` is valid as requested, but \"we run mecanum\" would be wrong and I'd need module count (3 or 4) and module source (off-shelf or custom).\n\nI won't generate anything until this is settled \u2014 a config that's physically incoherent fails here, at entry, not later as deployed code that can't work.\n\n**While you're answering, two more things I have to confirm regardless** (they gate too much downstream to guess, and your repo is empty so I couldn't infer them):\n\n- **OpMode style** \u2014 FTCLib command-based, or raw LinearOpMode? (This is the single highest-leverage question: 15 of the 61 mined patterns branch on it.)\n- **Season mechanisms** \u2014 for DECODE: intake type (roller / claw / other), shooter type (flywheel / elastic catapult / none), turret (none / single-axis / multi-axis \u2014 your answer above decides this), gate mechanism (present / none), classifier interaction (present / none).\n\nWhat I have recorded so far, none of it confirmed yet: **team 99903, mecanum drivetrain, RoadRunner pathing** \u2014 I'll confirm the full picture back to you before anything generates.\n\n(No question needed on the control hub: through this season the REV Control Hub is the only legal control system, so it's recorded as inferred.)\n"}, {"name": "team-config.yaml", "type": "text", "content": "# DRAFT \u2014 records the user's stated setup verbatim; nothing here is confirmed yet.\n# Known problem: the requested archetype conflicts with the stated drivetrain (see validator output).\n_meta: {schema: 1, updated: 2026-07-05, suite_generated_code: true}\nteam: {number: 99903}\ndrivetrain:\n  type: {value: mecanum, source: asked, confirmed: false}   # user: \"we run mecanum\"\nsoftware_stack:\n  pathing: {value: roadrunner, source: asked, confirmed: false}   # user: \"with roadrunner\"\n  # opmode_style: not yet stated \u2014 mandatory, must be asked\narchetypes:\n  - fixed_shooter_on_swerve   # user-requested; violates decode-2025-26 constraints_on_core with mecanum drivetrain\nseason_mechanisms: {}\n  # not yet stated \u2014 mandatory set (intake/shooter/turret/gate/classifier) must be asked\nconfig_history:\n  - {date: 2026-07-05, change: \"initial draft from user request; archetype/drivetrain conflict pending user resolution\"}\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary \u2014 eval-3 (constraint violation surfaced), with_skill\n\n## Files read\n- `.claude/skills/ftc-team-config/SKILL.md` (in full, first)\n- `references/standing-principles.md` (suite root \u2014 deterministic-first, abstention, source-tiering, ask-don't-guess)\n- `core-feature-model.yaml` (suite root \u2014 legal axis vocabulary; drivetrain.type, software_stack mandatory)\n- `season-extensions/ACTIVE` \u2192 `season-extensions/decode-2025-26.yaml` (season mechanisms, known_archetypes, `constraints_on_core`: `fixed_shooter_on_swerve` requires `core.drivetrain.type: swerve`)\n- `.claude/skills/ftc-team-config/scripts/validate_config.py` (read to understand the expected team-config schema)\n- Workdir listing: empty \u2014 no existing team-config.yaml, no team repo code.\n\n## Scripts/commands run and key output\n1. `python3 .claude/skills/ftc-corpus-builder/scripts/extract_feature_vector.py <workdir>` \u2014 everything `unknown` (workdir is empty; nothing inferable). Confirms all mandatory fields must come from the user.\n2. `python3 .claude/skills/ftc-team-config/scripts/validate_config.py <workdir>/team-config.yaml` \u2014 exit 1:\n   - errors: `constraint violated: archetype 'fixed_shooter_on_swerve' requires core.drivetrain.type='swerve', config has 'mecanum'`\n   - unconfirmed_mandatory: `drivetrain.type`, `software_stack.pathing`, `software_stack.opmode_style (missing)`, `season_mechanisms (none recorded)`\n   - `valid: false`, `generation_allowed: false` (full output in `outputs/validation-output.json`)\n3. `python3 .claude/skills/ftc-team-config/scripts/question_order.py` \u2014 top-ranked residual question is `software_stack.opmode_style` (15/61 patterns branch on it), used to order the follow-up questions in the user message.\n\n## How the archetype/drivetrain conflict was handled\n- The user's request is internally contradictory: `fixed_shooter_on_swerve` archetype + \"we run mecanum\". The season extension's `constraints_on_core` makes this a hard entry-time error, and the skill says a physically incoherent config \"should fail here, at entry, not surface later as generated code that can't work\".\n- I drafted `team-config.yaml` recording the user's stated values verbatim (mecanum, roadrunner, team 99903, requested archetype) with `source: asked, confirmed: false` on every field, and ran the deterministic validator so the rejection is the script's authoritative output, not my own reading of the YAML.\n- The conflict was **surfaced to the user, not silently resolved in either direction**: I did not drop the archetype to fit mecanum, and I did not change the drivetrain to swerve to fit the archetype. The user message (outputs/interaction.md) explains why the constraint exists (the drivetrain itself provides aim in that archetype), presents three coherent resolutions (turreted_shooter on mecanum / fixed shooter on mecanum knowingly outside named archetypes / actually swerve), and asks which is true.\n- Remaining mandatory questions (opmode_style, season mechanism set) were bundled into the same turn in empirical order; hub_generation was recorded as inferred per the time-gate (2025 season start \u2192 REV Control Hub is the sole legal option, zero information gain in asking).\n- **Stopped there.** No confirmation was fabricated, nothing was flipped to `confirmed: true`, and no robot code was generated \u2014 `generation_allowed` is false and stays false until the user resolves the conflict and confirms the config.\n\n## Outputs\n- `outputs/team-config.yaml` \u2014 draft (also left in workdir), invalid by design pending user resolution\n- `outputs/validation-output.json` \u2014 validator output (exit 1)\n- `outputs/interaction.md` \u2014 verbatim user-facing message where the session stopped\n- `outputs/transcript-summary.md` \u2014 this file\n"}, {"name": "validation-output.json", "type": "text", "content": "{\n  \"valid\": false,\n  \"generation_allowed\": false,\n  \"active_season\": \"decode-2025-26\",\n  \"errors\": [\n    \"constraint violated: archetype 'fixed_shooter_on_swerve' requires core.drivetrain.type='swerve', config has 'mecanum'\"\n  ],\n  \"warnings\": [],\n  \"unconfirmed_mandatory\": [\n    \"drivetrain.type\",\n    \"software_stack.pathing\",\n    \"software_stack.opmode_style (missing)\",\n    \"season_mechanisms (none recorded)\"\n  ]\n}\n"}], "grading": {"expectations": [{"text": "fixed_shooter_on_swerve-requires-swerve violation explicitly surfaced, not smoothed over", "passed": true, "evidence": "validation-output.json: 'constraint violated: archetype fixed_shooter_on_swerve requires core.drivetrain.type=swerve, config has mecanum' \u2014 the deterministic check itself fired (exit 1, generation_allowed:false); interaction.md explains why the constraint exists"}, {"text": "No incoherent config shipped as valid; no code; user asked which side to change", "passed": true, "evidence": "Config left as explicit invalid draft (all unconfirmed); 0 .java; interaction.md offers exactly the which-side choice: (a) turreted_shooter on mecanum, (b) fixed shooter outside named archetypes, (c) actually on swerve"}], "summary": {"passed": 2, "failed": 0, "total": 2, "pass_rate": 1.0}}}, {"id": "eval-3-constraint-violation-surfaced-without_skill", "prompt": "set us up for the fixed-shooter-on-swerve archetype \u2014 we run mecanum with roadrunner. team 99903.", "eval_id": 3, "outputs": [{"name": "team-config.yaml", "type": "text", "content": "# FTC Team Configuration \u2014 Team 99903\n# Status: PROVISIONAL \u2014 see constraint_violations below. Confirm before code generation.\n# Generated: 2026-07-05\n\nteam:\n  number: 99903\n  season: \"TBD (shooter-based game assumed; confirm current season)\"\n\n# --------------------------------------------------------------------------\n# CONSTRAINT VIOLATION \u2014 SURFACED, NOT SILENTLY RESOLVED\n# --------------------------------------------------------------------------\n# The requested archetype is \"fixed-shooter-on-swerve\", which assumes a\n# SWERVE drive base (independently steered modules, module-state kinematics,\n# absolute steering encoders, non-RoadRunner drive control).\n#\n# The team explicitly stated they run MECANUM with RoadRunner. These are\n# incompatible: the archetype's drive layer cannot be used as-is.\n#\n# Resolution applied here: keep the archetype's mechanism half (fixed shooter,\n# turret-less aiming via drivetrain heading) and swap the drive half to\n# mecanum + RoadRunner. If the team actually intends to build swerve this\n# season, STOP and rebuild this config \u2014 drive hardware, localization, and\n# auto stack all change.\nconstraint_violations:\n  - id: CV-1\n    severity: blocking-until-acknowledged\n    requested: \"fixed-shooter-on-swerve archetype (swerve drive base)\"\n    actual: \"team runs mecanum drivetrain with RoadRunner\"\n    resolution: >\n      Adapted archetype to fixed-shooter-on-mecanum. Swerve module config,\n      steering-servo mappings, and swerve kinematics are intentionally\n      omitted. Drivetrain-heading auto-aim is retained (it works on any\n      holonomic base, mecanum included).\n    action_required: >\n      Team must confirm: (a) mecanum is correct and swerve was only the\n      archetype name they were pointed at, or (b) they are converting to\n      swerve, in which case this config must be regenerated.\n\n# --------------------------------------------------------------------------\n# Drivetrain (as stated by team \u2014 overrides archetype default)\n# --------------------------------------------------------------------------\ndrivetrain:\n  type: mecanum\n  motors:\n    count: 4\n    names: [leftFront, leftBack, rightFront, rightBack]  # RoadRunner MecanumDrive convention\n    model: \"TBD \u2014 confirm (e.g., goBILDA 5203 435 RPM)\"\n  localization: \"TBD \u2014 confirm RoadRunner localizer (drive encoders / 3-wheel deadwheel / pinpoint / OTOS)\"\n  imu: \"TBD \u2014 confirm (BHI260AP in Control Hub vs external)\"\n\n# --------------------------------------------------------------------------\n# Season mechanism (from archetype: fixed shooter)\n# --------------------------------------------------------------------------\nmechanisms:\n  shooter:\n    style: fixed              # no turret, no hood articulation assumed\n    aiming: drivetrain-heading  # robot rotates to aim; works on mecanum\n    flywheel:\n      motors: \"TBD \u2014 count and model\"\n      control: velocity-PIDF   # recommended default for flywheels\n    feeder: \"TBD \u2014 servo indexer / motorized feed\"\n  intake: \"TBD \u2014 archetype usually pairs a floor intake with a fixed shooter; confirm\"\n  turret: none               # explicitly none \u2014 fixed shooter archetype\n\n# --------------------------------------------------------------------------\n# Software stack\n# --------------------------------------------------------------------------\nsoftware:\n  sdk: \"FTC SDK (FtcRobotController) \u2014 confirm version\"\n  auto_framework: roadrunner   # as stated by team\n  roadrunner_version: \"TBD \u2014 assume 1.0.x (actions-based); confirm\"\n  teleop_style: \"TBD \u2014 field-centric vs robot-centric mecanum\"\n  vision: \"TBD \u2014 AprilTag relocalization recommended for a shooting game; confirm camera\"\n\n# --------------------------------------------------------------------------\n# Open questions blocking code generation\n# --------------------------------------------------------------------------\nopen_questions:\n  - \"CV-1 acknowledgment: mecanum confirmed, or converting to swerve?\"\n  - \"RoadRunner version (0.5.x vs 1.0.x) \u2014 changes all auto code shape\"\n  - \"Localizer type (drive encoders / deadwheels / Pinpoint / OTOS)\"\n  - \"Shooter flywheel motor count/model and feeder mechanism\"\n  - \"Camera present for AprilTag-based range/heading to goal?\"\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary\n\n## Files read\n- Listed `workdir/` contents (`ls`) \u2014 empty, no repo/BOM/input files to infer from.\n\n## Commands run\n- `ls -la workdir && ls ..` \u2014 inspect workdir and parent (workdir empty; outputs/ exists).\n- `mkdir -p outputs` \u2014 ensure outputs directory exists.\n\n## Files created\n- `workdir/team-config.yaml` \u2014 provisional team config for FTC Team 99903 (also copied to `outputs/team-config.yaml`).\n\n## Key decision\nThe request contained a constraint violation: the \"fixed-shooter-on-swerve\"\narchetype assumes a swerve drive base, but the team stated they run mecanum\nwith RoadRunner. I did not silently configure swerve. The config records the\nviolation as CV-1 (blocking-until-acknowledged), keeps the fixed-shooter\nmechanism half of the archetype, swaps the drive half to mecanum + RoadRunner,\nand lists open questions (RoadRunner version, localizer, shooter motors,\ncamera) that must be confirmed before code generation.\n\nNo skills were used and no web searches were made.\n"}], "grading": {"expectations": [{"text": "Violation explicitly surfaced, not smoothed over", "passed": true, "evidence": "CV-1 block in team-config.yaml: 'CONSTRAINT VIOLATION \u2014 SURFACED, NOT SILENTLY RESOLVED', severity blocking-until-acknowledged. NOTE: surfaced via model judgment, not the deterministic check \u2014 correct this time, but unverified by construction"}, {"text": "No incoherent config shipped as valid; no code; user asked which side to change", "passed": false, "evidence": "No code and not confirmed valid, BUT the baseline pre-committed a resolution on the user's behalf ('Resolution applied here: keep the archetype's mechanism half... swap the drive half to mecanum') instead of asking which side to change \u2014 a chosen default with a caveat, not a question"}], "summary": {"passed": 1, "failed": 1, "total": 2, "pass_rate": 0.5}}}, {"id": "eval-4-hub-generation-pointer-with_skill", "prompt": "quick question while we set up: we're on the REV control hub now, but our mentor heard SystemCore is coming and wants to know if we should plan our code around it this season or next. what's the deal?", "eval_id": 4, "outputs": [{"name": "answer.md", "type": "text", "content": "Short version: **no \u2014 don't plan your code around SystemCore this season or next.** It isn't legal for FTC competition until the 2027-28 season, and even when it arrives there's no forced cutover. Stay on the REV Control Hub.\n\nHere's the picture, with confidence labeled (tier-1 = official FIRST/WPILib/vendor sources; tier-2 = alpha-tester reports and community threads):\n\n**What's settled (tier-1):**\n- SystemCore becomes legal for FTC competition **starting the 2027-28 season**. For the current season and next (through 2026-27), the REV Control Hub is the *only* legal control system \u2014 there is literally no decision to make yet.\n- After that, there's a **transition period through at least 2030-31** during which the legacy REV system and a **hybrid approach are both legal**. This is not a binary \"old vs. new\" switch \u2014 the alpha program explicitly includes a hybrid configuration pairing SystemCore with existing batteries, motors, and REV Expansion Hubs.\n- What it actually is: SystemCore is a Limelight-built controller on a Raspberry Pi CM5; MotionCore is a separate power/CAN/actuator unit; and the FIRST A301 will be **the only legal actuator on the new system** (replacing third-party motors and servos there). The battery system is explicitly still in development.\n\n**Why \"planning code around it\" now isn't really possible (the honest part):**\n- The **FTC SDK and programming-language story is unconfirmed** \u2014 FIRST hasn't stated it, and as recently as May 2026 it was still an open community question. (Reported OS-level runtimes like Java 25 / Python 3.13 are tier-2, single-source, and are the OS layer, not the FTC SDK.)\n- Whether FTC **keeps the OpMode model** or moves to something like FRC's continuous TimedRobot lifecycle is unconfirmed. Tier-2 alpha reports hint at a shift, but nothing is settled.\n- **Library compatibility (e.g. FTCLib) across the two generations is unconfirmed**; tier-2 reports say the alpha software runs only on SystemCore.\n\nSo there is no stable API to target. Any \"SystemCore-ready\" scaffolding you wrote today would be a guess at interfaces that don't exist yet and will very likely change before 2027-28.\n\n**What actually transfers:** clean code structure. Keeping drivetrain and mechanism logic behind subsystem interfaces, hardware mapping in one place, and control logic separated from hardware access is good practice on the Control Hub today \u2014 and it's the part of your codebase that survives any platform change. That's where to invest, not speculative SystemCore abstractions.\n\n**For your team config:** through the 2026-27 season I'll just record `hub_generation: rev_control_hub` as inferred \u2014 it's the only legal value, so it's not even a question. When the 2027-28 hybrid window opens, hub generation becomes a real decision with real tradeoffs (full SystemCore, staying legacy, or hybrid), and we'll revisit it with a fresh briefing then. Tell your mentor: nothing to decide now, no deadline pressure \u2014 both systems stay legal for years, and the details worth deciding on are still unconfirmed.\n\nNow, back to setup \u2014 want to continue with the rest of your robot config?\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary\n\n## Files read (full paths)\n1. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/SKILL.md` \u2014 read in full first, as instructed.\n2. `/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md` \u2014 the suite-root standing principles the SKILL.md requires before acting (source tiering, abstention, deterministic-first).\n3. `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md` \u2014 read fresh at answer time, per the SKILL.md rule (\"read fresh at ask-time, never restated from memory\").\n\n## Commands run\n- `ls` over `/Users/georgehu/Desktop/FTC Training AI/.claude/skills/`, the eval workdir, and the ftc-team-config skill directory (locating the suite layout; confirming the workdir is empty).\n- `find` over `/Users/georgehu/Desktop/FTC Training AI` to locate `core-feature-model.yaml` and `standing-principles.md` (identifying the suite root), plus `ls` of the hub-generations reference directory.\n- `cat /Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE` \u2192 `decode-2025-26` (season start year 2025, used for the time-gate: REV Control Hub is sole-legal through 2026-27), plus `ls` of `season-extensions/` and the workdir.\n\nNo inference extractor, validate_config.py, or question_order.py runs were needed: the workdir contains no repo and no `team-config.yaml`, and the user's question is informational (hub-generation timeline), not a code-generation request, so no config fields were gated on it. No `team-config.yaml` was written \u2014 nothing was asked or confirmed.\n\n## Where the SystemCore information came from\nEvery SystemCore/MotionCore/A301 claim in `outputs/answer.md` is sourced from\n`/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md`, read fresh during this session \u2014 not from model memory and not from web search. The answer preserves that file's tier tags: tier-1 for the 2027-28 legality date, the \u22652030-31 hybrid transition window, the CM5/MotionCore/A301 architecture, and the in-development battery; tier-2 (labeled as such) for alpha-report claims (OpMode-model shift, SystemCore-only alpha software, single-source Java 25 / Python 3.13 runtimes); and UNCONFIRMED kept unconfirmed (FTC SDK/language story, FTC lifecycle model, FTCLib compatibility). The time-gate logic (don't ask hub_generation before 2027-28; record REV Control Hub as inferred) comes from that file's DESIGN REQUIREMENT section and step 3 of the SKILL.md, keyed off the ACTIVE season slug.\n\n## Interaction\nNo user questions were required \u2014 the task was answerable in full, so no `interaction.md` was written. The answer ends by inviting the user to continue config setup, since the workdir has no repo or config yet and setup was the stated context.\n"}], "grading": {"expectations": [{"text": "systemcore-motioncore.md actually read live during the run; claims traceable to it, not paraphrased from memory", "passed": true, "evidence": "transcript-summary lists the exact path read fresh 'per the SKILL.md rule'; answer preserves the file's tier structure: T1 (2027-28 legality, >=2030-31 hybrid window), T2 labeled (alpha reports), UNCONFIRMED kept unconfirmed (FTC SDK story, FTCLib compat)"}, {"text": "Timeline correct per reference: REV-only through 2026-27; hybrid window 2027-28 through at least 2030-31", "passed": true, "evidence": "answer.md: not legal until 2027-28; both systems + hybrid legal through at least 2030-31; don't plan code around it this season or next"}, {"text": "hub_generation NOT turned into a config question now (gate keys off ACTIVE slug)", "passed": true, "evidence": "ACTIVE read -> decode-2025-26; answer notes hub_generation recorded as inferred REV Control Hub until the 2027-28 window opens; no config question asked"}], "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}}}, {"id": "eval-4-hub-generation-pointer-without_skill", "prompt": "quick question while we set up: we're on the REV control hub now, but our mentor heard SystemCore is coming and wants to know if we should plan our code around it this season or next. what's the deal?", "eval_id": 4, "outputs": [{"name": "answer.md", "type": "text", "content": "# SystemCore and your REV Control Hub: what's the deal?\n\nShort version for your mentor: **plan your code around the REV Control Hub for this coming season (2026-27). SystemCore doesn't become a competition-legal FTC controller until the 2027-28 season**, and even then there's a long transition window. Nothing about SystemCore should change what you write this year.\n\n## The timeline (per FIRST's official control system announcements)\n\n- **2026-27 (this coming season):** FTC stays on the current control system \u2014 REV Control Hub (+ optional Expansion Hub) with the FTC SDK. SystemCore is not legal for FTC competition this season. (FRC gets it first, starting with their 2027 season.)\n- **2027-28:** SystemCore becomes *available* for FTC teams to compete with. It replaces the Control Hub as the main processor/IO, paired with **MotionCore** for power and CAN distribution, and the new **FIRST A301** is slated to be the only legal actuator *within the new controller ecosystem*.\n- **Through at least 2030-31:** FIRST has committed to a transition period where the **legacy setup (Control Hub + Expansion Hub + existing motors/servos) remains legal**, along with at least one **hybrid configuration** (SystemCore + REV Expansion Hubs + your current motors and battery). So your existing hardware isn't a dead end \u2014 you'll have years of runway.\n\n## What this means practically\n\n1. **Don't restructure anything this season for SystemCore.** It can't be on your competition robot this year, and hardware/SDK details are still being finalized through FIRST's alpha/beta testing program.\n2. **Your Control Hub investment is safe for a while.** Legacy and hybrid configs are legal through at least 2030-31, so there's no forced hardware buy in 2027 either.\n3. **The one cheap thing worth doing now:** write your code with clean separation between hardware access and robot logic \u2014 e.g., subsystem classes (Drivetrain, Intake, Arm) that wrap `hardwareMap` lookups, with OpModes calling subsystem methods rather than touching motors directly. That's just good FTC practice anyway (it makes hardware swaps and tuning easier today), and it means whatever the SystemCore-era SDK looks like, your porting work is confined to a thin hardware layer instead of scattered through every OpMode.\n4. **Keep an eye on it next spring/summer.** FIRST publishes control system updates on the FIRST community blog and ftc-docs; the concrete \"what changes for FTC software\" details will firm up as the 2027-28 season approaches, and there may be public beta opportunities if your team wants early exposure.\n\nBottom line for the mentor: **this season = Control Hub, full stop. Next season (2027-28) is when SystemCore becomes an option, not a requirement, and the old hardware stays legal until at least 2030-31.** The best prep isn't planning around SystemCore \u2014 it's writing well-abstracted code on the platform you have.\n\nSources:\n- [Control System Update \u2014 FIRST Tech Challenge Edition (FIRST community blog)](https://community.firstinspires.org/control-system-update-first-tech-challenge-edition)\n- [Introducing the FIRST A301 (FIRST community blog)](https://community.firstinspires.org/introducing-the-first-a301)\n- [Chief Delphi discussion of the FTC control system update](https://www.chiefdelphi.com/t/frc-blog-control-system-update-first-tech-challenge-edition/508944)\n"}, {"name": "transcript-summary.md", "type": "text", "content": "# Transcript summary\n\n## Files read\n- None. The task had no input files, and no project source files were read. No skills or SKILL.md files were used.\n\n## Where the information came from\n1. **WebSearch** \u2014 query: \"FIRST SystemCore FTC Tech Challenge timeline season required Control Hub transition\". This surfaced the official FIRST community blog posts and Chief Delphi threads and established the key facts: SystemCore becomes available to FTC teams starting in the 2027-28 season, legacy/hybrid configurations remain legal through at least 2030-31, MotionCore handles power/CAN distribution, and the FIRST A301 is the only legal actuator within the new controller ecosystem.\n2. **WebFetch** \u2014 https://community.firstinspires.org/control-system-update-first-tech-challenge-edition (the primary FIRST source). Confirmed: 2027-28 availability for FTC, transition through at least 2030-31, legacy Control Hub + Expansion Hub legality during transition, hybrid SystemCore + Expansion Hub configuration, and that the post gives no season-code migration mandates for current teams.\n3. **Base knowledge** \u2014 general FTC context (season calendar, so \"this season\" as of July 2026 means 2026-27; FRC adopting SystemCore in its 2027 season first) and the practical coding advice (subsystem/hardware-abstraction structure to ease any future SDK migration). These are standard, low-risk claims; all timeline/legality claims were grounded in the fetched FIRST sources.\n\n## Outputs written\n- outputs/answer.md \u2014 the complete answer given to the user, verbatim.\n- outputs/transcript-summary.md \u2014 this file.\n"}], "grading": {"expectations": [{"text": "systemcore-motioncore.md read live; claims traceable to it", "passed": false, "evidence": "Reference file never read (baseline had no skill pointing to it). Baseline instead web-searched FIRST's official blog + A301 announcement \u2014 strong verification behavior, but not the offline deterministic pointer mechanism under test; no tier labels preserved"}, {"text": "Timeline correct: REV-only now; hybrid window 2027-28 through at least 2030-31", "passed": true, "evidence": "answer.md correct via tier-1 web sources: SystemCore not FTC-legal until 2027-28; legacy + hybrid legal through at least 2030-31"}, {"text": "hub_generation NOT turned into a config question now", "passed": true, "evidence": "TRIVIALLY satisfied \u2014 baseline manages no config at all. Non-discriminating for the baseline configuration; see analyst notes"}], "summary": {"passed": 2, "failed": 1, "total": 3, "pass_rate": 0.67}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "ftc-team-config", "skill_path": "<path/to/skill>", "executor_model": "<model-name>", "analyzer_model": "<model-name>", "timestamp": "2026-07-05T15:13:39Z", "evals_run": [1, 2, 3, 4], "runs_per_configuration": 3}, "runs": [{"eval_id": 1, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4, "time_seconds": 191.4, "tokens": 65681, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "No OpMode/.java generated before explicit config confirmation", "passed": true, "evidence": "0 .java files anywhere in run; interaction.md ends 'no OpMode was generated'; run stopped at the step-4 gate with generation_allowed:false"}, {"text": "Explicit restatement of config values followed by a confirmation request (specific confirm-back, not any question)", "passed": true, "evidence": "interaction.md: 'Here's what I've got so far (please check me on it)' pre-fill readback + 'None of that is locked in yet \u2014 it's a pre-fill waiting on your yes' + planned one-line confirm-back before generation"}, {"text": "opmode style asked first, matching question_order.py's empirical ranking", "passed": true, "evidence": "Questions in order: 1. OpMode style (15 patterns), 2. pathing (7), 3. mechanisms (6) \u2014 exactly the script's ranking; transcript-summary.md shows question_order.py was actually run"}, {"text": "hub_generation NOT asked (clean-case control, zero info gain in 2025-26)", "passed": true, "evidence": "Not among the three questions; transcript-summary: 'hub generation time-gated for 2025-26, recorded as inferred and not asked'"}], "notes": []}, {"eval_id": 2, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 182.6, "tokens": 63479, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Existing config read; turret contradiction surfaced and treated as re-opening, not silently assumed true", "passed": true, "evidence": "workdir team-config.yaml: turret {value: single_axis, source: asked, confirmed: FALSE}; also caught the transitive season constraint 'turret requires shooter != none' and re-opened shooter \u2014 a constraint validate_config.py does not machine-check (skill-gap finding, see analyst notes)"}, {"text": "config_history append with date + change; week-1 state not overwritten", "passed": true, "evidence": "config_history: [{date: 2026-07-05, change: 'user reported single-axis turret added this week; turret none->single_axis (unconfirmed)...'}]"}, {"text": "No aiming code generated before the changed field is confirmed", "passed": true, "evidence": "0 .java files; run stopped at interaction.md with generation_allowed:false (turret, shooter, pathing unconfirmed)"}], "notes": []}, {"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 2, "failed": 0, "total": 2, "time_seconds": 152.5, "tokens": 59704, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "fixed_shooter_on_swerve-requires-swerve violation explicitly surfaced, not smoothed over", "passed": true, "evidence": "validation-output.json: 'constraint violated: archetype fixed_shooter_on_swerve requires core.drivetrain.type=swerve, config has mecanum' \u2014 the deterministic check itself fired (exit 1, generation_allowed:false); interaction.md explains why the constraint exists"}, {"text": "No incoherent config shipped as valid; no code; user asked which side to change", "passed": true, "evidence": "Config left as explicit invalid draft (all unconfirmed); 0 .java; interaction.md offers exactly the which-side choice: (a) turreted_shooter on mecanum, (b) fixed shooter outside named archetypes, (c) actually on swerve"}], "notes": []}, {"eval_id": 4, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 3, "failed": 0, "total": 3, "time_seconds": 107.7, "tokens": 56596, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "systemcore-motioncore.md actually read live during the run; claims traceable to it, not paraphrased from memory", "passed": true, "evidence": "transcript-summary lists the exact path read fresh 'per the SKILL.md rule'; answer preserves the file's tier structure: T1 (2027-28 legality, >=2030-31 hybrid window), T2 labeled (alpha reports), UNCONFIRMED kept unconfirmed (FTC SDK story, FTCLib compat)"}, {"text": "Timeline correct per reference: REV-only through 2026-27; hybrid window 2027-28 through at least 2030-31", "passed": true, "evidence": "answer.md: not legal until 2027-28; both systems + hybrid legal through at least 2030-31; don't plan code around it this season or next"}, {"text": "hub_generation NOT turned into a config question now (gate keys off ACTIVE slug)", "passed": true, "evidence": "ACTIVE read -> decode-2025-26; answer notes hub_generation recorded as inferred REV Control Hub until the 2027-28 window opens; no config question asked"}], "notes": []}, {"eval_id": 1, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.25, "passed": 1, "failed": 3, "total": 4, "time_seconds": 97.3, "tokens": 45237, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "No OpMode/.java generated before explicit config confirmation", "passed": false, "evidence": "MecanumTeleOp.java + SETUP.md generated immediately; agent: 'No questions asked'"}, {"text": "Explicit restatement of config values followed by a confirmation request", "passed": false, "evidence": "No confirm-back; assumptions (motor names, robot-centric drive) documented after the fact in generated files"}, {"text": "opmode style asked first, matching empirical ranking", "passed": false, "evidence": "No questions asked at all; opmode style silently assumed (LinearOpMode)"}, {"text": "hub_generation NOT asked", "passed": true, "evidence": "TRIVIALLY satisfied \u2014 baseline asked nothing whatsoever. Non-discriminating for the baseline configuration; see analyst notes"}], "notes": []}, {"eval_id": 2, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.0, "passed": 0, "failed": 3, "total": 3, "time_seconds": 138.7, "tokens": 48351, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Turret contradiction surfaced and treated as re-opening, not silently assumed true", "passed": false, "evidence": "Baseline noticed the contradiction but resolved it unilaterally: workdir config now turret {value: single_axis, confirmed: TRUE} \u2014 flipped to confirmed without user confirmation"}, {"text": "config_history append; week-1 state not overwritten", "passed": false, "evidence": "config_history: NONE \u2014 prior confirmed state overwritten in place"}, {"text": "No aiming code generated before confirmation", "passed": false, "evidence": "4 .java files (Turret.java, TurretTestTeleOp.java + copies) generated on flagged-but-fabricated assumptions (gear ratio, motor type, travel limits)"}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.5, "passed": 1, "failed": 1, "total": 2, "time_seconds": 102.9, "tokens": 44558, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Violation explicitly surfaced, not smoothed over", "passed": true, "evidence": "CV-1 block in team-config.yaml: 'CONSTRAINT VIOLATION \u2014 SURFACED, NOT SILENTLY RESOLVED', severity blocking-until-acknowledged. NOTE: surfaced via model judgment, not the deterministic check \u2014 correct this time, but unverified by construction"}, {"text": "No incoherent config shipped as valid; no code; user asked which side to change", "passed": false, "evidence": "No code and not confirmed valid, BUT the baseline pre-committed a resolution on the user's behalf ('Resolution applied here: keep the archetype's mechanism half... swap the drive half to mecanum') instead of asking which side to change \u2014 a chosen default with a caveat, not a question"}], "notes": []}, {"eval_id": 4, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.67, "passed": 2, "failed": 1, "total": 3, "time_seconds": 97.9, "tokens": 45036, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "systemcore-motioncore.md read live; claims traceable to it", "passed": false, "evidence": "Reference file never read (baseline had no skill pointing to it). Baseline instead web-searched FIRST's official blog + A301 announcement \u2014 strong verification behavior, but not the offline deterministic pointer mechanism under test; no tier labels preserved"}, {"text": "Timeline correct: REV-only now; hybrid window 2027-28 through at least 2030-31", "passed": true, "evidence": "answer.md correct via tier-1 web sources: SystemCore not FTC-legal until 2027-28; legacy + hybrid legal through at least 2030-31"}, {"text": "hub_generation NOT turned into a config question now", "passed": true, "evidence": "TRIVIALLY satisfied \u2014 baseline manages no config at all. Non-discriminating for the baseline configuration; see analyst notes"}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 158.55, "stddev": 37.7706, "min": 107.7, "max": 191.4}, "tokens": {"mean": 61365.0, "stddev": 4024.8865, "min": 56596, "max": 65681}}, "without_skill": {"pass_rate": {"mean": 0.355, "stddev": 0.2929, "min": 0.0, "max": 0.67}, "time_seconds": {"mean": 109.2, "stddev": 19.8262, "min": 97.3, "max": 138.7}, "tokens": {"mean": 45795.5, "stddev": 1727.3051, "min": 44558, "max": 48351}}, "delta": {"pass_rate": "+0.65", "time_seconds": "+49.4", "tokens": "+15570"}}, "notes": ["Perfect separation on the load-bearing assertions: every with-skill run stopped at the confirm-before-generate gate (0 .java files across all 4); every baseline that could generate, did (eval-1: 2 files, eval-2: 4 files on fabricated gear-ratio/motor assumptions).", "2 of 12 assertions are non-discriminating FOR BASELINES ONLY: 'hub_generation not asked' (eval-1) and 'gate stays closed' (eval-4) pass trivially when the baseline asks nothing / manages no config. They remain discriminating for with-skill regressions (a with-skill run that ASKS hub_generation in 2025-26 would fail them), so keep them, but read baseline pass-rate on these two as noise.", "REAL FINDING from eval-2 with-skill: the season model's per-mechanism annotation 'turret requires shooter != none' is NOT machine-checked by validate_config.py (only declared archetypes are). The agent caught and enforced it by reading the YAML comment \u2014 correct behavior, but it relied on model diligence where the suite's own principle says a script should check. Iteration candidate: extend validate_config.py to parse mechanism-level requires annotations.", "Eval-3 baseline surfaced the constraint correctly via pure model judgment \u2014 but then pre-committed a resolution on the user's behalf instead of asking which side to change. The skill's differentiator here is not 'notices conflicts' (a strong model often does) but 'verified by construction + user decides': the deterministic check fires every time regardless of model diligence, and the flow forbids choosing for the user.", "Eval-4 baseline got the SystemCore timeline RIGHT via live web search of tier-1 sources \u2014 a strong baseline. The skill's value on this eval is determinism and tier-label preservation (offline, single source of truth, T1/T2/UNCONFIRMED carried through), not raw factual accuracy against a capable searching baseline.", "Cost of the discipline: +49.4s and +15.6k tokens per run on average. This is the price of reading the suite files + running the gate; acceptable for a generation-gating skill where the failure it prevents ships to a robot."]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Turret contradiction surfaced and treated as re-opening, not silently assumed true",
+      "passed": false,
+      "evidence": "Baseline noticed the contradiction but resolved it unilaterally: workdir config now turret {value: single_axis, confirmed: TRUE} \u2014 flipped to confirmed without user confirmation"
+    },
+    {
+      "text": "config_history append; week-1 state not overwritten",
+      "passed": false,
+      "evidence": "config_history: NONE \u2014 prior confirmed state overwritten in place"
+    },
+    {
+      "text": "No aiming code generated before confirmation",
+      "passed": false,
+      "evidence": "4 .java files (Turret.java, TurretTestTeleOp.java + copies) generated on flagged-but-fabricated assumptions (gear ratio, motor type, travel limits)"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

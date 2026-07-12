@@ -1,0 +1,172 @@
+# Distilled patterns — Team 12808 (RevAmped), DECODE V2
+#
+# source repo: corpus-sources/tier2/12808-RevAmped (public: github.com/junkjunk123/RevAmped-Decode-V2)
+# deps: Pedro Pathing (90 files) + FTC Dashboard (32). NO FTCLib, NO SolversLib, NO RoadRunner.
+#   -> team's own math/mechanisms are independent of FTCLib/RoadRunner lineage;
+#   -> BUT its COMMAND framework is Pedro's `com.pedropathing.ivy` (see 12808-B) — a shared library,
+#      NOT own code. The independent-vs-shared line runs THROUGH this repo; classify per subsystem.
+#
+# extraction: focused Phase-4 pass on the finding-relevant subsystems (shooter, orchestration,
+#   sensing) + an architecture note. Human-reviewed; A+B+C approved for merge 2026-07-04.
+#   Not a full sweep (sim/, prompter/, octoquad/, math/calc Kalman held — see held: below).
+
+meta:
+  team: "12808"
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+
+patterns:
+  - id: 12808-A-shooter-empirical-bilinear-fielded
+    finding_ref: shooter-empirical-vs-physics   # FIFTH empirical leg (see references/cross-team-findings.yaml)
+    problem: >
+      Produce flywheel-velocity / hood / turret setpoints for a variable-distance turreted shooter,
+      including shoot-on-the-move, on a physics-capable team that also BUILT a full ballistics solver.
+    solution_approach: >
+      The FIELDED shooter drives hardware off EMPIRICAL bilinear-interpolation tables. TrackingThread
+      (the class whose update() actually pushes setpoints to hardware every loop) uses SimpleShooterMath
+      EXCLUSIVELY (its only shooter-math import; instantiated at TrackingThread.java:33; update() calls
+      hood.updateTracking(getHoodPos()), turret.move(getTurretPos()), flywheel.setVelocity(
+      getFlywheelVelocity()) at TrackingThread.java:45-52). SimpleShooterMath holds hand-tuned 3x3
+      measured grids — flywheelVel, hoodPos, airTimes, turretPos — keyed on (xDist,yDist) via
+      BilinearInterpolation (SimpleShooterMath.java:104-143,201-218). It is NOT a naive table: it adds
+      gradient-based FEEDFORWARD prediction (K_flywheelPrediction * gradient . dispDeriv), SOTM offset
+      logic, and a LambertApproximator time-of-flight lead for the moving-shot turret solve
+      (computeTurretPos, SimpleShooterMath.java:223-243) — empirical base + genuine predictive layer.
+    built_but_unfielded_physics: >
+      12808 ALSO built a correct, first-principles, DRAG-AWARE ballistics solver and did NOT field it:
+        * ProjectileMathWithDrag (utils/math/projectile/ProjectileMathWithDrag.java) — g = 386.0885 in/s^2
+          (the CORRECT constant, cf. 24089's broken offline 385.0), real air density rho = 0.0023769
+          slugs/in^3, a proper quadratic-drag constant k = rho*CD*A/(2*mass), a drag-aware solveTheta(),
+          and a getConfidence() gate. This is a genuinely correct solver, not a broken prelim.
+        * Its wrapper ShooterMath (the physics path) is NEVER CONSTRUCTED — `new ShooterMath(` occurs 0
+          times in the repo; nothing calls ShooterMath.update() except itself. Built, dormant.
+        * Inside the FIELDED SimpleShooterMath, the physics HoodInverseKinematics call is COMMENTED OUT
+          (SimpleShooterMath.java:206-210) in favour of the empirical hood table — comment-out-instead-
+          of-delete (see held/watch below; 12808 is the 4th team for that watch-item).
+    code_reference: { file: "utils/math/projectile/SimpleShooterMath.java", fielded_via: "mechanisms/shooter/TrackingThread.java:33,45-52", built_unfielded_physics: "utils/math/projectile/ProjectileMathWithDrag.java (g=386.0885), utils/math/projectile/ShooterMath.java (never constructed), HoodInverseKinematics commented at SimpleShooterMath.java:206-210" }
+    applicable_when: "season.has_variable_distance_scoring == true && shooter.aiming == continuous_distance_model"
+    source_team: "12808"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: >
+        Own math built on Pedro geometry/Matrix/Vector; no FTCLib/RoadRunner. The empirical
+        bilinear-interpolation strategy and the drag solver are 12808's own. FIFTH independent empirical
+        distance->power implementation in the corpus (15993 logistic, 19043 2-axis table, 22105 LUT,
+        24089 linear regression, 12808 bilinear grid) — a visibly DIFFERENT execution, not a copy.
+      cross_team: >
+        Strengthens shooter-empirical-vs-physics (already HIGH). 12808 is the SHARPEST instance of a
+        physics-capable team that built a CORRECT ballistics solver (right gravity, real air density, a
+        confidence gate) and STILL fielded empirical tables. See the finding's confidence_revision:
+        each such team narrows the domain-forcing discount toward Magnus/backspin/wheel-compliance SLIP
+        specifically (the effects a drag model does NOT capture) as the actual hard part — rather than
+        weakening the discount in general.
+      collapses_with: []
+    notes: >
+      Carry the fielded-vs-built distinction wherever cited (the whole point of the 24089 correction):
+      12808 SHIPPED empirical bilinear tables; its correct drag solver is BUILT-BUT-DORMANT (never
+      constructed). Do not let "they have ProjectileMathWithDrag" read as "they fielded physics."
+
+  - id: 12808-B-ivy-command-adoption
+    # NOT an orchestration-nonblocking leg. Recorded as a PROVENANCE / false-convergence GUARD.
+    problem: >
+      (Provenance) 12808's command/orchestration layer LOOKS like an independent cooperative-command
+      framework (StateMachine graph, Speaker/Channel pub-sub, Conditional/Loop/Optional combinators) —
+      the kind of thing that would read as another independent orchestration-nonblocking leg.
+    solution_approach: >
+      It is NOT independent. The command SUBSTRATE is Pedro's library `com.pedropathing.ivy`:
+      Commands.java imports com.pedropathing.ivy.Command; StateMachine.java imports
+      com.pedropathing.ivy.ICommand; channel/Speaker.java imports com.pedropathing.ivy.Command,
+      ICommand, and com.pedropathing.ivy.groups.Sequential and uses ivy's .then()/.with() group
+      combinators. 12808's StateMachine (sealed Node/Edge graph) and channel pub-sub are TEAM LAYERS
+      built ON TOP of ivy's primitives — additions to a shared library, not an independent invention.
+    code_reference: { file: "utils/commands/Commands.java:3 (import com.pedropathing.ivy.Command)", also: "utils/commands/StateMachine.java:3, utils/commands/channel/Speaker.java:2-4" }
+    applicable_when: "n/a — provenance guard, not a transferable pattern"
+    source_team: "12808"
+    confidence: single-source
+    provenance:
+      classification: shared-ancestry
+      basis: "Command substrate is the Pedro `ivy` library (com.pedropathing.ivy). Collapses to that shared source; does NOT count as an independent orchestration data point."
+      collapses_with: [pedro-ivy-command-framework]
+    corpus_caveat: >
+      ELEVATED to a standing detection rule (PLAN.md §12): Pedro now SHIPS `ivy`, a command framework.
+      Pedro-based teams that adopt it will FALSELY appear to converge on command-orchestration when they
+      have merely adopted the same library. This is NOT hypothetical — a run of Pedro teams would have
+      false-convergence'd into a spurious second orchestration finding had this not surfaced here. ANY
+      Pedro-based orchestration candidate now requires an explicit `com.pedropathing.ivy` import check
+      BEFORE provenance classification runs, the same gating the FTCLib/SolversLib import check provides.
+    contrast_note: >
+      Contrast 24089's lioncore/tasks/ (Series/Parallel/Race/Fork/… ) which IS own code (no such
+      library import) and remains a genuine candidate orchestration leg. The ivy check is exactly what
+      distinguishes the two — same surface shape, opposite provenance.
+
+  - id: 12808-C-multimodal-sensing
+    finding_ref: sensing-modality   # breadth leg (see references/cross-team-findings.yaml)
+    problem: >
+      Answer several DIFFERENT game-state questions — is an artifact intaken? what colour/where are
+      field artifacts? where am I / what's the obelisk motif? — each needing a different sensor.
+    solution_approach: >
+      12808 fields a broad multi-modal suite, each modality matched to the QUESTION it answers:
+        * PRESENCE (intake): IntakeArtifactDetector extends HwDigitalDevice (a digital/break-beam-style
+          sensor) with a BooleanPeriod debounce (detectionPeriod + numMisfires) -> hasArtifact()
+          (IntakeArtifactDetector.java:7,14,37); plus IntakeDistanceSensors (distance-based presence).
+        * COLOUR + POSITION (field artifacts): DecodeBlobCamera — OpenCV colour-blob detection with
+          separate ARTIFACT_PURPLE and ARTIFACT_GREEN processors + contour-area prefilter
+          (DecodeBlobCamera.java:22-33). Answers what-colour-and-where.
+        * LOCALIZATION + MOTIF: DecodeLimelight — AprilTag pose (APRILTAG_POSE) with a Pipeline enum
+          incl SHOOTING_ALIGNMENT and OBELISK (DecodeLimelight.java:29,32-73). Answers where-am-I /
+          what's-the-randomization-motif.
+    code_reference: { file: "mechanisms/intake/IntakeArtifactDetector.java + mechanisms/vision/DecodeBlobCamera.java + mechanisms/vision/DecodeLimelight.java", fielded_by: "Robot.java:32-33 imports DecodeBlobCamera + DecodeLimelight" }
+    applicable_when: "season has multiple distinct sensing needs (intake presence + artifact id + localization/motif)"
+    source_team: "12808"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Own sensor integration on FTC SDK / Limelight / OpenCV VisionPortal; no FTCLib lineage."
+      collapses_with: []
+    finding_texture: >
+      REINFORCES sensing-modality's core claim (modality driven by information-NEED, not just
+      robustness): 12808 fields TWO vision backends simultaneously — DecodeBlobCamera AND DecodeLimelight
+      (both imported by Robot.java) — NOT as redundancy but because they answer DIFFERENT questions
+      (artifact colour/position via colour-blobs vs robot localization/motif via AprilTag). That two
+      vision backends coexist by QUESTION, not by which-is-more-robust, is direct corroboration.
+    honest_gap_on_the_shelved_backend: >
+      A THIRD vision backend, DecodeHuskyLens, was BUILT (full class: ImageArtifact record, distance-to-
+      centre comparator) but is ABANDONED — never instantiated (`new DecodeHuskyLens(` = 0), not imported
+      by Robot.java. Per Rule 7: the REASON it was set aside is NOT documented in commits or comments. Do
+      NOT attribute a cost/latency/reliability rationale — none is sourced. Recorded only as: built,
+      unfielded, reason unknown. (This is the "verify, then don't fabricate the why" discipline: the
+      requested cost/latency/reliability texture would have been invention, so it is omitted.)
+
+# Verified architecture observations that did NOT become the finding they looked like:
+architecture_observations:
+  - id: 12808-D-no-threads-despite-names
+    verified_reality: >
+      D was investigated as a "real multi-threaded architecture / concurrency data-race" finding. Source
+      verification KILLED that framing: 12808 has NO real background threads in fielded code. Whole-tree
+      grep for `new Thread(` / `extends Thread` / `Executors` / `ExecutorService` outside tests is EMPTY.
+      TrackingThread and GyroThread are PLAIN synchronous classes (public class X {}, no Thread/Runnable),
+      updated in the main loop. Every `.start()` is on a non-Thread object (distanceSensors.start(),
+      period.start() = a debounce timer, limelight.start() = SDK init, ivy command v.start()). There is
+      NO concurrency and therefore NO data race — the many `public static` mutable fields are all touched
+      on the MAIN thread (which is also why there is no volatile/synchronized anywhere, correctly).
+    what_is_actually_there: >
+      Two REAL but DIFFERENT smells surfaced, neither a data-race: (1) MISLEADING `-Thread` naming
+      (TrackingThread/GyroThread imply concurrency that does not exist — a comprehension hazard);
+      (2) PERVASIVE global mutable static state (dozens of non-final `public static` tunables in
+      SimpleShooterMath: SOTMOffset, turretCompOffset, hoodCompOffset, K_flywheelPrediction, blueX/redX,
+      etc., mutated from multiple opmodes/Robot.java). The consequential FTC-specific risk in (2) is
+      cross-opmode STATIC PERSISTENCE: statics survive between LinearOpMode runs in one app process, so
+      tuning/offset state can silently carry over from a previous run. That is deterministically checkable.
+    status: >
+      HELD for the user's decision (see review response). Not written as a corpus pattern and not yet a
+      named failure-mode taxonomy entry — the requested "concurrency/data-race" risk class does not exist;
+      the honest alternative is a "global-mutable-static / cross-opmode persistence" risk class, pending
+      the user's call on whether to add it to known-failure-modes.md.
+
+# Held (not extracted; no-silent-omission) — full sweep not done:
+held:
+  - "utils/math/calc: SingleStateKalman, Differentiator, PolynomialExtrapolator, Integrator — a real numerical-methods toolkit; not yet distilled."
+  - "sim/ package — an (unusual for FTC) simulation harness; not yet examined."
+  - "utils/prompter — config prompter; octoquad OctoQuadLocalizer — not yet examined."
+watch:
+  - "comment-out-instead-of-delete: 12808 is the 4th team (HoodInverseKinematics commented in SimpleShooterMath.java:206-210; also the commented addLimelightMeasurement in TrackingThread.java:56-72). Tracked in SESSION-1-CHECKPOINT.md watch-items."

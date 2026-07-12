@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "The validator SCRIPT (not the model reading a YAML comment) deterministically surfaced the turret-without-shooter contradiction",
+      "passed": true,
+      "evidence": "validation-output-1.json emitted by the now-machine-checked constraints_on_mechanisms rule: \"mechanism constraint violated: a turret aims a shooter; a turret with no shooter is incoherent\"; subagent transcript states its own reading only caught staleness, the SCRIPT caught the contradiction"
+    },
+    {
+      "text": "valid:false / generation_allowed:false; no aiming code generated",
+      "passed": true,
+      "evidence": "exit 1, 0 .java files, stopped at interaction.md"
+    },
+    {
+      "text": "config_history append; changed field re-opened not overwritten",
+      "passed": true,
+      "evidence": "turret single_axis + shooter re-opened confirmed:false, config_history appended"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

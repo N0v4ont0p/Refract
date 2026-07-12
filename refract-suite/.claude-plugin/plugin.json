@@ -1,0 +1,9 @@
+{
+  "name": "refract-suite",
+  "version": "1.0.0",
+  "description": "FTC robotics skill suite (Team 19859, DECODE season): citation-grounded rules compliance, structured hardware spec lookup with deterministic math, config-gated robot code generation, and config-and-corpus-aware code review. Four skills over one shared foundation (season-invariant feature model, standing principles, failure-mode taxonomy, and a provenance-weighted elite-team pattern corpus).",
+  "author": {
+    "name": "FTC Team 19859",
+    "email": "georgehu67@gmail.com"
+  }
+}

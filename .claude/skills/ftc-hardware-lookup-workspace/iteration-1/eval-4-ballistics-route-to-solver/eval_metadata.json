@@ -1,0 +1,19 @@
+{
+  "eval_id": 4,
+  "eval_name": "ballistics-route-to-solver",
+  "prompt": "our flywheel shoots artifacts at roughly 400 in/s. the goal is about 120 inches out and 24 inches above the launch point \u2014 what launch angle do we need?",
+  "assertions": [
+    {
+      "name": "used-solver-not-derivation",
+      "text": "trajectory_solver.py was actually run with the user's numbers \u2014 the angle comes from the script, not a hand-derived projectile calculation in the response"
+    },
+    {
+      "name": "reports-drag-aware",
+      "text": "The drag-aware angle (~21 deg) is reported for the team to act on, distinguished from the no-drag figure (~20 deg)"
+    },
+    {
+      "name": "carries-not-fielded-caveat",
+      "text": "Does not overclaim \u2014 a correct solver is presented as 'physics is tractable', not as evidence that physics-based power is the fielded/recommended approach"
+    }
+  ]
+}

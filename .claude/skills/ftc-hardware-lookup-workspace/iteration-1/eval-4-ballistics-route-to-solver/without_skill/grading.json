@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Solver used not hand derivation",
+      "passed": false,
+      "evidence": "pure hand derivation of the quadratic-in-tan; no tool"
+    },
+    {
+      "text": "Reports drag-aware",
+      "passed": false,
+      "evidence": "no-drag ONLY (hand math can't easily do drag); missed the 21.2 vs 20.0 distinction that matters for a real shot"
+    },
+    {
+      "text": "No overclaim / correct constant",
+      "passed": false,
+      "evidence": "used g=386.1 from memory (corrected value is 386.4); ~20.0 deg happens to match but on a slightly wrong constant + no drag"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

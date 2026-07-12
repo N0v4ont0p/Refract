@@ -1,0 +1,32 @@
+{
+  "table_id": "15-3",
+  "caption": "da Vinci Round-Robin Tournament Ranking Criteria",
+  "rows": [
+    [
+      "Order Sort",
+      "Criteria"
+    ],
+    [
+      "1 st",
+      "Championship Score (CS)"
+    ],
+    [
+      "2 nd",
+      "Average ALLIANCE MATCH points, not including MINOR FOULS and MAJOR FOULS (Average MATCH points minus FOULS)"
+    ],
+    [
+      "3 rd",
+      "Average BASE points"
+    ],
+    [
+      "4 th",
+      "Average AUTO points"
+    ],
+    [
+      "5 th",
+      "Random sort by the FIRST event management software"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:15-3]] pointer (\u00a78<->\u00a79)"
+}

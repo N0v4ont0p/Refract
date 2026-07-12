@@ -1,0 +1,133 @@
+{
+  "team": "15993-V2",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "kotlin",
+  "language_file_counts": {
+    "java": 21,
+    "kotlin": 62
+  },
+  "drivetrain": {
+    "type": {
+      "value": [
+        "mecanum",
+        "tank_differential"
+      ],
+      "evidence": {
+        "mecanum": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:124",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:136",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:140"
+        ],
+        "tank_differential": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/TankDrive.java:62",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/TankDrive.java:215",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/tuning/LocalizationTest.java:14"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:29",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:30",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:86"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": [
+        "limelight_3a",
+        "webcam_easyopencv"
+      ],
+      "evidence": {
+        "webcam_easyopencv": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:23",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:24",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:33"
+        ],
+        "limelight_3a": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:54",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:124",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/AutoBase.kt:141"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "odometry": {
+      "value": [
+        "dead_wheels",
+        "goBILDA_pinpoint"
+      ],
+      "evidence": {
+        "goBILDA_pinpoint": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:8",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:10",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:38"
+        ],
+        "dead_wheels": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/TwoDeadWheelLocalizer.java:23",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/TwoDeadWheelLocalizer.java:26",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/TwoDeadWheelLocalizer.java:45"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": [
+        "pedro_pathing",
+        "roadrunner"
+      ],
+      "evidence": {
+        "pedro_pathing": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:19",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:20",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:21"
+        ],
+        "roadrunner": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/Localizer.java:1",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/Localizer.java:3",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/roadrunner/Localizer.java:4"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "opmode_style": {
+      "value": "raw_linear_opmode",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:132",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:184",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:231"
+      ]
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  }
+}

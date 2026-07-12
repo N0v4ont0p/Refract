@@ -1,0 +1,13 @@
+{
+  "valid": false,
+  "generation_allowed": false,
+  "active_season": "decode-2025-26",
+  "errors": [
+    "mechanism constraint violated: a turret aims a shooter; a turret with no shooter is incoherent \u2014 requires season_mechanisms.shooter {\"not\": \"none\"}, config has 'none'"
+  ],
+  "warnings": [],
+  "unconfirmed_mandatory": [
+    "software_stack.pathing",
+    "season_mechanisms.shooter"
+  ]
+}

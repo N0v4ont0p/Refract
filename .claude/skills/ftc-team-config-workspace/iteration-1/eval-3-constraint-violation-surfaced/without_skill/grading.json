@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "Violation explicitly surfaced, not smoothed over",
+      "passed": true,
+      "evidence": "CV-1 block in team-config.yaml: 'CONSTRAINT VIOLATION \u2014 SURFACED, NOT SILENTLY RESOLVED', severity blocking-until-acknowledged. NOTE: surfaced via model judgment, not the deterministic check \u2014 correct this time, but unverified by construction"
+    },
+    {
+      "text": "No incoherent config shipped as valid; no code; user asked which side to change",
+      "passed": false,
+      "evidence": "No code and not confirmed valid, BUT the baseline pre-committed a resolution on the user's behalf ('Resolution applied here: keep the archetype's mechanism half... swap the drive half to mecanum') instead of asking which side to change \u2014 a chosen default with a caveat, not a question"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 1,
+    "total": 2,
+    "pass_rate": 0.5
+  }
+}

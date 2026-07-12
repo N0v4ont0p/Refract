@@ -1,0 +1,26 @@
+# §20 synthetic config: rookie / stock goBILDA / no turret — pathing inferred but NOT confirmed
+# (generation must be BLOCKED: unconfirmed mandatory field — the R73 eval case)
+_meta: {schema: 1, fixture: true}
+team: {number: 99902, experience: rookie}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}
+  wheel_diameter_mm: {value: 96, source: inferred, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 0, source: inferred, confirmed: true}
+sensing:
+  vision: {value: none, source: asked, confirmed: true}
+  odometry: {value: none, source: asked, confirmed: true}
+software_stack:
+  pathing: {value: none, source: inferred, confirmed: false}   # inferred, never confirmed
+  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}
+fabrication:
+  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  shooter: {value: none, source: asked, confirmed: true}
+  turret: {value: none, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: asked, confirmed: true}

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Correct verdict grounded in R101",
+      "passed": true,
+      "evidence": "illegal, R101 18-inch cube \u2014 retrieved via rules.py lookup"
+    },
+    {
+      "text": "Every citation verified to exist; none fabricated",
+      "passed": true,
+      "evidence": "R101/R102/R105/G304/G414/I304 all rules.py verify all_valid:true"
+    },
+    {
+      "text": "Grounded not from memory",
+      "passed": true,
+      "evidence": "transcript shows lookup+verify, not recall"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

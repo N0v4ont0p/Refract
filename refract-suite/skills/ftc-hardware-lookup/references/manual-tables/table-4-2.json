@@ -1,0 +1,52 @@
+{
+  "table_id": "4-2",
+  "caption": "Advancement Sorting Criteria Including Tiebreakers",
+  "rows": [
+    [
+      "Order Sort",
+      "Criteria"
+    ],
+    [
+      "1 st",
+      "Total Advancement Points (as calculated in Table 4-1)"
+    ],
+    [
+      "2 nd",
+      "Judged Team Award Points"
+    ],
+    [
+      "3 rd",
+      "Playoff Advancement Points"
+    ],
+    [
+      "4 th",
+      "ALLIANCE Selection Results Points (ALLIANCE lead or Draft Order Acceptance)"
+    ],
+    [
+      "5 th",
+      "Qualification Phase Performance Points"
+    ],
+    [
+      "6 th",
+      "Average Qualification MATCH Points (excluding FOULS)"
+    ],
+    [
+      "7 th",
+      "Average Qualification AUTO Points"
+    ],
+    [
+      "8 th",
+      "Highest individual Qualification MATCH Points (excluding FOULS)"
+    ],
+    [
+      "9 th",
+      "Second Highest individual Qualification MATCH Points (excluding FOULS)"
+    ],
+    [
+      "10 th",
+      "Random Selection by Event Management System"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:4-2]] pointer (\u00a78<->\u00a79)"
+}

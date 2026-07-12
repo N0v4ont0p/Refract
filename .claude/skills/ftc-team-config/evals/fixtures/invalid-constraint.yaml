@@ -1,0 +1,17 @@
+# Negative fixture: fixed_shooter_on_swerve archetype on a MECANUM drivetrain
+# (the R7/R69 constraint must fire) + an invented axis value (R3 must fire)
+_meta: {schema: 1, fixture: true}
+team: {number: 99903, experience: veteran}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+software_stack:
+  pathing: {value: roadrunner, source: asked, confirmed: true}
+  opmode_style: {value: hybrid_reactive, source: asked, confirmed: true}   # NOT a declared axis value
+season_mechanisms:
+  shooter: {value: flywheel, source: asked, confirmed: true}
+  intake: {value: roller, source: asked, confirmed: true}
+  turret: {value: none, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: asked, confirmed: true}
+archetypes: [fixed_shooter_on_swerve]

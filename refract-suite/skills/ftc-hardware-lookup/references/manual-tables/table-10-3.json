@@ -1,0 +1,32 @@
+{
+  "table_id": "10-3",
+  "caption": "DECODE RP thresholds",
+  "rows": [
+    [
+      "RP Type",
+      "FIRST Championship",
+      "Regional Championships",
+      "All Other Events*"
+    ],
+    [
+      "MOVEMENT RP",
+      "21",
+      "21",
+      "16"
+    ],
+    [
+      "GOAL RP",
+      "67",
+      "42",
+      "36"
+    ],
+    [
+      "PATTERN RP",
+      "22",
+      "22",
+      "18"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-3]] pointer (\u00a78<->\u00a79)"
+}

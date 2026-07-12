@@ -1,0 +1,24 @@
+{
+  "table_id": "12-6",
+  "caption": "Legal ROBOT",
+  "rows": [
+    [
+      "Grounding Strap",
+      "Part Number"
+    ],
+    [
+      "AndyMark Resistive Grounding Strap",
+      "am-4648a"
+    ],
+    [
+      "REV Resistive Grounding Strap",
+      "REV-31-1269"
+    ],
+    [
+      "Swyft Grounding Cable",
+      "SR-Ground-01"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-6]] pointer (\u00a78<->\u00a79)"
+}

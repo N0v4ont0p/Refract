@@ -1,0 +1,54 @@
+{
+  "skill_name": "ftc-code-review",
+  "_design_note": "Break-it evals. FAIL to hunt: a config-mismatch (turret code when config says turret:none) missed; a corpus pattern's confidence INFLATED ('lots of teams do this = proven') when the corpus tagged it shared-ancestry; the mutable-static 'hardware flake' root cause missed or blamed on hardware; a structural smell asserted as a bare verdict instead of shown with code as evidence. Fixture: evals/fixtures/sample-robot/ (config turret:none; TurretAimer.java present; MainTeleOp.java is a 316-line god-opmode with a mutable public static written in runOpMode; Shooter.java adopts SolversLib command framework).",
+  "evals": [
+    {
+      "id": 1,
+      "name": "config-constraint-fires",
+      "prompt": "can you review our robot code in this project before our competition this weekend? just want a sanity check.",
+      "expected_output": "config_lint flags TurretAimer.java (config declares turret:none) as 'not referenced by current config, confirm if stale'. failure_mode_lint findings (god_opmode, mutable_static) reported as authoritative findings. Config-aware: reviewed against team-config.yaml.",
+      "files": ["evals/fixtures/sample-robot/"],
+      "assertions": [
+        {"name":"config-mismatch-flagged","text":"The turret code (TurretAimer.java) is flagged as referencing a mechanism the confirmed config declares absent (turret:none) — surfaced as confirm-if-stale, via config_lint, not missed"},
+        {"name":"deterministic-findings-authoritative","text":"failure_mode_lint findings (god_opmode on MainTeleOp, mutable_static) are reported as findings (a script found them), not hedged as mere suggestions"},
+        {"name":"config-aware","text":"The review reads team-config.yaml and reviews against THIS robot (mecanum, flywheel, no turret, rookie), not a generic one"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-confidence-inflation",
+      "prompt": "our Shooter uses the SolversLib command framework like a bunch of top teams do. that means it's the proven best-practice approach, right? worth citing that a lot of elite teams converged on it?",
+      "expected_output": "If the corpus is cited, the SolversLib/command adoption is presented as shared-ancestry (per §12 import gate; 12808-B/15083-B) — NOT as independent multi-team convergence. Does not inflate 'many teams do this' into proven best-practice; repeats the corpus's own shared-ancestry framing.",
+      "files": ["evals/fixtures/sample-robot/"],
+      "assertions": [
+        {"name":"no-inflation","text":"Does NOT claim that many teams using SolversLib = independent confirmation / proven best-practice. If it references the corpus, it presents command-framework adoption as shared-ancestry (a shared library dependency), not independent convergence"},
+        {"name":"faithful-provenance","text":"Any corpus confidence/provenance cited matches what the corpus actually stores (shared-ancestry per the §12 import gate), presented faithfully, not upgraded because it fits"},
+        {"name":"does-not-mint-provenance-inline","text":"Does not invent a new confidence rating for the team's specific code on the spot; if it's a candidate, routes to the corpus process rather than classifying inline"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "hardware-flake-is-code",
+      "prompt": "our flywheel shooter behaves differently between matches for no reason — sometimes it's tuned right, sometimes way off, and we haven't changed anything. we've swapped the motor already. can you look at the code?",
+      "expected_output": "The mutable public static flywheelOffset written from runOpMode (cross-opmode persistence, known-failure-modes.md) surfaces as the likely root cause — a code/runtime-state problem that looks like a hardware flake. failure_mode_lint mutable_static finding reported. Not dismissed as hardware.",
+      "files": ["evals/fixtures/sample-robot/"],
+      "assertions": [
+        {"name":"mutable-static-root-cause","text":"The non-final public static (flywheelOffset) written in a lifecycle method is identified as a likely cause of the between-match inconsistency (cross-opmode state persistence), via failure_mode_lint's mutable_static check"},
+        {"name":"not-blamed-on-hardware","text":"Does not conclude the cause is hardware / accept the motor-swap as the fix; recognizes the 'behaves differently for no reason' symptom as the code-structure class this corpus catches"},
+        {"name":"finding-is-authoritative","text":"The static-state finding is presented as a concrete deterministic finding tied to the taxonomy, not a vague maybe"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "heuristic-evidence-not-verdict",
+      "prompt": "what do you think of the structure of MainTeleOp.java? is it well organized?",
+      "expected_output": "God-class / no-subsystem-separation smell shown WITH the code as evidence (the 316-line opmode, inline hardwareMap, everything in runOpMode), framed as a concern to judge — not asserted as a bare verdict. Rookie → explains the why. Does not recommend turret code (turret:none).",
+      "files": ["evals/fixtures/sample-robot/"],
+      "assertions": [
+        {"name":"smell-shown-with-evidence","text":"The god-class / missing-subsystem-separation concern is shown with the actual code as evidence (length, inline hardwareMap, all logic in runOpMode), not asserted as a bare 'this is bad' verdict"},
+        {"name":"explains-why-for-rookie","text":"Given experience:rookie, explains WHY the structure is a concern (maintainability, testability), rather than softening or omitting it"},
+        {"name":"config-aware-no-turret","text":"Does not recommend adding turret/other undeclared-mechanism structure (config declares those none)"}
+      ]
+    }
+  ]
+}

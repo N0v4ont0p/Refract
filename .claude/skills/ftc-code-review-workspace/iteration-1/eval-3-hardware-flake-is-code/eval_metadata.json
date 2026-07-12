@@ -1,0 +1,19 @@
+{
+  "eval_id": 3,
+  "eval_name": "hardware-flake-is-code",
+  "prompt": "our flywheel shooter behaves differently between matches for no reason \u2014 sometimes it's tuned right, sometimes way off, and we haven't changed anything. we've swapped the motor already. can you look at the code?",
+  "assertions": [
+    {
+      "name": "mutable-static-root-cause",
+      "text": "The non-final public static (flywheelOffset) written in a lifecycle method is identified as a likely cause of the between-match inconsistency (cross-opmode state persistence), via failure_mode_lint's mutable_static check"
+    },
+    {
+      "name": "not-blamed-on-hardware",
+      "text": "Does not conclude the cause is hardware / accept the motor-swap as the fix; recognizes the 'behaves differently for no reason' symptom as the code-structure class this corpus catches"
+    },
+    {
+      "name": "finding-is-authoritative",
+      "text": "The static-state finding is presented as a concrete deterministic finding tied to the taxonomy, not a vague maybe"
+    }
+  ]
+}

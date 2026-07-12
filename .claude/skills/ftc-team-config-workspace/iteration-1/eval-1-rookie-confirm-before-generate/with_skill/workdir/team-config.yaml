@@ -1,0 +1,29 @@
+# team-config.yaml — Team 99902 (PRE-FILL, not yet confirmed)
+# Written by the ftc-team-config skill. Nothing here is a decision until the
+# team confirms it back — see interaction.md. generation_allowed is false.
+_meta:
+  schema: 1
+  updated: 2026-07-05
+  suite_generated_code: true
+  status: awaiting_confirmation   # confirm-back pending; no code generates until then
+
+team:
+  number: 99902
+  experience: rookie   # user-stated; affects explanation depth only, never recommendations
+
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: false}          # user-stated ("gobilda strafer kit with mecanum wheels"); mandatory — confirm back before generation
+  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: false}   # inferred from "goBILDA Strafer kit"
+  wheel_diameter_mm: {value: 96, source: inferred, confirmed: false}         # Strafer Chassis Kit ships with 96mm mecanum wheels — confirm
+
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: false}
+  # time-gated: season decode-2025-26 → REV Control Hub is the sole legal control
+  # system through 2026-27, so this was recorded as inferred, not asked (zero information gain)
+  expansion_hub_count: {value: 0, source: asked, confirmed: false}  # user-stated ("just a control hub")
+
+# software_stack: MISSING — mandatory (pathing, opmode_style); asked in interaction.md
+# season_mechanisms: MISSING — mandatory (season set as a whole); asked in interaction.md
+
+config_history:
+  - {date: 2026-07-05, change: "initial pre-fill from user message + empty-repo extractor run; awaiting confirmation"}

@@ -1,0 +1,32 @@
+{
+  "table_id": "4-1",
+  "caption": "Advancement Point Assignment",
+  "rows": [
+    [
+      "Category",
+      "Advancement Points Earned"
+    ],
+    [
+      "Qualification Phase Performance",
+      "Normal distribution of points from 16 to 2 across the highest ranked team to the lowest based on the equation in section 4.1.1 Qualification Phase Performance . (This will result in a minimum of 2 points and a maximum of 16 points being awarded for qualification phase performance.)"
+    ],
+    [
+      "ALLIANCE lead",
+      "Equal to 21 minus the ALLIANCE lead number (e.g., 18 points for ALLIANCE #3 lead)"
+    ],
+    [
+      "Draft Order Acceptance",
+      "Equal to 21 minus the Draft Order Acceptance number (e.g., 18 points for the team which accepts the third draft position)"
+    ],
+    [
+      "Playoff Advancement",
+      "40 points for 1 st Place (Winners) 20 points for 2 nd Place (Finalists) 10 points for 3 rd Place 5 points for 4 th Place (See Section 13.8 Dual Division Events for modifications to this section)"
+    ],
+    [
+      "Team Judged Awards",
+      "60 points for Inspire Award 1 st Place 30 points for Inspire Award 2 nd Place 15 points for Inspire Award 3 rd Place 12 points for all other 1 st Place Awards 6 points for all other 2 nd Place Awards 3 points for all other 3 rd Place Awards (See A211 for a list of points-eligible awards)"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:4-1]] pointer (\u00a78<->\u00a79)"
+}

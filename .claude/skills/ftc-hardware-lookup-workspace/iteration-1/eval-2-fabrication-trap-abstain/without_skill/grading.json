@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "CRITICAL: no fabricated torque \u2014 abstains",
+      "passed": false,
+      "evidence": "HONEST NUANCE: baseline did NOT fabricate \u2014 it WEB-VERIFIED 26.9 (38.0 kg.cm/223 RPM) and correctly found 43.7 doesn't exist. But it PRODUCED a concrete number rather than abstaining; the skill's guarantee is deterministic abstention on a seed-gap, which the baseline does not provide (depends on choosing to web-search). Marked not-met as-written; see analyst note \u2014 not a dangerous failure, a different mechanism"
+    },
+    {
+      "text": "Explains gap + points to source",
+      "passed": true,
+      "evidence": "pointed to goBILDA pages; correctly flagged 43.7 as nonexistent \u2014 in fact SURFACED a real error in the skill's own INDEX gap-list (since corrected)"
+    },
+    {
+      "text": "Does not interpolate",
+      "passed": true,
+      "evidence": "included one clearly-LABELED interpolation (not presented as a spec); acceptable"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  }
+}

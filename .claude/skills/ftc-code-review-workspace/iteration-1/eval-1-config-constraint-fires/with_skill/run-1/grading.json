@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "config-mismatch-flagged",
+      "passed": true,
+      "evidence": "config_lint.py run; flagged turret:none vs TurretAimer.java as confirm-if-stale"
+    },
+    {
+      "name": "deterministic-findings-authoritative",
+      "passed": true,
+      "evidence": "both linters run, god_opmode+mutable_static+turret reported under 'deterministic tier \u2014 authoritative'"
+    },
+    {
+      "name": "config-aware",
+      "passed": true,
+      "evidence": "read team-config.yaml; reviewed against mecanum/flywheel/no-turret/rookie"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "name": "resolves-table-pointer",
+      "passed": false,
+      "evidence": "ampacity from memory"
+    },
+    {
+      "name": "correct-rule-R615",
+      "passed": false,
+      "evidence": "no rule cited"
+    },
+    {
+      "name": "verdict-uses-table-value",
+      "passed": false,
+      "evidence": "no table value"
+    },
+    {
+      "name": "verdict-quotes-verbatim-text",
+      "passed": false,
+      "evidence": "baseline answered from memory; no verbatim corpus text quoted"
+    },
+    {
+      "name": "freshness-checked",
+      "passed": false,
+      "evidence": "baseline ran no freshness check"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 5,
+    "total": 5,
+    "pass_rate": 0.0
+  }
+}

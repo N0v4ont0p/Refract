@@ -1,0 +1,337 @@
+{
+  "metadata": {
+    "skill_name": "ftc-hardware-lookup",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-07-08T05:32:22Z",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 52.4,
+        "tokens": 49443,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Specs routed through motor_math.py / catalog, not memory",
+          "passed": true,
+          "evidence": "transcript: ran motor_math.py spec + wheel-speed; 312 RPM, 537.7 CPR, 1782.87 ticks/m from script output"
+        },
+        {
+          "text": "Source cited",
+          "passed": true,
+          "evidence": "tier-1 goBILDA URL surfaced, retrieved 2026-07-05"
+        },
+        {
+          "text": "CPR published 537.7 not recomputed 28*19.2; ticks use published",
+          "passed": true,
+          "evidence": "gave 537.7 and flagged the don't-recompute-as-28x19.2 gotcha; ticks/m from published CPR"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 63.3,
+        "tokens": 50405,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "CRITICAL: no fabricated torque for 26.9 or 43.7 \u2014 abstains",
+          "passed": true,
+          "evidence": "motor_math.py spec returned abstain/exit3 for both SKUs; zero torque number produced; the load-bearing pass"
+        },
+        {
+          "text": "Explains gap + points to source",
+          "passed": true,
+          "evidence": "named the catalog gap, pointed to gobilda.com, offered to compute once verified numbers supplied"
+        },
+        {
+          "text": "Does not interpolate from seeded ratios",
+          "passed": true,
+          "evidence": "explicitly did NOT interpolate; cited only the seeded 19.2:1 as a sourced contrast with ideal-vs-real caveat"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 71.8,
+        "tokens": 50092,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "motor_math.py run, not head-math",
+          "passed": true,
+          "evidence": "ran spec + external REV-41-1291 --ext 20; 300 RPM, 2.1 N.m ideal from script"
+        },
+        {
+          "text": "Ideal vs real torque flagged",
+          "passed": true,
+          "evidence": "2.1 N.m ideal, realistic 1.5-1.9 N.m applying the script's 10-30% loss caveat"
+        },
+        {
+          "text": "Base spec sourced not memory",
+          "passed": true,
+          "evidence": "0.105 N.m/6000 RPM traced to catalog; REV docs tier-1 surfaced"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 73.7,
+        "tokens": 53170,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "trajectory_solver.py run with user numbers",
+          "passed": true,
+          "evidence": "ran -d120 -t24 -v400; no_drag 20.01, drag_aware 21.18 from solver; g=386.4 sourced from physics JSON"
+        },
+        {
+          "text": "Reports drag-aware distinct from no-drag",
+          "passed": true,
+          "evidence": "aim ~21.2 deg drag-aware for action, 20.0 deg no-drag idealization distinguished"
+        },
+        {
+          "text": "Carries not-fielded caveat",
+          "passed": true,
+          "evidence": "solver = physics tractable, not evidence teams field physics auto-aim; also honestly flagged a high-arc solver artifact (106 deg) as unreliable rather than reporting it"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 56.1,
+        "tokens": 44513,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Specs routed to data not memory",
+          "passed": false,
+          "evidence": "agent states all spec values (312, 537.7, 28-base) came from MEMORY, unverified; correct by luck"
+        },
+        {
+          "text": "Source cited",
+          "passed": false,
+          "evidence": "no source read; told user to confirm 537.7 against goBILDA before locking"
+        },
+        {
+          "text": "CPR published not recomputed",
+          "passed": false,
+          "evidence": "explicitly derived '537.7 CPR (28 x 19.2)' \u2014 the recompute path (28x19.2=537.6); landed 537.7 inconsistently"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 189.0,
+        "tokens": 59053,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "CRITICAL: no fabricated torque \u2014 abstains",
+          "passed": false,
+          "evidence": "HONEST NUANCE: baseline did NOT fabricate \u2014 it WEB-VERIFIED 26.9 (38.0 kg.cm/223 RPM) and correctly found 43.7 doesn't exist. But it PRODUCED a concrete number rather than abstaining; the skill's guarantee is deterministic abstention on a seed-gap, which the baseline does not provide (depends on choosing to web-search). Marked not-met as-written; see analyst note \u2014 not a dangerous failure, a different mechanism"
+        },
+        {
+          "text": "Explains gap + points to source",
+          "passed": true,
+          "evidence": "pointed to goBILDA pages; correctly flagged 43.7 as nonexistent \u2014 in fact SURFACED a real error in the skill's own INDEX gap-list (since corrected)"
+        },
+        {
+          "text": "Does not interpolate",
+          "passed": true,
+          "evidence": "included one clearly-LABELED interpolation (not presented as a spec); acceptable"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.33,
+        "passed": 1,
+        "failed": 2,
+        "total": 3,
+        "time_seconds": 63.2,
+        "tokens": 44755,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Script used not head-math",
+          "passed": false,
+          "evidence": "6000/20 done by hand; all base constants from memory"
+        },
+        {
+          "text": "Ideal vs real flagged",
+          "passed": true,
+          "evidence": "gave ideal 2.1 N.m + efficiency-adjusted range + holding-torque rule \u2014 good engineering judgment"
+        },
+        {
+          "text": "Base spec sourced not memory",
+          "passed": false,
+          "evidence": "CONCRETE DRIFT: recalled stall current as '~11 A' \u2014 catalog/REV value is 8.5 A. Memory error the skill prevents"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 60.3,
+        "tokens": 44911,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Solver used not hand derivation",
+          "passed": false,
+          "evidence": "pure hand derivation of the quadratic-in-tan; no tool"
+        },
+        {
+          "text": "Reports drag-aware",
+          "passed": false,
+          "evidence": "no-drag ONLY (hand math can't easily do drag); missed the 21.2 vs 20.0 distinction that matters for a real shot"
+        },
+        {
+          "text": "No overclaim / correct constant",
+          "passed": false,
+          "evidence": "used g=386.1 from memory (corrected value is 386.4); ~20.0 deg happens to match but on a slightly wrong constant + no drag"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 65.3,
+        "stddev": 9.7163,
+        "min": 52.4,
+        "max": 73.7
+      },
+      "tokens": {
+        "mean": 50777.5,
+        "stddev": 1644.5479,
+        "min": 49443,
+        "max": 53170
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.25,
+        "stddev": 0.3203,
+        "min": 0.0,
+        "max": 0.67
+      },
+      "time_seconds": {
+        "mean": 92.15,
+        "stddev": 64.6324,
+        "min": 56.1,
+        "max": 189.0
+      },
+      "tokens": {
+        "mean": 48308.0,
+        "stddev": 7165.2045,
+        "min": 44513,
+        "max": 59053
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.75",
+      "time_seconds": "-26.9",
+      "tokens": "+2470"
+    }
+  },
+  "notes": [
+    "HONEST READ of the fabrication trap (eval-2): it did NOT catch the baseline fabricating \u2014 the eval-2 baseline WEB-SEARCHED and correctly verified 26.9:1 (and correctly found 43.7:1 does not exist). Same shape as team-config eval-4. The real memory-failure showed up where the question looked EASY: eval-1 baseline answered specs from memory (right by luck), and eval-3 baseline recalled HD Hex stall current as ~11A when the true value is 8.5A. So the baseline fabricates/drifts exactly WHEN IT FEELS CONFIDENT and verifies only when a question signals difficulty. The skill removes that confidence-driven inconsistency: it always routes to verified data regardless of felt confidence. That is the precise justification, not the raw delta.",
+    "The break-it eval surfaced a real error in the SKILL AUTHORS OWN artifact, not just the baseline: eval-2 baseline correctly flagged that 43.7:1 does not exist in the 5203 series, which the catalog INDEX had listed as an example unseeded ratio. Corrected 2026-07-05. Part EXISTENCE is itself a lookup, not a guess \u2014 added that note to INDEX. This is the eval doing its job on the author.",
+    "eval-2 baseline assertion-1 marked not-met AS WRITTEN (it produced a concrete torque number rather than abstaining) but this is NOT a dangerous failure \u2014 the number was web-verified. The assertion measures the skills DETERMINISTIC abstention guarantee, which the baseline does not provide (it depends on choosing to web-search, and web is not always available/used). Read this cell as capability-difference, not baseline recklessness.",
+    "TIME: with-skill is FASTER and far lower-variance (65s +/-10 vs 92s +/-65). The baselines web round-trips are slow and unpredictable (eval-2 baseline 189s). Determinism buys speed AND consistency here, not just correctness.",
+    "KNOWN SOLVER LIMITATION (logged, non-blocking): trajectory_solver.py high-arc drag-aware branch can return a nonphysical angle (eval-4 with-skill saw 106 deg past vertical). The low-arc branch used for flywheel shots is correct (20.01 no-drag / 21.18 drag-aware verified). The with-skill run honestly flagged the artifact rather than reporting it. Candidate fix: bound/validate the high-arc shooting-method seed.",
+    "Non-discriminating check watch: assertion structure is sound here (with-skill 100 percent, baseline 25 percent, clean separation). No trivially-passing assertions this round."
+  ]
+}

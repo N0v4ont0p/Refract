@@ -1,0 +1,19 @@
+{
+  "eval_id": 4,
+  "eval_name": "hub-generation-pointer",
+  "prompt": "quick question while we set up: we're on the REV control hub now, but our mentor heard SystemCore is coming and wants to know if we should plan our code around it this season or next. what's the deal?",
+  "assertions": [
+    {
+      "name": "briefing-read-live-not-paraphrased",
+      "text": "The transcript shows the file .claude/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md being actually read during the run, and the answer's specific claims (dates, hybrid window, tier labels) are traceable to that file's content \u2014 not a from-memory paraphrase"
+    },
+    {
+      "name": "timeline-correct-per-reference",
+      "text": "The answer states REV Control Hub is the sole legal system through 2026-27 and that the SystemCore transition opens a hybrid-legal window (2027-28 through at least 2030-31), consistent with the reference file"
+    },
+    {
+      "name": "gate-stays-closed-now",
+      "text": "hub_generation is NOT turned into a config question for the current season (the time gate keys off the ACTIVE season slug, which is 2025-26 \u2192 zero information gain), even though the user raised the topic"
+    }
+  ]
+}

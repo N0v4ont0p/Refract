@@ -1,0 +1,89 @@
+{
+  "team": "12808",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "java",
+  "language_file_counts": {
+    "java": 192,
+    "kotlin": 0
+  },
+  "drivetrain": {
+    "type": {
+      "value": "mecanum",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:145",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:159",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:163"
+      ]
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:11",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:12",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:56"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": "limelight_3a",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/mechanisms/vision/DecodeLimelight.java:8",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/mechanisms/vision/DecodeLimelight.java:9",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/mechanisms/vision/DecodeLimelight.java:10"
+      ]
+    },
+    "odometry": {
+      "value": "goBILDA_pinpoint",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:9",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:11",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Constants.java:63"
+      ]
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": "pedro_pathing",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:3",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:4",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Robot.java:5"
+      ]
+    },
+    "opmode_style": {
+      "value": "raw_linear_opmode",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:153",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:207",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/Tuning.java:255"
+      ]
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  }
+}

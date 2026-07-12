@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "name": "traverses-to-limit-rules",
+      "passed": false,
+      "evidence": "no traversal"
+    },
+    {
+      "name": "citations-verified",
+      "passed": false,
+      "evidence": "no IDs"
+    },
+    {
+      "name": "grounded-not-memory",
+      "passed": false,
+      "evidence": "memory"
+    },
+    {
+      "name": "verdict-quotes-verbatim-text",
+      "passed": false,
+      "evidence": "baseline answered from memory; no verbatim corpus text quoted"
+    },
+    {
+      "name": "freshness-checked",
+      "passed": false,
+      "evidence": "baseline ran no freshness check"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 5,
+    "total": 5,
+    "pass_rate": 0.0
+  }
+}

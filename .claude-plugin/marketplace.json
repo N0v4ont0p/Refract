@@ -1,0 +1,14 @@
+{
+  "name": "refract",
+  "owner": {
+    "name": "Team 19859 Reflection"
+  },
+  "description": "FTC robotics Claude Code skills: rules compliance, hardware lookup, code review, team config",
+  "plugins": [
+    {
+      "name": "refract-suite",
+      "source": "./refract-suite",
+      "description": "Config-aware FTC skill suite: citation-grounded rules, hardware specs, elite-team pattern review, team config elicitation"
+    }
+  ]
+}

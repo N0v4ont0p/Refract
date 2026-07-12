@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "smell-shown-with-evidence",
+      "passed": true,
+      "evidence": "quoted offending lines, stated verdict only after evidence; god_opmode from linter"
+    },
+    {
+      "name": "explains-why-for-rookie",
+      "passed": true,
+      "evidence": "defined hardwareMap.get, God OpMode, static lifetime; explained why without softening"
+    },
+    {
+      "name": "config-aware-no-turret",
+      "passed": true,
+      "evidence": "flagged TurretAimer as stale vs turret:none; recommended no undeclared mechanisms"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

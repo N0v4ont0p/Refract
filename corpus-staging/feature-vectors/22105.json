@@ -1,0 +1,131 @@
+{
+  "team": "22105",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "java",
+  "language_file_counts": {
+    "java": 191,
+    "kotlin": 1
+  },
+  "drivetrain": {
+    "type": {
+      "value": [
+        "mecanum",
+        "swerve"
+      ],
+      "evidence": {
+        "swerve": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/math/Angle.java:5",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/subsystems/HangSubsystem.java:141",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/subsystems/SpindexerSubsystem.java:348"
+        ],
+        "mecanum": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedroPathing/Tuning.java:121",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedroPathing/Tuning.java:136",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedroPathing/Tuning.java:140"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/misc/ResetHangOpmode.java:7",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/misc/ResetHangOpmode.java:8",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/misc/ResetHangOpmode.java:20"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": "webcam_easyopencv",
+      "evidence": [
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/subsystems/vision/CameraDash.java:21",
+        "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/subsystems/vision/CameraDash.java:22"
+      ]
+    },
+    "odometry": {
+      "value": [
+        "goBILDA_pinpoint",
+        "otos"
+      ],
+      "evidence": {
+        "goBILDA_pinpoint": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/teleop/TerrorTeleOp.java:199",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/teleop/TerrorTeleOp.java:283",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/tuning/ShooterAimingTuner.java:138"
+        ],
+        "otos": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/math/Pose2d.java:7",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/math/Pose2d.java:39",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/math/Pose2d.java:61"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": [
+        "pedro_pathing",
+        "roadrunner"
+      ],
+      "evidence": {
+        "pedro_pathing": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/CustomizableAuto.java:18",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/CustomizableAuto.java:19",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/CustomizableAuto.java:20"
+        ],
+        "roadrunner": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/hardware/sensors/TerrorEncoder.java:11",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/robot/hardware/sensors/TerrorSparkFunOTOS.kt:3"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "opmode_style": {
+      "value": [
+        "ftclib_command_based",
+        "raw_linear_opmode"
+      ],
+      "evidence": {
+        "raw_linear_opmode": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/misc/ResetHangOpmode.java:15",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/misc/UtilityCameraFrameCapture.java:62",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/OneAutoToRuleThemAll.java:32"
+        ],
+        "ftclib_command_based": [
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/AutoFar.java:4",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/AutoFar.java:27",
+          "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/opmodes/auto/OneAutoToRuleThemAll.java:14"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "table_id": "6-7",
+  "caption": "Innovate Award Criteria Innovate Award Criteria Required 1 Team must describe, d",
+  "rows": [
+    [
+      "Innovate Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must describe, display, or document examples of the team\u2019s engineering content that illustrate how the team arrived at their design solution."
+    ],
+    [
+      "Required",
+      "2",
+      "ROBOT or ROBOT MECHANISM is creative and/or unique in its design."
+    ],
+    [
+      "Required",
+      "3",
+      "The innovative element must be stable, robust, and contribute positively to the team\u2019s game objectives most of the time."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Designs often come with risks, the team should discuss, describe, display or document how they mitigated that risk."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-7]] pointer (\u00a78<->\u00a79)"
+}

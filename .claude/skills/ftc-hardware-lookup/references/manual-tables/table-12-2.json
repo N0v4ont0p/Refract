@@ -1,0 +1,53 @@
+{
+  "table_id": "12-2",
+  "caption": "Servo Requirements at 6V",
+  "rows": [
+    [
+      "Actuator Class",
+      "Mechanical Output Power",
+      "Stall Current",
+      "Example Servos (including, but not limited to)"
+    ],
+    [
+      "Servo",
+      "\u2264 8 watts @6V",
+      "\u2264 4 amps @6V",
+      "AndyMark High-Torque Servos (am-4954)"
+    ],
+    [
+      "Axon MAX+ Servo (Axon MAX+)"
+    ],
+    [
+      "DSSERVO 35KG Coreless (DS3235MG)"
+    ],
+    [
+      "FEETECH Digital Servo (FT5335M-FB)"
+    ],
+    [
+      "goBILDA Dual Mode Servo (2000-0025-0003)"
+    ],
+    [
+      "REV Robotics Smart Servo (REV-41-1097)"
+    ],
+    [
+      "Studica Multi-Mode Smart Servo (75002)"
+    ],
+    [
+      "Linear Servo",
+      "N/A",
+      "\u2264 1 amps @6V",
+      "Actuonix Micro Linear Servo (P8-100-252-12-R)"
+    ],
+    [
+      "Hitec Linear Servo (HLS12-3050-6V)"
+    ],
+    [
+      "Studica Linear Servo RC Actuator (75014)"
+    ],
+    [
+      "Servo mechanical output power is approximated by the following formula (using 6V data reported by manufacturer): \u00b7 Mechanical Output Power = 0.25 x ( Stall Torque in N-m ) x ( No Load Speed in rad/s )"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-2]] pointer (\u00a78<->\u00a79)"
+}

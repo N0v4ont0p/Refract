@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "systemcore-motioncore.md read live; claims traceable to it",
+      "passed": false,
+      "evidence": "Reference file never read (baseline had no skill pointing to it). Baseline instead web-searched FIRST's official blog + A301 announcement \u2014 strong verification behavior, but not the offline deterministic pointer mechanism under test; no tier labels preserved"
+    },
+    {
+      "text": "Timeline correct: REV-only now; hybrid window 2027-28 through at least 2030-31",
+      "passed": true,
+      "evidence": "answer.md correct via tier-1 web sources: SystemCore not FTC-legal until 2027-28; legacy + hybrid legal through at least 2030-31"
+    },
+    {
+      "text": "hub_generation NOT turned into a config question now",
+      "passed": true,
+      "evidence": "TRIVIALLY satisfied \u2014 baseline manages no config at all. Non-discriminating for the baseline configuration; see analyst notes"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "table_id": "12-1",
+  "caption": "Motor allowances",
+  "rows": [
+    [
+      "Motor Name",
+      "Part Numbers Available",
+      "Notes"
+    ],
+    [
+      "AndyMark NeveRest 12V DC",
+      "am-3104, am-3104b",
+      ""
+    ],
+    [
+      "AndyMark NeveRest Hex 12V DC",
+      "am-3104c",
+      ""
+    ],
+    [
+      "goBILDA Yellow Jacket 520x Series 12V DC",
+      "5201-0002-0026, etc.",
+      "5201, 5202, 5203, and 5204 series"
+    ],
+    [
+      "goBILDA 5000 Series 12V DC",
+      "5000-0002-4008, etc.",
+      ""
+    ],
+    [
+      "Modern Robotics / MATRIX 12V DC",
+      "5000-0002-0001",
+      "Discontinued"
+    ],
+    [
+      "NFR Products Yuksel 12V DC",
+      "NFR-600-100-000",
+      ""
+    ],
+    [
+      "REV Robotics HD Hex 12V DC",
+      "REV-41-1291",
+      ""
+    ],
+    [
+      "REV Robotics Core Hex 12V DC",
+      "REV-41-1300",
+      ""
+    ],
+    [
+      "Studica Robotics Maverick 12V DC",
+      "75001",
+      ""
+    ],
+    [
+      "SWYFT Robotics SWYFT Spike Motor",
+      "SR-MOTOR-DC-01",
+      ""
+    ],
+    [
+      "TETRIX MAX 12V DC",
+      "739530, 39530",
+      "Discontinued"
+    ],
+    [
+      "TETRIX MAX TorqueNADO 12V DC",
+      "W44260",
+      ""
+    ],
+    [
+      "Factory installed vibration and autofocus motors resident in COTS computing devices (e.g., rumble motor in a smartphone); can only be used as part of the device and cannot be removed and/or repurposed. These motors do not count toward the limit in R503 ."
+    ],
+    [
+      "Motors integral to a COTS sensor (e.g., LIDAR, scanning sonar), provided the device is not modified except to facilitate mounting. These motors do not count toward the limit in R503 ."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-1]] pointer (\u00a78<->\u00a79)"
+}

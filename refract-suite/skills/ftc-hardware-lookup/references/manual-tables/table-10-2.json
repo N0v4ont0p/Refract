@@ -1,0 +1,91 @@
+{
+  "table_id": "10-2",
+  "caption": "DECODE point values MATCH points RANKING POINTS AUTO TELEOP LEAVE 3 ARTIFACT CLA",
+  "rows": [
+    [
+      "",
+      "MATCH points",
+      "RANKING POINTS"
+    ],
+    [
+      "AUTO",
+      "TELEOP"
+    ],
+    [
+      "LEAVE",
+      "",
+      "3",
+      "",
+      ""
+    ],
+    [
+      "ARTIFACT",
+      "CLASSIFIED",
+      "3",
+      "3",
+      ""
+    ],
+    [
+      "OVERFLOW",
+      "1",
+      "1",
+      ""
+    ],
+    [
+      "DEPOT",
+      "",
+      "1",
+      ""
+    ],
+    [
+      "PATTERN",
+      "ARTIFACT matches MOTIF",
+      "2",
+      "2",
+      ""
+    ],
+    [
+      "BASE",
+      "Partially returned to BASE",
+      "",
+      "5",
+      ""
+    ],
+    [
+      "Fully returned to BASE",
+      "",
+      "10",
+      ""
+    ],
+    [
+      "Additional Bonus: 2 ROBOTS fully returned to BASE.",
+      "",
+      "10",
+      ""
+    ],
+    [
+      "MOVEMENT RP - Combined LEAVE + BASE points earned at or above threshold",
+      "1"
+    ],
+    [
+      "GOAL RP - The number of ARTIFACTS scored through the SQUARE at or above threshold",
+      "1"
+    ],
+    [
+      "PATTERN RP - PATTERN points earned at or above threshold",
+      "1"
+    ],
+    [
+      "WIN",
+      "Completing a MATCH with more MATCH points than your opponent",
+      "3"
+    ],
+    [
+      "TIE",
+      "Completing a MATCH with the same MATCH points as your opponent",
+      "1"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-2]] pointer (\u00a78<->\u00a79)"
+}

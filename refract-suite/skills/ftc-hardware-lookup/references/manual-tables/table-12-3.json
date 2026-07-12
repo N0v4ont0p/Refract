@@ -1,0 +1,48 @@
+{
+  "table_id": "12-3",
+  "caption": "Power Regulators and Limits",
+  "rows": [
+    [
+      "Power Regulating Device",
+      "Part Number",
+      "Load Limit per Device"
+    ],
+    [
+      "goBILDA 6V Servo Power Injector",
+      "3125-0001-0001",
+      "2 Servos per Port"
+    ],
+    [
+      "REV Control Hub or Expansion Hub Motor Ports",
+      "REV-31-1153 / REV-31-1595",
+      "2 Motors per Port"
+    ],
+    [
+      "REV Control Hub or Expansion Hub Servo Ports",
+      "REV-31-1153 / REV-31-1595",
+      "2 Servos per Port"
+    ],
+    [
+      "REV Servo Power Module",
+      "REV-11-1144",
+      "2 Servos per Port"
+    ],
+    [
+      "REV Robotics Servo Hub",
+      "REV-11-1855",
+      "2 Servos per Port"
+    ],
+    [
+      "REV SPARKmini",
+      "REV-31-1230",
+      "2 Motors per Device"
+    ],
+    [
+      "Studica Servo Power Block",
+      "75005",
+      "2 Servos per Port"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-3]] pointer (\u00a78<->\u00a79)"
+}

@@ -1,0 +1,122 @@
+# =============================================================================
+# season-extensions/biobuzz-2026-27.yaml  —  DRAFT PREVIEW (NOT MERGED, NOT ACTIVE)
+# =============================================================================
+# Produced by the Season Transition Protocol (§19), steps 1-3 ONLY, against
+# PUBLIC PRE-SEASON PREVIEW material — the full manual does not exist yet.
+#
+#   *** THIS IS A DRAFT. It is NOT in season-extensions/ACTIVE and MUST NOT be. ***
+#   *** DECODE (decode-2025-26) remains the ACTIVE season. ***
+#
+# Purpose of this file at this stage: demonstrate the protocol end-to-end on a
+# real upcoming boundary (BIOBUZZ, FIRST CANOPY, kickoff 2026-09-12) and prove
+# the season-agnostic claim — core-feature-model.yaml and every other layer
+# (§5/§8/§11/§12) are UNTOUCHED; only this replaceable slot changes.
+#
+# EVERYTHING below is tier-2 preview (§11 Rule 7): ecosystem-partner StarterBot
+# posts + pre-season community reports, NOT an official manual. Every value is
+# provisional and MUST be re-verified at kickoff. Unknowns are marked UNKNOWN and
+# left UNKNOWN — not invented (deterministic-first / abstain-over-guess).
+# =============================================================================
+
+_meta:
+  slug: biobuzz-2026-27
+  schema_version: 1                    # same schema as decode-2025-26.yaml — proves the slot is stable
+  scope: season_specific
+  status: DRAFT_PREVIEW                 # NOT 'live'. §19 step 3 (draft only); steps 4-6 pending.
+  not_active: true                      # season-extensions/ACTIVE must still read 'decode-2025-26'
+  replaced_by: season_transition_protocol
+  protocol_progress:
+    step_1_detection: done              # boundary detected: BIOBUZZ / FIRST CANOPY announced
+    step_2_full_manual_ingestion: DEFERRED   # no manual until 2026-09-12 — nothing to chunk yet
+    step_3_taxonomy_draft: this_file    # draft only, from preview material
+    step_4_quant_strategy: BLOCKED      # needs point values + time constraints from the manual (Opus xhigh)
+    step_5_deliberation: see deliberation_checkpoint below
+    step_6_merge: BLOCKED               # only after full manual + sign-off
+
+season: BIOBUZZ (part of FIRST CANOPY, 2026-2027)
+kickoff: 2026-09-12
+rules_current_through: NONE — no official manual published yet (preview material only)
+
+# ----------------------------------------------------------------------------
+# SCORING ELEMENT — the one thing preview material actually pins down (loosely).
+# ----------------------------------------------------------------------------
+scoring_element:
+  name: Pollen
+  form: plastic ball
+  diameter_in:
+    value: UNCONFIRMED
+    reported_range: [2.8, 3.0]          # "roughly 2.8-3 in across different sources" — a RANGE, not a spec
+    source_tier: 2                      # multiple pre-season sources disagree at the decimal; NOT official
+    confidence: single-source-equivalent # "different sources" that may all trace to one preview image
+    reverify_at: kickoff
+  mass_g: UNKNOWN
+  material_notes: "plastic; hollow-vs-solid UNKNOWN (matters for intake compliance + any launch)"
+  cross_season_comparison:
+    claim_in_plan: "PLAN.md §19 calls Pollen 'similar physical characteristics' to DECODE Artifacts"
+    corpus_check: >
+      FLAG (do not paper over): the DECODE Artifact is ~5.0 in diameter (corpus-verified —
+      references/physics/decode-artifact-ballistics.json ball.diameter_in = 5.0, from team 24089's
+      data). Pollen's reported 2.8-3.0 in is ~40% SMALLER in diameter. "Similar" may hold for
+      material (plastic, ball-shaped) but is FALSE on the dimension that most drives intake/launch
+      geometry. This directly feeds the deliberation checkpoint below — do NOT assume the DECODE
+      intake/shooter mechanism category transfers on size grounds.
+
+# ----------------------------------------------------------------------------
+# SEASON MECHANISMS — populate ONLY what preview material supports; the rest UNKNOWN.
+# Mirrors decode-2025-26.yaml's season_mechanisms block (§4), so the core's dynamic
+# interface generation (§10) works identically — no schema change, no core edit.
+# ----------------------------------------------------------------------------
+season_mechanisms:
+  intake:
+    options: [roller, other]            # StarterBot Base (REV/goBILDA/AndyMark/Studica) ships a drivetrain+intake
+    basis: "ecosystem-partner StarterBot Base preview designs (tier-2)"
+    caveat: "specific intake TYPE not standardized across partners; 'roller' is the common preview shape, not confirmed"
+  # --- Everything below is UNKNOWN pending the manual. Left UNKNOWN on purpose. ---
+  scoring_target: UNKNOWN               # is Pollen deposited? launched into a goal? placed in a structure? unknown
+  launch_mechanism: UNKNOWN             # ball-shaped element MIGHT imply a shooter — but UNCONFIRMED, do not assume
+  turret: UNKNOWN                       # depends on whether there's a launch/aim element at all
+  zones: UNKNOWN
+  endgame: UNKNOWN
+
+known_archetypes: UNKNOWN               # do NOT port DECODE's turreted_shooter / fixed_shooter_on_swerve — unverified for BIOBUZZ
+
+constraints_on_core: []                 # none derivable yet; a real entry needs the manual (cf. DECODE's fixed_shooter_on_swerve)
+
+# ----------------------------------------------------------------------------
+# §19 STEP 5 — MANDATORY DELIBERATION CHECKPOINT (surfaced here, not auto-merged)
+# Engineering-specific questions the manual/regional-meta must answer before this
+# draft can mature. These are the "what's genuinely ambiguous" items, per §19.5.
+# ----------------------------------------------------------------------------
+deliberation_checkpoint:
+  core_untouched_proof: >
+    PROVEN: producing this draft required ZERO edits to core-feature-model.yaml and zero to §5/§8/
+    §11/§12. Drivetrain stays the one always-core-fixed interface (§10); every BIOBUZZ mechanism
+    interface will generate dynamically from this file's season_mechanisms keys, exactly as DECODE's
+    do. The season-agnostic claim holds on a real second season.
+  open_questions:
+    - id: intake-transfer
+      q: >
+        Does the DECODE intake mechanism category transfer to Pollen, or does the ~40% smaller
+        diameter (2.8-3.0 in vs 5.0 in) force a new category? Smaller, possibly-solid balls change
+        compliance, spacing, and retention geometry. LEAN: do NOT assume transfer — size delta is
+        the exact variable an intake is designed around. Needs: confirmed Pollen spec + field geometry.
+    - id: is-there-a-launcher
+      q: >
+        Is BIOBUZZ even a launch/shooter game? Pollen being ball-shaped is suggestive but NOT
+        dispositive (could be a place/deposit game). If there IS launching, the whole shooter-empirical-
+        vs-physics + moving-shot-compensation corpus becomes relevant; if not, it doesn't. Do not
+        pre-wire a shooter interface on a hunch. Needs: the manual's scoring definition.
+    - id: pollen-count-per-cycle
+      q: >
+        How many Pollen per cycle / per possession limit? Drives whether a spindexer/magazine
+        (cf. 22105 per-slot color sensing) is relevant or overkill. Needs: manual possession rules.
+    - id: spec-uncertainty
+      q: >
+        The 2.8-3.0 in range must collapse to a single official number before any mechanism math.
+        Treat the range as a Rule-7 open item, not an average — a shooter/intake tuned to 3.0 that
+        meets a 2.8 element (or vice versa) is a real miss. Needs: official Team Manual Part 2.
+  do_not_do_yet:
+    - "Do NOT run §19 step 4 (quantitative strategy modeling) — no point values / time constraints exist."
+    - "Do NOT add this slug to season-extensions/ACTIVE."
+    - "Do NOT port DECODE archetypes or constraints_on_core as if confirmed for BIOBUZZ."
+    - "Do NOT collapse the Pollen diameter range to a point estimate."

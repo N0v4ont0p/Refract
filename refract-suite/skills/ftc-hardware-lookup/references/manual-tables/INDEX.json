@@ -1,0 +1,202 @@
+{
+  "meta": {
+    "manual": "DECODE Competition Manual (2025-2026)",
+    "incorporates_through": "Team Update 32",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "retrieved": "2026-07-03",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "tables": [
+    {
+      "table_id": "10-1",
+      "caption": "DRIVE TEAM roles",
+      "rows": 4
+    },
+    {
+      "table_id": "10-2",
+      "caption": "DECODE point values MATCH points RANKING POINTS AUTO TELEOP LEAVE 3 ARTIFACT CLA",
+      "rows": 15
+    },
+    {
+      "table_id": "10-3",
+      "caption": "DECODE RP thresholds",
+      "rows": 4
+    },
+    {
+      "table_id": "10-4",
+      "caption": "Rule violations",
+      "rows": 9
+    },
+    {
+      "table_id": "10-5",
+      "caption": "YELLOW and RED CARD application",
+      "rows": 5
+    },
+    {
+      "table_id": "10-6",
+      "caption": "Violation examples",
+      "rows": 10
+    },
+    {
+      "table_id": "12-1",
+      "caption": "Motor allowances",
+      "rows": 15
+    },
+    {
+      "table_id": "12-10",
+      "caption": "Legal Android Smartphones",
+      "rows": 7
+    },
+    {
+      "table_id": "12-11",
+      "caption": "Recommended Software for Control System",
+      "rows": 10
+    },
+    {
+      "table_id": "12-12",
+      "caption": "Allowed",
+      "rows": 8
+    },
+    {
+      "table_id": "12-2",
+      "caption": "Servo Requirements at 6V",
+      "rows": 12
+    },
+    {
+      "table_id": "12-3",
+      "caption": "Power Regulators and Limits",
+      "rows": 8
+    },
+    {
+      "table_id": "12-4",
+      "caption": "Legal ROBOT Main Power",
+      "rows": 8
+    },
+    {
+      "table_id": "12-5",
+      "caption": "Legal",
+      "rows": 7
+    },
+    {
+      "table_id": "12-6",
+      "caption": "Legal ROBOT",
+      "rows": 4
+    },
+    {
+      "table_id": "12-7",
+      "caption": "Power Regulation Device Power Requirements",
+      "rows": 7
+    },
+    {
+      "table_id": "12-8",
+      "caption": "Wire sizing requirements",
+      "rows": 9
+    },
+    {
+      "table_id": "12-9",
+      "caption": "Supported programmable vision coprocessors",
+      "rows": 2
+    },
+    {
+      "table_id": "13-1",
+      "caption": "Qualification MATCH ranking criteria",
+      "rows": 6
+    },
+    {
+      "table_id": "13-3",
+      "caption": "2-ALLIANCE playoff bracket typical timing",
+      "rows": 9
+    },
+    {
+      "table_id": "13-7",
+      "caption": "Dual Division Playoff Advancement Points",
+      "rows": 2
+    },
+    {
+      "table_id": "15-1",
+      "caption": "FIRST Championship",
+      "rows": 5
+    },
+    {
+      "table_id": "15-2",
+      "caption": "da Vinci playoff schedule",
+      "rows": 28
+    },
+    {
+      "table_id": "15-3",
+      "caption": "da Vinci Round-Robin Tournament Ranking Criteria",
+      "rows": 6
+    },
+    {
+      "table_id": "4-1",
+      "caption": "Advancement Point Assignment",
+      "rows": 6
+    },
+    {
+      "table_id": "4-2",
+      "caption": "Advancement Sorting Criteria Including Tiebreakers",
+      "rows": 11
+    },
+    {
+      "table_id": "4-3",
+      "caption": "Sample Qualification Round Point Assignments",
+      "rows": 2
+    },
+    {
+      "table_id": "6-1",
+      "caption": "Total judged awards available based on all event participating teams Total Event",
+      "rows": 11
+    },
+    {
+      "table_id": "6-10",
+      "caption": "Compass Award Criteria Compass Award Criteria Required 1 Team must be able to cl",
+      "rows": 3
+    },
+    {
+      "table_id": "6-2",
+      "caption": "Inspire Award Criteria Inspire Award Criteria Required 1 Team must submit a PORT",
+      "rows": 5
+    },
+    {
+      "table_id": "6-3",
+      "caption": "Think Award Criteria Think Award Criteria Required 1 Team must submit a PORTFOLI",
+      "rows": 4
+    },
+    {
+      "table_id": "6-4",
+      "caption": "Connect Award Criteria Connect Award Criteria Required 1 Team must describe, dis",
+      "rows": 4
+    },
+    {
+      "table_id": "6-5",
+      "caption": "Reach Award Criteria Reach Award Criteria Required 1 Team must discuss, describe",
+      "rows": 5
+    },
+    {
+      "table_id": "6-6",
+      "caption": "Sustain Award Criteria Sustain Award Criteria Required 1 Team must discuss, desc",
+      "rows": 5
+    },
+    {
+      "table_id": "6-7",
+      "caption": "Innovate Award Criteria Innovate Award Criteria Required 1 Team must describe, d",
+      "rows": 5
+    },
+    {
+      "table_id": "6-8",
+      "caption": "Control Award Criteria Control Award Criteria Required 1 Team must submit a PORT",
+      "rows": 6
+    },
+    {
+      "table_id": "6-9",
+      "caption": "Design Award Criteria Design Award Criteria Required 1 A team must be able to de",
+      "rows": 6
+    },
+    {
+      "table_id": "9-1",
+      "caption": "Audio cues",
+      "rows": 8
+    }
+  ]
+}

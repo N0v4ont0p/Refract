@@ -1,0 +1,36 @@
+{
+  "table_id": "6-8",
+  "caption": "Control Award Criteria Control Award Criteria Required 1 Team must submit a PORT",
+  "rows": [
+    [
+      "Control Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must submit a PORTFOLIO. The PORTFOLIO must include all of the following: A. hardware and/or software control COMPONENTS on the ROBOT, B. which challenges each COMPONENT or system is intended to solve, and C. how does each COMPONENT or system work."
+    ],
+    [
+      "Required",
+      "2",
+      "Team must use one or more hardware or software solutions to improve ROBOT functionality by using external feedback and control."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "The control solution(s) should work consistently during most MATCHES."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Team could discuss, describe, display, or document how the solution may consider reliability either through demonstrated effectiveness or identification of how the solution could be improved"
+    ],
+    [
+      "Encouraged",
+      "5",
+      "Use of the engineering process to develop the control solutions (sensors, hardware and/or algorithms) used on the ROBOT includes lessons learned."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-8]] pointer (\u00a78<->\u00a79)"
+}

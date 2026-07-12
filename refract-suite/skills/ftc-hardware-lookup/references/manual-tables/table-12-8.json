@@ -1,0 +1,39 @@
+{
+  "table_id": "12-8",
+  "caption": "Wire sizing requirements",
+  "rows": [
+    [
+      "Application",
+      "Minimum Wire Size"
+    ],
+    [
+      "12V Main Battery Power",
+      "18 AWG (19 SWG or 1 mm 2 )"
+    ],
+    [
+      "Motor Power (unless otherwise listed)"
+    ],
+    [
+      "11-20A fuse protected circuit"
+    ],
+    [
+      "Motor Power - TETRIX MAX 12V DC Motors, REV Robotics Core Hex (REV-14-1300)",
+      "22 AWG (22 SWG or 0.5 mm 2 )"
+    ],
+    [
+      "PWM / Servo"
+    ],
+    [
+      "LEDs (5V / 12V)"
+    ],
+    [
+      "\u226410A fuse protected circuit"
+    ],
+    [
+      "SIGNAL LEVEL circuits (i.e., circuits which draw \u22641A continuous and have a source incapable of delivering >1A, including but not limited to: I2C, DIO, Analog, encoder and RS485 connections)",
+      "28 AWG (29 SWG or .08 mm 2 )"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:12-8]] pointer (\u00a78<->\u00a79)"
+}

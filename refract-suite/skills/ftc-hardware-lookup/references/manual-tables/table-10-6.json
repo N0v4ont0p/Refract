@@ -1,0 +1,48 @@
+{
+  "table_id": "10-6",
+  "caption": "Violation examples",
+  "rows": [
+    [
+      "Example Violation",
+      "Expanded Interpretation"
+    ],
+    [
+      "MINOR FOUL",
+      "Upon violation, a MINOR FOUL is assessed against the violating ALLIANCE."
+    ],
+    [
+      "MAJOR FOUL and YELLOW CARD",
+      "Upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE. After the MATCH, the Head REFEREE presents the violating team with a YELLOW CARD."
+    ],
+    [
+      "MINOR FOUL per SCORING ELEMENT over the limit.",
+      "Upon violation, a number of MINOR FOULS are assessed against the violating ALLIANCE equal to the number of additional SCORING ELEMENTS beyond the permitted quantity."
+    ],
+    [
+      "MINOR FOUL. MAJOR FOUL if REPEATED.",
+      "Upon initial violation in a MATCH, a MINOR FOUL is assessed against the violating ALLIANCE. If the condition in the second statement is met: the ROBOT repeats the infraction in the MATCH, then a MAJOR FOUL is assessed against the violating ALLIANCE. Assuming no additional infractions of that rule by that ROBOT in that MATCH, the ROBOT is assessed a MINOR FOUL and a MAJOR FOUL for their ALLIANCE."
+    ],
+    [
+      "MINOR FOUL and an additional MINOR FOUL for every 3 seconds in which the situation is not corrected",
+      "Upon violation, a MINOR FOUL is assessed against the violating ALLIANCE and the REFEREE begins to count. Their count continues until the criteria to discontinue the count are met, and for each 3 seconds within that time, an additional MINOR FOUL is assessed against the violating ALLIANCE. A ROBOT in violation of this type of rule for 15 seconds is assessed a total of 6 MINOR FOULS (assuming no other rules were being simultaneously violated)."
+    ],
+    [
+      "MAJOR FOUL and the opposing ALLIANCE is awarded the PATTERN RP.",
+      "Upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE and the opposing ALLIANCE is awarded the PATTERN RP, regardless of the status of the scoring achievements during the MATCH."
+    ],
+    [
+      "MAJOR FOUL plus YELLOW CARD if REPEATED.",
+      "Upon violation, a MAJOR FOUL is assessed against the violating team. If the condition \u201cif REPEATED\u201d (e.g., a subsequent violation by the same team in the same MATCH) is met, then the violating team is issued another MAJOR FOUL. If these are the only violations during the MATCH: after the MATCH, the Head REFEREE presents the violating team with a YELLOW CARD for the second violation of this rule. In total, 2 MAJOR FOULS and a YELLOW CARD were assessed during the MATCH."
+    ],
+    [
+      "VERBAL WARNING. YELLOW CARD if subsequent violations occur during the event.",
+      "Upon violation, a VERBAL WARNING is issued to the violating team. If an additional violation of the same rule occurs later in the event, including during the same MATCH, a later MATCH during the same event phase, or during a later event phase, then following the subsequent violations: after the MATCH, the Head REFEREE presents the violating team with a YELLOW CARD."
+    ],
+    [
+      "MAJOR FOUL and YELLOW CARD. MAJOR FOUL and RED CARD if opponent ROBOT is unable to drive.",
+      "Upon a general violation of this rule, a MAJOR FOUL is assessed against the violating ALLIANCE. After the MATCH, the Head REFEREE presents the violating team with a YELLOW CARD. However, if the opponent ROBOT is unable to drive, then upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE. After the MATCH, the Head REFEREE presents the violating team with a RED CARD. Only 1 MAJOR FOUL is earned for a single violation."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-6]] pointer (\u00a78<->\u00a79)"
+}

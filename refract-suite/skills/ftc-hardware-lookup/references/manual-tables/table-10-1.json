@@ -1,0 +1,30 @@
+{
+  "table_id": "10-1",
+  "caption": "DRIVE TEAM roles",
+  "rows": [
+    [
+      "Role",
+      "Description",
+      "Max./ DRIVE TEAM",
+      "Criteria"
+    ],
+    [
+      "DRIVE COACH",
+      "a guide or advisor",
+      "1",
+      "any team member and may be an adult, must wear \u201cDRIVE COACH\u201d badge"
+    ],
+    [
+      "DRIVER",
+      "an operator and controller of the ROBOT",
+      "3",
+      "STUDENT, must wear a \u201cDRIVE TEAM\u201d badge"
+    ],
+    [
+      "HUMAN PLAYER",
+      "a SCORING ELEMENT manager"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-1]] pointer (\u00a78<->\u00a79)"
+}

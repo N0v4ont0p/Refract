@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Correct verdict grounded in R101",
+      "passed": false,
+      "evidence": "verdict direction right (19>18 fails) but grounded in WRONG rule R104 ('Keep it together'); the real sizing rule is R101"
+    },
+    {
+      "text": "No hallucinated/mis-attributed citation",
+      "passed": false,
+      "evidence": "KEY NUANCE: cited R104 for the 18-in cube. R104 EXISTS (passes an existence check) but is the wrong rule \u2014 a real-but-mis-attributed citation. rules.py verify (existence) would NOT catch this; retrieve-don't-recall (lookup R101, see it's the cube rule) is what prevents it. This is the sharper failure the skill guards, beyond nonexistent-ID hallucination"
+    },
+    {
+      "text": "Grounded not from memory",
+      "passed": false,
+      "evidence": "self-reported memory-only, hedged"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

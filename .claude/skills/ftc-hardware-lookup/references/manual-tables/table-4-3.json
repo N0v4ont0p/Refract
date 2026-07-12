@@ -1,0 +1,40 @@
+{
+  "table_id": "4-3",
+  "caption": "Sample Qualification Round Point Assignments",
+  "rows": [
+    [
+      "Rank",
+      "1",
+      "2",
+      "3",
+      "4",
+      "\u2026",
+      "12",
+      "13",
+      "14",
+      "\u2026",
+      "25",
+      "26",
+      "27",
+      "28"
+    ],
+    [
+      "Points",
+      "16",
+      "15",
+      "14",
+      "14",
+      "\u2026",
+      "10",
+      "10",
+      "10",
+      "\u2026",
+      "6",
+      "5",
+      "5",
+      "4"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:4-3]] pointer (\u00a78<->\u00a79)"
+}

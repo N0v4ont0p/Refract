@@ -1,0 +1,26 @@
+# §20 synthetic config: veteran / CNC / swerve / turret — fully confirmed (generation_allowed case)
+_meta: {schema: 1, fixture: true}
+team: {number: 99901, experience: veteran}
+drivetrain:
+  type: {value: swerve, source: asked, confirmed: true}
+  module_count: {value: 4, source: asked, confirmed: true}
+  module_source: {value: custom_fabricated, source: asked, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 1, source: inferred, confirmed: true}
+sensing:
+  vision: {value: limelight_3a, source: inferred, confirmed: true}
+  odometry: {value: goBILDA_pinpoint, source: inferred, confirmed: true}
+software_stack:
+  pathing: {value: pedro_pathing, source: inferred, confirmed: true}
+  opmode_style: {value: ftclib_command_based, source: asked, confirmed: true}
+fabrication:
+  capability: {value: cnc_aluminum_or_carbon, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  shooter: {value: flywheel, source: asked, confirmed: true}
+  turret: {value: single_axis, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: asked, confirmed: true}
+archetypes: [fixed_shooter_on_swerve]

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "name": "mutable-static-root-cause",
+      "passed": true,
+      "evidence": "identified it precisely, even noted 'line 12 re-sets it every run but dangerous pattern regardless' + caught open-loop battery-sag angle"
+    },
+    {
+      "name": "not-blamed-on-hardware",
+      "passed": true,
+      "evidence": "'swapping the motor was never going to fix this'"
+    },
+    {
+      "name": "finding-is-authoritative",
+      "passed": false,
+      "evidence": "concrete but reached by reading, not tied to the deterministic tier / taxonomy \u2014 no script/corpus grounding"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  }
+}

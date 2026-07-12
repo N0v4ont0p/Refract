@@ -1,0 +1,300 @@
+# Cross-team findings — corpus-level conclusions that span multiple teams.
+# These are NOT single-team patterns; they are claims the corpus can make BECAUSE
+# independent teams converge (or diverge) on something. Each records the actual
+# reasoning, not just linked IDs (§12 diversity-of-reasoning).
+
+findings:
+  - id: orchestration-nonblocking
+    title: "Cooperative per-tick non-blocking orchestration (over blocking sleeps)"
+    confidence: medium-high
+    member_patterns:
+      - { id: 15993-A-task-framework, team: "15993", mechanism: "hand-rolled Task state-machine + Serial/Parallel combinators + TaskBuilder DSL", platform: FTC }
+      - { id: 18742-C-iaction-actionrunner, team: "18742", mechanism: "IAction/ActionRunner cooperative queue routed through an EventBus", platform: FTC }
+      - { id: 3543-A-trcautotask, team: "3543", mechanism: "TrcAutoTask<State> library class over TrcStateMachine + TrcTaskMgr", platform: "cross-platform (FTC + FRC)" }
+    claim: >
+      Three INDEPENDENTLY-DERIVED non-blocking-orchestration mechanisms converge on
+      the same principle: drive autonomous/teleop sequencing with cooperative
+      per-tick step-functions (start/update/isEnd polled from an external loop),
+      never blocking sleeps. The three implementations share no code, no template,
+      and no library (all FTCLib-free; TRC is Titan's own) — genuine diversity of
+      reasoning, not one design in three coats.
+    why_the_confidence_rests_on_the_third_leg: >
+      TWO of the three legs (15993, 18742) arise in FTC, where the stock LinearOpMode
+      loop model NUDGES every FTC team toward exactly this cooperative per-tick shape.
+      So FTC-to-FTC convergence, on its own, is partly explained away by that
+      platform-forcing pressure — it is weak evidence that the design is good rather
+      than merely default. The THIRD leg, 3543's TrcAutoTask, is designed
+      CROSS-PLATFORM (it also runs on FRC, where the LinearOpMode nudge does NOT
+      exist — TrcTaskMgr is the shared scheduler, FtcOpMode is only the FTC bridge).
+      Convergence from a context where the platform-forcing explanation does NOT
+      apply is a DIFFERENT KIND of evidence: it rules out "the platform just forced
+      convergence" as the full explanation. The corpus's confidence in the principle
+      rests specifically on that third leg — remove it and this drops back to
+      platform-discounted FTC-only convergence.
+    tag_scope: >
+      medium-high is on THIS cross-team PRINCIPLE. Each member's standalone code stays
+      single-source (its own team/lineage). Do not read the convergence as validating
+      any one implementation's specific wiring.
+    upgrade_condition: >
+      Reserve "high" for an additional independent leg that is ALSO not platform-forced
+      (e.g. another cross-platform framework, or a from-scratch FTC team that visibly
+      reasoned to it against the grain), further ruling out environmental convergence.
+    divergence_note: >
+      Contrast the "sensing-modality" (15993-L / 22105 / 19043) finding, where teams DIVERGE
+      across modalities — there, cross-team spread confirms a real tradeoff EXISTS but does not
+      corroborate one answer. Here, by contrast, they genuinely CONVERGE on one principle, which
+      is why this earns a confidence tag rather than a "tradeoff exists" note. (NOTE: the
+      shooter-empirical-vs-physics finding was ALSO once cited here as a divergence example, on
+      the belief 24089 was a physics counterexample; source re-check found 24089 empirical too,
+      so that finding is now itself a CONVERGENCE — see its corrected_from_counterexample.)
+
+  - id: shooter-empirical-vs-physics
+    title: "Empirical distance->power for FTC shooters (with a preset alternative and an orthogonal moving-shot axis)"
+    confidence: high
+    finding_type: convergence-on-empirical-power-solve
+    confidence_revision:
+      # Session 1: revised medium-high -> HIGH after the 24089 leg was re-verified at source.
+      from: medium-high
+      to: high
+      why_not_leg_count: >
+        The upgrade is NOT "more legs -> more confident" (this finding explicitly warns against
+        that in discount_prediction). It rests on WHAT the source re-check found.
+      basis:
+        - >
+          The would-be COUNTEREXAMPLE confirmed the pattern. 24089 was believed (twice) to be a
+          physics holdout. Re-verified at Turret.java:148, its fielded distance->power core is an
+          empirical LINEAR REGRESSION (24089-A) — a FOURTH independent empirical implementation,
+          not a holdout. The one team that might have contradicted the pattern, once actually
+          checked against fielded code, sits on the empirical side too.
+        - >
+          A PHYSICS-CAPABLE team still chose empirical for the power solve. 24089 demonstrably
+          CAN do physics — it fields a competent moving-shot lead layer (24089-B: velocity
+          decomposition, cross-product-signed lead). Yet its reachability/power mapping is still
+          an empirical linear regression, and its gravity-ballistics attempt (proj_motion.py) was
+          abandoned/broken. "Team that could have done physics but didn't, for the power solve"
+          PARTIALLY defeats the domain-forcing discount — structurally the same move as 3543's
+          cross-platform leg defeating the platform-forcing discount in orchestration-nonblocking.
+        - >
+          Gravity-ballistics for the power solve was independently BUILT and never fielded THREE
+          times (15993 Alfa.kt — built then removed; 24089 proj_motion.py — broken offline prelim;
+          12808 ProjectileMathWithDrag — a CORRECT drag-aware solver, g=386.0885, real air density,
+          a confidence gate, whose wrapper ShooterMath is never even constructed). Three independent
+          teams built the physics power solve and none shipped it.
+        - >
+          12808 SHARPENS the discount-narrowing (this is the precise mechanism, not a vibe): each
+          additional team that builds a CORRECT ballistics solver and still ships empirical does NOT
+          weaken the domain-forcing discount in general — it narrows it SPECIFICALLY toward
+          Magnus/backspin/wheel-compliance SLIP as the actual hard part. 12808 is the sharpest such
+          instance yet: they modeled aerodynamic DRAG correctly (right gravity, real air density, a
+          confidence gate) and STILL shelved it for tables — which points the finger at the effects a
+          drag model does NOT capture (spin/slip/variance), not at ballistics being intractable wholesale.
+      residual_caveat: >
+        Held at the LOWER EDGE of high, not maximal — but the residual is now SHARPER, not just
+        smaller. 12808 built a correct DRAG solver and shelved it, so the discount no longer plausibly
+        means "ballistics is intractable" in general; it means the UN-INSTRUMENTED effects
+        (Magnus/backspin/wheel-compliance slip, ball variance) are the specific hard part. Full defeat
+        (an unambiguous high) would still need a team that instrumented THOSE effects — not just drag —
+        and STILL chose empirical. No mined team has done that; 12808's shelving of a drag-only model
+        could itself be that constraint biting (drag alone was not enough).
+    member_patterns:
+      - { id: 15993-J-shooter-curve-fit-evolution, team: "15993", stance: "empirical (built lookup+physics/Alfa.kt, abandoned BOTH for a fitted logistic curve)" }
+      - { id: 19043-G-shooter-empirical-table, team: "19043", stance: "empirical (built a FULL physics solver — gravity + moving-shot + spin — then abandoned it for a 2-axis lookup table)" }
+      - { id: 22105-B-shooter-empirical-lut, team: "22105", stance: "empirical (distance→velocity lookup table + interpolation + dedicated aiming tuners)" }
+      - { id: 24089-A-shooter-empirical-linear-regression, team: "24089", stance: "empirical (class NAMED ProjectileMotion, but the fielded distance->power core is a live-tuned LINEAR REGRESSION; integrated & 'working'). FOURTH empirical leg — see corrected_from_counterexample below." }
+      - { id: 12808-A-shooter-empirical-bilinear-fielded, team: "12808", stance: "empirical (fielded 3x3 bilinear-interpolation tables + gradient feedforward + Lambert SOTM lead; BUILT a CORRECT drag-aware solver — ProjectileMathWithDrag, g=386.0885 — and shelved it, wrapper never constructed). FIFTH empirical leg; sharpest physics-capable-chose-empirical instance." }
+      - { id: 15083-A-shooter-empirical-lut-sotm, team: "15083", stance: "empirical (three coupled InterpLUTs — velocity/hood/TIME — + iterative empirical-time SOTM + BANG-BANG flywheel control + turret hysteresis). SIXTH empirical leg; InterpLUT primitive is SolversLib, the calibration approach/data is the team's own." }
+      - { id: 16093-D-shooter-preset, team: "16093", stance: "THIRD STANCE — fixed-preset bet (no continuous distance-aiming model at all); see third_stance below" }
+    claim: >
+      SIX teams independently field EMPIRICAL distance->power mappings (15993 logistic fit,
+      19043 2-axis table, 22105 distance->velocity LUT, 24089 live-tuned linear regression,
+      12808 bilinear-interpolation grid, 15083 three-coupled-LUTs) — six visibly different executions,
+      no shared code lineage (15083's InterpLUT is a SolversLib util, but the calibration approach + data
+      are its own). Gravity-ballistics for the power solve was independently BUILT and never fielded THREE
+      times (15993's Alfa.kt, built then removed; 24089's proj_motion.py, broken offline prelim; 12808's
+      ProjectileMathWithDrag, a CORRECT drag solver whose wrapper is never constructed). The corpus's
+      lean toward empirical distance->power for FTC shooters is well-supported — strengthened both
+      because the one team that looked like a physics counterexample turned out to confirm the pattern
+      (24089), and because the team with the most correct ballistics model still shipped tables (12808),
+      which sharpens the remaining doubt onto spin/slip/variance specifically rather than ballistics broadly.
+    the_mechanism: >
+      WHY (this is what should travel with the finding, not just the outcome): a physics model's
+      real-world accuracy for an FTC shooter is capped by effects that are hard to INSTRUMENT
+      in-season — Magnus/backspin, wheel-compliance SLIP (the ball slips against compliant
+      flywheel wheels, so exit velocity != wheel surface speed), and ball manufacturing variance.
+      An empirical fit's error is instead bounded by CALIBRATION COVERAGE (how many distance
+      points you tuned), not by model fidelity. So the real decision for a team is: can you
+      actually instrument/measure backspin/slip/variance for a gravity-ballistics POWER solve,
+      or is your accuracy better served by dense empirical calibration? CORRECTION (source
+      re-check): do NOT attribute the "instrument-the-physics-power" path to 24089 — it was
+      previously mislabeled as such. NO mined team shipped a gravity-ballistics power solve; all
+      four went empirical for power. 24089's real physics is on a DIFFERENT axis (moving-shot
+      lead, see moving_shot_lead_layer), not the power solve. Weigh the physics-power option
+      against your OWN capacity to instrument those effects — but note the corpus has zero
+      fielded examples of anyone doing it, and THREE built-but-unfielded attempts (15993 Alfa.kt,
+      24089 proj_motion.py, 12808 ProjectileMathWithDrag — the last a CORRECT drag solver).
+    domain_forcing_discount: >
+      The discount (analogous to the LinearOpMode discount on orchestration-nonblocking): because
+      FTC shooter ballistics is genuinely under-modelable, empirical convergence MAY partly be
+      co-discovery of the SAME environmental constraint rather than independent inventions.
+      Convergence-via-shared-constraint is weaker than convergence-via-independent-insight. This
+      is now PARTIALLY DEFEATED and, more importantly, NARROWED (see confidence_revision): 24089 and
+      12808 are both physics-capable teams that still fielded empirical power — and 12808 built a
+      CORRECT drag model and shelved it, which relocates the discount from "ballistics is intractable"
+      to "the un-instrumented effects (Magnus/spin/slip/variance) are the hard part." Partial, not
+      full — hence high at its lower edge, not maximal.
+    discount_prediction: >
+      Do NOT revisit confidence on LEG COUNT alone (now 6 empirical: 15993, 19043, 22105, 24089, 12808,
+      15083). The discount makes a testable PREDICTION: independent responses to a shared constraint
+      should keep looking DIFFERENT IN EXECUTION even as more teams appear — and 15993 (fitted logistic
+      curve, after abandoning both a table and physics), 19043 (2-axis table conditioned on actual
+      flywheel velocity, after abandoning a full spin-modeling solver), 22105 (distance→velocity
+      table + calibration tuners), 24089 (live-tuned 2-parameter linear regression), 12808
+      (3x3 bilinear grid + gradient feedforward + Lambert SOTM lead), and 15083 (three coupled LUTs +
+      iterative empirical-time SOTM + bang-bang) are SIX VISIBLY DIFFERENT empirical strategies, not
+      convergent copies. That the executions stay diverse is the discount's OWN prediction holding. The
+      actual signal to REVISIT would be a future leg that looks like a COPY of one of these six
+      specifically (shared code/structure), not another independent empirical strategy and not leg count.
+    corrected_from_counterexample: >
+      RECORD CORRECTION (do not silently overwrite — the path matters). 24089 was TWICE recorded
+      as a physics COUNTEREXAMPLE: first "physics-KEPT (proj_motion.py) — proof physics works",
+      then reframed to "physics attempted then abandoned." BOTH restated a prior conclusion without
+      re-running the check against FIELDED code. Source re-verification (Turret.java:148, where
+      ProjectileMotion.calculate is called live in the loop, driving flywheel/hood/azimuth) found:
+      24089's fielded distance->power core is an EMPIRICAL LINEAR REGRESSION (24089-A), integrated
+      and iterated to "working" — NOT a gravity-ballistics solve. The gravity-ballistics attempt
+      (proj_motion.py) was a broken, unintegrated OFFLINE prelim (referenced nowhere; solver
+      divides by an empty tuple) — genuinely abandoned, correctly so this time (24089-C). So 24089
+      is NOT a counterexample; it is the FOURTH empirical leg. The would-be counterexample, checked
+      at source, confirmed the pattern — which is WHY this finding was revised UP, not down.
+    moving_shot_lead_layer: >
+      PROMOTED to its own finding — see `moving-shot-compensation` below. (Stale claim CORRECTED:
+      this note formerly said "24089 is the ONLY mined team" that fields shoot-on-the-move lead. That
+      became false once 12808 (Lambert time-of-flight) and 15083 (iterative empirical-time projection)
+      were mined — three teams, three distinct methods.) The SOTM axis is deliberately NOT filed on the
+      empirical-vs-physics power-solve axis; it is orthogonal, which is exactly why it earns a separate
+      finding rather than a sub-note here. 24089-B remains the evidence that 24089 is "physics-capable"
+      for the power-solve discount argument above; its SOTM method is now one of three legs there.
+    feasibility_artifact: >
+      A CORPUS-BUILT correct gravity-ballistics solver exists (ftc-hardware-lookup/scripts/
+      trajectory_solver.py + references/physics/decode-artifact-ballistics.json, gravity corrected
+      to 386.4 in/s^2 and read from the JSON, verified by running it). Its tag is UNCHANGED and now
+      MORE clearly justified: it supports ONLY "gravity-ballistics is computationally TRACTABLE —
+      here is a correct implementation." It is explicitly NOT evidence of any team's fielded
+      results — NONE of the three teams that built a ballistics solver fielded it for power (24089
+      empirical; 15993 built-then-removed; 12808 built a correct drag solver but never constructs its
+      wrapper). Carry that NOT-clause wherever the artifact is cited; its existence must never quietly
+      read as if a team shipped physics-based power. (12808's ProjectileMathWithDrag is, incidentally,
+      independent corroboration that the physics is tractable — it too gets gravity right, 386.0885.)
+    third_stance: >
+      A THIRD option beyond empirical-vs-physics (16093-D): DELIBERATE FIXED PRESETS — a small
+      set of {velocity, hood-angle} pairs keyed by named states, no distance→velocity function
+      at all. This is a BET, not an omission (presets paired with matching hood angles + onboard
+      velocity-PIDF hold = engineered for repeatability). CONDITION for it to be the right call:
+      the team's firing spots are FEW AND PREDICTABLE enough that a continuous model's tuning
+      cost isn't worth what it buys — defensible for staged auto positions / a few teleop shoot
+      zones, does NOT generalize to free-roam shooting where distance varies continuously. So the
+      full decision tree for a future team is: (1) are your firing spots few/fixed? → presets
+      (cheapest). (2) If distance varies continuously: can you instrument backspin/slip/variance
+      for a gravity-ballistics power solve? → physics (NOTE: zero mined teams shipped this; THREE
+      built it and shelved it — 15993/24089/12808, the last a CORRECT drag model — treat as
+      unproven-in-corpus). If not → empirical calibration (15993/19043/22105/24089/12808, the
+      well-attested path). NOTE (fork evolution):
+      16093's OWN Premier fork later moved beyond presets toward live vision-closed-loop bearing
+      tracking — see 16093-D fork_supplement — i.e. the same lineage outgrew the preset bet as its
+      aiming needs expanded, which is itself evidence the condition above is real.
+
+  - id: moving-shot-compensation
+    title: "Shoot-on-the-move lead compensation — a real capability tier with an OPEN method space"
+    confidence: medium
+    finding_type: capability-with-open-design-space   # descriptive, NOT a single-answer convergence
+    member_patterns:
+      - { id: 24089-B-moving-shot-lead-compensation, team: "24089", method: "PHYSICS velocity decomposition — normal/tangential split, saturating tangential-lead term, cross-product angular-momentum sign, RPM lead by closing-range component", platform: FTC }
+      - { id: 15993-J-shooter-curve-fit-evolution, team: "15993", method: "(NO SOTM — noted for contrast: 15993 does odometry-pose targeting but no moving-shot lead; a capable team that DIDN'T field SOTM, which matters for the discount)", platform: FTC, is_member: false }
+      - { id: 12808-A-shooter-empirical-bilinear-fielded, team: "12808", method: "LAMBERT closed-form time-of-flight lead (timeTravelDevice) + gradient feedforward on the interpolation surface", platform: FTC }
+      - { id: 15083-A-shooter-empirical-lut-sotm, team: "15083", method: "ITERATIVE empirical-time projection — 5 iterations of v*t + 0.5*a*t^2 with t from an empirical time-of-flight LUT, plus angularVelocity*t turret offset", platform: FTC }
+    claim: >
+      THREE independent teams (24089, 12808, 15083) field shoot-on-the-move LEAD compensation as a real
+      fielded capability — and they do it by THREE genuinely DISTINCT formulations: physics velocity-
+      decomposition, closed-form Lambert time-of-flight, and iterative empirical-time projection. No two
+      share code or approach. The finding is therefore descriptive, not prescriptive: SOTM is a real
+      capability tier that strong teams reach, and its method space is OPEN — at least three viable,
+      non-dominant points — NOT "here is the way to do SOTM."
+    confidence_reasoning:
+      # Assessed independently (NOT inherited from shooter-empirical-vs-physics by proximity),
+      # walking the same domain-forcing test used on orchestration and shooter.
+      what_is_plausibly_forced: >
+        That a robot shooting at a fixed goal WHILE MOVING needs SOME lead correction is physics-forced
+        and unsurprising — any team that decides to shoot-on-the-move MUST add some lead, or it misses.
+        So "3 teams do SOTM" on its own is WEAK evidence (the same shape as the LinearOpMode discount on
+        orchestration): the requirement, not independent insight, explains the mere presence. Discount it.
+      what_is_NOT_forced_and_is_the_real_evidence: >
+        The three methods stay genuinely DISTINCT — decomposition vs closed-form-time-of-flight vs
+        iterative-projection — rather than converging toward one dominant approach. The problem forces
+        "do some lead"; it does NOT force three different mathematical formulations. If one approach were
+        clearly best/standard, teams would cluster on it. That they don't is evidence the design space is
+        genuinely open (no dominant solution) AND that each team reasoned to its own — the diversity-of-
+        reasoning signal. The confidence rests on THIS (method-divergence), not on the leg count.
+      why_medium_and_not_higher: >
+        Two honest brakes keep it at medium, not medium-high. (1) NO discount-defeating leg: all three
+        are FTC, none is cross-platform or otherwise from a context where the "you must lead a moving
+        shot" force is absent — nothing plays the role 3543's cross-platform TrcAutoTask plays for
+        orchestration. (2) A counter-discount on the divergence itself: each team's SOTM is bolted onto
+        its OWN different shooter base (24089 empirical-linear + physics lead; 12808 bilinear + Lambert;
+        15083 LUT + empirical-time), so the method-divergence may partly reflect three different stacks
+        rather than three independent insights into SOTM specifically. That makes the claim descriptive
+        ("capability real, space open") rather than prescriptive — a medium-grade claim, like
+        sensing-modality, not a high-grade one like shooter-empirical-vs-physics.
+      why_not_lower: >
+        Above low/single-source because the capability's REALITY is well-attested: three independent
+        top teams, no shared lineage, three fielded implementations — not one team's idea seen once.
+      contrast_leg_note: >
+        15993 is listed with is_member:false as a deliberate CONTRAST, not a leg: a capable team that
+        fielded a variable-distance shooter but did NOT add moving-shot lead (odometry-pose targeting
+        from a stopped/settled pose). It shows SOTM is a CHOICE some strong teams decline — which is
+        part of why this is a "capability tier some teams reach," not a universal requirement.
+    upgrade_condition: >
+      Reserve medium-high for either (a) a cross-platform / non-FTC leg that fields SOTM lead (defeating
+      the "must-lead-a-moving-shot" force the way orchestration's third leg does), or (b) clear evidence
+      the three methods were reasoned to INDEPENDENTLY of their host shooter stacks (ruling out the
+      counter-discount). A fourth FTC team with yet another distinct method strengthens "open space" but
+      does not by itself move the tier (same no-leg-count rule as the shooter finding).
+    revisit_signal: >
+      REVISIT DOWN if a future SOTM leg turns out to be a COPY of one of these three (shared code, e.g.
+      everyone adopting one library's SOTM helper) — that would collapse the method-divergence the
+      confidence rests on. Apply the §12 shared-library import gate here too: a shared SOTM util would be
+      shared-ancestry, not a fourth independent method.
+
+  - id: sensing-modality
+    title: "Game-piece sensing modality is driven by the information NEED, not just robustness"
+    finding_type: design-principle
+    confidence: medium
+    demonstrated_by:
+      - { id: 19043-J-balldetection-field-position, team: "19043", question_answered: "WHERE on the field (presence + 2D position)", modality: "Limelight neural-net detector" }
+      - { id: 19043-K-analog-held-color, team: "19043", question_answered: "WHAT COLOR am I holding (presence + type)", modality: "analog light sensor" }
+      - { id: 15993-L-breakbeam-intake, team: "15993", question_answered: "IS one in the mechanism now (presence only)", modality: "2x digital break-beam" }
+      - { id: 22105-D-batch-color-sensor, team: "22105", question_answered: "WHICH COLOR in each of the 3 spindexer slots (presence + type, PER-SLOT)", modality: "3x REV Color Sensor V3, I2C batch-read" }
+      - { id: 12808-C-multimodal-sensing, team: "12808", question_answered: "IS one intaken (presence) / WHAT COLOR+WHERE are field artifacts / WHERE am I + WHAT MOTIF (localization)", modality: "digital device+debounce (presence) + OpenCV colour-blob (colour+position) + Limelight AprilTag (localization+motif) — three modalities, three questions" }
+      - { id: 15083-C-sensing-limelight-plus-color-array, team: "15083", question_answered: "WHERE am I (localization) + WHAT TYPE is the held ball (colour, green-vs-other)", modality: "Limelight (localization) + multi-channel intake colour-sensor array (getSense3, drives hood selection + LED indicator)" }
+    claim: >
+      The choice of game-piece SENSOR is driven by which QUESTION a team needs answered, NOT
+      merely by which sensor is "more robust." Fully demonstrated WITHIN 19043 alone (Limelight for
+      field-POSITION + analog light sensor for held-COLOR), and reinforced by 12808, which fields
+      TWO vision backends AT ONCE — colour-blob (artifact colour+position) AND Limelight-AprilTag
+      (localization+motif) — not as redundancy but because they answer DIFFERENT questions. A team
+      should pick modality by information-need first.
+    modality_question_map:
+      presence_only: "digital break-beam / debounced digital device (cheap, proximal)"
+      presence_plus_type: "color / analog-light sensor"
+      presence_plus_position: "vision detector (colour-blob / Limelight / AprilTag)"
+      localization_plus_motif: "AprilTag pipeline (Limelight) — a DIFFERENT question from artifact-id"
+    twobackend_texture: >
+      12808's TWO fielded vision backends (DecodeBlobCamera + DecodeLimelight, both imported by
+      Robot.java) coexist by QUESTION, not by robustness — the sharpest confirmation of the core claim.
+      HONEST GAP: a THIRD backend, DecodeHuskyLens, was built and abandoned (never instantiated), but
+      the REASON is NOT documented in commits/comments — per Rule 7, NO cost/latency/reliability
+      rationale is attributed (that would be invention). Recorded as: built, unfielded, reason unknown.
+    open_legs: >
+      Structurally OPEN — do not pre-write. 22105 (per-slot colour) and 12808 (multi-modal breadth)
+      legs are FILLED. 24089's sensing, when placed, goes by the QUESTION its sensor answers, not
+      assumed. The principle is established within 19043 + 15993-L and does not depend on any one leg;
+      cross-team BREADTH keeps growing (now 5 teams: 19043, 15993, 22105, 12808, 15083).

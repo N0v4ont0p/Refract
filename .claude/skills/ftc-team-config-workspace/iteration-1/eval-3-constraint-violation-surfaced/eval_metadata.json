@@ -1,0 +1,15 @@
+{
+  "eval_id": 3,
+  "eval_name": "constraint-violation-surfaced",
+  "prompt": "set us up for the fixed-shooter-on-swerve archetype \u2014 we run mecanum with roadrunner. team 99903.",
+  "assertions": [
+    {
+      "name": "constraint-fires-and-surfaces",
+      "text": "The fixed_shooter_on_swerve-requires-swerve constraint violation is explicitly surfaced (via validate_config.py or the season extension's constraints_on_core), not smoothed over or silently 'fixed'"
+    },
+    {
+      "name": "no-incoherent-config-shipped",
+      "text": "No config is written/confirmed as valid with the contradiction intact, and no code is generated; the user is asked which side to change (drivetrain or archetype)"
+    }
+  ]
+}

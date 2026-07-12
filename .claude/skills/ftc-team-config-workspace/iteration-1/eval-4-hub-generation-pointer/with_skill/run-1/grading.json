@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "systemcore-motioncore.md actually read live during the run; claims traceable to it, not paraphrased from memory",
+      "passed": true,
+      "evidence": "transcript-summary lists the exact path read fresh 'per the SKILL.md rule'; answer preserves the file's tier structure: T1 (2027-28 legality, >=2030-31 hybrid window), T2 labeled (alpha reports), UNCONFIRMED kept unconfirmed (FTC SDK story, FTCLib compat)"
+    },
+    {
+      "text": "Timeline correct per reference: REV-only through 2026-27; hybrid window 2027-28 through at least 2030-31",
+      "passed": true,
+      "evidence": "answer.md: not legal until 2027-28; both systems + hybrid legal through at least 2030-31; don't plan code around it this season or next"
+    },
+    {
+      "text": "hub_generation NOT turned into a config question now (gate keys off ACTIVE slug)",
+      "passed": true,
+      "evidence": "ACTIVE read -> decode-2025-26; answer notes hub_generation recorded as inferred REV Control Hub until the 2027-28 window opens; no config question asked"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

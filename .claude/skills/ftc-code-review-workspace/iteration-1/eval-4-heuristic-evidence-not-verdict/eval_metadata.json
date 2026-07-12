@@ -1,0 +1,19 @@
+{
+  "eval_id": 4,
+  "eval_name": "heuristic-evidence-not-verdict",
+  "prompt": "what do you think of the structure of MainTeleOp.java? is it well organized?",
+  "assertions": [
+    {
+      "name": "smell-shown-with-evidence",
+      "text": "The god-class / missing-subsystem-separation concern is shown with the actual code as evidence (length, inline hardwareMap, all logic in runOpMode), not asserted as a bare 'this is bad' verdict"
+    },
+    {
+      "name": "explains-why-for-rookie",
+      "text": "Given experience:rookie, explains WHY the structure is a concern (maintainability, testability), rather than softening or omitting it"
+    },
+    {
+      "name": "config-aware-no-turret",
+      "text": "Does not recommend adding turret/other undeclared-mechanism structure (config declares those none)"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "source": "team 24089 (Iron Lions) proj_motion.py — an OFFLINE pygame projectile-motion model of the DECODE artifact",
+    "purpose": "Physics/ballistics constants feeding a deterministic trajectory + launch-angle solver (§9). Extracted per Phase-1: constants -> structured data, NOT reproduced as a code pattern.",
+    "corrections": [
+      {
+        "constant": "gravity_in_s2",
+        "source_value": 385.0,
+        "source_ref": "24089 proj_motion.py:20 (g = 385.0)",
+        "corrected_value": 386.4,
+        "why": "Standard gravity is ~386.4 in/s^2 (32.2 ft/s^2 x 12; precise 386.088 = 9.80665 m/s^2). Corrected AT SOURCE per Phase-1 — the solver (scripts/trajectory_solver.py) consumes THIS value, not 385."
+      }
+    ],
+    "caveats_from_source": [
+      "24089's own launch-angle solver (proj_motion.py:39) is broken WIP: `1/math.atan((-d + math.sqrt(d**2 - 768*(d)/()))/())` — reciprocal-of-atan + division-by-empty-tuple (a real syntax/runtime error). NOT reproduced; replaced by a correct closed-form solver in trajectory_solver.py.",
+      "Ball modeled as a HOLLOW 5-inch ball with drag reduced for holes (Cd=0.3, effective area x0.7). These are 24089's modeling choices, carried as-is (their values, not independently verified)."
+    ]
+  },
+  "gravity_in_s2": 386.4,
+  "ball": { "diameter_in": 5.0, "mass_slug": 0.00512, "mass_note": "75 g = 0.00512 slugs (24089's value)" },
+  "air": { "density_slug_in3": 0.00000237 },
+  "drag": { "Cd": 0.3, "Cd_note": "reduced due to holes", "effective_area_factor": 0.7, "effective_area_note": "A = factor * pi * (D/2)^2" },
+  "sim": { "dt_s": 0.01 }
+}

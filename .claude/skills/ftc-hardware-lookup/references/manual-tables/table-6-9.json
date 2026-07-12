@@ -1,0 +1,36 @@
+{
+  "table_id": "6-9",
+  "caption": "Design Award Criteria Design Award Criteria Required 1 A team must be able to de",
+  "rows": [
+    [
+      "Design Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "A team must be able to describe or demonstrate how their ROBOT is elegant, efficient (simple/executable), and practical to maintain."
+    ],
+    [
+      "Required",
+      "2",
+      "The entire machine design, or the detailed process used to develop the design, is worthy of this recognition, and not just a single COMPONENT."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "The ROBOT distinguishes itself from others by its aesthetic and functional design."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "The basis for the design is well considered (that is inspiration, function, etc.)."
+    ],
+    [
+      "Encouraged",
+      "5",
+      "Design is effective and consistent with the team\u2019s game plan and/or strategy."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-9]] pointer (\u00a78<->\u00a79)"
+}

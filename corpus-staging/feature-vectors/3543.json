@@ -1,0 +1,90 @@
+{
+  "team": "3543",
+  "extracted_by": "extract_feature_vector.py (deterministic, no model)",
+  "language": "java",
+  "language_file_counts": {
+    "java": 16,
+    "kotlin": 0
+  },
+  "drivetrain": {
+    "type": {
+      "value": [
+        "mecanum",
+        "swerve"
+      ],
+      "evidence": {
+        "mecanum": [
+          "TeamCode/src/main/java/teamcode/RobotParams.java:199"
+        ],
+        "swerve": [
+          "TeamCode/src/main/java/teamcode/FtcTest.java:478",
+          "TeamCode/src/main/java/teamcode/FtcTeleOp.java:810",
+          "TeamCode/src/main/java/teamcode/FtcTeleOp.java:814"
+        ]
+      },
+      "note": "multiple detected \u2014 human to disambiguate primary"
+    },
+    "mecanum_wheel_source": {
+      "value": "unknown",
+      "evidence": [],
+      "note": "BOM/CAD not in code"
+    },
+    "wheel_diameter_mm": "unknown",
+    "wheel_durometer": "unknown"
+  },
+  "control_hardware": {
+    "hub_generation": {
+      "value": "REV_Control_Hub",
+      "evidence": [
+        "TeamCode/src/main/java/teamcode/FtcTest.java:27",
+        "TeamCode/src/main/java/teamcode/FtcAuto.java:27",
+        "TeamCode/src/main/java/teamcode/FtcTeleOp.java:25"
+      ],
+      "note": "FTC SDK usage present; REV is the sole legal option this season"
+    },
+    "expansion_hub_count": {
+      "value": "unknown",
+      "note": "not reliably recoverable from code"
+    }
+  },
+  "sensing": {
+    "vision": {
+      "value": "limelight_3a",
+      "evidence": [
+        "TeamCode/src/main/java/teamcode/FtcTest.java:227",
+        "TeamCode/src/main/java/teamcode/FtcTest.java:575",
+        "TeamCode/src/main/java/teamcode/FtcTeleOp.java:150"
+      ]
+    },
+    "odometry": {
+      "value": "goBILDA_pinpoint",
+      "evidence": [
+        "TeamCode/src/main/java/teamcode/subsystems/DriveBase.java:32",
+        "TeamCode/src/main/java/teamcode/subsystems/DriveBase.java:119",
+        "TeamCode/src/main/java/teamcode/subsystems/DriveBase.java:120"
+      ]
+    }
+  },
+  "software_stack": {
+    "pathing": {
+      "value": "unknown",
+      "evidence": []
+    },
+    "opmode_style": {
+      "value": "unknown",
+      "evidence": []
+    }
+  },
+  "fabrication": {
+    "capability": {
+      "value": "unknown",
+      "note": "not recoverable from code \u2014 needs BOM/CAD/human"
+    }
+  },
+  "team_context": {
+    "experience": {
+      "value": "unknown",
+      "note": "not recoverable from code"
+    }
+  }
+}

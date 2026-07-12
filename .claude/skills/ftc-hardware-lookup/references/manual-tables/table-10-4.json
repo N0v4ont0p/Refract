@@ -1,0 +1,44 @@
+{
+  "table_id": "10-4",
+  "caption": "Rule violations",
+  "rows": [
+    [
+      "Penalty",
+      "Description"
+    ],
+    [
+      "MINOR FOUL",
+      "a credit of 5 points towards the opponent\u2019s MATCH point total"
+    ],
+    [
+      "MAJOR FOUL",
+      "a credit of 15 points towards the opponent\u2019s MATCH point total"
+    ],
+    [
+      "YELLOW CARD",
+      "a warning issued by the Head REFEREE for egregious ROBOT or team member behavior or rule violations . A subsequent YELLOW CARD within the same tournament phase results in a RED CARD"
+    ],
+    [
+      "RED CARD",
+      "a penalty issued by the Head REFEREE for egregious ROBOT or team member behavior or rule violations which results in a team being DISQUALIFIED for the MATCH."
+    ],
+    [
+      "DISABLED",
+      "The REFEREE instructs the team to stop the ROBOT which will deactivate all outputs, rendering the ROBOT inoperable for the remainder of the MATCH ."
+    ],
+    [
+      "DISQUALIFIED",
+      "the state of a team in which they receive 0 MATCH points and 0 RANKING POINTS in a Qualification MATCH or causes their ALLIANCE to receive 0 MATCH points in a Playoff MATCH ."
+    ],
+    [
+      "VERBAL WARNING",
+      "a warning issued by event staff or the Head REFEREE"
+    ],
+    [
+      "ALLIANCE is ineligible for RP",
+      "An ALLIANCE is ineligible for the specified RP for that MATCH. This overrides any RP awarded through normal MATCH play or other rule violations."
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-4]] pointer (\u00a78<->\u00a79)"
+}

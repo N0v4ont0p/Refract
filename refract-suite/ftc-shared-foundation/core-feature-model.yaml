@@ -1,0 +1,71 @@
+# =============================================================================
+# core-feature-model.yaml  —  SEASON-INVARIANT feature model
+# =============================================================================
+# This file is written ONCE. It is touched again only if the underlying FTC
+# hardware/software ecosystem itself changes (e.g. the eventual
+# SystemCore/MotionCore transition) — NEVER because a new game was announced.
+# Anything game-specific belongs in season-extensions/<slug>.yaml, not here.
+#
+# Modeled as a feature model in the formal (FODA) sense — Kang et al., 1990,
+# "Feature-Oriented Domain Analysis" — with mandatory / optional / alternative
+# axes and cross-axis constraints: software product-line variability discipline
+# applied to a family of related robots.
+#
+# LEGEND (how to read the axes below):
+#   [a, b, c]        alternative domain — choose exactly ONE value unless the
+#                    axis is explicitly marked multi-select.
+#   number           a numeric value supplied per team (units in the key name).
+#   optional         the value may legitimately be absent / unknown.
+#   # [mandatory]    a value MUST be confirmed for every team (gates downstream
+#                    logic too much to guess — see §13's always-ask set).
+#   # [conditional]  the sub-block applies only under the stated parent value.
+#
+# A filled copy of this schema = one "feature-model instance" per team (§14.2).
+# =============================================================================
+
+_meta:
+  schema_version: 1
+  model_type: FODA_feature_model            # Kang et al., 1990
+  scope: season_invariant
+  touch_policy: >
+    Edit only on an FTC ecosystem change (hardware/software platform), never on
+    a new-season announcement. New games are handled entirely in
+    season-extensions/<slug>.yaml, selected via season-extensions/ACTIVE.
+  enum_note: >
+    Value lists under `sensing` and `software_stack` track current-ecosystem
+    device/library availability. Extend a list IN PLACE as the ecosystem adds
+    options; the AXIS itself is season-invariant, only its value set evolves.
+
+drivetrain:
+  type: [mecanum, swerve, tank_differential, other_holonomic]   # [mandatory] — §13 always-ask
+  mecanum:                                    # [conditional: type == mecanum]
+    wheel_source: [goBILDA_stock, custom]
+    wheel_diameter_mm: number
+    wheel_durometer: optional   # affects tuning assumptions, not code structure
+  swerve:                                      # [conditional: type == swerve]
+    module_count: [3, 4]
+    module_source: [off_shelf, custom_fabricated]
+
+control_hardware:
+  hub_generation: [REV_Control_Hub, SystemCore_MotionCore]   # [mandatory]
+  # SystemCore/MotionCore/the A301 smart actuator are not FTC-legal until the 2027-28 season,
+  # with a hybrid-legal transition period through at least 2030-31. This axis exists now
+  # specifically so the schema doesn't need restructuring when that transition arrives.
+  expansion_hub_count: [0, 1, 2+]
+
+sensing:
+  vision: [limelight_3a, webcam_easyopencv, none]
+  odometry: [dead_wheels, goBILDA_pinpoint, otos, none]
+
+software_stack:
+  pathing: [pedro_pathing, roadrunner, custom, none]              # [mandatory] — §13 always-ask
+  opmode_style: [ftclib_command_based, raw_linear_opmode]         # [mandatory] — §13 always-ask
+
+fabrication:
+  capability: [stock_gobilda_rev, 3d_printed_custom, cnc_aluminum_or_carbon]
+  # affects tuning parameters (acceleration limits, PID gains) — never gates which code
+  # gets recommended, only which tuning values get advised. Keep this boundary sharp.
+
+team_context:
+  experience: [rookie, veteran]
+  # affects explanation depth only, never gates a recommendation

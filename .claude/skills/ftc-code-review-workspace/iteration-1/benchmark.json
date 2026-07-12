@@ -1,0 +1,337 @@
+{
+  "metadata": {
+    "skill_name": "ftc-code-review",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-07-09T12:57:36Z",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "config-mismatch-flagged",
+          "passed": true,
+          "evidence": "config_lint.py run; flagged turret:none vs TurretAimer.java as confirm-if-stale"
+        },
+        {
+          "name": "deterministic-findings-authoritative",
+          "passed": true,
+          "evidence": "both linters run, god_opmode+mutable_static+turret reported under 'deterministic tier \u2014 authoritative'"
+        },
+        {
+          "name": "config-aware",
+          "passed": true,
+          "evidence": "read team-config.yaml; reviewed against mecanum/flywheel/no-turret/rookie"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "no-inflation",
+          "passed": true,
+          "evidence": "'six teams extends SubsystemBase = one library inherited six times, not six endorsements'; refused 'elite teams converged'"
+        },
+        {
+          "name": "faithful-provenance",
+          "passed": true,
+          "evidence": "grounded in ACTUAL corpus tags: 15083-B/22105/12808-B/16093/3543 shared-ancestry via \u00a712 import gate, stored confidence repeated"
+        },
+        {
+          "name": "does-not-mint-provenance-inline",
+          "passed": true,
+          "evidence": "routed the config-vs-code mismatch to ftc-team-config; did not invent a rating"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "mutable-static-root-cause",
+          "passed": true,
+          "evidence": "identified flywheelOffset static as prime suspect via failure_mode_lint, WITH the honest reset caveat ('unconditionally reset before first read is safe')"
+        },
+        {
+          "name": "not-blamed-on-hardware",
+          "passed": true,
+          "evidence": "'it's the code, not the motor'; swapping motor won't fix"
+        },
+        {
+          "name": "finding-is-authoritative",
+          "passed": true,
+          "evidence": "framed as deterministic finding tied to known-failure-modes.md (12808 cross-opmode persistence case)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "smell-shown-with-evidence",
+          "passed": true,
+          "evidence": "quoted offending lines, stated verdict only after evidence; god_opmode from linter"
+        },
+        {
+          "name": "explains-why-for-rookie",
+          "passed": true,
+          "evidence": "defined hardwareMap.get, God OpMode, static lifetime; explained why without softening"
+        },
+        {
+          "name": "config-aware-no-turret",
+          "passed": true,
+          "evidence": "flagged TurretAimer as stale vs turret:none; recommended no undeclared mechanisms"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "config-mismatch-flagged",
+          "passed": true,
+          "evidence": "caught by READING team-config: 'TurretAimer.java exists but config says no turret' + SolversLib-vs-raw mismatch + missing auto"
+        },
+        {
+          "name": "deterministic-findings-authoritative",
+          "passed": false,
+          "evidence": "reached findings by careful reading, NOT the deterministic tier \u2014 no script guarantee; on a larger/rushed review this is exactly the dependence the linter removes"
+        },
+        {
+          "name": "config-aware",
+          "passed": true,
+          "evidence": "summarized the confirmed config and reviewed against it"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "no-inflation",
+          "passed": true,
+          "evidence": "independently refused: 'popularity is not proof', derived shared-lineage \u2248 one data point"
+        },
+        {
+          "name": "faithful-provenance",
+          "passed": false,
+          "evidence": "no corpus access \u2014 reasoned it cold rather than displaying the stored shared-ancestry tags; correct outcome, but not grounded/faithful-by-construction"
+        },
+        {
+          "name": "does-not-mint-provenance-inline",
+          "passed": true,
+          "evidence": "did not invent a confidence rating"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "mutable-static-root-cause",
+          "passed": true,
+          "evidence": "identified it precisely, even noted 'line 12 re-sets it every run but dangerous pattern regardless' + caught open-loop battery-sag angle"
+        },
+        {
+          "name": "not-blamed-on-hardware",
+          "passed": true,
+          "evidence": "'swapping the motor was never going to fix this'"
+        },
+        {
+          "name": "finding-is-authoritative",
+          "passed": false,
+          "evidence": "concrete but reached by reading, not tied to the deterministic tier / taxonomy \u2014 no script/corpus grounding"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "name": "smell-shown-with-evidence",
+          "passed": true,
+          "evidence": "grounded every claim in line numbers; god-opmode, no main loop, orphaned subsystems \u2014 evidence-first"
+        },
+        {
+          "name": "explains-why-for-rookie",
+          "passed": true,
+          "evidence": "explained the why with a prioritized fix list"
+        },
+        {
+          "name": "config-aware-no-turret",
+          "passed": true,
+          "evidence": "flagged TurretAimer config mismatch; did not recommend adding turret"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.7525,
+        "stddev": 0.165,
+        "min": 0.67,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.25",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "FRAMING CORRECTION (do not propagate the imprecise version): the +0.25 is NOT evidence that code review needs the skill less than other domains. It is evidence that a FULLY-READABLE 3-file fixture removes the ONE variable the deterministic layer exists to handle \u2014 incomplete or rushed reading under real conditions. Fixture-size effect, not domain property. Session 2 faces real repos, not 3-file ones. A large-repo fixture (iteration-2) is the actual test of the property; this small-fixture result stands only as the honest FLOOR.",
+    "SMALLEST DELTA OF THE FOUR SKILLS (with 100%, baseline 75%, +0.25) \u2014 and this is the honest finding, not a weak skill. On a 3-file fixture a strong baseline READS EVERYTHING and independently catches the config mismatch, the mutable-static-persistence framing (even the line-12 reset nuance), the God-OpMode, and refuses confidence inflation (deriving shared-lineage-is-one-datapoint cold). Code review is the domain where a careful strong model needs the least help.",
+    "WHERE THE SKILL STILL WINS (the mechanisms a baseline structurally cannot run): (1) deterministic linters that fire EVERY time regardless of reading depth \u2014 config_lint + failure_mode_lint; the baseline reached the same findings only by exhaustively reading 3 tiny files. (2) FAITHFUL DISPLAY of STORED corpus provenance \u2014 with-skill grounded no-inflation in the actual \u00a712 tags (15083-B/22105/12808-B/16093/3543); the baseline reasoned it correctly but COLD, with no stored tags to be faithful to (correct-by-luck-of-a-strong-model, not correct-by-construction).",
+    "FIXTURE LIMITATION (stated, not hidden): 3 files lets the baseline read exhaustively, so the determinism advantage \u2014 linters firing on a LARGE or rushed review where the model would NOT read all 316+ lines of every file \u2014 is UNDER-STRESSED here. The +0.25 is a floor on the skill value, not a ceiling; a realistic multi-thousand-line repo fixture would widen it. Offered to the user.",
+    "EVAL-3 PREMISE partially self-corrected: the fixtures flywheelOffset is reset each run, so it is a SMELL not an active persistence BUG. Both arms correctly caught this nuance rather than over-claiming it as the definite cause \u2014 good faithful behavior on both sides, and evidence the mutable_static check severity tiering (it fired LOW) is calibrated.",
+    "RUN INTEGRITY: 6 of 8 first-round runs hit a session limit mid-write; 6 had already persisted outputs, the 2 that had not (eval-2/eval-4 with-skill) were cleanly re-run. No results fabricated. TIMING CAVEAT: 4 runs (eval-1, eval-3 both arms) completed their work but the harness reported them failed-on-limit WITHOUT usage metrics, so their timing.json is a PLACEHOLDER (50k/90s) \u2014 do not read the time/token panel for those; pass-rate is from real graded outputs."
+  ]
+}

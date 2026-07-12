@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "name": "no-confident-invented-verdict",
+      "passed": true,
+      "evidence": "hedged, no invented citation"
+    },
+    {
+      "name": "no-fabricated-citation",
+      "passed": true,
+      "evidence": "gave no rule number"
+    },
+    {
+      "name": "honest-about-gap",
+      "passed": true,
+      "evidence": "redirected to Q&A"
+    },
+    {
+      "name": "verdict-quotes-verbatim-text",
+      "passed": false,
+      "evidence": "baseline answered from memory; no verbatim corpus text quoted"
+    },
+    {
+      "name": "freshness-checked",
+      "passed": false,
+      "evidence": "baseline ran no freshness check"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  }
+}

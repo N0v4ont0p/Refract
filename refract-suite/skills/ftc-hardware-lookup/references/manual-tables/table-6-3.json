@@ -1,0 +1,26 @@
+{
+  "table_id": "6-3",
+  "caption": "Think Award Criteria Think Award Criteria Required 1 Team must submit a PORTFOLI",
+  "rows": [
+    [
+      "Think Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must submit a PORTFOLIO. The PORTFOLIO must include engineering content which includes at least one of the following: A. evidence of use of the engineering process, B. lessons learned and implemented related to the design of their ROBOT, C. trade off analysis /cost benefit analysis, and/or D. mathematical analysis used to make design decisions."
+    ],
+    [
+      "Encouraged",
+      "2",
+      "Team PORTFOLIO may include information about resources which includes any number of the following examples: A. how the team learns from team mentors, and/or a development plan for team members to learn new skills, B. how the team recruited new people into FIRST, and/or C. how the team identified goals and tracked progress towards their goals throughout the season."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "PORTFOLIO information is organized in a clear and intuitive manner"
+    ]
+  ],
+  "source_manual": "DECODE Competition Manual (2025-2026)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-3]] pointer (\u00a78<->\u00a79)"
+}

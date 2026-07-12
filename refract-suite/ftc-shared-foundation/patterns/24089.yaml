@@ -1,0 +1,171 @@
+# Distilled patterns — Team 24089 (Iron Lions), DECODE
+#
+# SCOPE OF THIS FILE (read first): this is a FOCUSED extraction, not a full sweep.
+# 24089 was mined for the shooter empirical-vs-physics leg of the cross-team finding,
+# and that is what is formalized below (plus the abandoned gravity-ballistics prelim
+# and one genuinely-novel capability found alongside it). A FULL 24089 pattern sweep
+# is NOT done — most notably the `lioncore/tasks/` cooperative task-composition
+# framework (Series/Parallel/Race/Fork/Repeat/Forever/WaitUntil/Optional/Sleep, own
+# code, NO FTCLib/SolversLib import) is a strong candidate 4th leg for
+# `orchestration-nonblocking` and is FLAGGED as pending (see pending: below), NOT
+# merged — it needs its own provenance pass + review batch, same discipline as every
+# other merge.
+#
+# PROVENANCE-OF-THIS-ENTRY (honesty note, kept deliberately): the 24089 shooter leg was
+# believed twice to be something it is not. First as "24089 KEPT physics (proj_motion.py)
+# — proof physics works" (Session-1 checkpoint / 15993-J note). Then as "physics attempted
+# then abandoned — broken/offline/unintegrated." BOTH restated a prior conclusion without
+# re-running the check against the FIELDED code. Re-verifying at source — Turret.java:148,
+# where ProjectileMotion.calculate is called live, in the loop, driving flywheel/hood/azimuth
+# — is what actually settled it. That is Rule 7 doing its job at the hardest point: on an
+# already-AGREED claim, where the incentive is to move on rather than re-verify. Recorded so
+# the correction path is not silently erased by the fix.
+#
+# source repo: corpus-sources/tier2/24089-IronLions
+# 24089 imports NO FTCLib / NO SolversLib (verified) → ProjectileMotion, Vector3, and the
+# lioncore framework are all independent reimplementations, not derived code.
+
+meta:
+  team: "24089"
+  extraction_scope: "shooter/physics leg only (+ 1 novel capability + 1 abandoned prelim). Full sweep pending."
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+
+patterns:
+  - id: 24089-A-shooter-empirical-linear-regression
+    finding_ref: shooter-empirical-vs-physics   # FOURTH empirical leg (see references/cross-team-findings.yaml)
+    problem: >
+      Convert measured distance-to-goal into a flywheel-RPM and hood-angle setpoint for
+      variable-distance scoring, on a turreted shooter, without a first-principles
+      gravity-ballistics solve.
+    solution_approach: >
+      Despite the class being NAMED ProjectileMotion, the fielded distance->power core is an
+      EMPIRICAL LINEAR REGRESSION, not a ballistics solver:
+        RPM  = distance * shooterMultiplier + shooterOffset   (ProjectileMotion.java:54,
+               commented verbatim "Linear approximation of shooting power")
+        hood = clamp(1.1 - distance/hoodDivisor + hoodOffset, 0, 1.1)   (ProjectileMotion.java:55)
+      The coefficients (shooterMultiplier=14, shooterOffset=1800, hoodDivisor=70, hoodOffset=1)
+      are @Config/@Configurable dashboard-tunable fields (Turret.RobotConstants:49-52), tuned
+      live via a dedicated ShooterTuning @TeleOp (opmodes/tuning/ShooterTuning.java). The git
+      arc names the workflow directly: "feat: shooter regression" -> "feat: tunable shooter
+      regression" -> "feat: working shooter :O" -> "feat: functional". This is INTEGRATED and
+      LIVE: Turret.update() calls ProjectileMotion.calculate() every loop in Tracking/Shooting
+      (Turret.java:148) and drives the flywheel-RPM PID, hood servo, and turret-azimuth PID off
+      the returned Solution.
+    code_reference: { file: "math/ProjectileMotion.java", lines: "54-55", integrated_at: "systems/Turret.java:148", tuned_by: "opmodes/tuning/ShooterTuning.java", constants: "systems/Turret.java:49-52" }
+    applicable_when: "season.has_variable_distance_scoring == true && shooter.aiming == continuous_distance_model"
+    source_team: "24089"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: >
+        No FTCLib/SolversLib import in 24089 (verified) — ProjectileMotion/Vector3 are own code.
+        A distance->setpoint linear fit is commodity; independently implemented and tuned here.
+      cross_team: >
+        This is the FOURTH independent empirical distance->power implementation in the corpus
+        (with 15993 logistic curve-fit, 19043 2-axis table, 22105 distance->velocity LUT), and
+        it is VISIBLY DIFFERENT in execution from all three (a live-tuned 2-parameter linear
+        regression). It is NOT a shared-lineage copy — see shooter-empirical-vs-physics.
+      collapses_with: []
+    notes: >
+      RECORD-CORRECTING (verbatim, do not soften): the earlier belief that 24089 fired purely
+      "time/mode-based (ShootForTime/ToggleShooterMode), no aiming model" CONFLATED the
+      time-boxed FEED with the AIMING model. ShootForTime (tasks/ShootForTime.java) only runs
+      the FEEDER for N seconds; the Turret subsystem independently and continuously computes
+      aim/RPM/hood via ProjectileMotion every loop. Firing CADENCE is time-boxed; AIMING is a
+      continuous distance model. Both are true at once.
+
+  - id: 24089-B-moving-shot-lead-compensation
+    # DISTINCT CAPABILITY — deliberately NOT filed on the empirical-vs-physics axis.
+    # This is the real physics 24089 fields, and it is on a DIFFERENT axis (shoot-on-the-move),
+    # one no other corpus team occupies. See shooter-empirical-vs-physics: moving_shot_lead_layer.
+    problem: >
+      Hit a fixed field goal while the robot is TRANSLATING and ROTATING — i.e. lead the shot
+      for robot motion, rather than only aiming from a static pose.
+    solution_approach: >
+      A genuine-kinematics lead layer sitting ON TOP of the empirical power base (all in
+      ProjectileMotion.calculate, ProjectileMotion.java:45-76): decompose robot velocity into
+      NORMAL (toward/away the goal, via dot with the normalised radial) and TANGENTIAL
+      (perpendicular) components; add an azimuth lead from a SATURATING tangential term
+      20*(1 - e^(-0.03*tangentialVelocity)); SIGN that lead with a cross-product
+      angular-momentum test (radial x tangentialVelocity, sign of .z) so the lead points the
+      correct rotational way; and lead the RPM for closing/opening range via
+      RPM += normalVelocity * 13. Turret feeds it a smoothed velocity estimate (2-sample buffer,
+      Turret.java:130-134,198-203) plus Pinpoint heading velocity.
+    code_reference: { file: "math/ProjectileMotion.java", lines: "45-76", fed_by: "systems/Turret.java:130-134,148-150,198-203" }
+    applicable_when: "season.has_fixed_field_goal_target == true && shooter.requires == shoot_on_the_move"
+    source_team: "24089"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: >
+        Own Vector3 math (no FTCLib). The velocity-decomposition + cross-product-signed lead is
+        real robot kinematics, competently done, and UNIQUE in the corpus — no other mined team
+        implements moving-shot lead. This is the evidence that 24089 is a PHYSICS-CAPABLE team
+        (it matters for the finding's confidence: they could do physics and still fielded an
+        empirical power solve — see shooter-empirical-vs-physics confidence reasoning).
+      collapses_with: []
+    notes: >
+      Carry the DISTINCTION wherever this is cited: 24089's real fielded physics is MOVING-SHOT
+      KINEMATICS (leading a moving robot's shot), NOT gravity/projectile ballistics for the
+      distance->power reachability solve. The two prior framings both argued about the wrong
+      axis (gravity ballistics) and missed this one entirely. Do NOT collapse this into the
+      empirical/physics power debate — it is orthogonal.
+
+  - id: 24089-C-projmotion-abandoned-ballistics
+    # The ONLY genuinely broken/offline/unintegrated piece. Recorded as an abandoned attempt,
+    # NOT as fielded evidence. This time "abandoned" is CORRECT — verified so.
+    problem: >
+      (Attempted, not shipped) Solve launch angle from first-principles projectile physics with
+      gravity + drag, offline, before committing to an on-robot aiming approach.
+    solution_approach: >
+      A standalone pygame script (proj_motion.py, repo ROOT — NOT in the TeamCode Java tree)
+      modeling a hollow 5-inch ball with reduced drag. It is a throwaway prelim: single commit
+      "feat: prelim test of vec math" (0583361), referenced NOWHERE else in the repo, and its
+      launch-angle solver is genuinely BROKEN — proj_motion.py:39 is
+      `angle_rad = 1 / math.atan((-d + math.sqrt(d**2 - 768*(d)/())) / ())` (reciprocal-of-atan,
+      plus division by an EMPTY TUPLE `()` — a hard runtime error), with gravity set to 385.0
+      in/s^2 (proj_motion.py:20; standard is ~386.4). It never reached shipped power output; the
+      fielded distance->power path is 24089-A (empirical linear regression), not this.
+    code_reference: { file: "proj_motion.py (repo root, offline)", lines: "20 (g=385.0), 39 (broken solver)", git: "0583361 feat: prelim test of vec math", referenced_by: "nothing" }
+    applicable_when: "n/a — abandoned/unintegrated; recorded for provenance only"
+    source_team: "24089"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Own offline experiment; abandoned. No lineage; no consumers."
+      collapses_with: []
+    corpus_feasibility_artifact:
+      # Per explicit instruction — kept, tag UNCHANGED, and if anything more clearly justified
+      # now that NEITHER team's fielded path was gravity-ballistics at all.
+      what: >
+        A CORPUS-BUILT correct replacement for the broken offline solve:
+        .claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py (closed-form no-drag
+        launch angle + drag-aware shooting method) consuming
+        .claude/skills/ftc-hardware-lookup/references/physics/decode-artifact-ballistics.json,
+        with gravity CORRECTED at source to 386.4 in/s^2 (read from the JSON, not hardcoded;
+        verified by running the solver). 24089's constants/modeling choices carried as-is in
+        meta.corrections / caveats_from_source.
+      claim_it_supports: >
+        ONLY this: "gravity-ballistics for the DECODE artifact is COMPUTATIONALLY TRACTABLE —
+        here is a correct implementation." It is a feasibility demonstration built BY the corpus.
+      explicitly_not: >
+        NOT evidence of any team's fielded results. 24089 did not field gravity-ballistics
+        (their power solve is empirical, 24089-A); 15993 built and abandoned theirs (Alfa.kt).
+        This artifact's existence must NEVER quietly read as if a team shipped physics-based
+        power. Carry this NOT-clause wherever the artifact is cited.
+
+# Candidate patterns FOUND but NOT extracted/merged (no-silent-merge, both directions):
+pending:
+  - id: 24089-lioncore-tasks
+    what: >
+      A full cooperative task-composition framework in lioncore/tasks/ (Task, Series, Parallel,
+      Race, Fork, Repeat, Forever, WaitUntil, Optional, Sleep, Run, Master, Jobs, TaskOpMode) —
+      own code, NO FTCLib/SolversLib import. Autos/teleop are built from it (e.g. FollowPath /
+      ShootForTime composed under Jobs; far_zone_only.java, TheseusBlue.java, ShooterTuning.java).
+    why_flagged: >
+      Strong candidate 4th independent leg for `orchestration-nonblocking` (cooperative per-tick
+      non-blocking task tree, FTCLib-free). If it holds up, it is another FTC-only leg — so it
+      would BROADEN the finding but is still platform-forced (LinearOpMode nudge applies), i.e.
+      it does NOT defeat the platform-forcing discount the way 3543's cross-platform TrcAutoTask
+      does. Weigh accordingly; do not let it inflate the tag on leg-count.
+    next_action: "Run through pattern-extractor + provenance-checker as its own batch; present for review before any merge. Do NOT merge inline."

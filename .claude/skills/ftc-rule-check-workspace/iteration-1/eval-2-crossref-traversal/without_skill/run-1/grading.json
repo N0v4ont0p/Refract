@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Traverses to limit rules",
+      "passed": false,
+      "evidence": "self-reported NO cross-ref traversal; gave only structure + a hedged '~20 in' ballpark"
+    },
+    {
+      "text": "Citations verified",
+      "passed": false,
+      "evidence": "no rule IDs cited; exact number deliberately withheld"
+    },
+    {
+      "text": "Grounded not memory",
+      "passed": false,
+      "evidence": "memory, hedged low-confidence"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  }
+}

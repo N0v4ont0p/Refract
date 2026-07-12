@@ -1,0 +1,83 @@
+# FTC Team Configuration — Team 99903
+# Status: PROVISIONAL — see constraint_violations below. Confirm before code generation.
+# Generated: 2026-07-05
+
+team:
+  number: 99903
+  season: "TBD (shooter-based game assumed; confirm current season)"
+
+# --------------------------------------------------------------------------
+# CONSTRAINT VIOLATION — SURFACED, NOT SILENTLY RESOLVED
+# --------------------------------------------------------------------------
+# The requested archetype is "fixed-shooter-on-swerve", which assumes a
+# SWERVE drive base (independently steered modules, module-state kinematics,
+# absolute steering encoders, non-RoadRunner drive control).
+#
+# The team explicitly stated they run MECANUM with RoadRunner. These are
+# incompatible: the archetype's drive layer cannot be used as-is.
+#
+# Resolution applied here: keep the archetype's mechanism half (fixed shooter,
+# turret-less aiming via drivetrain heading) and swap the drive half to
+# mecanum + RoadRunner. If the team actually intends to build swerve this
+# season, STOP and rebuild this config — drive hardware, localization, and
+# auto stack all change.
+constraint_violations:
+  - id: CV-1
+    severity: blocking-until-acknowledged
+    requested: "fixed-shooter-on-swerve archetype (swerve drive base)"
+    actual: "team runs mecanum drivetrain with RoadRunner"
+    resolution: >
+      Adapted archetype to fixed-shooter-on-mecanum. Swerve module config,
+      steering-servo mappings, and swerve kinematics are intentionally
+      omitted. Drivetrain-heading auto-aim is retained (it works on any
+      holonomic base, mecanum included).
+    action_required: >
+      Team must confirm: (a) mecanum is correct and swerve was only the
+      archetype name they were pointed at, or (b) they are converting to
+      swerve, in which case this config must be regenerated.
+
+# --------------------------------------------------------------------------
+# Drivetrain (as stated by team — overrides archetype default)
+# --------------------------------------------------------------------------
+drivetrain:
+  type: mecanum
+  motors:
+    count: 4
+    names: [leftFront, leftBack, rightFront, rightBack]  # RoadRunner MecanumDrive convention
+    model: "TBD — confirm (e.g., goBILDA 5203 435 RPM)"
+  localization: "TBD — confirm RoadRunner localizer (drive encoders / 3-wheel deadwheel / pinpoint / OTOS)"
+  imu: "TBD — confirm (BHI260AP in Control Hub vs external)"
+
+# --------------------------------------------------------------------------
+# Season mechanism (from archetype: fixed shooter)
+# --------------------------------------------------------------------------
+mechanisms:
+  shooter:
+    style: fixed              # no turret, no hood articulation assumed
+    aiming: drivetrain-heading  # robot rotates to aim; works on mecanum
+    flywheel:
+      motors: "TBD — count and model"
+      control: velocity-PIDF   # recommended default for flywheels
+    feeder: "TBD — servo indexer / motorized feed"
+  intake: "TBD — archetype usually pairs a floor intake with a fixed shooter; confirm"
+  turret: none               # explicitly none — fixed shooter archetype
+
+# --------------------------------------------------------------------------
+# Software stack
+# --------------------------------------------------------------------------
+software:
+  sdk: "FTC SDK (FtcRobotController) — confirm version"
+  auto_framework: roadrunner   # as stated by team
+  roadrunner_version: "TBD — assume 1.0.x (actions-based); confirm"
+  teleop_style: "TBD — field-centric vs robot-centric mecanum"
+  vision: "TBD — AprilTag relocalization recommended for a shooting game; confirm camera"
+
+# --------------------------------------------------------------------------
+# Open questions blocking code generation
+# --------------------------------------------------------------------------
+open_questions:
+  - "CV-1 acknowledgment: mecanum confirmed, or converting to swerve?"
+  - "RoadRunner version (0.5.x vs 1.0.x) — changes all auto code shape"
+  - "Localizer type (drive encoders / deadwheels / Pinpoint / OTOS)"
+  - "Shooter flywheel motor count/model and feeder mechanism"
+  - "Camera present for AprilTag-based range/heading to goal?"

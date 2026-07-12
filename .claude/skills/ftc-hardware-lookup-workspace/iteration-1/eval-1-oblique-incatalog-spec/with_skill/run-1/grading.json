@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Specs routed through motor_math.py / catalog, not memory",
+      "passed": true,
+      "evidence": "transcript: ran motor_math.py spec + wheel-speed; 312 RPM, 537.7 CPR, 1782.87 ticks/m from script output"
+    },
+    {
+      "text": "Source cited",
+      "passed": true,
+      "evidence": "tier-1 goBILDA URL surfaced, retrieved 2026-07-05"
+    },
+    {
+      "text": "CPR published 537.7 not recomputed 28*19.2; ticks use published",
+      "passed": true,
+      "evidence": "gave 537.7 and flagged the don't-recompute-as-28x19.2 gotcha; ticks/m from published CPR"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

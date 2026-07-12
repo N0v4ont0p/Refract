@@ -1,0 +1,102 @@
+# Distilled patterns — Team 15083 (Overclock), DECODE
+#
+# source repo: corpus-sources/tier2/15083-Overclock (public: github.com/Xtendera/OverclockDecode)
+# deps: SolversLib (21 files) + Pedro (23) + com.pedropathing.ivy (1 file). NO FTCLib, NO RoadRunner.
+#   §12 SHARED-LIBRARY IMPORT GATE APPLIED: the subsystem/command architecture is SolversLib
+#   (com.seattlesolvers.solverslib) — the FTCLib-successor command framework — so it is
+#   shared-ancestry, NOT an independent orchestration leg (see 15083-B). Gate fired on BOTH
+#   SolversLib and the one ivy file, exactly as PLAN §12 now requires.
+# Team made Worlds — recorded as context ONLY; did not inflate any confidence tag (§12).
+# Last Tier-2 team. Human-reviewed; A/B/C approved for merge 2026-07-04.
+
+meta:
+  team: "15083"
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode/overclock"
+
+patterns:
+  - id: 15083-A-shooter-empirical-lut-sotm
+    finding_ref: [shooter-empirical-vs-physics, moving-shot-compensation]   # SIXTH empirical leg + a SOTM leg
+    problem: >
+      Produce flywheel-velocity / hood / time-of-flight setpoints for a variable-distance turreted
+      shooter, INCLUDING shoot-on-the-move, from measured calibration data rather than a physics solve.
+    solution_approach: >
+      EMPIRICAL: three coupled InterpLUT lookup tables — velocityLut, hoodLut, timeLut — populated in
+      the Shooter ctor from the team's measured MConstants.velTable/hoodTable/timeTable
+      (Shooter.java:28-64), then queried by distance each loop (Shooter.java:273-296). Execution is
+      visibly DIFFERENT from the other five empirical legs (three COUPLED LUTs, incl. a time-of-flight
+      LUT), plus two distinctive control choices: (1) BANG-BANG flywheel control — +1.0/-1.0/0.0 around
+      threshold bands, not a PIDF hold (getShooterPower, Shooter.java:209-224); (2) turret HYSTERESIS
+      (±15° overlap) to stop flip-flopping near ±180° (Shooter.java:20-22,164-177).
+    sotm_aspect: >
+      MOVING-SHOT leg (see moving-shot-compensation finding): getCompState (Shooter.java:124-150) does
+      an ITERATIVE time-compensation — 5 iterations projecting the shooter position forward by
+      v*t + 0.5*a*t^2 (kinematic, WITH acceleration) where t is read from the EMPIRICAL time-of-flight
+      LUT (getClampedTime), plus an angular offset = angularVelocity * flightTime for turret lead. This
+      is a THIRD, distinct SOTM formulation: empirical-time-driven iterative projection (cf. 24089
+      physics-decomposition, 12808 Lambert closed-form).
+    code_reference: { file: "subsystems/Shooter.java", lut: "28-64,273-296", sotm: "124-150", bang_bang: "209-224", hysteresis: "164-177", data: "globals/MConstants (velTable/hoodTable/timeTable)", tuner: "opmodes/teleop/other/VelocityTableTuner.java" }
+    applicable_when: "season.has_variable_distance_scoring == true && shooter.requires includes shoot_on_the_move"
+    source_team: "15083"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: >
+        The empirical-calibration STRATEGY, the three-coupled-LUT structure, the iterative
+        empirical-time SOTM, bang-bang control and turret hysteresis are the team's own design + own
+        measured data. The InterpLUT PRIMITIVE is SolversLib's util (com.seattlesolvers.solverslib.util
+        .InterpLUT) — a shared interpolation helper, noted; it does NOT make the empirical CHOICE shared
+        (measured tables + SOTM math are 15083's). SIXTH independent empirical distance->power leg.
+      library_note: "InterpLUT = SolversLib util (shared). The empirical approach/data is not."
+      collapses_with: []
+    notes: >
+      Bang-bang flywheel control is a debatable choice (simple, robust to model error, but chattery vs a
+      velocity-PIDF hold) — recorded as 15083's ACTUAL approach, not endorsed. Turret hysteresis near
+      ±180° is a nice transferable practical detail for any turret that can wrap.
+
+  - id: 15083-B-solverslib-command-adoption
+    # NOT an orchestration-nonblocking leg. Shared-ancestry PROVENANCE data point (§12 gate).
+    problem: >
+      (Provenance) 15083's subsystem/command architecture LOOKS like a full command framework
+      (SubsystemBase subsystems, ShooterVelocityCommand, SolverCommands) — candidate orchestration leg.
+    solution_approach: >
+      It is NOT independent. ALL subsystems (Intake, Shooter, Pixel, LimeLight) extend SolversLib's
+      com.seattlesolvers.solverslib.command.SubsystemBase; commands are the SolversLib command framework
+      (the FTCLib-successor). SEPARATELY, one abstract opmode (opmodes/auto/IvyOpMode.java) uses Pedro
+      ivy's Scheduler/Command/Groups — a SECOND shared command substrate, experimental (abstract base).
+    code_reference: { file: "subsystems/*.java (all: extends SubsystemBase, com.seattlesolvers.solverslib)", ivy: "opmodes/auto/IvyOpMode.java (com.pedropathing.ivy.{Scheduler,Command,groups})" }
+    applicable_when: "n/a — provenance guard, not a transferable pattern"
+    source_team: "15083"
+    confidence: single-source
+    provenance:
+      classification: shared-ancestry
+      basis: "Subsystem/command substrate is SolversLib (FTCLib-successor); a second is Pedro ivy. Both shared libraries. Collapses to those sources; NOT an independent orchestration data point."
+      collapses_with: [solverslib-command-framework, pedro-ivy-command-framework]
+    caveat_ref: >
+      This is the §12 shared-library import gate working on the LAST Tier-2 team: TWO shared command
+      frameworks in one repo (SolversLib fielded + ivy experimental), either of which would have
+      false-converged as an "independent orchestration leg" without the import check. See PLAN §12.
+
+  - id: 15083-C-sensing-limelight-plus-color-array
+    finding_ref: sensing-modality   # breadth leg
+    problem: >
+      Answer two different questions: WHERE am I (localization) and WHAT TYPE is the held ball (colour).
+    solution_approach: >
+      LOCALIZATION: a Limelight subsystem (subsystems/LimeLight.java). BALL-TYPE: a multi-channel intake
+      colour-sensor array read via Intake.getSense3() (int[]), classified green-vs-other by comparing
+      channels ([2] vs mean of [1],[3]) to pick hood setting (Shooter.java:279-296) and surfaced on an
+      LED indicator (subsystems/Pixel.java driving pixelController.setLeds). Modality matched to question.
+    code_reference: { file: "subsystems/LimeLight.java + subsystems/Intake.java:34 (getSense3) + subsystems/Pixel.java", consumer: "subsystems/Shooter.java:279-296 (colour-gated hood)" }
+    applicable_when: "season needs localization + held-ball colour discrimination"
+    source_team: "15083"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Own sensor integration on Limelight + a colour-sensor array; no FTCLib lineage (sensing code is team's, not SolversLib)."
+      collapses_with: []
+    notes: >
+      Reinforces sensing-modality breadth: position (Limelight) + type/colour (intake colour array). The
+      colour array drives BOTH control (hood selection for ball type) AND an LED status indicator.
+
+held:
+  - "pedroPathing/ package — Pedro tuning/config (dependency glue), not a distilled pattern."
+  - "globals/ (Robot singleton, MConstants, FeedforwardTurretController) — a FeedforwardTurretController (kV/kS feedforward + PIDF) is a candidate control-pattern; not extracted this pass."

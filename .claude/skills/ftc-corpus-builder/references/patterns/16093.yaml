@@ -1,0 +1,181 @@
+# Distilled patterns — Team 16093 (X-Impact), DECODE
+# License: not stated → default-copyright (file+line refs only). Java, FTCLib COMMAND-BASED.
+# Provenance via narrowed provenance-checker (Opus xhigh), human-approved 2026-07-03.
+#
+# META NOTES:
+# - Orchestration = FTCLib CommandScheduler → SHARED-ANCESTRY (library-provided); explicitly
+#   NOT a 4th independent leg of the orchestration-nonblocking finding.
+# - Pathing: BOTH live but for different jobs — Pedro (autonomous following, via 16093-A
+#   FollowerEx) AND RoadRunner (localizer abstraction + teleop telemetry only; RR's own
+#   following API has 0 live callers — see 16093-C).
+# - Shooter: preset-velocity = a THIRD stance in the shooter-empirical-vs-physics finding
+#   (16093-D). No live empirical/physics distance-aiming (a physics stub Vision.java is dead).
+# - Sensing stance (NOTES ONLY, no live pattern merged): color sensor (presence+type), but the
+#   live impl is WIP/buggy — ballDetection.java lacks an opModeIsActive loop + reads a stale
+#   zero-array; colorCurveDashboard.java (live-tunable @Config) is commented out. A WEAK
+#   presence+type leg for the sensing-modality finding; recorded as note, not merged.
+# - "COMMENT-OUT-INSTEAD-OF-DELETE" is now a CROSS-TEAM signal (18742 disabled Limelight +
+#   16093 dead Vision/ballDetection/colorCurveDashboard/SuperStructure) — flagged for Phase 9's
+#   taxonomy lens to keep watching through the rest of Tier 2; not yet its own pattern.
+# - Premier fork (lucasnotfound59/…-Premier) = ONE LINEAGE (same team, shared committer). Its
+#   more-mature parts updated main's entries below (see fork_supplement fields), NOT new IDs.
+
+meta:
+  team: "16093"
+  name: X-Impact
+  license: default-copyright
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+  premier_fork: "lucasnotfound59/FTC16093-2026DECODE-Premier — SAME lineage (shared committer OLeslieO); not an independent data point"
+
+patterns:
+  - id: 16093-A-followerex
+    problem: >
+      Pedro's stock Follower oscillates/hunts near the target pose and doesn't positively
+      brake at end-of-segment.
+    solution_approach: >
+      FollowerEx extends com.pedropathing.follower.Follower, adds per-call x/y/heading
+      tolerances, and overrides update() to detect "close enough" then breakFollowing() +
+      holdPoint() + drop max power to 0.3 + force BRAKE zero-power on all four drive motors.
+    code_reference: { file: "utils/FollowerEx.java", lines: "1-98" }
+    applicable_when: "software_stack.pathing == pedro_pathing"
+    source_team: "16093"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Pedro Follower base = shared-ancestry (quickstart); the anti-oscillation finish-latch + hard-brake addition is NOT a Pedro-quickstart idiom (quickstart relies on the follower's own hold, does not reach into DcMotorEx zero-power). Team-specific fix to observed end-point swinging."
+      collapses_with: []
+    notes: >
+      CARRY VERBATIM attribution comment (lines 2-5): "Author: Yunkai Li / Date: 2025/07/18 /
+      Intro: A wrapper of pedro pathing follower. Add tolerances to avoid swinging near the end
+      point. / Please DO NOT delete this comment! Be respectful to the copyright!!!". Self-flagged
+      caveat: the motor-list construction is described in-code as "not a good solution ... only
+      solution [I could] think of" (:38-39) — a hardware-coupling weakness the AUTHOR flagged.
+    fork_supplement: >
+      Motor-list caveat was NOT fixed in place — instead FollowerEx is ABSENT from the fork
+      (0 files), which dropped RoadRunner entirely and went Pedro-only (pedroPathing/Constants.java
+      + a Hardwares container). So the self-flagged "not a good solution" code was removed in a
+      restructure, not repaired. Whether the underlying end-of-path oscillation was re-solved
+      differently (newer Pedro, or another mechanism) is NOT confirmed from this pass — but the
+      flagged weak code is not carried forward.
+
+  - id: 16093-B-pathchain-interleaving
+    problem: >
+      Keep autonomous path segments and their paired waypoint actions in sync as a routine is
+      edited over a season.
+    solution_approach: >
+      Parallel indexed collections: a custom Iterable PathChainList of PathChain segments (some
+      null) held alongside a List<Command> (some null); a single run() loop advances the iterator,
+      calls follower.followPath() when idle and schedules the paired Command, and throws
+      IllegalStateException up front if the two collection sizes disagree (fail-fast invariant).
+    code_reference: { file: "opmodes/autos/AutoNearRed.java", lines: "99-298", also: "utils/PathChainList.java" }
+    applicable_when: "software_stack.pathing == pedro_pathing && software_stack.opmode_style == ftclib_command_based"
+    source_team: "16093"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Pedro follower + FTCLib Command are library primitives (shared-ancestry); the parallel-indexed-collections-with-size-invariant STRUCTURE is the team's house idiom — the 'size does not match' guard recurs across 16 autos (authorship, not a copied snippet)."
+      collapses_with: []
+    notes: "Field poses are DECODE-season-specific (NOT the pattern); the transferable part is the interleaving STRUCTURE + fail-fast size guard. Single-source."
+
+  - id: 16093-C-newmecanumdrive-pinpoint
+    problem: >
+      Use RoadRunner's MecanumDrive/localizer machinery while the actual localization hardware is
+      a goBILDA Pinpoint odometry computer, not drive-motor encoders.
+    solution_approach: >
+      NewMecanumDrive extends RoadRunner MecanumDrive and overrides getWheelPositions/
+      getWheelVelocities/getRawExternalHeading/getExternalHeadingVelocity to return Pinpoint pose/
+      velocity (mm→in) instead of encoder counts — feeding an absolute odometry pod through the
+      wheel-encoder interface RR expects, so RR's localizer math runs on Pinpoint-sourced pose.
+    code_reference: { file: "Subsystems/driving/NewMecanumDrive.java", lines: "57-150" }
+    applicable_when: "drivetrain.type == mecanum && sensing.odometry == goBILDA_pinpoint && software_stack.pathing == roadrunner"
+    source_team: "16093"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "SPLIT: RR MecanumDrive/TrajectorySequenceRunner/HolonomicPIDVAFollower base = verbatim RR-quickstart (shared-ancestry); the Pinpoint-source OVERRIDE (the interface inversion) is the custom, load-bearing part."
+      collapses_with: []
+    notes: >
+      VERIFIED ambiguity: RR's autonomous-following API (followTrajectory*/trajectorySequenceBuilder)
+      has ZERO live opmode callers — RR is live ONLY for the localizer abstraction + teleop telemetry;
+      autonomous following is done by Pedro/FollowerEx. So RR's TrajectorySequence methods are dead
+      weight; the transferable part is the Pinpoint-source adapter. Single-source.
+    fork_supplement: >
+      ABSENT from the fork (0 NewMecanumDrive.java; RoadRunner dropped entirely — 0 RR files).
+      The same lineage ABANDONED the RR-localizer-adapter (whose autonomous-following API was
+      already dead in main) for a Pedro-native setup — confirming main's RR adapter was
+      TRANSITIONAL; the lineage's mature state carries no RoadRunner at all.
+
+  - id: 16093-D-shooter-preset
+    problem: >
+      Set flywheel velocity + hood angle for scoring, for a team whose firing positions are few
+      and predictable.
+    solution_approach: >
+      A small fixed set of {velocity, hood-angle} presets keyed by named states
+      (accelerate_slow/mid/fast/idle), each a constant DcMotorEx.setVelocity() from a MotorConstants
+      enum + a matching fixed servo angle, held by onboard setVelocityPIDFCoefficients. NO distance/
+      vision term feeds velocity.
+    code_reference: { file: "Subsystems/Shooter.java", lines: "14-153" }
+    applicable_when: "season.mechanism == flywheel_shooter && shooter.aiming_stance == fixed_presets && shooter.firing_spots == few_and_predictable"
+    source_team: "16093"
+    confidence: single-source
+    finding_ref: shooter-empirical-vs-physics   # the THIRD stance
+    provenance:
+      classification: independently-derived
+      basis: "Stock SDK primitives only (setVelocity + setVelocityPIDFCoefficients + Servo.setPosition); the preset-vs-continuous design is the team's own control decision, iterated in-house Dec–Jan, not inherited scaffolding."
+      collapses_with: []
+    shooter_stance: >
+      THIRD STANCE (deliberate-preset BET, NOT "opted out of aiming"): discrete velocity/hood
+      presets beat a continuous distance→velocity function WHEN the team's shooting positions are
+      limited/predictable enough that a continuous model's tuning cost isn't worth what it buys.
+      CONDITION (carry explicitly): defensible only where firing spots are few and fixed (staged
+      auto positions / a small number of teleop shoot zones); does NOT generalize to free-roam
+      shooting where distance varies continuously. Evidence it's a BET not an omission: presets are
+      paired with matching hood angles + onboard velocity-PIDF hold — engineered for repeatability
+      at chosen spots.
+    notes: >
+      VERBATIM CAVEAT: isAsTargetVelocity compares against literals 1320 (accelerate_mid) and 1500
+      (accelerate_fast), inconsistent with the enum commanded (MID=1380, FAST=1760; SLOW=1100,
+      IDLE=600). Likely stale/unsynced magic numbers, NOT verified intentional. Preset values are
+      season/robot-specific; the transferable part is the preset-vs-continuous stance.
+    fork_supplement: >
+      The fork moved BEYOND the fixed-preset bet as its aiming needs expanded — CONCRETE
+      evidence the third_stance CONDITION is real (same lineage outgrew presets). Two evolutions:
+      (1) velocity control matured from main's plain setVelocityPIDFCoefficients to a custom
+      XKPIDFController — a documented PIDF + BANG-BANG controller (bang-bang "assist for severe
+      velocity drop", VERIFIED in its docstring) with dedicated dashboard tuners (ShooterTuner /
+      XKPIDFTuner). (2) LIVE vision-closed-loop aiming: VisionBearingTracker (latency-compensated
+      world-frame bearing) + AutoPan (auto-panning turret) — bringing to LIFE the aiming that was
+      DEAD (commented-out Vision.java) in main. So the preset bet was a main-stage simplification
+      the lineage outgrew — not a permanent design position.
+
+  - id: 16093-E-prelimitcommand
+    problem: >
+      Decide several coupled outputs (shooter-accel state, intake limit-servo, LED color) from a
+      few shared driver-toggled flags, without scattering the coupling across per-button lambdas.
+    solution_approach: >
+      A single always-scheduled FTCLib Command polls BooleanSupplier flags (isLimitOn,
+      isVelocityDetecting, isShooting) each tick and centrally drives the coupled outputs,
+      edge-triggering on isLimitOn transitions via a stored lastLimitOn.
+    code_reference: { file: "commands/PreLimitCommand.java", lines: "14-94" }
+    applicable_when: "software_stack.opmode_style == ftclib_command_based"
+    source_team: "16093"
+    confidence: low
+    provenance:
+      classification: independently-derived
+      basis: "The FTCLib CommandBase + execute()-polling loop is the LIBRARY PRIMITIVE (shared-ancestry); the credited part is the ORGANIZATIONAL decision (one central command deciding several coupled outputs from shared flags). Kept LOW because the credited part is thin (a centralization decision, not a novel mechanism)."
+      collapses_with: []
+    related:
+      - { id: 18742-F-pidf-regulator, why: "recurrence of the org-layer-over-borrowed-primitive move across independent teams" }
+      - { id: 3543-J-observability-discipline, why: "same recurrence" }
+    notes: >
+      RECURRENCE-NOT-COLLAPSE (kept as a linked note, NOT folded into a shared number — same
+      discipline as the orchestration finding): the 18742-F / 3543-J references are quality/
+      recurrence CORROBORATION of the org-idea across independent teams, NOT shared lineage — do
+      NOT collapse (different teams, different codebases, convergent org choice). Deliberately not
+      used to upgrade provenance. Portability partial: the organizing idea transfers, the specific
+      flag set is 16093's robot state.
+
+# DROPPED (recorded so not re-extracted): CommandOpModeEx, ButtonEx (thin FTCLib wrappers,
+# used-as-intended); voltage-comp PIDF F-rescale (RoadRunner SampleMecanumDrive boilerplate);
+# Vision.java (commented-out physics stub), ballDetection.java (buggy), colorCurveDashboard.java
+# (commented-out), SuperStructure.java (prior-season, commented-out) — dead/WIP, notes-only.

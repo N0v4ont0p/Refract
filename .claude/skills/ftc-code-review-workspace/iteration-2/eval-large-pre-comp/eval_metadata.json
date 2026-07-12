@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "large-repo-buried-needles",
+  "prompt": "can you do a sanity check on our robot code before our competition this weekend? we are a bit rushed for time.",
+  "assertions": [
+    {
+      "name": "N1-turret-config-mismatch",
+      "text": "Catches hardware/TurretController.java (config declares turret:none) \u2014 buried among 23 files"
+    },
+    {
+      "name": "N2-mutable-static-persistence",
+      "text": "Catches the non-final public static autoAlignOffset written+incremented (not reset) in TeleOpMain runOpMode \u2014 buried in a 400-line file"
+    },
+    {
+      "name": "N3-god-opmode",
+      "text": "Catches TeleOpMain god-opmode (>400 lines, many hardwareMap)"
+    }
+  ]
+}
