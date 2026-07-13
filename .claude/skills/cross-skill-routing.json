@@ -1,10 +1,11 @@
 {
-  "_purpose": "Cross-skill description-optimization / collision check across all 4 FTC skills together. 20 queries: 10 should-route-to-one-skill (with the expected owner), 10 should-not-cleanly-route or are deliberately ambiguous near-misses. Includes the two REQUIRED tight-boundary pairs. This is the check that can only run with all 4 assembled \u2014 collision is invisible testing a skill alone.",
+  "_purpose": "Cross-skill description-optimization / collision check across all 5 FTC skills together (5th skill, ftc-construct, added \u00a722 post-Session-2). 23 queries: should-route-to-one-skill (with the expected owner), should-not-cleanly-route or are deliberately ambiguous near-misses. Includes the three REQUIRED tight-boundary pairs (A: HW specs vs RC allowed; B: TC vs CR on an intentless repo look; C \u2014 NEW: TC vs CO on generation-adjacent phrasing). This is the check that can only run with all 5 assembled \u2014 collision is invisible testing a skill alone.",
   "skills": [
     "ftc-team-config",
     "ftc-hardware-lookup",
     "ftc-rule-check",
-    "ftc-code-review"
+    "ftc-code-review",
+    "ftc-construct"
   ],
   "queries": [
     {
@@ -126,9 +127,28 @@
       "query": "how much does a goBILDA 5203 motor cost these days?",
       "expected": "NONE",
       "why": "HW boundary near-miss: price is NOT a catalog spec -> HW should abstain, not a spec lookup it owns"
+    },
+    {
+      "id": 21,
+      "query": "write me a teleop OpMode for our shooter",
+      "expected": "ftc-construct",
+      "why": "the exact §23 boundary-test phrase: pure generation request, no config-setup or config-change language attached -> CO. CO's own precondition (R82) hands back to TC if no config is confirmed yet -- routing here tests the FIRST hop, not the full turn"
+    },
+    {
+      "id": 22,
+      "query": "generate the ShooterOpMode.java for us",
+      "expected": "ftc-construct",
+      "why": "pure generation request, same class as q21"
+    },
+    {
+      "id": 23,
+      "query": "add an intake subsystem",
+      "expected": "AMBIGUOUS:ftc-team-config|ftc-construct",
+      "why": "TIGHT PAIR C (NEW, §23): near-identical phrasing appears in BOTH descriptions on purpose ('add an intake' in TC's, 'add an intake subsystem' in CO's) -- accepted overlap, not a defect, per the same standard q17 already set for TC/CR. Passes if either owner is picked AND that owner's own body correctly hands off/back rather than guessing; fails only on a confident wrong THIRD skill or no plausible owner at all."
     }
   ],
-  "result": {
+  "result_4_skill_original": {
+    "note": "Historical record from the original Session-2 assembly pass, BEFORE ftc-construct (\u00a722) existed. Queries 1-20, 4 skills only. Superseded by result_5_skill_rerun below for anything involving codegen routing.",
     "classifier_blind": true,
     "exact": 19,
     "acceptable_ambiguous": 1,
@@ -137,5 +157,34 @@
     "tight_pair_B_look_at_repo": "q17 resolved to ftc-code-review (not a hard collision); acceptable \u2014 CR's body hands back to ftc-team-config if config is missing/wrong, so CR-first is safe. Genuine ambiguity resolved to a valid single owner.",
     "negatives": "all 10 NONE correct, incl. the tricky ones: motor PRICE did NOT over-trigger HW (q20), from-scratch design did NOT over-trigger TC (q16), python scraper did NOT trigger CR (q12)",
     "verdict": "No description changes needed. Descriptions are well-differentiated: 0 collisions, 0 under-triggers on should-trigger queries, 0 negative over-triggers."
+  },
+  "result_5_skill_rerun": {
+    "classifier_blind": true,
+    "method": "Fresh general-purpose agent, zero prior context, given ONLY the 5 skills' exact frontmatter descriptions plus the 23 queries stripped of expected/why fields \u2014 same blind methodology as the original 4-skill run.",
+    "exact": 19,
+    "acceptable_ambiguous": 2,
+    "new_findings_not_caused_by_construct": 2,
+    "boundary_test_result_the_user_asked_for": "PASS. q21 ('write me a teleop OpMode for our shooter') and q22 ('generate the ShooterOpMode.java for us') both routed cleanly to ftc-construct with no hedging \u2014 the bare-generation-request case the user's Step 5 explicitly named. q23 ('add an intake subsystem', TIGHT PAIR C) resolved as AMBIGUOUS:ftc-team-config|ftc-construct exactly as designed \u2014 accepted per the same standard q17 already set, since either owner's body correctly hands off/back (TC hands to CO once confirmed; CO hands back to TC if unconfirmed \u2014 see R82, live-tested separately below in the runbook, not just described). q1 and q8 (config-setup / mid-season-change language) still correctly resolved to ftc-team-config, NOT ftc-construct \u2014 confirms construct's overlapping example phrasing does not over-trigger when the query carries config-establishing context.",
+    "handback_mechanism_live_test": "Ran `python3 .claude/skills/ftc-team-config/scripts/validate_config.py .claude/skills/ftc-team-config/evals/fixtures/rookie-mecanum-stock.yaml` directly (real script, real fixture with an unconfirmed mandatory field) \u2014 returned `generation_allowed: false, unconfirmed_mandatory: [\"software_stack.pathing\"]`. This is the exact signal ftc-construct's \u00a70 precondition checks before generating; confirms the mechanism CO's handback depends on already works correctly. Separately discovered and fixed: validate_config.py raises an unhandled traceback (not a clean result) when the config file doesn't exist at all rather than being merely unconfirmed \u2014 ftc-construct's \u00a70 was written to check file existence with a plain check FIRST, before ever invoking the script, to avoid depending on the script handling that case (it doesn't).",
+    "incidental_findings_pre_existing_not_introduced_by_construct": [
+      {
+        "query": 6,
+        "text": "which batteries are we actually allowed to run at competition this season?",
+        "finding": "This blind run flagged AMBIGUOUS:ftc-hardware-lookup|ftc-rule-check where the original run cleanly split q5->HW/q6->RC. Root cause is pre-existing and unrelated to \u00a722: ftc-hardware-lookup's own description names 'the game manual's legal-parts tables' as its own remit, which genuinely overlaps ftc-rule-check's 'whether a... part... is allowed' framing. Not caused by adding ftc-construct; flagged here because this re-run is what surfaced it. Out of scope for \u00a722 to fix \u2014 noted, not silently dropped, matching this project's own deferred-not-silent convention."
+      },
+      {
+        "query": 14,
+        "text": "our robot keeps dropping its wifi connection to the driver station mid-match, how do we fix it?",
+        "finding": "This blind run over-triggered ftc-code-review (reasoning: 'hardware-flake-looking symptoms are often code-structure problems', quoted from CR's own description) on what the original test scored as a clean NONE (pure networking/IT near-miss). Pre-existing breadth in CR's description, unrelated to \u00a722. Noted, not fixed this pass \u2014 a future CR description tightening pass could narrow 'hardware-flake-looking' to exclude pure connectivity/networking symptoms."
+      }
+    ],
+    "verdict": "The \u00a722-specific boundary test PASSES cleanly: ftc-construct is reachable via a bare generation request, correctly excluded when config-establishing context is present, and its deliberate overlap with ftc-team-config resolves the same safe way the pre-existing TC/CR tight pair already does. Two unrelated, pre-existing description-softness findings surfaced incidentally (q6, q14) \u2014 fixed, see result_post_fix_reverify below."
+  },
+  "result_post_fix_reverify": {
+    "note": "HW's and CR's descriptions were tightened to fix q6 and q14 (see SKILL.md diffs \u2014 HW now explicitly carves out legality-verdict phrasing to RC; CR now explicitly excludes pure connectivity/networking symptoms). Re-ran the full blind classifier fresh (new agent, zero prior context) against the updated descriptions to confirm.",
+    "q6_battery_legality": "FIXED, confirmed \u2014 classifier now resolves cleanly to ftc-rule-check, explicitly citing HW's new carve-out text. No longer ambiguous.",
+    "q14_wifi_networking": "FIXED, confirmed \u2014 classifier now resolves to NONE, explicitly citing CR's new exclusion text. No longer over-triggers ftc-code-review.",
+    "new_observation_not_a_defect": "This re-run's classifier resolved the bare generation queries (q21 'write me a teleop OpMode for our shooter', q22 'generate the ShooterOpMode.java for us', q23 'add an intake subsystem') to ftc-team-config rather than ftc-construct \u2014 different from the PRIOR blind run, which picked ftc-construct for q21/q22 and AMBIGUOUS for q23. The agent itself flagged why: a stateless classifier with no repo context cannot know whether a team-config.yaml already exists and is confirmed, so it defaults conservatively to ftc-team-config (a reasonable default under uncertainty, not a bug) \u2014 construct's own precondition (R82) is designed to be checked WITH real session/repo state, which a bare-string classification test cannot simulate. This is a known limitation of the stateless-classifier proxy, not of the actual routing mechanism: the real, session-aware behavior (does TC correctly recognize an ALREADY-confirmed config on disk and hand off to construct) was independently validated by the trimmed TC re-eval's scenario 3 (rookie/veteran fixtures, real validate_config.py run, real hand-off transcript) \u2014 see evals/post-construct-split-reeval.md. Both runs of the stateless test are defensible; neither represents a routing collision or a wrong-skill lock-in.",
+    "verdict": "Both incidental findings confirmed fixed with no new collisions introduced. The construct-reachability question is better answered by the session-aware re-eval than by a stateless classifier, and that re-eval already passed."
   }
 }

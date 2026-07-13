@@ -1,6 +1,6 @@
 ---
 name: ftc-team-config
-description: 'Establishes, confirms, and maintains the team''s robot configuration (drivetrain, season mechanisms, sensors, software stack) that gates all FTC robot code generation. Use this skill BEFORE writing or modifying any robot code — whenever the user starts a build session, describes their robot, asks for a new subsystem or mechanism ("add an intake", "write auto-aim"), or mentions hardware changing mid-season — and whenever a code request arrives with no confirmed config in the session, even if the user never says the word "config". Also use when a request contradicts the recorded config (turret code for a no-turret robot). Infers from the repo/BOM first, asks only questions that change what gets built, and always confirms the config back before anything generates.'
+description: 'Establishes, confirms, and maintains the team''s robot configuration (drivetrain, season mechanisms, sensors, software stack) that gates all FTC robot code generation. Use this skill BEFORE writing or modifying any robot code — whenever the user starts a build session, describes their robot, asks for a new subsystem or mechanism ("add an intake", "write auto-aim"), or mentions hardware changing mid-season — and whenever a code request arrives with no confirmed config in the session, even if the user never says the word "config". Also use when a request contradicts the recorded config (turret code for a no-turret robot). Infers from the repo/BOM first, asks only questions that change what gets built, and always confirms the config back before handing off to ftc-construct — this skill does not write code itself; once the config is confirmed, ftc-construct does the actual generation.'
 ---
 
 # FTC Team Config
@@ -133,10 +133,17 @@ config_history:
 mechanism added in week 6 must not silently overwrite what was true in week 1, because "when did
 the config change" is exactly the question that matters when behavior changes at the same time.
 
-### 6. Generation rules
+### 6. Hand off to ftc-construct
 
-Once `generation_allowed` is true, actually write the code — create and edit real files, don't
-describe hypothetical ones. Three structural rules govern what gets generated:
+Once `generation_allowed` is true, this skill's job is done — it does not write the code itself.
+Hand off to `ftc-construct`, which reads the just-confirmed `team-config.yaml` and does the actual
+generation: scaffolding from the quickstart interface template, grounding API calls and tuning
+values in the library docs and hardware catalog, and running a mandatory rule-check and
+code-review verification pass before calling anything done. Codegen carries its own dedicated
+grounding discipline there instead of being a paragraph bolted onto config confirmation.
+
+Three structural rules that shape what `generation_allowed` actually authorizes, worth knowing
+here too even though ftc-construct is the one that enforces them:
 
 - **Interfaces are derived, not enumerated.** `Drivetrain` is the one always-present interface.
   Every other mechanism interface comes from the keys of the ACTIVE season extension's

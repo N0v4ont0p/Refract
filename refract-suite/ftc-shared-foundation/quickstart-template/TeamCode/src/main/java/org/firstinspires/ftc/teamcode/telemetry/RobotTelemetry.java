@@ -1,0 +1,43 @@
+package org.firstinspires.ftc.teamcode.telemetry;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+/**
+ * Telemetry scaffolding, wired in by default rather than opt-in.
+ *
+ * known-failure-modes.md names "no telemetry" as the root cause that makes every
+ * other fault undiagnosable: a fault that only shows up once (a brownout, a
+ * dropped I2C read, a stale static carrying state from the previous match) reads
+ * as an unreproducible hardware flake unless something recorded state at the
+ * moment it happened. This class exists so a rookie never has to remember to
+ * add telemetry -- {@link org.firstinspires.ftc.teamcode.opmodes.TeamOpMode}
+ * calls {@link #wrap} for every OpMode automatically.
+ *
+ * Implementation is one line on purpose: FTC Dashboard's own
+ * {@link MultipleTelemetry} already fans a single addData/update call out to
+ * both the Driver Station and the dashboard's graphing UI. There is nothing
+ * here worth re-inventing -- the value is that every OpMode gets it without
+ * asking.
+ */
+public final class RobotTelemetry {
+
+    private RobotTelemetry() {
+        // static utility -- not instantiable
+    }
+
+    /**
+     * Wrap the Driver Station's Telemetry instance so every addData/update also
+     * reaches FTC Dashboard.
+     *
+     * @param driverStationTelemetry the {@code telemetry} field the SDK hands
+     *                                every OpMode
+     * @return a Telemetry that fans out to both the Driver Station and the
+     *         dashboard
+     */
+    public static Telemetry wrap(Telemetry driverStationTelemetry) {
+        return new MultipleTelemetry(driverStationTelemetry, FtcDashboard.getInstance().getTelemetry());
+    }
+}

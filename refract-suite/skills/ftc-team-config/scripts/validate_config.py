@@ -81,7 +81,12 @@ def main():
     active_slug = (suite / "season-extensions" / "ACTIVE").read_text().strip()
     season = yaml.safe_load((suite / "season-extensions" / f"{active_slug}.yaml").read_text())
 
-    cfg = yaml.safe_load(cfg_path.read_text()) or {}
+    # No team-config.yaml yet is a normal, expected state (a fresh repo, before any elicitation) —
+    # not a crash. Treat it as an empty config: every mandatory field falls out as unconfirmed via
+    # the existing logic below, same as a sparse-but-present file. `config_found` lets a caller
+    # distinguish "nothing confirmed yet" from "file exists but incomplete".
+    config_found = cfg_path.exists()
+    cfg = (yaml.safe_load(cfg_path.read_text()) or {}) if config_found else {}
     errors, warnings, unconfirmed = [], [], []
 
     core_axes = {k: v for k, v in core.items() if not k.startswith("_")}
@@ -199,6 +204,7 @@ def main():
         "valid": not errors,
         "generation_allowed": not errors and not unconfirmed,
         "active_season": active_slug,
+        "config_found": config_found,
         "errors": errors,
         "warnings": warnings,
         "unconfirmed_mandatory": unconfirmed,

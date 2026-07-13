@@ -2,7 +2,8 @@
 
 Repo-root, shared, cross-cutting reference — same status as `core-feature-model.yaml`.
 Not owned by one skill. Consumed by `ftc-code-review` (§17 rule-based checks),
-`ftc-quickstart-builder` (§16 defaults that actively counter these modes), and
+`ftc-construct` (§23 — the quickstart template it scaffolds from actively counters these modes;
+this absorbed what §16 originally scoped as a standalone `ftc-quickstart-builder` skill), and
 Phase 4 repo mining (used as an active lens while extracting patterns, not a
 separate checklist afterward).
 

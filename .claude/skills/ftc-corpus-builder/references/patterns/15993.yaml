@@ -109,11 +109,13 @@ patterns:
       basis: "MultipleTelemetry is com.acmerobotics.dashboard.telemetry.MultipleTelemetry, designed for exactly this fan-out; the singleton wrapper is a thin convenience idiom."
       collapses_with: [FTC-Dashboard]
     notes: >
-      PHASE 9 ↔ PHASE 4 LINK: this is the concrete reference implementation behind
-      ftc-quickstart-builder's "telemetry ON by default" commitment
-      (.claude/skills/ftc-quickstart-builder/design-notes.md, countering the
-      Measurement/"no telemetry" failure mode in known-failure-modes.md). Kept in
-      the corpus specifically to make that link explicit, not coincidental.
+      PHASE 9 ↔ PHASE 4 LINK: this is the concrete reference implementation behind the
+      quickstart template's "telemetry ON by default" commitment, delivered §23 as
+      refract-suite/ftc-shared-foundation/quickstart-template/TeamCode/.../telemetry/RobotTelemetry.java
+      (wired in via TeamOpMode), countering the Measurement/"no telemetry" failure mode in
+      known-failure-modes.md. Originally scoped to a standalone ftc-quickstart-builder skill
+      (superseded — see TRACEABILITY.md R61). Kept in the corpus specifically to make that
+      link explicit, not coincidental.
 
   - id: 15993-G-actionqueue
     problem: >

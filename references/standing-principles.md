@@ -153,3 +153,26 @@ two assumed-identical copies is the drift bug §7 exists to prevent, wearing a d
 When assembling a new skill (quickstart-builder, season-transition, …): ask of each shared line, *does
 this get executed at a decision point in this body, or merely consulted?* Executed → home copy here +
 canonical pointer. Consulted → pointer only. Default to pointer; earn the home copy.
+
+## 9. Season transition scope — design linkage, noted not built
+
+`ftc-season-transition` (R66, still deferred) is scoped in PLAN.md §19 around `season_mechanisms`:
+detect the boundary, ingest the new manual, redraft the mechanism taxonomy, merge into
+`season-extensions/`. That scope is necessary but not sufficient. Two artifacts introduced after §19
+was written also carry season-specific assumptions and are NOT covered by that scope as written:
+
+- **The quickstart template** (`ftc-shared-foundation/quickstart-template/`) ships concrete example
+  implementations (Shooter/Turret/Intake) built against a specific season's mechanism set. A season
+  boundary that removes or reshapes a mechanism category (see `season-extensions/biobuzz-2026-27.yaml`'s
+  open question on whether BIOBUZZ has a launcher at all) can leave the template's examples describing
+  mechanisms the new season doesn't have, silently — nothing currently checks this.
+- **The library docs corpus** (`ftc-shared-foundation/references/library-docs/`) is season-agnostic at
+  the library-API level (FTCLib/RoadRunner/REV SDK docs don't change with the game), but the *guidance
+  that cites them* (which pattern to reach for, which example to point at) can go stale the same way
+  `check_freshness.py` already watches for elsewhere in this project.
+
+When `ftc-season-transition` is actually built, its trigger set should extend to: does the new
+season's `season_mechanisms` block imply the quickstart template's example implementations need
+revision or replacement, and does anything in the library-docs corpus need a re-fetch check. This is
+a scope note for that future build, not new work now — `ftc-season-transition` stays deferred exactly
+as R66 already records it.
