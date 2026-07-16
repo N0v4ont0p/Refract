@@ -227,10 +227,11 @@ correctly collapsed (not over-counted). The 7 open questions were answered by th
 tagged as design references per confirmed known-imperfect execution, 1 (AutoAimSubsystem's fielded
 status) recorded as an explicit both-sides tension after checking for a caller outside the snapshot
 (full history + all working-tree changes + the one local branch — none found; the GitHub remote was
-inaccessible from this environment, a real limitation). 32008 mined at the lighter, no-provenance
-treatment: 3 low-novelty candidates + 7 real bugs (including one that wouldn't compile against the
-real SDK) — **proposed, not yet formalized into a file** (deprioritized given the internal-only
-ceiling already confirmed).
+inaccessible from this environment, a real limitation). Re-check trigger added to patterns F/G so
+this isn't silently missed if remote access becomes available later. 32008 mined at the lighter,
+no-provenance treatment and **FORMALIZED** — `references/patterns/32008.yaml`, 3 low-novelty
+candidates, every one `public_shippable: false`, plus 7 real bugs found along the way (including one
+that wouldn't compile against the real SDK, recorded in `PHASE-F-G-FINDINGS.md`, not as a pattern).
 
 **F3: all 4 existing cross-team findings walked individually against 19859**, not a bulk append.
 2 substantively updated (`shooter-empirical-vs-physics`: 7th leg, same confidence tier, not
@@ -256,7 +257,27 @@ the README) — confirmed a deliberately well-engineered library (centralized ac
 composition-only OpMode integration, explicit RUNNING/SUCCESS-only command semantics, self-disclosed
 limitations). 6 Refract-side integration findings recorded for G3's future config-axis work; 0
 TickTree-side defects found in this pass — an honest result, not a placeholder, bounded by what was
-actually read. "Pre-alpha, API unstable" attached to every finding. G2/G3/G5 remain future work, not
-silently folded into G1.
+actually read. "Pre-alpha, API unstable" attached to every finding.
+
+**Phase G2/G3/G5: done, real engineering, not documentation-only.**
+- **G5** (docs staleness discipline, built first since G3 needed real docs to ground against): 8
+  real doc files fetched into `library-docs/ticktree/` (all 6 `docs/*.md`, `index.md`, and the
+  README's install+example section), source-headers stamped at the actual commit fetched (not the
+  stale `v0.1.0` release tag). `corpus-input-scan.py` extended with a genuinely different check for
+  this library — commit-tracked, not release-tracked, since TickTree's only release predates its
+  current docs and a release-based check would have reported false CURRENT. Verified both branches
+  fire correctly (a real live run confirms CURRENT; a logic test confirms STALE fires on mismatch).
+- **G2** (recognition): `extract_feature_vector.py` given a real TickTree signature — caught and
+  fixed a real gap while wiring it (`main()` hardcodes which axes reach its output; a SIGS entry
+  alone wasn't enough, verified end-to-end with both a real negative case, 19859, and a synthetic
+  positive case, not just "the regex looks right").
+- **G3** (real, selectable option): `core-feature-model.yaml`'s `software_stack.behavior_layer`
+  axis added (both copies, byte-identical) — deliberately NOT mandatory-always-ask like
+  `pathing`/`opmode_style`, matching `sensing.*`'s optional/detected convention, since TickTree is
+  orthogonal (composes WITH a team's existing command framework, not instead of it) and forcing the
+  question on every team would be poor UX for a niche pre-alpha library. `ftc-construct`'s SKILL.md
+  (both copies) now grounds generation against `ticktree/` when selected, carrying forward both real
+  API constraints from G1 (composition-only `OpModeTreeRunner` integration; RUNNING/SUCCESS-only
+  Command leaves) so generated code can't violate them by construction.
 
 Phase E: planned, not started.

@@ -50,9 +50,24 @@ LIBRARY_REPOS = {
     "ftc-sdk": "FIRST-Tech-Challenge/FtcRobotController",
     "pedro-pathing": "Pedro-Pathing/PedroPathing",
 }
+# G5 (Phase G): commit-tracked, not release-tracked — TickTree is pre-alpha with only one release
+# (v0.1.0) and its docs were deliberately fetched at HEAD, not that tag (see the doc headers'
+# own note). Comparing against "latest release" here would be actively wrong, not just imprecise —
+# it would report CURRENT against a stale tag while real commits pile up unfetched. Compares the
+# commit hash embedded in each doc's own Source URL against the repo's live default-branch HEAD.
+#
+# ponytail: this is a correct fix for TickTree's CURRENT temporary state (docs and releases out of
+# sync), not a standing architectural decision — don't let it calcify into permanent special-case
+# logic. Revisit once TickTree's own release practice stabilizes (i.e. it starts tagging releases
+# that track its docs the way every other bundled library already does) — at that point TickTree
+# should move from COMMIT_TRACKED_REPOS back into the ordinary LIBRARY_REPOS release-based check
+# above, and this whole block (plus its branch in scan_libraries()) should be deleted, not kept
+# around as a second, permanently-diverging code path.
+COMMIT_TRACKED_REPOS = {"ticktree": "N0v4ont0p/Ticktree"}
 LIBRARY_DOCS_DIR = ROOT / "refract-suite/ftc-shared-foundation/references/library-docs"
 PATTERNS_DIR = ROOT / ".claude/skills/ftc-corpus-builder/references/patterns"
 FETCHED_RE = re.compile(r"Fetched:\s*(\d{4}-\d{2}-\d{2})")
+COMMIT_RE = re.compile(r"/blob/([0-9a-f]{7,40})/")
 
 
 def _gh_api(path, params=None):
@@ -130,6 +145,31 @@ def scan_libraries():
             "status": "STALE" if stored_fetch and live_date > stored_fetch else "CURRENT",
             "repo": repo, "stored_fetch_date": stored_fetch,
             "latest_release_tag": release["tag_name"], "latest_release_date": live_date,
+        }
+
+    for lib, repo in COMMIT_TRACKED_REPOS.items():
+        lib_dir = LIBRARY_DOCS_DIR / lib
+        if not lib_dir.exists():
+            results[lib] = {"status": "skipped", "reason": "no local library-docs dir"}
+            continue
+
+        stored_commits = set()
+        for f in lib_dir.rglob("*.md"):
+            head = f.read_text(errors="ignore")[:500]
+            m = COMMIT_RE.search(head)
+            if m:
+                stored_commits.add(m.group(1))
+
+        head_commit, err = _gh_api(f"/repos/{repo}/commits/HEAD")
+        if err or head_commit is None:
+            results[lib] = {"status": "error", "detail": err, "repo": repo, "stored_commits": sorted(stored_commits)}
+            continue
+
+        live_sha = head_commit["sha"]
+        results[lib] = {
+            "status": "CURRENT" if any(live_sha.startswith(c) for c in stored_commits) else "STALE",
+            "repo": repo, "tracking": "commit (pre-alpha, no meaningful release cadence — see G5)",
+            "stored_commits": sorted(stored_commits), "live_head_commit": live_sha,
         }
     return results
 

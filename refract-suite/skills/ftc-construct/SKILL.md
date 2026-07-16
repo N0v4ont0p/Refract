@@ -24,7 +24,7 @@ paths below are relative to it unless stated otherwise.
 | `team-config.yaml` (team's project root) | the confirmed config this generation is *against* — read first, never re-elicited here |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-team-config/scripts/validate_config.py` | authoritative `generation_allowed` gate — read by path, not re-implemented |
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/quickstart-template/` | the interface-based scaffolding source (Drivetrain fixed + per-mechanism interfaces derived from `season_mechanisms`) |
-| `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/`, `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/` |
+| `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/`, `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/`, `ticktree/` (Phase G — pre-alpha, API unstable) |
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/patterns/*.yaml` | provenance-tagged elite-team patterns — cited with confidence/provenance displayed faithfully, same discipline as ftc-code-review |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/catalogs/` + `scripts/motor_math.py` | any spec/tuning value used in generated code — read by path, never guessed |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-code-review/scripts/{config_lint.py,failure_mode_lint.py}` | mandatory post-generation verification (step 5 below) |
@@ -85,6 +85,19 @@ ships one example implementation per DECODE mechanism (`MecanumDrivetrain`, `Fly
   - `sensing.vision` → `limelight/` when `limelight_3a`, **`easyopencv/` when `webcam_easyopencv`**
     — this axis is in scope exactly like `software_stack` is; never skip grounding a vision pipeline
     just because vision isn't `software_stack`.
+  - **`software_stack.behavior_layer` → `ticktree/` when `ticktree`** (Phase G — pre-alpha, API
+    unstable; re-check the doc header's fetch commit against the library's actual current state
+    before trusting it against a materially newer TickTree commit). TickTree is orthogonal, not a
+    replacement for `pathing`/`opmode_style` — it composes WITH whichever command framework the
+    config already selects, sitting above it as a reactive arbitration layer. Two constraints from
+    the library's own design, not incidental: (1) `OpModeTreeRunner` is composition-only — never
+    generate code that extends it as a base class; the correct shapes are
+    `OpModeTreeRunner.runLinear(tree, this::opModeIsActive)` after `waitForStart()` for
+    `LinearOpMode`, or explicit `loop(){tree.tick();}`/`stop(){tree.halt();}` for the raw `OpMode`
+    base (no wrapper exists for that path, by design). (2) Command leaves
+    (`FtcLibCommandAction`/`SolversLibCommandAction`) are RUNNING/SUCCESS only — never generate code
+    that assumes a wrapped `Command` can directly signal FAILURE; express it via `Timeout`/`Guard`/
+    `Condition` structure instead, per the library's own documented constraint.
   Read the relevant file before writing a call against an unfamiliar API in either case; don't
   recall it.
 - **Template-inherited domains — read before extending, not just before adopting.** The quickstart

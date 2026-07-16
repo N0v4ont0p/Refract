@@ -60,6 +60,13 @@ sensing:
 software_stack:
   pathing: [pedro_pathing, roadrunner, custom, none]              # [mandatory] — §13 always-ask
   opmode_style: [ftclib_command_based, raw_linear_opmode]         # [mandatory] — §13 always-ask
+  behavior_layer: [ticktree, none]
+  # NOT mandatory, unlike pathing/opmode_style — detected from imports (io.github.n0v4ont0p.ticktree)
+  # like sensing.vision/sensing.odometry, not always-asked (niche, pre-alpha library most teams have
+  # never heard of; forcing the question would be poor UX for the common case). ORTHOGONAL to both
+  # pathing and opmode_style, not an alternative value within either: TickTree is a reactive
+  # arbitration layer that sits ABOVE whatever pathing/command-framework choice a team already made
+  # (Phase G1/G3) — a team can be ftclib_command_based + pedro_pathing + ticktree simultaneously.
 
 fabrication:
   capability: [stock_gobilda_rev, 3d_printed_custom, cnc_aluminum_or_carbon]

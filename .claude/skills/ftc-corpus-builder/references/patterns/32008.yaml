@@ -1,0 +1,112 @@
+# Distilled patterns — Team 32008
+#
+# source: 32008teamcode/ (local, permissioned — 4 files, no git history, unchanged since Feb 2024).
+# Permission (Phase F0, confirmed by the user, not inferred): INTERNAL ANALYSIS / CORPUS-QUALITY
+#   USE ONLY. Every pattern below is public_shippable: false — held back from the publicly-shipped
+#   plugin corpus until permission for public inclusion is separately reconfirmed with whoever
+#   actually granted access. That permission was not the user's alone to extend to public shipping.
+#
+# Mined at the LIGHTER, no-provenance treatment (Phase F1) — this is rookie/instructional-tier code
+# (52-130 line files, heavy step-by-step teaching comments), not a Tier-1/2 veteran team. No
+# provenance-checker pass was run (deliberate, per the lighter-treatment decision); lineage judgment
+# below is the pattern-extractor's own inline call, not independently re-verified.
+#
+# team-config.yaml sitting alongside these files (found during Phase F0's pre-mining check, R103)
+# is Refract's own earlier test artifact, NOT source material — excluded from mining. That same
+# file also declares team.experience: veteran, which contradicts both the code itself and this
+# lighter-treatment framing — flagged as a likely-stale metadata inconsistency, not resolved here.
+#
+# Full findings, including 7 real bugs found alongside these patterns (not folded in as patterns):
+# PHASE-F-G-FINDINGS.md.
+
+meta:
+  team: "32008"
+  paths_root: "."
+
+patterns:
+  - id: 32008-A-gamepad-deadzone
+    finding_ref: []
+    problem: >
+      Raw analog joystick input has center-drift/jitter that produces unwanted motor creep if mixed
+      directly into drivetrain power.
+    solution_approach: >
+      Apply a fixed-magnitude deadzone independently to each of the three drive axes
+      (forward/strafe/rotate) before mixing — zero the axis if |value| <= 0.1, else pass through —
+      with the rotate axis additionally pre-scaled by 0.85 and all four final wheel outputs scaled
+      by 0.8.
+    code_reference: { file: "a001.java", lines: "68-79" }
+    applicable_when: "Any joystick-driven drivetrain needing manual driver-input smoothing before power mixing — core-layer, season-agnostic."
+    source_team: "32008"
+    confidence: low
+    provenance:
+      classification: independently-derived
+      basis: "Plain FTC SDK, no shared library import — but this is a near-universal FTC convention, low-signal for team-specific engineering judgment. Inline judgment only (lighter treatment, no provenance-checker pass) — not independently re-verified."
+      collapses_with: []
+      public_shippable: false
+      note: "internal analysis/corpus-quality use only per Phase F0 permission scope; NOT eligible for the public plugin corpus without separate reconfirmation."
+    notes: >
+      Deadzone threshold (0.1) and scale factors (0.85, 0.8) are hardcoded inline with no named
+      constants and no comment explaining derivation — cannot tell whether empirically tuned or
+      placeholder defaults. Very common/widely-taught technique — low novelty as a distinctive
+      design choice.
+
+  - id: 32008-B-dpad-edge-trigger-step-adjust
+    finding_ref: []
+    problem: >
+      Need a driver-operable way to incrementally tune a servo setpoint live during teleop/practice
+      without recompiling.
+    solution_approach: >
+      Edge-triggered button-state helpers (gamepad1.dpadUpWasPressed()/dpadDownWasPressed())
+      increment/decrement a persisted field by a fixed step per press-edge, applied directly via
+      Servo.setPosition().
+    code_reference: { file: "a001.java", lines: "84-102" }
+    applicable_when: "Any mechanism with a servo/position setpoint benefiting from live driver-tunable adjustment — season-agnostic, core-layer debug/tuning-UI technique."
+    source_team: "32008"
+    confidence: low
+    provenance:
+      classification: independently-derived
+      basis: "No shared library; common/widely-taught pattern, low novelty. Inline judgment only (lighter treatment, no provenance-checker pass) — not independently re-verified."
+      collapses_with: []
+      public_shippable: false
+      note: "internal analysis/corpus-quality use only per Phase F0 permission scope; NOT eligible for the public plugin corpus without separate reconfirmation."
+    notes: >
+      REAL BUG in this specific instance, not folded into the pattern as validated: a second branch
+      (dpadLeft/dpadRight, lines 94-101) steps the SAME `panel_degree` field by 50.0 per press, while
+      dpadUp/dpadDown (lines 84-91) steps it by 0.01 — and panel_degree feeds Servo.setPosition()
+      directly (valid range [0,1]). A single dpadLeft/Right press would try to drive it far out of
+      range (SDK-clamped, not a crash, but clearly a copy-paste/placeholder mistake). The general
+      edge-triggered-increment TECHNIQUE is sound and transferable; this specific parameterization is
+      not reliable as shipped.
+
+  - id: 32008-C-mecanum-kinematics-plus-normalization
+    finding_ref: []
+    problem: >
+      Convert 3 joystick axes into 4 mecanum wheel powers without exceeding +/-1.0 motor power while
+      preserving the commanded motion ratio between wheels under saturation.
+    solution_approach: >
+      Standard mecanum mixing formula, followed by a magnitude-based normalization pass: find
+      max(|flPower|,|frPower|,|blPower|,|brPower|), and if >1.0, divide all four by that max before
+      calling setPower().
+    code_reference: { file: "SquareDrive.java", lines: "36-52" }
+    applicable_when: "drivetrain.type == mecanum && software_stack.opmode_style == raw_linear_opmode — core-layer, season-agnostic."
+    source_team: "32008"
+    confidence: low
+    provenance:
+      classification: independently-derived
+      basis: "No shared library — but this is the textbook/widely-published FTC-sample mecanum formula, very low novelty as a design decision. Inline judgment only (lighter treatment, no provenance-checker pass) — not independently re-verified."
+      collapses_with: []
+      public_shippable: false
+      note: "internal analysis/corpus-quality use only per Phase F0 permission scope; NOT eligible for the public plugin corpus without separate reconfirmation."
+    notes: >
+      Internal inconsistency worth preserving: TeleopMecanumDrive.java (same tiny corpus, lines
+      50-59) has the IDENTICAL mixing formula but WITHOUT this normalization step — powers go
+      straight to setPower() relying only on the SDK's own clamp, so under simultaneous
+      full-magnitude input the wheel-power RATIOS get distorted rather than preserved in that file.
+      No git history exists for either file to establish which came first — flagged as an observed
+      cross-file inconsistency, not framed as "V1->V2 evolution." SquareDrive.java's own
+      direction-reversal comment ("mecanum wheels: left-front/left-back set to reversed — adjust
+      according to actual installation") flags the wiring assumption as installation-dependent and
+      unverified by the team.
+
+held:
+  - "SingleMotorStarter.java — filename/registered-name says 'single motor' but the code drives all 4 drivetrain motors (arcade-style). Naming/documentation drift, not a pattern; recorded as a bug in PHASE-F-G-FINDINGS.md, not extracted here."

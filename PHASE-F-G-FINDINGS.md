@@ -296,10 +296,14 @@ is Refract's own earlier-session artifact, not 32008's own statement, this is wo
 before it's read by anything downstream as a real signal about the team — not resolved here,
 flagged for whoever owns corpus metadata next.
 
-**Status: proposed, not merged.** Same human-gated checkpoint as every other source. Internal-only
-tagging is load-bearing on these specifically — even after a merge decision, these must never
-surface in the publicly-shipped corpus without the separate reconfirmation the permission decision
-requires.
+**Status: FORMALIZED** — `references/patterns/32008.yaml`, 3 entries, every one
+`provenance.public_shippable: false`. Internal-only tagging is load-bearing here, not incidental —
+even now that these are formalized into a real corpus file, they must never surface in the
+publicly-shipped corpus without the separate reconfirmation the permission decision requires.
+(One real bug caught while writing this file: an early draft used the `provenance:` YAML key twice
+per entry — the second silently clobbered the first, dropping the classification/basis fields
+entirely. Fixed by merging into one block; re-verified by parsing the file and checking both the
+lineage and shipping-scope sub-keys actually survive.)
 
 ---
 
@@ -349,6 +353,75 @@ read (the architectural spine + 2 of 11 FTC-bridge files + 1 of 8 docs files, no
 audit of all 66 source files) — a deeper future pass could still surface something real; this pass
 didn't manufacture a finding to fill the category.
 
-**Status: G1 done. G2 (recognition in mining/generation), G3 (real selectable config option), G5
-(staleness discipline for TickTree's docs) are not started — scoped as future work, not silently
-completed under "G1."**
+**Status: G1 done.**
+
+---
+
+## G5 — TickTree docs, staleness-instrumented (built first — G3 needed real docs to ground against)
+
+8 real files fetched into `refract-suite/ftc-shared-foundation/references/library-docs/ticktree/`:
+all 6 `docs/*.md` (index, getting-started, core-concepts, node-reference, cookbook,
+testing-your-tree, migration) plus the README's install+example section
+(`readme-install-and-hello-tree.md`). Every header stamped with the actual commit fetched
+(`998011a`), explicitly **not** the `v0.1.0` release tag — TickTree's docs have moved on since that
+release, and citing the tag would misrepresent what was actually read.
+
+`corpus-input-scan.py` extended with a genuinely different staleness check for this one library:
+commit-tracked, not release-tracked. TickTree only has one release and it predates the current
+docs — the existing release-based check (compare stored fetch date vs. latest release date) would
+have reported a false `CURRENT` here, not just an imprecise one. Added `COMMIT_TRACKED_REPOS`,
+comparing the commit hash embedded in each doc's own Source URL against the repo's live HEAD.
+Verified both branches, not just the happy path: a real live run confirms `CURRENT` (exact match,
+today); a logic test confirms `STALE` fires correctly on a mismatched hash.
+
+**Marked explicitly in-code as temporary, not a standing decision** — a `ponytail:` comment on the
+branch states this is a correct fix for TickTree's *current* state (docs and release tags out of
+sync) and should be revisited once TickTree's own release practice stabilizes, at which point the
+commit-tracked branch should move back into the ordinary release-tracked check and be deleted, not
+kept around as permanent special-case logic.
+
+## G2 — recognition, in mining and in generation
+
+`extract_feature_vector.py` given a real signature (`io.github.n0v4ont0p.ticktree`,
+`BehaviorTree`, `OpModeTreeRunner`) so a future mining pass doesn't misattribute TickTree-based
+orchestration to a team's own hand-rolled work — the exact class of mistake the provenance-checker
+corrected for 19859-J's FTCLib `CommandScheduler` usage. **Caught and fixed a real gap while wiring
+this**: adding the SIGS entry alone did nothing — `main()` hardcodes which axes actually reach the
+output JSON, and `software_stack.behavior_layer` wasn't in that list. Verified end-to-end, not just
+"the regex looks plausible": a real negative case (19859, no TickTree, correctly reports `unknown`)
+and a synthetic positive case (a file importing `BehaviorTree`/`OpModeTreeRunner`, correctly
+detected with real evidence line numbers).
+
+`ftc-construct`'s SKILL.md (both source and plugin copies) updated so generation-time recognition
+matches mining-time recognition — TickTree is named explicitly as a library to ground against, not
+left to be inferred.
+
+## G3 — a real, selectable config option
+
+`core-feature-model.yaml`'s `software_stack.behavior_layer: [ticktree, none]` axis (both copies,
+re-verified byte-identical). Deliberately **not** marked mandatory-always-ask like
+`pathing`/`opmode_style` — matches the `sensing.vision`/`sensing.odometry` convention (optional,
+detected) instead, because TickTree is genuinely orthogonal: it composes WITH whichever
+pathing/command-framework choice a team already made (confirmed directly from source in G1 —
+`OpModeTreeRunner` is designed to sit above an existing stack, not replace it), and forcing every
+team through a question about a niche pre-alpha library they've likely never heard of would be poor
+UX for the common case.
+
+`ftc-construct`'s SKILL.md §3 (both copies) now grounds generation against `ticktree/` when the
+axis selects it, and carries forward two real API constraints established in G1 — not generic
+caution, the library's own documented design:
+1. `OpModeTreeRunner` is composition-only — generated code must never extend it as a base class.
+   Correct shapes: `OpModeTreeRunner.runLinear(tree, this::opModeIsActive)` after `waitForStart()`
+   for `LinearOpMode`; explicit `loop(){tree.tick();}`/`stop(){tree.halt();}` for the raw `OpMode`
+   base (no wrapper exists for that path, by TickTree's own design).
+2. Command leaves (`FtcLibCommandAction`/`SolversLibCommandAction`) are RUNNING/SUCCESS only —
+   generated code must never assume a wrapped `Command` can directly signal FAILURE; express it via
+   `Timeout`/`Guard`/`Condition` structure instead.
+
+**Status: G2/G3/G5 done — real engineering, verified end-to-end, not documentation-only.** G4 (the
+bidirectional feedback-loop mechanism itself — a dedicated file separating Refract-side integration
+notes from TickTree-side bug reports) is implicit in how G1's findings were already structured (this
+document's own G1 section keeps the two categories explicitly separate) but no dedicated
+`TICKTREE-FEEDBACK.md`-style file exists yet since G1 found 0 TickTree-side defects to put in it —
+nothing to create prematurely. Build that file the first time a real TickTree-side finding exists to
+report.

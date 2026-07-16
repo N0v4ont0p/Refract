@@ -228,3 +228,29 @@ tactical fix that gets the current test to a correct result, and the report that
 *necessary*, are two different obligations — doing only the first is how a real defect survives an
 otherwise-careful test run. This is the more important lesson of the two R101 surfaced, not the bug
 itself.
+
+**A closely related failure shape, recurring three times in one work session — worth naming
+visibly here rather than left scattered across three files' commit history as isolated bug notes:**
+a fix or addition that *reads* as correct is not the same claim as one that has actually been run
+and checked against real output.
+
+1. `config_lint.py`'s own fix (R101): the first attempt (scope the `rglob` search to `code_dir`)
+   read as a reasonable, targeted correction — and was wrong for the common case (a config at the
+   project root, a *sibling* of `code_dir`, not nested inside it). Caught only by running it against
+   the real fixture and getting an unexpected "no config found," not by re-reading the diff.
+2. A pattern file's duplicate YAML key (`32008.yaml`, Phase F1): the source text had both a
+   `classification`/`basis` block and a `public_shippable` block under the same key, `provenance:`
+   — every field was present in the file as written, but YAML's own key-collision rule silently let
+   the second occurrence overwrite the first, dropping the classification entirely. Caught only by
+   parsing the file and printing the actual resulting dict, not by reading the source text.
+3. `extract_feature_vector.py`'s TickTree signature (Phase G2): adding a `SIGS` entry matched the
+   exact shape of every existing signature in the file — but `main()` separately hardcodes which
+   axes reach the output JSON, so the new signature was silently unreachable. Caught only by running
+   the script against a real positive case and checking the actual JSON, not by confirming the
+   `SIGS` dict looked right.
+
+**The rule, stated once so it doesn't need re-deriving three more times**: all three of the above
+would have shipped silently broken if the check had stopped at "the diff looks right." A change
+that reads as correct on inspection has not yet been verified — only running it and checking the
+real output verifies it. This is the concrete, current evidence for why every fix in this project
+gets an actual re-run, not just a re-read, before being called done.
