@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r '.tool_input.file_path // .tool_input.notebook_path // empty'); case \"$f\" in corpus-sources/*|*/corpus-sources/*|32008teamcode/*|*/32008teamcode/*) echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"corpus-sources/ and 32008teamcode/ hold third-party reference material (other FTC teams'\\'' mined/cloned code, kept for corpus-mining reproducibility) -- never part of the Refract deliverable and never to be written to by any agent or subagent. See .gitignore for the rationale.\"}}' ;; esac"
+            "command": "f=$(jq -r '.tool_input.file_path // .tool_input.notebook_path // empty'); case \"$f\" in corpus-sources/*|*/corpus-sources/*|32008teamcode/*|*/32008teamcode/*|19859crucialcodeauthentic/*|*/19859crucialcodeauthentic/*) echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"corpus-sources/, 32008teamcode/, and 19859crucialcodeauthentic/ hold third-party or real-team reference material (mined/cloned code, kept for corpus-mining reproducibility, or the actual team'\\''s own repo) -- never part of the Refract deliverable and never to be written to by any agent or subagent. See .gitignore for the rationale.\"}}' ;; esac"
           }
         ]
       }

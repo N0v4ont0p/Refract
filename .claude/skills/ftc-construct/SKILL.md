@@ -28,7 +28,8 @@ unless stated otherwise.
 | `.claude/skills/ftc-corpus-builder/references/patterns/*.yaml` | provenance-tagged elite-team patterns — cited with confidence/provenance displayed faithfully, same discipline as ftc-code-review |
 | `.claude/skills/ftc-hardware-lookup/references/catalogs/` + `scripts/motor_math.py` | any spec/tuning value used in generated code — read by path, never guessed |
 | `.claude/skills/ftc-code-review/scripts/{config_lint.py,failure_mode_lint.py}` | mandatory post-generation verification (step 5 below) |
-| `.claude/skills/ftc-rule-check/scripts/rules.py` | mandatory post-generation legality re-check (step 5 below) |
+| `scripts/check_freshness.py` (suite root) | mandatory post-generation freshness gate, run BEFORE the rule-check below (step 5) |
+| `.claude/skills/ftc-rule-check/scripts/rules.py` | mandatory post-generation legality re-check, at genuine parity with ftc-rule-check's own flow (step 5 below) |
 | `known-failure-modes.md` (suite root) | the taxonomy the quickstart template already counters by construction — still worth checking generated additions against |
 
 ## The flow
@@ -75,10 +76,24 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
 
 ### 3. Ground the implementation
 
-- **API usage** cites `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` for
-  whichever library the config's `software_stack` actually selects (Pedro Pathing vs. RoadRunner
-  vs. FTCLib's command framework vs. raw SDK) — read the relevant file before writing a call
-  against an unfamiliar API; don't recall it.
+- **API usage is grounded per config axis that selects a library — required, not incidental to
+  whichever axis happens to be named here.** Cite
+  `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` for whichever library the
+  relevant axis actually selects:
+  - `software_stack.pathing` / `software_stack.opmode_style` → Pedro Pathing / RoadRunner / FTCLib's
+    command framework / raw SDK;
+  - `sensing.vision` → `limelight/` when `limelight_3a`, **`easyopencv/` when `webcam_easyopencv`**
+    — this axis is in scope exactly like `software_stack` is; never skip grounding a vision pipeline
+    just because vision isn't `software_stack`.
+  Read the relevant file before writing a call against an unfamiliar API in either case; don't
+  recall it.
+- **Template-inherited domains — read before extending, not just before adopting.** The quickstart
+  template already wires FTC Dashboard (telemetry via `RobotTelemetry`, tunables via
+  `RobotConstants`'s `@Config`). Adapting that existing pattern needs no fresh read. But the moment
+  a request EXTENDS the baseline — a new tunable, a new graphable field, a custom dashboard widget —
+  read `ftc-dashboard/` first: a `@Config` field alone does not make a value graphable, and other
+  FTC-Dashboard-specific mechanics don't fall out of the template's existing wiring by inspection
+  alone.
 - **Hardware values** (gear ratios, tuning constants, spec numbers) are never generated — read them
   from `ftc-hardware-lookup`'s catalog and scripts by path, exactly as ftc-hardware-lookup itself
   would.
@@ -87,8 +102,14 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   `provenance.classification` exactly as stored, never inflated, and carry its `notes` caveats
   verbatim. Same discipline ftc-code-review's pattern-citation step already enforces — a pattern's
   provenance is displayed here, not re-graded.
-- **goBILDA build guides / REV / Limelight docs** ground any generated setup or wiring code the
-  same way — read the relevant file, don't recall a wiring convention from memory.
+- **REV setup/wiring docs** (`rev-robotics/`) ground any generated hub or device-configuration code
+  the same way — read the relevant file, don't recall an addressing/naming convention from memory.
+  **goBILDA build guides** (`gobilda-build-guides/`) are a known, permanent partial exception: they
+  are physical assembly instructions, not code/API references, and even the closest-fit file
+  (`viper-slide-linear-slide-build.md`) has been confirmed to lack the derived numbers (net travel
+  distance) generation actually needs — a corpus-completeness gap, not a wiring one. Treat a miss
+  here as an ask-don't-guess abstention (ship a fail-safe placeholder with a TODO, per
+  standing-principles), not something to keep searching the guide for.
 
 ### 4. Structural rules — non-negotiable, same as ftc-team-config
 
@@ -102,21 +123,42 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
 
 ### 5. Mandatory verification — no exceptions, run before declaring anything done
 
-Every generation ends here, unconditionally, whether the code "looks right" or not:
+Every generation ends here, unconditionally, whether the code "looks right" or not.
+
+**Linters, unconditional:**
 
 ```bash
 python3 .claude/skills/ftc-code-review/scripts/config_lint.py <code_dir> --config <team-config.yaml>
 python3 .claude/skills/ftc-code-review/scripts/failure_mode_lint.py <repo_path>
 ```
 
-Then re-verify legality against anything the generated code touches that has a rules dimension
-(mechanism restrictions, size/expansion limits if relevant) through ftc-rule-check's own
-citation-grounded flow (`rules.py lookup` + `rules.py verify`) — a config being *confirmed* is not
-the same claim as a mechanism being *legal*, and this skill does not substitute one for the other.
+**Rule-check, at genuine parity with `ftc-rule-check`'s own flow — retrieval-plus-citation-existence
+alone is not enough, and a config being *confirmed* is not the same claim as a mechanism being
+*legal*:**
+
+0. **Freshness first, not skipped.** Run `python3 scripts/check_freshness.py` (suite root) before
+   anything else in this step — same script, same call, `ftc-rule-check` itself runs as its own
+   step 0. If it reports `STALE` or `UNVERIFIABLE`, that caveat travels into the final report
+   verbatim; do not silently proceed as if the corpus is guaranteed current.
+1. **Retrieve.** For anything the generated code touches that has a rules dimension (mechanism
+   restrictions, size/expansion limits if relevant), run
+   `python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup <id>` — rule text plus one hop of
+   cross-references.
+2. **Reason, then form a verdict — not optional.** Read the retrieved text, including the
+   cross-referenced neighbors (a size/mechanism rule usually hinges on one), and reason over it
+   against what the generated code actually does. Emit the same structure `ftc-rule-check` itself
+   would: `{verdict: legal|illegal|ambiguous, citations: [{id, text}], reasoning}`. A lookup without
+   this step is retrieval, not a verdict.
+3. **Verify citations before shipping — non-negotiable.** Run
+   `python3 .claude/skills/ftc-rule-check/scripts/rules.py verify <id>`; an unverified citation
+   doesn't ship, same as `ftc-rule-check`'s own step 3.
+4. **Ambiguous is a real outcome.** If reasoning genuinely can't resolve to legal/illegal, the
+   verdict is `ambiguous`, not a confident guess — same as `ftc-rule-check`'s own step 4.
 
 Report the **combined** result — "code written and verified against rules and known failure
-patterns," with the actual linter and citation output attached — never just "code written." If
-either linter reports a finding, or a rule-check verdict comes back `illegal` or `ambiguous`,
+patterns," with the actual linter output, the freshness status, and the full `{verdict, citations,
+reasoning}` attached — never just "code written." If either linter reports a finding, the freshness
+check flags `STALE`/`UNVERIFIABLE`, or the rule-check verdict comes back `illegal` or `ambiguous`,
 surface it plainly before calling the task done. A finding on code this skill just generated is not
 a reason to soften how it gets reported.
 

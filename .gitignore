@@ -22,3 +22,14 @@ __pycache__/
 
 # --- Stray third-party team code (not part of the Refract deliverable; same rationale as corpus-sources) ---
 32008teamcode/
+
+# --- Team 19859's own real robot code repo, if/when present alongside this project (its own nested
+#     .git; carries a debug keystore) -- not part of the Refract deliverable, never swept into a
+#     git add -A here regardless of whose code it is. ---
+19859crucialcodeauthentic/
+
+# --- Gradle build output/cache from compile-testing the quickstart-template or a real TeamCode
+#     checkout dropped alongside it -- machine-specific, never a deliverable. ---
+.gradle/
+build/
+*.class

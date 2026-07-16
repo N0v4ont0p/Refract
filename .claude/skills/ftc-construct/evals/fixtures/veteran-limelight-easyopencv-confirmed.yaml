@@ -1,0 +1,27 @@
+# Utilization-audit fixture: fully confirmed, webcam+EasyOpenCV vision, no shooter/turret.
+# Purpose: gives EasyOpenCV and FTC Dashboard scenarios a config that actually selects them,
+# since neither has a clean season_mechanisms hook of its own.
+_meta: {schema: 1, fixture: true}
+team: {number: 99905, experience: veteran}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}
+  wheel_diameter_mm: {value: 96, source: inferred, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 1, source: asked, confirmed: true}
+sensing:
+  vision: {value: webcam_easyopencv, source: asked, confirmed: true}
+  odometry: {value: goBILDA_pinpoint, source: asked, confirmed: true}
+software_stack:
+  pathing: {value: pedro_pathing, source: asked, confirmed: true}
+  opmode_style: {value: ftclib_command_based, source: asked, confirmed: true}
+fabrication:
+  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  shooter: {value: none, source: asked, confirmed: true}
+  turret: {value: none, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: present, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: asked, confirmed: true}

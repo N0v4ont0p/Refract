@@ -288,6 +288,28 @@ targeting `corpus-sources/` or `32008teamcode/` outright, for every agent, verif
 `Write` attempt into `32008teamcode/` was rejected by the actual permission system before touching
 disk, not just pipe-tested). Full writeup in `ftc-team-config/evals/post-construct-split-reeval.md`.
 
+## §24 — Phase B: library-docs utilization audit + six fixes (IDs now run R1-R99)
+
+A verification pass over the 57-file library-docs corpus (§23's own deliverable), not new
+construction: does every fetched file actually have a reachable path from a skill's real
+instructions, not just a sibling directory? Full findings + fix-by-fix re-verification in
+`ftc-construct/evals/library-docs-utilization-audit.md`. Six fixes landed, each re-tested with a
+real scenario, not assumed fixed from the text diff alone.
+
+| ID | Requirement | Owner | Status |
+|---|---|---|---|
+| R94 | **CO's post-generation rule-check brought to genuine parity with RC's real 5-part flow** — `check_freshness.py` as an actual first step (not skipped), plus an explicit reason-to-verdict instruction between `rules.py lookup` and `rules.py verify`, matching RC's own structure instead of approximating it with retrieval-plus-citation-existence alone. | CO | **VERIFIED** — forced-stale re-test (`check_freshness.py --live-tu 40` against the stored TU-32 corpus) confirmed the final report now explicitly caveats the rule-check verdict as resting on a stale snapshot; previously this check never ran and nothing would have surfaced it. |
+| R95 | **EasyOpenCV and FTC Dashboard wiring made structural, not incidental** — CO's SKILL.md §3 grounding bullets now explicitly cover the `sensing.vision` axis (not just `software_stack`) and template-inherited domains requiring a fresh read when extended beyond baseline. | CO | **VERIFIED** — re-test: fresh agent quoted the exact new FLOW-section instruction (not the files-read table) for both EasyOpenCV and FTC Dashboard before generating; previously both returned "NONE FOUND" and worked only via model initiative. |
+| R96 | **RoadRunner tested for the first time**, not assumed verified by analogy to Pedro Pathing's result. | CO (test coverage, no skill change) | **TESTED — partially grounded, new corpus gap found.** New fixture `veteran-roadrunner-confirmed.yaml` built and validated (`generation_allowed: true`). 7 of 11 cited API calls traced to real quoted lines in `trajectories.md`/`tuning.md`; the teleop localizer/pose-read API is genuinely absent from the fetched docs and was correctly stubbed (`UnsupportedOperationException` + TODO) rather than fabricated — same shape of gap as goBILDA's (R97), flagged for the same Phase F candidate list. |
+| R97 | **goBILDA build-guides gap marked permanent** — a known, structural corpus-completeness gap (source material lacks the derived specs generation needs), not a wiring defect; correct abstention is the designed behavior, not a shortfall to keep searching for. Flagged as a Phase F candidate: team 19859's own measured specs are the real fix, not more fetching. | CO (documentation), flagged DEF (Phase F) | **DELIVERED** — CO's SKILL.md §3 now states this inline; the audit file carries the same note as a load-bearing record, not an incidental observation. |
+| R98 | **REV's two orphaned files explicitly annotated** (`onbot-java-programming.md`: intentionally unreachable, template is Gradle-based; `troubleshooting.md`: no current owner, correctly excluded) so a future utilization audit doesn't re-discover these as mysteries. | — (documentation only) | **DELIVERED** — audit matrix entries updated with the explicit one-line notes. |
+| R99 | **CR gets a narrow, explicit handoff to RC's real flow for legality-flavored questions about existing code** — same sequential-boundary pattern as the existing RC/HW table-pointer (R27): CR invokes `check_freshness.py` + `rules.py lookup` + `rules.py verify` directly and reasons to the same `{verdict, citations, reasoning}` shape, rather than reviewing structurally or guessing. Not new legality logic inside CR, not a third skill. Resolves §23's Step-4 open question (the combined generate→verify chain was previously reachable only for newly generated code). | CR | **VERIFIED** — real scenario against the existing `evals/fixtures/sample-robot/` code (mixed structural-review + legality request: "is this flywheel shooter legal?"). Freshness check ran for real (returned `UNVERIFIABLE` this time — a live network fetch with no parseable TU marker — and that flag was carried into the reasoning, not dropped); `rules.py lookup`/`verify` ran against real candidate IDs (R207, R801) surfaced by grepping the actual corpus, not guessed; verdict `legal`, citation independently re-checked byte-for-byte against `rules.json` (matches verbatim). The ordinary structural pass ran alongside it unmodified — caught a real R34 config-mismatch (`TurretAimer.java` vs. `turret: none`), routed back to ftc-team-config per CR's existing boundary, not resolved inline. |
+
+**Post-fix state, per the audit's own tally: 0 files with an unaddressed wiring gap.** Every one of
+the 57 files now has either verified real usage, directory-level wiring not yet exercised (a testing
+gap, not a routing one), or an explicit, load-bearing annotation stating why it's excluded/thin/
+structurally gapped. Nothing is silently orphaned.
+
 ## Cross-cutting implementation decision (user, assembly phase)
 
 R5, R16, R38, R41, R53 — the five ALL-owner requirements — are implemented as **ONE shared file,

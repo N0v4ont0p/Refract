@@ -22,6 +22,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/standing-principles.md` (suite
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/` | the pattern corpus + `cross-team-findings.yaml` |
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/known-failure-modes.md` (suite root) | the failure-mode taxonomy the linter checks operationalize |
 | `${CLAUDE_PLUGIN_ROOT}/agents/full-review.md` | the isolated Opus-xhigh read-only full-review subagent |
+| `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/check_freshness.py` + `${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py` | invoked directly when a review turns legality-flavored (§5 below) — never re-derived inline |
 
 ## The review
 
@@ -71,6 +72,32 @@ For the high-stakes whole-codebase pass before a competition, delegate the **`fu
 reports findings with evidence; it does not edit. This is the one worth the cost — a missed structural
 problem at a competition is expensive.
 
+### 5. Legality-flavored questions about existing code — resolve via ftc-rule-check's real flow, don't approximate
+
+If a review request is genuinely a legality question about code that already exists ("is this
+mechanism legal", "will this pass inspection") rather than a structural/pattern review question,
+don't review it as a code-quality matter and don't guess at a verdict. Resolve it the same way
+`ftc-rule-check` would, by invoking its actual tools directly — the same sequential-boundary this
+project already uses for hardware tables (R27: a rule citing an embedded table resolves BY POINTER
+into HW's structured file, never re-derived inline; here, a review that turns legal resolves BY
+POINTER into RC's own scripts, never re-derived inline either):
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/check_freshness.py                 # freshness first
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py lookup <id>       # rule + one-hop cross-refs
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py verify <id>       # citation existence, non-negotiable
+```
+
+Reason over the retrieved (and cross-referenced) text against what the *existing* code actually
+does, and emit the same `{verdict: legal|illegal|ambiguous, citations: [{id, text}], reasoning}`
+shape `ftc-rule-check`'s own SKILL.md defines. This mirrors `ftc-construct`'s own post-generation
+rule-check (its §5) — same discipline, applied here to code that already exists instead of code
+just generated. It is not new legality logic living in this skill; it is this skill invoking
+`ftc-rule-check`'s own scripts and structure directly, the same way it already reads the corpus and
+config by path rather than re-deriving them. A *pure* legality question with no existing code in
+view still belongs to `ftc-rule-check` directly, unchanged — this only fires when a review already
+in progress turns out to hinge on legality.
+
 ## Boundaries that shape a review, not just decorate it
 
 - **`fabrication.capability` changes tuning values you *advise*, never which pattern you recommend**
@@ -87,4 +114,7 @@ problem at a competition is expensive.
 Legality verdicts (ftc-rule-check), hardware specs/math (ftc-hardware-lookup), establishing or changing
 the config itself (ftc-team-config — this skill reviews *against* a confirmed config, it doesn't set
 one). If the review reveals the config is wrong, say so and hand back to ftc-team-config rather than
-editing the config here.
+editing the config here. **Narrow exception (§5 above):** when a review already in progress turns out
+to hinge on a legality question about that specific existing code, this skill resolves it by invoking
+`ftc-rule-check`'s own scripts directly rather than deferring or guessing — it still isn't reviewing
+*generically*-posed legality questions with no code in view; those go to `ftc-rule-check` untouched.
