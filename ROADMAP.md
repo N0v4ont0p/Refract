@@ -173,7 +173,7 @@ utilization audit complete (0 files with an unaddressed wiring gap; findings + f
 `ftc-construct/evals/library-docs-utilization-audit.md`, TRACEABILITY.md R94-R99), all fixes
 re-verified with real scenarios, not just text diffs.
 
-**Phase C1: substantially done, pending commit.** `mcp-server/` built (4 tools, thin subprocess
+**Phase C1: done, committed** (`b58d4fd`). `mcp-server/` built (4 tools, thin subprocess
 wrappers, no reimplemented logic), fidelity-tested against the direct skill path (byte-match on
 citations/abstentions/provenance) AND over the real MCP stdio protocol, not just as Python calls.
 Skills-format baseline independently verified per-tool (not just cited from agentskills.io's own
@@ -186,7 +186,7 @@ there too), not built this pass. OpenCode hooks-bridge checked: real, cheap (one
 but on the OpenCode *user's* machine, not something this repo can ship — documented, not built.
 Full findings: `PHASE-C1-C2-FINDINGS.md`. Antigravity's support status still genuinely unverified.
 
-**Phase C2 (continuous input layer): built, pending commit.** `corpus-input-scan.py` at repo root —
+**Phase C2 (continuous input layer): done, committed** (`b58d4fd`). `corpus-input-scan.py` at repo root —
 3 checks (new team repos via GitHub search, library releases for the 6 GitHub-hosted bundled
 libraries, Team Updates via a thin `check_freshness.py` wrapper), manual or external-cron/CI
 trigger only, `GITHUB_TOKEN` env-var auth (same discipline as `CLAUDE_PLUGIN_ROOT` elsewhere in this
@@ -196,12 +196,67 @@ release landed 3 days after the local docs were fetched), and caught+fixed a rea
 (Pedro Pathing) via a direct GitHub API call, not another LLM-summarized fetch.
 
 Both goals Phase C set out with are now closed: cross-tool reach (C1) and an active,
-human-gated-safe input layer (C2). Phase D, E, G: planned, not started. Phase F: not started as a
-phase (F0's scope-confirmation questions haven't been asked) — but its one specific "immediate
-action" (extend the `PreToolUse`
-write-block hook to cover the 19859 material) already happened as a side effect of unrelated work,
-before this file had been read: `19859crucialcodeauthentic/` appeared unexpectedly during Phase B
-and was added to both `.gitignore` and the hook's blocklist defensively. Confirmed with the user:
-this does not retire F0's actual scope-confirmation checkpoint (exact paths, 32008's real git-history
-state, per-source permission scope) — those are still unanswered and stay that way until Phase F
-formally starts.
+human-gated-safe input layer (C2).
+
+**Phase D: done, committed** (`65c3d31`). Full findings: `PHASE-D-FINDINGS.md`. Real Rule-7
+staleness re-check (5/6 libraries current, `ftc-sdk` genuinely stale — characterized and closed with
+a sourced addendum, not a blind re-fetch), a fresh 6-scenario eval battery across all 5 skills (all
+regression-free), a real bug found and fixed at root cause (`config_lint.py`'s config-discovery bug,
+R101 — caught live by the eval battery, not gone looking for), and the R100 self-scan applied to
+this project's own docs (one genuine clarity gap found and tightened). R102 (`standing-principles.md`
+§11): a workaround needed to get a correct result during testing is itself a finding, escalate it
+immediately — the actual lesson R101 exposed. README fully rewritten with the corrected cross-tool
+picture.
+
+**Phase F0 + G0: closed, committed.** Full findings: `PHASE-F-G-FINDINGS.md`. Paths and git-history
+state for both 19859 and 32008 re-verified live, not assumed. Permission scope decided by the user
+(not inferred): 19859 has full authority to ship derived patterns in the public plugin corpus; 32008
+is internal-analysis-only until public-shipping permission is separately reconfirmed with whoever
+actually granted access. New standing rule (R103): check for Refract's own prior generated output
+before mining any directory — a real instance of this was found (`32008teamcode/team-config.yaml`,
+Refract's own earlier test artifact sitting in a to-be-mined directory) before it could contaminate
+provenance. TickTree confirmed real and substantive (17 commits, two working modules, 8 real docs
+files, published JitPack `v0.1.0`) — go decision for G1.
+
+**Phase F1: 19859 FORMALIZED and merged** — `references/patterns/19859.yaml`, 10 entries (11 raw
+candidates, 2 merged into one lineage). Real feature-vector extraction (one script false-positive
+caught and corrected by direct code reading — flagged `swerve`, actually mecanum), real evolution
+analysis across all 3 git commits, pattern-extractor + provenance-checker both run, lineages
+correctly collapsed (not over-counted). The 7 open questions were answered by the author
+(2026-07-16) and applied precisely — 3 genuinely left unresolved, 3 areas (Pinpoint/shooter/autoaim)
+tagged as design references per confirmed known-imperfect execution, 1 (AutoAimSubsystem's fielded
+status) recorded as an explicit both-sides tension after checking for a caller outside the snapshot
+(full history + all working-tree changes + the one local branch — none found; the GitHub remote was
+inaccessible from this environment, a real limitation). 32008 mined at the lighter, no-provenance
+treatment: 3 low-novelty candidates + 7 real bugs (including one that wouldn't compile against the
+real SDK) — **proposed, not yet formalized into a file** (deprioritized given the internal-only
+ceiling already confirmed).
+
+**F3: all 4 existing cross-team findings walked individually against 19859**, not a bulk append.
+2 substantively updated (`shooter-empirical-vs-physics`: 7th leg, same confidence tier, not
+escalated; `moving-shot-compensation`: candidate 4th formulation, explicitly NOT counted toward the
+"three fielded teams" claim pending the fielded-status tension). 2 checked with no genuine new leg
+found (`orchestration-nonblocking`: 19859 uses FTCLib's off-the-shelf scheduler, not an independent
+mechanism; `sensing-modality`: 19859 has no game-piece sensing at all) — no forced edit either way.
+
+**F2: partial.** A real draft config extracted from F1's findings —
+`ftc-team-config/evals/fixtures/19859-real-draft.yaml`, schema-valid, `generation_allowed: false`
+(every field `confirmed: false`, since this is static extraction, not a live confirmation). Caught
+and fixed 2 real schema issues while validating it (an invented field, a guessed-vs-evidenced intake
+type). **Not done**: promoting this into the standing `§20` fixture requires an actual confirmation
+step, not just extraction — not silently claimed as complete.
+
+**F4: checked, insufficient data — honest result, not forced.** `stale_pid`'s heuristic needs a
+temporal gap between a hardware change and a stale PID re-tune; 19859's only 3 commits introduce its
+PID constants in the same commit as the surrounding hardware changes, no gap to detect. Remains
+"implemented as heuristic, not yet validated."
+
+**Phase G1: done for this pass.** TickTree's architectural spine read directly from source (not just
+the README) — confirmed a deliberately well-engineered library (centralized activation lifecycle,
+composition-only OpMode integration, explicit RUNNING/SUCCESS-only command semantics, self-disclosed
+limitations). 6 Refract-side integration findings recorded for G3's future config-axis work; 0
+TickTree-side defects found in this pass — an honest result, not a placeholder, bounded by what was
+actually read. "Pre-alpha, API unstable" attached to every finding. G2/G3/G5 remain future work, not
+silently folded into G1.
+
+Phase E: planned, not started.

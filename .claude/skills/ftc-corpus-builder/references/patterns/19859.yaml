@@ -1,0 +1,325 @@
+# Distilled patterns — Team 19859, DECODE
+#
+# source: 19859crucialcodeauthentic/ (local, permissioned — the user's own team, not a public
+#   GitHub clone). Real git history: 3 commits, all 2026-06-16.
+# Permission (Phase F0, confirmed by the user, not inferred): FULL — derived patterns may ship in
+#   the public plugin corpus, same as any Tier-1/2 team.
+# Mined at full Tier-1-equivalent depth (Phase F1): extract_feature_vector.py run for real, full
+#   git-evolution diff across all 3 commits, pattern-extractor + provenance-checker both run.
+#   Full findings: PHASE-F-G-FINDINGS.md.
+#
+# Feature-vector correction, recorded for future mining methodology: extract_feature_vector.py
+# flagged drivetrain.type=swerve — a false positive sourced entirely from Pedro Pathing's own
+# bundled pedroPathing/Tuning.java (vendor tuning boilerplate, not this team's code). Corrected by
+# reading the real, fielded subsystems/Drivetrain.java directly: definitively mecanum (classic
+# (y+x+rx) mixing + 45-degree-offset field-oriented trig).
+#
+# Author follow-up (2026-07-16), applied precisely per the answers given — NOT stretched further
+# than what was actually confirmed:
+#   - Q2 (two heading-lock implementations), Q6 (unused static pose handoff), Q7 (Robot.exec thread
+#     pool abandoned) — genuinely UNRESOLVED, no information available. Recorded as such below, not
+#     guessed at.
+#   - Q1 (Pinpoint CRC bad-read counter) — NOT resolved as live-vs-disconnected specifically, but
+#     Pinpoint integration overall is confirmed known-imperfect ("a bit of deviation"). Pattern A
+#     tagged as a design reference, not a best-practice exemplar.
+#   - Q3 (is AutoAimSubsystem fielded?) — real tension, NOT resolved either way. Checked for a
+#     caller outside this snapshot (full local git history across all commits, all staged/unstaged
+#     working-tree changes, the one local branch) — none found. The one configured remote
+#     (github.com/IvyMaker/PP_19859_25-26_MK3) returned "repository not found" from this
+#     environment (private or inaccessible) — could not check for other remote branches; recorded
+#     as a real limitation, not treated as a negative result. Per the author: described as a
+#     working (if rough) part of the robot, but disconnected in this specific code snapshot — BOTH
+#     sides recorded on patterns F and G, not resolved to one.
+#   - Q4/Q5 (shooter airtime + panelConstants "untested/unused" vs. live usage) — same
+#     known-deviation signal applies to the shooter lineage generally. Patterns C and D tagged as
+#     design references, not best-practice exemplars. Full resolution not available.
+#   - Everything else (B, H, I, J, K — unrelated to autoaim/shooter/Pinpoint): proceeds at the
+#     provenance-checker's own confidence tier, no additional caveat. This is authentic, tuned,
+#     competition-validated code; the caveat is scoped to the three specific known-rough areas
+#     named above, not the whole source.
+
+meta:
+  team: "19859"
+  paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+
+patterns:
+  - id: 19859-A-pinpoint-crc-firmware-gate
+    finding_ref: []
+    problem: >
+      goBILDA Pinpoint's CRC error-detection mode is only available on newer driver firmware;
+      blindly enabling it on older firmware would silently fail or misbehave. Need graceful
+      degradation plus visibility into odometry-sensor health.
+    solution_approach: >
+      At init, read pinPoint.getDeviceVersion() and only enable ErrorDetectionType.CRC if firmware
+      >= a minimum-version constant (PINPOINT_CRC_MIN_FIRMWARE_VERSION = 3); otherwise fall back to
+      ErrorDetectionType.LOCAL_TEST. Tracks last DeviceStatus and a bad-read counter, exposed via
+      getters.
+    code_reference: { file: "subsystems/Drivetrain.java", init: "39-62", gate: "64-74", status_tracker: "76-82", getters: "215-229" }
+    applicable_when: "odometry.type == gobilda_pinpoint"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Team's own commit (5dd70eb, 'Add intake heading lock and Pinpoint CRC telemetry'); no shared-library import for this logic — direct GoBildaPinpointDriver SDK calls."
+      collapses_with: []
+    caveat_ref: "known-imperfect-pinpoint"
+    notes: >
+      KNOWN-IMPERFECT (per author, 2026-07-16): the team confirms Pinpoint integration overall has
+      "a bit of deviation" — not fully dialed in. The specific technical question (whether the
+      private updatePinPoint() that updates the bad-read counter still has a live call site — it
+      appeared to have none in this snapshot) was NOT resolved either way. Use this as a design
+      REFERENCE for the firmware-gating strategy, not a best-practice exemplar to cite as proven.
+
+  - id: 19859-B-pd-heading-lock-field-oriented
+    finding_ref: []
+    problem: >
+      Hold a target field-relative heading while still allowing full translational driver control
+      in a field-oriented mecanum drive, without a blocking turn-to-heading routine.
+    solution_approach: >
+      driveFieldOriented(gamepad, lockHeading, targetHeadingDeg, p, currentPosition): when
+      lockHeading is true, `turn` is computed by calculateHeadingCorrection instead of the right
+      stick. Wraps heading error to [-180,180], deadbands under 1 deg, applies a dt-based PD
+      (AUTO_TURN_KP/AUTO_TURN_KD) whose output passes through a signum-based kS feedforward blend
+      (recalcTurn).
+    code_reference: { file: "subsystems/Drivetrain.java", overloads: "108-110,160-182", correction: "184-205", feedforward: "207-209" }
+    applicable_when: "drivetrain.type == mecanum && localization.provides_heading == true"
+    source_team: "19859"
+    confidence: low
+    provenance:
+      classification: shared-ancestry
+      basis: "Core is the widely-taught community mecanum field-oriented-control + PD heading-lock formulation (GM0-style) — convergent, not an independent invention. Only the recalcTurn kS feedforward term is genuinely team-specific."
+      collapses_with: ["GM0/community mecanum field-oriented + textbook PD heading-lock"]
+    notes: >
+      No known-imperfect caveat applies here (unrelated to the Pinpoint/shooter/autoaim areas
+      flagged 2026-07-16) — the low confidence tag is purely a provenance/novelty call, not an
+      execution-quality one. An older, duplicate 3-arg overload also exists (Drivetrain.java:116-158,
+      still called from tests/AASSTEST.java) — whether it's a deliberate comparison or unmigrated
+      leftover is UNRESOLVED (author confirmed no information available).
+
+  - id: 19859-C-shooter-empirical-cubic-fit
+    finding_ref: [shooter-empirical-vs-physics]
+    problem: >
+      Produce flywheel-velocity, hood-position, intake-power, and inter-shot-gap setpoints for a
+      variable-distance turreted shooter from measured calibration data.
+    solution_approach: >
+      A single generic cubic-polynomial evaluator f(a,b,c,d,x) = a*x^3+b*x^2+c*x+d, fit against
+      distance with per-curve coefficient sets (velocity, hood — each effectively lower-order since
+      leading coefficients are 0), reused across FOUR distinct empirical curves rather than
+      hand-rolling a fit function per behavior.
+    code_reference: { file: "subsystems/Shooter.java", constants: "39-61", fit_fn: "211-213", velocity: "247-253", hood: "255-261", intake_and_gap: "202-209" }
+    applicable_when: "season.has_variable_distance_scoring == true"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "The evaluator itself is a trivial shared primitive (cubic poly), but the fitted coefficients are 19859's own measured velocity/hood/intake/gap-vs-distance regression on their own robot, and the reuse-across-four-curves design is the team's own code-organization choice."
+      collapses_with: []
+    caveat_ref: "known-imperfect-shooter"
+    notes: >
+      KNOWN-IMPERFECT (per author, 2026-07-16): the same "known deviation, not the best code" signal
+      the team gave for Pinpoint applies to the shooter area generally (this pattern was originally
+      drafted as two candidates, C and E — merged here since they're one lineage: E was just "reuse
+      the same evaluator across more curves," not a second independent finding). Use as a design
+      REFERENCE for the shared-evaluator strategy, not a best-practice exemplar of dialed-in tuning.
+      Separately: constants/panelConstants.java's class comment reads "未测试 未使用" (untested,
+      unused), yet SHOOTER_KP/KI/KD/KF and VELOCITY_TOR from that class ARE imported and used live
+      in this file's velocity-PIDF/shooterReady logic — whether the comment is stale or applies only
+      to the class's other fields is UNRESOLVED (author confirmed no information available beyond
+      the general "not the best code" signal).
+
+  - id: 19859-D-shooter-airtime-physics-abandoned-for-constant
+    finding_ref: [shooter-empirical-vs-physics]
+    problem: >
+      Compute projectile time-of-flight for a given shot distance, for shoot-on-the-move lead
+      compensation.
+    solution_approach: >
+      A physics-flavored trajectory solver exists (surfaceZ/zOfT/solveForT, an 80-iteration
+      bisection search against fitted launch-angle and gravity constants) — but the intended call
+      site, calculateAirtime(), has that solve commented out and just `return 0.6;`, a hardcoded
+      constant independent of distance.
+    code_reference: { file: "subsystems/Shooter.java", trajectory_math: "215-245", airtime_shelved: "263-268" }
+    applicable_when: "season.has_variable_distance_scoring == true && shooter.requires includes shoot_on_the_move"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Team's own code; the commented-out call and hardcoded return are directly visible in source, not inferred."
+      collapses_with: []
+    caveat_ref: "known-imperfect-shooter"
+    notes: >
+      KNOWN-IMPERFECT (per author, 2026-07-16, same shooter-area signal as 19859-C) — whether this
+      was a deliberate temporary simplification with a known upgrade path, or the physics solve was
+      found not to work and shelved, is UNRESOLVED (no information available). Preserve this AS a
+      negative-result / lesson-learned pattern (a built-then-shelved physics model, replaced by an
+      empirical constant) — do not promote the physics solver itself as a recommended approach.
+
+  - id: 19859-F-sotm-braking-predictive-projection
+    finding_ref: [moving-shot-compensation]
+    problem: >
+      Lead a turreted shot to compensate for robot translational motion AND anticipated
+      deceleration (braking) between the aiming calculation and the moment the shot releases.
+    solution_approach: >
+      Chassis forward/lateral velocity and acceleration are low-pass filtered; if braking, measured
+      acceleration is blended toward a fixed empirical brake-deceleration constant per axis. The
+      release point/velocity is projected forward by MECHANICAL_SHOOT_DELAY, then flight time (from
+      calculateAirtime, see 19859-D) projects the shot's landing position, converted to a target
+      turret angle/rpm/pitch. Turret drive is a position PID plus kV/kS/kA feedforward, additionally
+      offset by a braking-distance term.
+    code_reference: { file: "subsystems/AutoAimSubsystem.java", braking_helpers: "224-240", chassis_filters_and_projection: "275-317", turret_brake_overshoot: "364-371", turret_feedforward_drive: "452-472" }
+    applicable_when: "shooter.requires includes shoot_on_the_move && turret.present == true"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Only the inner turret loop is a shared primitive (FTCLib PIDFController). The filtering/braking-prediction/projection/feedforward strategy is bespoke. Pedro's own PredictiveBrakingCoefficients is for PATH following, not for leading a turret shot — a distinct, team-authored SOTM model, not adapted from a shared source."
+      collapses_with: []
+    caveat_ref: "known-imperfect-autoaim"
+    notes: >
+      KNOWN TENSION (per author, 2026-07-16) — NOT resolved either way, both sides recorded: the
+      author describes AutoAimSubsystem as "a working (if rough) part of the robot," while the code
+      itself shows it referenced only from tests/AASSTEST.java and tests/TurretFullAutoTuner.java —
+      no auto/ or teleop opmode constructs it; the fielded teleop uses a simpler turretToDegree()
+      path instead. Checked for a caller outside this snapshot (full git history, all
+      staged/unstaged changes, the one local branch) — none found; the configured GitHub remote
+      returned "not found" from this environment, so other remote branches could not be checked — a
+      real limitation, not a negative finding. This is the highest-engineering-value pattern in the
+      batch, but treat it as a design reference pending the author's own resolution of the
+      fielded-vs-rough tension, not a confirmed best-practice exemplar. Also consumes
+      calculateAirtime (19859-D), which currently returns a hardcoded constant regardless of the
+      resolution above.
+    recheck_trigger: >
+      If remote branch access to 19859's repo (github.com/IvyMaker/PP_19859_25-26_MK3) becomes
+      available later — re-attempted auth, a different clone — that specifically could resolve the
+      AutoAimSubsystem caller question this pattern's dual-sided recording rests on. When that
+      happens, re-check for a caller outside this snapshot and revisit this pattern's confidence/
+      caveat explicitly, rather than treating it as one more incidental finding folded in passively.
+
+  - id: 19859-G-turret-soft-limit-return-to-center
+    finding_ref: []
+    problem: >
+      A turret with a limited mechanical rotation range must not be commanded past its physical
+      limits when the computed aim solution falls outside a safe range.
+    solution_approach: >
+      If the computed target turret angle falls outside [TURRET_MIN_SAFE_ANGLE,
+      TURRET_MAX_SAFE_ANGLE], the aim update clears hasTarget/isAimLocked, drives the turret back
+      toward a configured TURRET_CENTER_ANGLE instead of the unsafe target, and resets the hood to
+      its minimum position — a fail-safe default rather than clamping the angle in place.
+    code_reference: { file: "subsystems/AutoAimSubsystem.java", lines: "353-360" }
+    applicable_when: "turret.present == true && turret.has_mechanical_range_limit == true"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Team's own safety branch inside its own turret-aim update loop — the choice to recenter rather than saturate-at-limit is a deliberate design decision."
+      collapses_with: []
+    caveat_ref: "known-imperfect-autoaim"
+    notes: >
+      Same fielded-vs-rough tension as 19859-F applies (lives inside the same AutoAimSubsystem,
+      only exercised from tests/) — see 19859-F's notes for the full both-sides record. The
+      recenter-not-clamp design decision itself is sound regardless of that tension; use as a
+      reference for the safety-behavior CHOICE, not as confirmation the whole subsystem is
+      match-proven.
+    recheck_trigger: >
+      Same trigger as 19859-F: if remote branch access to 19859's repo becomes available later,
+      re-check for an AutoAimSubsystem caller outside this snapshot and revisit this pattern's
+      confidence/caveat explicitly rather than folding the result in passively.
+
+  - id: 19859-H-pedro-follower-subsystem-wrapper
+    finding_ref: []
+    problem: >
+      Integrate Pedro Pathing's Follower into an FTCLib command-based architecture so
+      path-following can be driven/queried like any other subsystem, with pose pushed to a
+      dashboard each tick.
+    solution_approach: >
+      FollowerSubsystem extends FTCLib's SubsystemBase, constructs the Follower via
+      pedroPathing/Constants.createFollower, exposes a thin pass-through API. Its periodic() calls
+      follower.update() and pushes x/y/heading to a TelemetryManager every scheduler tick.
+    code_reference: { file: "subsystems/FollowerSubsystem.java", lines: "14-75" }
+    applicable_when: "software_stack.pathing == pedro_pathing && software_stack.command_framework == ftclib"
+    source_team: "19859"
+    confidence: low
+    provenance:
+      classification: shared-ancestry
+      basis: "Standard FTCLib+Pedro integration glue every team using both libraries writes — convergent boilerplate following both libraries' own idioms, not a team-original design."
+      collapses_with: ["FTCLib SubsystemBase + Pedro Follower integration idiom"]
+    notes: >
+      No known-imperfect caveat applies (unrelated to the flagged areas) — the low tag is purely
+      provenance/novelty. Real latent bug worth preserving: getInstance() reassigns a NEW instance
+      on every call (instance = new FollowerSubsystem(...)) — a broken singleton, no actual reuse.
+      This argues against citing the file as an exemplary singleton pattern even though the
+      wrapping SEAM (Pedro Follower as an FTCLib SubsystemBase) is a reasonable structural choice.
+
+  - id: 19859-I-dynamic-bezier-command-by-point-count
+    finding_ref: []
+    problem: >
+      Drive from the robot's CURRENT (live, not pre-planned) pose to a target pose through a
+      variable number of control points, as a single composable command.
+    solution_approach: >
+      DriveCurrentToPoint (and sibling DrivePointToPoint) extend FTCLib's CommandBase, overloaded by
+      Bezier control-point count (2-5), selected at construction. The Pedro PathBuilder path is
+      built inside initialize() — not the constructor — using the follower's LIVE pose at
+      schedule-time. DrivePointToPoint is the same structure from an explicit start pose instead.
+    code_reference: { file: "commands/DriveCurrentToPoint.java", lines: "11-124" }
+    applicable_when: "software_stack.pathing == pedro_pathing && software_stack.command_framework == ftclib"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "Bezier/PathBuilder are Pedro primitives and CommandBase is FTCLib, but the load-bearing idea — resolving the path start from the robot's live pose at initialize() rather than at construction — is the team's own design. The deliberate live-pose-vs-fixed-start contrast between the two sibling commands confirms intentionality, not incidental behavior."
+      collapses_with: []
+    notes: >
+      Full confidence — unrelated to the three flagged areas (autoaim/shooter/Pinpoint). Real design
+      insight (resolve the path start at runtime so it begins wherever the robot actually is).
+
+  - id: 19859-J-hybrid-command-plus-raw-loop-orchestration
+    finding_ref: []
+    problem: >
+      An autonomous routine needs both DISCRETE sequenced actions and CONTINUOUS per-tick concerns
+      (pose tracking, dashboard drawing, live distance-based shooter aiming) running simultaneously.
+    solution_approach: >
+      Built on the raw event-driven OpMode base (not LinearOpMode): discrete sequencing goes through
+      FTCLib's CommandScheduler, scheduled once in start(). Continuous concerns run directly every
+      tick in the OpMode's own loop(), OUTSIDE the command graph, alongside
+      CommandScheduler.getInstance().run().
+    code_reference: { file: "auto/BLUE_FAR_LEAVE.java", loop: "75-93", start: "95-123" }
+    applicable_when: "software_stack.command_framework == ftclib && software_stack.opmode_base == raw_opmode"
+    source_team: "19859"
+    confidence: single-source
+    provenance:
+      classification: independently-derived
+      basis: "The CommandScheduler.getInstance().run() call inside a raw OpMode.loop() is a standard FTCLib usage — the shared part. The team-specific part is the deliberate architectural split between scheduled discrete sequencing and raw-loop continuous concerns."
+      collapses_with: []
+    notes: >
+      Full confidence — unrelated to the three flagged areas. Structurally similar auto opmodes
+      exist for other alliance/start-position combinations (BLUE_CLOSE_18, BLUE_FAR_21, RED_CLOSE_18,
+      RED_FAR_21) — cited file is representative, not exhaustive.
+
+  - id: 19859-K-cross-opmode-static-pose-handoff
+    finding_ref: []
+    problem: >
+      Carry the robot's ending pose and alliance-appropriate scoring-target coordinates from
+      Autonomous into the subsequent TeleOp period.
+    solution_approach: >
+      robotConstants declares volatile static fields (autoEndX/Y/H, BLUE/RED_TARGET_X/Y,
+      teleOpTargetX/Y). The auto OpMode writes these at multiple points (loop(), end of the
+      scheduled sequence, stop()); a subsequent TeleOp is presumed to read them to seed its own
+      pose/targeting.
+    code_reference: { file: "constants/robotConstants.java", fields: "20-31" }
+    applicable_when: "season.requires_auto_to_teleop_pose_handoff == true"
+    source_team: "19859"
+    confidence: low
+    provenance:
+      classification: shared-ancestry
+      basis: "The ubiquitous FTC community auto->teleop static-field pose handoff idiom — convergent, not team invention."
+      collapses_with: ["common FTC auto->teleop static-field pose handoff idiom"]
+    notes: >
+      No known-imperfect caveat applies (unrelated to the flagged areas) — low tag is purely
+      provenance/novelty. One above-average touch worth crediting: the fields are declared
+      `volatile`, acknowledging cross-thread opmode visibility (most teams omit this). UNRESOLVED
+      (author confirmed no information available): no TeleOp opmode in this snapshot actually reads
+      these fields — the one present (tests/Test.java) hardcodes its own pose/targets instead.
+      Whether a real consuming teleop exists outside this snapshot is unknown.
+
+held:
+  - "tests/AASSTEST.java, tests/TurretFullAutoTuner.java — tuning/debug harnesses for AutoAimSubsystem, not distilled patterns themselves (their existence is evidence cited in 19859-F/G's notes, not extracted separately)."
+  - "Robot.java's ScheduledExecutorService (exec field) — constructed but its only consumer (shootAll) is fully commented out. Not extracted as a pattern (nothing to distill from an abandoned, never-wired mechanism); whether it was abandoned in favor of command-based sequencing or still planned is UNRESOLVED (Q7, no information available)."

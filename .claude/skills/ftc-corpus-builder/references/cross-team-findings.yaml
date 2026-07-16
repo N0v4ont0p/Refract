@@ -103,19 +103,26 @@ findings:
       - { id: 24089-A-shooter-empirical-linear-regression, team: "24089", stance: "empirical (class NAMED ProjectileMotion, but the fielded distance->power core is a live-tuned LINEAR REGRESSION; integrated & 'working'). FOURTH empirical leg — see corrected_from_counterexample below." }
       - { id: 12808-A-shooter-empirical-bilinear-fielded, team: "12808", stance: "empirical (fielded 3x3 bilinear-interpolation tables + gradient feedforward + Lambert SOTM lead; BUILT a CORRECT drag-aware solver — ProjectileMathWithDrag, g=386.0885 — and shelved it, wrapper never constructed). FIFTH empirical leg; sharpest physics-capable-chose-empirical instance." }
       - { id: 15083-A-shooter-empirical-lut-sotm, team: "15083", stance: "empirical (three coupled InterpLUTs — velocity/hood/TIME — + iterative empirical-time SOTM + BANG-BANG flywheel control + turret hysteresis). SIXTH empirical leg; InterpLUT primitive is SolversLib, the calibration approach/data is the team's own." }
+      - { id: "19859-C/D-shooter-cubic-fit-plus-shelved-airtime-physics", team: "19859", stance: "empirical (a single shared cubic-polynomial evaluator fit against distance, reused across velocity/hood/intake/gap curves; separately, a physics time-of-flight bisection solver was built and then shelved for a hardcoded constant — 19859-D, same shape as 15993/24089/12808's build-then-shelve pattern, this time on the AIRTIME axis rather than the power axis). SEVENTH empirical leg, genuinely distinct execution (a shared parametric-polynomial fit, not a table/LUT/logistic/linear form any of the other six use). CAVEAT, carried forward per the author (2026-07-16): shooter tuning on this team is self-described as having 'a bit of deviation, not the best code' — cite this leg for the STRATEGY (shared-evaluator reuse; build-then-shelve-physics-for-airtime), not as evidence of a well-dialed-in seventh exemplar the way the other six are." }
       - { id: 16093-D-shooter-preset, team: "16093", stance: "THIRD STANCE — fixed-preset bet (no continuous distance-aiming model at all); see third_stance below" }
     claim: >
-      SIX teams independently field EMPIRICAL distance->power mappings (15993 logistic fit,
+      SEVEN teams independently field EMPIRICAL distance->power mappings (15993 logistic fit,
       19043 2-axis table, 22105 distance->velocity LUT, 24089 live-tuned linear regression,
-      12808 bilinear-interpolation grid, 15083 three-coupled-LUTs) — six visibly different executions,
-      no shared code lineage (15083's InterpLUT is a SolversLib util, but the calibration approach + data
-      are its own). Gravity-ballistics for the power solve was independently BUILT and never fielded THREE
-      times (15993's Alfa.kt, built then removed; 24089's proj_motion.py, broken offline prelim; 12808's
-      ProjectileMathWithDrag, a CORRECT drag solver whose wrapper is never constructed). The corpus's
-      lean toward empirical distance->power for FTC shooters is well-supported — strengthened both
-      because the one team that looked like a physics counterexample turned out to confirm the pattern
-      (24089), and because the team with the most correct ballistics model still shipped tables (12808),
-      which sharpens the remaining doubt onto spin/slip/variance specifically rather than ballistics broadly.
+      12808 bilinear-interpolation grid, 15083 three-coupled-LUTs, 19859 shared cubic-polynomial
+      evaluator) — seven visibly different executions, no shared code lineage (15083's InterpLUT is a
+      SolversLib util, but the calibration approach + data are its own). Gravity-ballistics for the power
+      solve was independently BUILT and never fielded THREE times (15993's Alfa.kt, built then removed;
+      24089's proj_motion.py, broken offline prelim; 12808's ProjectileMathWithDrag, a CORRECT drag solver
+      whose wrapper is never constructed) — a FOURTH build-then-shelve instance exists on the adjacent
+      AIRTIME axis (19859-D), not the power axis itself, noted for completeness rather than folded into
+      the power-solve count. The corpus's lean toward empirical distance->power for FTC shooters is
+      well-supported — strengthened both because the one team that looked like a physics counterexample
+      turned out to confirm the pattern (24089), and because the team with the most correct ballistics
+      model still shipped tables (12808), which sharpens the remaining doubt onto spin/slip/variance
+      specifically rather than ballistics broadly. The seventh leg (19859) reinforces the SAME tier, not a
+      higher one — see discount_prediction: this is exactly the kind of additional-diverse-execution
+      update the finding's own test anticipates, not a leg-count escalation, and its self-reported
+      known-imperfect tuning is an additional reason not to read it as strengthening confidence further.
     the_mechanism: >
       WHY (this is what should travel with the finding, not just the outcome): a physics model's
       real-world accuracy for an FTC shooter is capped by effects that are hard to INSTRUMENT
@@ -143,17 +150,22 @@ findings:
       to "the un-instrumented effects (Magnus/spin/slip/variance) are the hard part." Partial, not
       full — hence high at its lower edge, not maximal.
     discount_prediction: >
-      Do NOT revisit confidence on LEG COUNT alone (now 6 empirical: 15993, 19043, 22105, 24089, 12808,
-      15083). The discount makes a testable PREDICTION: independent responses to a shared constraint
+      Do NOT revisit confidence on LEG COUNT alone (now 7 empirical: 15993, 19043, 22105, 24089, 12808,
+      15083, 19859). The discount makes a testable PREDICTION: independent responses to a shared constraint
       should keep looking DIFFERENT IN EXECUTION even as more teams appear — and 15993 (fitted logistic
       curve, after abandoning both a table and physics), 19043 (2-axis table conditioned on actual
       flywheel velocity, after abandoning a full spin-modeling solver), 22105 (distance→velocity
       table + calibration tuners), 24089 (live-tuned 2-parameter linear regression), 12808
-      (3x3 bilinear grid + gradient feedforward + Lambert SOTM lead), and 15083 (three coupled LUTs +
-      iterative empirical-time SOTM + bang-bang) are SIX VISIBLY DIFFERENT empirical strategies, not
-      convergent copies. That the executions stay diverse is the discount's OWN prediction holding. The
-      actual signal to REVISIT would be a future leg that looks like a COPY of one of these six
+      (3x3 bilinear grid + gradient feedforward + Lambert SOTM lead), 15083 (three coupled LUTs +
+      iterative empirical-time SOTM + bang-bang), and now 19859 (a single shared cubic-polynomial
+      evaluator reused across four curves) are SEVEN VISIBLY DIFFERENT empirical strategies, not
+      convergent copies. That the executions stay diverse — the seventh leg included — is the discount's
+      OWN prediction holding, confirmed again, not a reason to move the tier. The
+      actual signal to REVISIT would be a future leg that looks like a COPY of one of these seven
       specifically (shared code/structure), not another independent empirical strategy and not leg count.
+      (19859 specifically: its known-imperfect, self-reported-rough tuning is a SEPARATE reason to not
+      let this leg push confidence up even if it were being leg-counted — it's cited for strategy
+      diversity, not as a newly-strong exemplar.)
     corrected_from_counterexample: >
       RECORD CORRECTION (do not silently overwrite — the path matters). 24089 was TWICE recorded
       as a physics COUNTEREXAMPLE: first "physics-KEPT (proj_motion.py) — proof physics works",
@@ -212,13 +224,30 @@ findings:
       - { id: 15993-J-shooter-curve-fit-evolution, team: "15993", method: "(NO SOTM — noted for contrast: 15993 does odometry-pose targeting but no moving-shot lead; a capable team that DIDN'T field SOTM, which matters for the discount)", platform: FTC, is_member: false }
       - { id: 12808-A-shooter-empirical-bilinear-fielded, team: "12808", method: "LAMBERT closed-form time-of-flight lead (timeTravelDevice) + gradient feedforward on the interpolation surface", platform: FTC }
       - { id: 15083-A-shooter-empirical-lut-sotm, team: "15083", method: "ITERATIVE empirical-time projection — 5 iterations of v*t + 0.5*a*t^2 with t from an empirical time-of-flight LUT, plus angularVelocity*t turret offset", platform: FTC }
+      - { id: 19859-F-sotm-braking-predictive-projection, team: "19859", method: "CHASSIS velocity/acceleration low-pass filtering + braking-deceleration prediction (anticipates deceleration between aim-calc and shot-release, not just current velocity) + turret PID/feedforward drive — a genuinely distinct FOURTH formulation from the existing three (none of them model braking specifically)", platform: FTC, is_member: false, fielded_status: "unresolved — see fielded_status_caveat below, not the same reason 15993's is_member:false is set (15993 deliberately declined SOTM; 19859 built SOTM but its fielded status is unconfirmed)" }
+    fielded_status_caveat: >
+      19859-F is NOT counted toward the "THREE independent teams" claim below, deliberately — its fielded
+      status is a genuine, unresolved tension (F1 open question 3, author follow-up 2026-07-16): the
+      author describes AutoAimSubsystem as "a working (if rough) part of the robot," but in the actual
+      source it is referenced only from two test/tuning harnesses (tests/AASSTEST.java,
+      tests/TurretFullAutoTuner.java) — no auto/ or teleop opmode constructs it; the fielded teleop uses a
+      simpler turretToDegree() path instead. A caller outside this snapshot was checked for (full git
+      history, all staged/unstaged working-tree changes, the one local branch) and none found; the
+      GitHub remote was inaccessible from this environment, so other remote branches could not be ruled
+      out — a real limitation, not a negative finding. Until this resolves, 19859's braking-prediction
+      formulation is recorded here as a CANDIDATE fourth method (genuinely distinct in design — none of
+      the other three model anticipated braking) but explicitly NOT promoted into the "real fielded
+      capability" claim the other three legs support. Revisit if the fielded status is ever confirmed
+      either way.
     claim: >
       THREE independent teams (24089, 12808, 15083) field shoot-on-the-move LEAD compensation as a real
       fielded capability — and they do it by THREE genuinely DISTINCT formulations: physics velocity-
       decomposition, closed-form Lambert time-of-flight, and iterative empirical-time projection. No two
       share code or approach. The finding is therefore descriptive, not prescriptive: SOTM is a real
       capability tier that strong teams reach, and its method space is OPEN — at least three viable,
-      non-dominant points — NOT "here is the way to do SOTM."
+      non-dominant points — NOT "here is the way to do SOTM." A candidate FOURTH formulation exists at
+      19859 (braking-deceleration-aware projection) but is deliberately NOT counted toward this claim — see
+      fielded_status_caveat: its fielded status is unresolved, not confirmed like the other three.
     confidence_reasoning:
       # Assessed independently (NOT inherited from shooter-empirical-vs-physics by proximity),
       # walking the same domain-forcing test used on orchestration and shooter.
