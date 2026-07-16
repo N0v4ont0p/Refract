@@ -1,9 +1,9 @@
 # Standing principles — shared by all four FTC skills
 
 One copy, pointed to by every SKILL.md (ftc-team-config, ftc-hardware-lookup, ftc-rule-check,
-ftc-code-review). Implements R5, R16, R38, R41, R53, R77 (+ the R58 echo) from TRACEABILITY.md.
-Edit here, never in a skill body — five drifting copies of the same rule was the failure this file
-exists to prevent.
+ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100 (+ the R58 echo) from
+TRACEABILITY.md. Edit here, never in a skill body — five drifting copies of the same rule was the
+failure this file exists to prevent.
 
 ## 1. Deterministic first (R16)
 
@@ -176,3 +176,30 @@ season's `season_mechanisms` block imply the quickstart template's example imple
 revision or replacement, and does anything in the library-docs corpus need a re-fetch check. This is
 a scope note for that future build, not new work now — `ftc-season-transition` stays deferred exactly
 as R66 already records it.
+
+## 10. The unhedged claim is the one that needed the check (R100)
+
+A pattern worth naming on its own, distinct from §6's confidence-driven drift (which is about
+*generating* an unverified fact mid-task). This one is about *reporting a finding* once real work
+is already done, and it has its own predictable shape: **the claims phrased as a clean, total win
+are consistently the ones that don't survive scrutiny; the claims that already carried a caveat
+have consistently held.**
+
+Two concrete instances, same phase, directly comparable because both were coverage tallies:
+
+- **Unhedged, walked back:** "5 of 8 named tools are official, no-bridge-needed clients of the
+  Skills format" — sourced from one page's own client-showcase listing (a spec describing adoption
+  of itself), phrased as a settled fact. Independent verification against each tool's *own* docs
+  found only 2 of 5 actually scan `.claude/skills/` with zero action; the other 3 needed a real
+  placement or enable step the "5 of 8, zero bridge" framing had already smoothed over.
+- **Hedged, held:** a library-docs utilization test reported "partially grounded" on RoadRunner —
+  explicitly named a real gap (the teleop localizer/pose-read API absent from the fetched docs)
+  rather than claiming full coverage. Independent re-verification confirmed the gap was exactly as
+  described. The hedge didn't need correcting later; it was already correct.
+
+**The rule**: a claim that arrives with no caveat attached is not evidence it needs none — it is the
+one that most needs one checked for. A single source describing its own adoption, a "fully
+verified" with no named edge case, an "N of M, clean" tally — these are the shapes that have
+repeatedly hidden the gap this project's own Rule 7 discipline exists to catch. When a finding comes
+out clean and total, that cleanliness is the signal to go find the tool's *own* source before
+shipping the claim, not confirmation the check can be skipped.
