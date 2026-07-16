@@ -167,15 +167,41 @@ It's actively changing, more than any other bundled library. Whatever gets store
 
 ## Status
 
-Phase A: done. Phase B: **closed, pending commit** — post-generation verification step at genuine
-`ftc-rule-check` parity (freshness gate + explicit reason-to-verdict), 57-file library-docs
+Phase A: done. Phase B: **done, committed** (`b3ec9a4`) — post-generation verification step at
+genuine `ftc-rule-check` parity (freshness gate + explicit reason-to-verdict), 57-file library-docs
 utilization audit complete (0 files with an unaddressed wiring gap; findings + fixes in
 `ftc-construct/evals/library-docs-utilization-audit.md`, TRACEABILITY.md R94-R99), all fixes
-re-verified with real scenarios, not just text diffs. Working tree has the changes; last commit
-(`3430ed2`) predates Phase B. Phase C, D, E, G: planned, not started. Phase F: not started as a
+re-verified with real scenarios, not just text diffs.
+
+**Phase C1: substantially done, pending commit.** `mcp-server/` built (4 tools, thin subprocess
+wrappers, no reimplemented logic), fidelity-tested against the direct skill path (byte-match on
+citations/abstentions/provenance) AND over the real MCP stdio protocol, not just as Python calls.
+Skills-format baseline independently verified per-tool (not just cited from agentskills.io's own
+listing) — corrected a real overstatement in the process: only VS Code/Copilot and OpenCode
+directly scan `.claude/skills/` (genuinely zero-action today); Cursor and OpenAI Codex are
+format-compatible but scan `.agents/skills/` instead (need a placement action, not code); Gemini
+CLI needs placement plus an explicit `/skills link`+enable step. `.agents/skills/` is the emerging
+shared convention across 3 of the 5 — a real, low-cost future candidate (publish/symlink skills
+there too), not built this pass. OpenCode hooks-bridge checked: real, cheap (one manifest line),
+but on the OpenCode *user's* machine, not something this repo can ship — documented, not built.
+Full findings: `PHASE-C1-C2-FINDINGS.md`. Antigravity's support status still genuinely unverified.
+
+**Phase C2 (continuous input layer): built, pending commit.** `corpus-input-scan.py` at repo root —
+3 checks (new team repos via GitHub search, library releases for the 6 GitHub-hosted bundled
+libraries, Team Updates via a thin `check_freshness.py` wrapper), manual or external-cron/CI
+trigger only, `GITHUB_TOKEN` env-var auth (same discipline as `CLAUDE_PLUGIN_ROOT` elsewhere in this
+repo), never writes into `references/`/`patterns/`/`rules.json` — draft-only, always. Real-scanned
+live (not just smoke-tested): caught a genuine `ftc-sdk` STALE finding on the first run (a real
+release landed 3 days after the local docs were fetched), and caught+fixed a real wrong-repo guess
+(Pedro Pathing) via a direct GitHub API call, not another LLM-summarized fetch.
+
+Both goals Phase C set out with are now closed: cross-tool reach (C1) and an active,
+human-gated-safe input layer (C2). Phase D, E, G: planned, not started. Phase F: not started as a
 phase (F0's scope-confirmation questions haven't been asked) — but its one specific "immediate
-action" (extend the `PreToolUse` write-block hook to cover the 19859 material) already happened as
-a side effect of unrelated work, before this file had been read: `19859crucialcodeauthentic/`
-appeared unexpectedly during Phase B and was added to both `.gitignore` and the hook's blocklist
-defensively. Worth confirming with the user whether that satisfies F0's requirement or whether F0's
-scope-confirmation step still needs to happen properly before any mining work.
+action" (extend the `PreToolUse`
+write-block hook to cover the 19859 material) already happened as a side effect of unrelated work,
+before this file had been read: `19859crucialcodeauthentic/` appeared unexpectedly during Phase B
+and was added to both `.gitignore` and the hook's blocklist defensively. Confirmed with the user:
+this does not retire F0's actual scope-confirmation checkpoint (exact paths, 32008's real git-history
+state, per-source permission scope) — those are still unanswered and stay that way until Phase F
+formally starts.
