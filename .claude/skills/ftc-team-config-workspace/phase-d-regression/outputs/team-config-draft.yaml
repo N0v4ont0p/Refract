@@ -1,0 +1,12 @@
+_meta: {schema: 1, updated: "2026-07-16", suite_generated_code: true}
+team: {number: TBD, experience: rookie}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: false}
+  mecanum:
+    wheel_source: {value: goBILDA_stock, source: inferred, confirmed: false}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: false}
+software_stack: {}
+season_mechanisms: {}
+config_history:
+  - {date: "2026-07-16", change: "draft — pre-confirmation, elicitation in progress"}

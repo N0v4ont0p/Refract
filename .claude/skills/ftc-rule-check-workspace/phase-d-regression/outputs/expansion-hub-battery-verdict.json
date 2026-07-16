@@ -1,0 +1,35 @@
+{
+  "scenario": "Expansion hub mounted with its own separate battery, not daisy-chained off the control hub's battery.",
+  "freshness_check": {
+    "season": "decode-2025-26",
+    "stored_incorporates_through": "Team Update 32",
+    "stored_tu": 32,
+    "live_tu": null,
+    "status": "UNVERIFIABLE",
+    "flag": true,
+    "reason": "could not read a live Team Update number (no marker on page); treat corpus as possibly stale and say so in the answer",
+    "exit_code": 1
+  },
+  "verdict": "illegal",
+  "citations": [
+    {
+      "id": "R601",
+      "text": "The only legal source of electrical energy for the ROBOT control system and actuation during the competition, the ROBOT battery, must be 1 and only 1 approved 12V NiMH main battery. The ROBOT main battery must have a COTS equivalent in-line 20A ATM mini blade fuse installed. Installed connectors may be replaced with other popular connectors such as Anderson Powerpole, XT30, or any connector with a comparable power rating. The only allowed ROBOT main power battery packs are: Table 12-4: Legal ROBOT Main Power Battery Packs [[TABLE:12-4]] There are many other similar style batteries available from multiple VENDORS, but only the listed manufactures and part numbers are legal for use at FIRST Tech Challenge Events. Batteries should be charged in accordance with manufacturer’s specification. (Please see the FIRST Safety Manual for additional information.)"
+    },
+    {
+      "id": "R602",
+      "text": "COTS USB battery packs with a capacity of 100Wh or less (27,000mAh at 3.7V), with 5V/5A max output or 12V/5A max output using USB-PD per port, and batteries integral to a self-contained camera (e.g., GoPro style camera) may be used provided they are: A. connected only using unmodified COTS cables, B. charged according to manufacturer recommendations, C. securely fastened to the ROBOT, D. not supplement power to any of the ROBOT actuators, and E. not used by any devices receiving control signals from the ROBOT control system (i.e., COTS USB battery packs must remain electrically isolated from the ROBOT power systems.). Exceptions to part E of this rule are: i. powered USB Hubs, and ii. ROBOT CONTROLLER smartphones. For example, a REV Blinkin powered by a COTS USB battery pack cannot be controlled by signals from a REV Control or Expansion Hub. Any device receiving signals from a REV Control or Expansion Hub must be powered by the main ROBOT battery."
+    },
+    {
+      "id": "R605",
+      "text": "No batteries other than those allowed per R601 and R602 are allowed on the ROBOT, whether or not they are being used to supply power. For example, teams may not use additional batteries as extra weight on their ROBOTS."
+    }
+  ],
+  "reasoning": "R601 mandates exactly one approved 12V NiMH main battery as the sole legal power source for the robot control system and actuation. The Expansion Hub is a device that receives control signals from the robot control system, and R602 states explicitly: 'Any device receiving signals from a REV Control or Expansion Hub must be powered by the main ROBOT battery.' A separate, non-daisy-chained battery dedicated to the Expansion Hub does not fit R602's narrow peripheral-battery exception (COTS USB battery packs, camera-integral batteries, isolated from actuators and control-signal devices except powered USB hubs / controller phones). R605 closes the loop: no batteries beyond what R601/R602 allow may be on the robot at all. Therefore a second main-scale battery powering the Expansion Hub independently of the single main robot battery is illegal.",
+  "verify_result": {
+    "exists": {"R601": true, "R602": true, "R605": true},
+    "missing": [],
+    "all_valid": true,
+    "exit_code": 0
+  }
+}

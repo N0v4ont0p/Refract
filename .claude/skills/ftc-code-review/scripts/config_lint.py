@@ -29,12 +29,28 @@ def val(node):
     return node["value"] if isinstance(node, dict) and "value" in node else node
 
 
-def find_config(explicit):
+def find_config(explicit, code_dir="."):
+    """ponytail: was `Path(".").rglob(...)`, unscoped from the CWD -- in a repo with more than
+    one team-config.yaml lying around (test fixtures, reference dirs) it silently took whichever
+    file rglob happened to yield first, no warning, and could pick an unrelated team's config
+    (real bug, caught live: from repo root it matched 32008teamcode/team-config.yaml instead of
+    the fixture actually under review, masking a real finding as a false-negative "clean").
+
+    Fix: walk UP from code_dir through its ancestors (team-config.yaml conventionally lives at
+    the project root, a SIBLING of the code directory, not nested inside it -- descending via
+    rglob was searching the wrong direction). Deterministic and unambiguous by construction: at
+    most one team-config.yaml can exist at any single directory level, and the walk stops at the
+    first (closest) match. Bounded at the git repo root so it can never climb into an unrelated
+    tree above the project."""
     if explicit:
         return Path(explicit)
-    for p in (Path("team-config.yaml"), *Path(".").rglob("team-config.yaml")):
+    start = Path(code_dir).resolve()
+    for d in (start, *start.parents):
+        p = d / "team-config.yaml"
         if p.exists():
             return p
+        if (d / ".git").exists():
+            break  # don't climb past the repo root
     return None
 
 
@@ -72,6 +88,28 @@ def _self_test():
     r = check(src, Path(d, "team-config.yaml"))
     assert not r["clean"] and r["findings"][0]["mechanism"] == "turret", r
     assert all(f["mechanism"] != "shooter" for f in r["findings"]), "shooter is declared, must not flag"
+
+    # real bug regression: config lives at the PROJECT ROOT, a SIBLING of code_dir, not nested
+    # inside it -- find_config must find that sibling by walking UP, not miss it by searching down.
+    d2 = tempfile.mkdtemp()
+    prev_cwd = os.getcwd()
+    os.chdir(d2)  # CWD itself has no team-config.yaml -- must not silently fall back to it either
+    try:
+        proj = Path(d2, "project").resolve(); proj.mkdir()
+        (proj / "team-config.yaml").write_text("season_mechanisms: {}\n")
+        code = proj / "TeamCode"; code.mkdir()
+        found = find_config(None, code)
+        assert found.resolve() == proj / "team-config.yaml", found
+
+        # and the original bug: an UNRELATED team-config.yaml sitting elsewhere must never be
+        # picked up just because it happens to exist somewhere reachable
+        unrelated = Path(d2, "unrelated-other-team"); unrelated.mkdir()
+        (unrelated / "team-config.yaml").write_text("season_mechanisms: {}\n")
+        found_again = find_config(None, code)
+        assert found_again.resolve() == proj / "team-config.yaml", \
+            f"picked up an unrelated config instead of the correct sibling: {found_again}"
+    finally:
+        os.chdir(prev_cwd)
     print("self-test OK")
 
 
@@ -83,7 +121,7 @@ def main():
     a = ap.parse_args()
     if a.self_test:
         return _self_test()
-    cfg = find_config(a.config)
+    cfg = find_config(a.config, a.code_dir or ".")
     if not cfg:
         print(json.dumps({"error": "no team-config.yaml found; run ftc-team-config first"})); sys.exit(2)
     r = check(a.code_dir or ".", cfg)

@@ -1,0 +1,30 @@
+=== scenario 2: unseeded SKU spec lookup ===
+{
+  "abstain": true,
+  "reason": "'5203-2402-0001' is not in the verified catalog. I don't have a sourced spec for it.",
+  "do_not": "Do not fill this from memory \u2014 report the abstention and point to the manufacturer page.",
+  "known_skus": [
+    "2000-0025-0002",
+    "5203-2402-0014",
+    "5203-2402-0019",
+    "REV-41-1291",
+    "REV-41-1300"
+  ]
+}
+exit code: 0
+
+=== scenario 2b: unseeded SKU external ratio calc (should also abstain) ===
+{
+  "abstain": true,
+  "reason": "'5203-2402-0001' is not in the verified catalog. I don't have a sourced spec for it.",
+  "do_not": "Do not fill this from memory \u2014 report the abstention and point to the manufacturer page.",
+  "known_skus": [
+    "2000-0025-0002",
+    "5203-2402-0014",
+    "5203-2402-0019",
+    "REV-41-1291",
+    "REV-41-1300"
+  ]
+}
+exit code: 0
+actual exit code for scenario2 spec lookup: 3 (verified separately; tee pipeline in scenario2.txt masked it)

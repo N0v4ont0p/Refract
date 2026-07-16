@@ -42,6 +42,16 @@ A text-based web browser tool for creating, editing, and saving Java OpModes. Su
 
 Key resources referenced across all three tutorials: _FIRST_ Official Team Resources, Official Game Q&A, and FTC Programming Documentation.
 
+> **Addendum, added Phase D (2026-07-16), separate from the four fetches above — not a re-fetch of
+> those pages.** `check_freshness.py`'s library-release check flagged the FTC SDK repo as newer than
+> this file's stored fetch date; the release notes for the newer version state a minimum toolchain
+> requirement not covered above: **Android Studio requires the Narwhal 3 Feature Drop or later** to
+> build the workspace (breaking change vs. earlier Android Studio versions). Source:
+> https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases/tag/v11.2 (Tier-1, official
+> FIRST release notes), retrieved 2026-07-16. This doesn't contradict anything stated above — no
+> specific Android Studio version was previously claimed — it's an omission being closed, not a
+> correction.
+
 ## Recommendation Summary
 
 - **Rookies / novice programmers** → Blocks (fastest path, easiest to learn, browser-only).

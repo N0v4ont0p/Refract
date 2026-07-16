@@ -1,0 +1,30 @@
+{
+  "legality_question": "TurretAimer.aimTurret(heading) rotates the turret during teleop (called from a live match, not just at setup) — does that rotation risk exceeding the ROBOT's post-start horizontal expansion limit, independent of whether the team is even allowed to have a turret at all under their confirmed config?",
+  "freshness_check": {
+    "command": "python3 scripts/check_freshness.py",
+    "cwd": "suite root (contains core-feature-model.yaml)",
+    "exit_code": 1,
+    "output": {
+      "season": "decode-2025-26",
+      "stored_incorporates_through": "Team Update 32",
+      "stored_tu": 32,
+      "live_tu": null,
+      "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+      "retrieved": "2026-07-03",
+      "status": "UNVERIFIABLE",
+      "flag": true,
+      "reason": "could not read a live Team Update number (no marker on page); treat corpus as possibly stale and say so in the answer"
+    }
+  },
+  "rule_ids_found_by_grep": ["G414", "G415", "R101", "R105"],
+  "lookup_and_verify": {
+    "G414": {"verify_all_valid": true, "short_title": "ROBOTS have horizontal expansion limits"},
+    "R105": {"verify_all_valid": true, "short_title": "There are expansion limits"},
+    "R101": {"verify_all_valid": true, "short_title": "STARTING CONFIGURATION is limited to an 18-inch Cube"}
+  },
+  "structural_review": {
+    "failure_mode_lint": "ran clean against sample-robot fixture: vcs_discipline (medium), god_opmode (medium), mutable_static_opmode_write (low, flywheelOffset)",
+    "config_lint_default_no_config_flag": "WRONG CONFIG PICKED UP — rglob found ./32008teamcode/team-config.yaml first, not the fixture's own; reported clean:true (false negative for this fixture)",
+    "config_lint_with_explicit_config_flag": "clean:false — turret finding: 'config declares turret: none, but code references it' citing TurretAimer.java, matches R34 framing verbatim from SKILL.md"
+  }
+}

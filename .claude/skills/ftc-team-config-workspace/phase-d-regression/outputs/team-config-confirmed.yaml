@@ -1,0 +1,15 @@
+_meta: {schema: 1, updated: "2026-07-16", suite_generated_code: true}
+team: {number: TBD, experience: rookie}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  mecanum:
+    wheel_source: {value: goBILDA_stock, source: inferred, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+software_stack:
+  pathing: {value: none, source: asked, confirmed: true}
+  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}
+season_mechanisms:
+  endgame_parking: {value: mandatory, source: inferred, confirmed: true}
+config_history:
+  - {date: "2026-07-16", change: "initial confirmation — rookie team, strafer-kit mecanum drivetrain, teleop-only start; no scoring mechanisms built yet"}

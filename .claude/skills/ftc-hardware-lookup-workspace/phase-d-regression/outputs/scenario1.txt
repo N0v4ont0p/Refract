@@ -1,0 +1,123 @@
+=== scenario 1: spec ===
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "record": {
+    "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+    "type": "brushed_dc_gearmotor",
+    "motor_base": "RS-555",
+    "nominal_voltage_v": 12,
+    "gear_ratio_label": "19.2:1",
+    "no_load_rpm_output": 312,
+    "no_load_current_a": 0.25,
+    "stall_torque_published": {
+      "value": 24.3,
+      "unit": "kg.cm",
+      "also": {
+        "value": 338,
+        "unit": "oz-in"
+      }
+    },
+    "stall_current_a": 9.2,
+    "encoder_cpr_output": 537.7,
+    "encoder_cpr_output_note": "Published at the OUTPUT shaft; reflects the exact (non-rounded) gear ratio. Do NOT recompute from the rounded 19.2 label \u2014 537.7/28 = 19.20 exact. goBILDA labels this 'PPR' but it is counts/rev.",
+    "_source": {
+      "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+      "tier": 1,
+      "retrieved": "2026-07-05",
+      "note": "manufacturer product page; max output power not listed"
+    }
+  }
+}
+exit code: 0
+=== scenario 1: external ratio search for ~200 RPM ===
+--- ext=1.4 ---
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "external_stage": {
+    "ratio_driven_over_driver": 1.4
+  },
+  "output_rpm_after_stage": 222.86,
+  "output_stall_torque_nm_ideal": 3.3362,
+  "torque_note": "ideal (no efficiency loss); base 24.3 kg.cm published -> 2.383 N.m (converted, 1 kg.cm=0.0980665 N.m); real torque is lower \u2014 gearboxes/belts lose 10-30%",
+  "speed_note": "base output 312 rpm (no_load_rpm_output); divided by external ratio 1.4"
+}
+--- ext=1.5 ---
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "external_stage": {
+    "ratio_driven_over_driver": 1.5
+  },
+  "output_rpm_after_stage": 208.0,
+  "output_stall_torque_nm_ideal": 3.5745,
+  "torque_note": "ideal (no efficiency loss); base 24.3 kg.cm published -> 2.383 N.m (converted, 1 kg.cm=0.0980665 N.m); real torque is lower \u2014 gearboxes/belts lose 10-30%",
+  "speed_note": "base output 312 rpm (no_load_rpm_output); divided by external ratio 1.5"
+}
+--- ext=1.56 ---
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "external_stage": {
+    "ratio_driven_over_driver": 1.56
+  },
+  "output_rpm_after_stage": 200.0,
+  "output_stall_torque_nm_ideal": 3.7175,
+  "torque_note": "ideal (no efficiency loss); base 24.3 kg.cm published -> 2.383 N.m (converted, 1 kg.cm=0.0980665 N.m); real torque is lower \u2014 gearboxes/belts lose 10-30%",
+  "speed_note": "base output 312 rpm (no_load_rpm_output); divided by external ratio 1.56"
+}
+--- ext=1.6 ---
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "external_stage": {
+    "ratio_driven_over_driver": 1.6
+  },
+  "output_rpm_after_stage": 195.0,
+  "output_stall_torque_nm_ideal": 3.8128,
+  "torque_note": "ideal (no efficiency loss); base 24.3 kg.cm published -> 2.383 N.m (converted, 1 kg.cm=0.0980665 N.m); real torque is lower \u2014 gearboxes/belts lose 10-30%",
+  "speed_note": "base output 312 rpm (no_load_rpm_output); divided by external ratio 1.6"
+}
+--- ext=1.7 ---
+{
+  "part": "5203-2402-0019",
+  "name": "goBILDA 5203 Series Yellow Jacket Planetary Gear Motor, 19.2:1",
+  "source": {
+    "url": "https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/",
+    "tier": 1,
+    "retrieved": "2026-07-05"
+  },
+  "external_stage": {
+    "ratio_driven_over_driver": 1.7
+  },
+  "output_rpm_after_stage": 183.53,
+  "output_stall_torque_nm_ideal": 4.0511,
+  "torque_note": "ideal (no efficiency loss); base 24.3 kg.cm published -> 2.383 N.m (converted, 1 kg.cm=0.0980665 N.m); real torque is lower \u2014 gearboxes/belts lose 10-30%",
+  "speed_note": "base output 312 rpm (no_load_rpm_output); divided by external ratio 1.7"
+}

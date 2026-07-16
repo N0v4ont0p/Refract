@@ -1,7 +1,7 @@
 # Standing principles — shared by all four FTC skills
 
 One copy, pointed to by every SKILL.md (ftc-team-config, ftc-hardware-lookup, ftc-rule-check,
-ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100 (+ the R58 echo) from
+ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100, R102 (+ the R58 echo) from
 TRACEABILITY.md. Edit here, never in a skill body — five drifting copies of the same rule was the
 failure this file exists to prevent.
 
@@ -203,3 +203,28 @@ verified" with no named edge case, an "N of M, clean" tally — these are the sh
 repeatedly hidden the gap this project's own Rule 7 discipline exists to catch. When a finding comes
 out clean and total, that cleanliness is the signal to go find the tool's *own* source before
 shipping the claim, not confirmation the check can be skipped.
+
+## 11. A workaround needed to get a correct result IS the result (R102)
+
+A pattern distinct from both §6 (confidence-driven drift, about generating an unverified fact) and
+§10 (about how a finding gets *reported* once work is already done). This one is about what happens
+*during* a test run, in the moment a workaround becomes necessary — and it has a precise, missable
+failure shape: the workaround gets treated as a solved problem (the test still produced a correct
+result, so the run counts as a pass) instead of as the finding it actually is.
+
+**Concretely, from this project's own history (R101):** a Phase B regression test needed to pass
+`config_lint.py` an explicit `--config` because the script's own default discovery grabbed the
+wrong file. The agent running that test noticed, worked around it, got a correct result, and
+reported the workaround in passing. That was the right *tactical* move — but the workaround itself
+was never escalated as "this script has a real discovery bug," so it sat unfixed for a full extra
+session and fired again on the very next test that happened to omit `--config`, before finally
+being recognized and fixed.
+
+**The rule**: needing to work around a tool, script, or convention to get the correct answer is not
+neutral information that a test still passed despite it — it is itself a finding, with the same
+standing as a wrong answer would have had. Escalate it the moment it happens ("this needed a
+workaround, and here's why"), not after it recurs enough times to become obviously a pattern. The
+tactical fix that gets the current test to a correct result, and the report that the fix was
+*necessary*, are two different obligations — doing only the first is how a real defect survives an
+otherwise-careful test run. This is the more important lesson of the two R101 surfaced, not the bug
+itself.
