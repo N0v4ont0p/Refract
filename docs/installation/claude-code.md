@@ -14,10 +14,20 @@ directories), and the shared foundation data install together.
 
 ```
 /plugin marketplace update refract
+/plugin uninstall refract-suite@refract
+/plugin install refract-suite@refract
 ```
 
-Pulls whatever is currently on this repo's `main` branch. Nothing updates automatically — run this
-when you want the current version.
+**All three steps are needed, verified directly rather than assumed** — a real, live fresh-install
+test (via the CLI-equivalent commands, `claude plugin marketplace update` / `claude plugin install`,
+since interactive slash commands aren't scriptable) found that `marketplace update` alone refreshes
+the marketplace's own clone and catalog, but does **not** refresh what's actually installed and
+running — re-running `install` on an already-installed plugin no-ops ("already installed"). The
+installed copy only picks up the update after an uninstall/reinstall. Confirmed on the reinstalled
+copy: the exact commit hash of the update (`gitCommitSha` in Claude Code's own
+`installed_plugins.json`) matched what was actually pushed, and a real file-count check on the
+reinstalled copy's `library-docs/` confirmed the content came through, not just the version number.
+Nothing updates automatically either way — run this when you want the current version.
 
 ## Uninstall
 

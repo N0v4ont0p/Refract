@@ -1,5 +1,8 @@
 # Refract
 
+[![License: MIT](https://img.shields.io/github/license/N0v4ont0p/Refract)](./LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/N0v4ont0p/Refract)](https://github.com/N0v4ont0p/Refract/commits/main)
+
 A grounded FTC (FIRST Tech Challenge) robotics skill suite: citation-grounded rules compliance,
 structured hardware lookup, elite-team-pattern-aware code review, and config-gated code
 generation — built so Claude never guesses at a rule number, a motor spec, an API call, or what
@@ -22,6 +25,25 @@ Fastest path, Claude Code:
 For VS Code, Copilot CLI, Cursor, Gemini CLI, OpenCode, Codex, Antigravity, or any other
 MCP-speaking client, see [`docs/installation/`](docs/installation/) for exactly what each one
 needs — checked against that tool's own current documentation, not guessed.
+
+### Update
+
+```
+/plugin marketplace update refract
+/plugin uninstall refract-suite@refract
+/plugin install refract-suite@refract
+```
+
+All three steps are needed — `marketplace update` alone refreshes the catalog but not what's
+already installed, verified with a real reinstall, not assumed (detail:
+[`docs/installation/claude-code.md`](docs/installation/claude-code.md)).
+
+### Uninstall
+
+```
+/plugin uninstall refract-suite@refract
+/plugin marketplace remove refract
+```
 
 ## Which skill do I use?
 
