@@ -1,7 +1,7 @@
 # Standing principles — shared by all four FTC skills
 
 One copy, pointed to by every SKILL.md (ftc-team-config, ftc-hardware-lookup, ftc-rule-check,
-ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100, R102 (+ the R58 echo) from
+ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100, R102, R107 (+ the R58 echo) from
 TRACEABILITY.md. Edit here, never in a skill body — five drifting copies of the same rule was the
 failure this file exists to prevent.
 
@@ -254,3 +254,28 @@ would have shipped silently broken if the check had stopped at "the diff looks r
 that reads as correct on inspection has not yet been verified — only running it and checking the
 real output verifies it. This is the concrete, current evidence for why every fix in this project
 gets an actual re-run, not just a re-read, before being called done.
+
+## 12. A verified claim has a shelf life, not just a confidence level (R107)
+
+Distinct from §10's rule (R100 — an unhedged claim that was *wrong at the time it was made*). This
+is a different failure mode, adjacent but not the same: a claim that was genuinely, correctly
+verified against a real source at the time — cited accurately, read correctly, nothing rushed —
+and is no longer true, because the external thing it described changed afterward. Both are real
+risks to a claim about the outside world; they don't get to share one mitigation.
+
+**Concrete instance — the first one caught, not a hypothetical**: Phase C's cross-tool
+compatibility check found Cursor did not scan `.claude/skills/`, cited directly to Cursor's own
+documentation at the time. That finding was correct when made — not an unhedged guess, not a
+stretched inference. A later pass (building this project's own `docs/` tree) re-checked the same
+question against Cursor's *current* documentation and found it now states "for compatibility,
+Cursor also loads skills from Claude and Codex directories." The earlier finding didn't fail R100's
+test — it had a real citation, correctly read. It just didn't stay true, because Cursor's own
+product changed underneath it.
+
+**The rule**: a claim about an external tool or platform's current behavior is a claim with an
+expiration date, not a permanent fact once verified — carry a "verified as of" sense with it, not
+just the citation. Re-checking that class of claim on some real cadence (tied to how fast the
+specific platform actually moves, not a fixed calendar rule) is a different, additional discipline
+from R100's "check the ones that sound too clean" — R100 catches a claim that was never solid; this
+catches a claim that was solid and stopped being true. A claims inventory that only re-runs R100's
+check will still go stale here, silently, exactly the way this one almost did.

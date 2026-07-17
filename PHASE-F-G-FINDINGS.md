@@ -228,22 +228,42 @@ All 4 named findings checked (`cross-team-findings.yaml`), not a bulk append:
   (confirmed: no vision, Pinpoint is localization-only) — nothing to contribute to a finding about
   how teams choose game-piece SENSOR modality by information-need. No edit made.
 
-## F2 — 19859 as the real eval-fixture stand-in, partial progress
+## F2 — 19859 as the real eval-fixture stand-in, DONE — the real promotion
 
-A real draft config extracted from F1's actual findings:
-`.claude/skills/ftc-team-config/evals/fixtures/19859-real-draft.yaml` — every field `source:
-inferred, confirmed: false` (static analysis, not a live confirmation conversation), fields
-`extract_feature_vector.py` couldn't recover left absent rather than guessed.
-`validate_config.py` confirms it's schema-**valid** but correctly reports `generation_allowed:
-false` (6 unconfirmed-mandatory fields) — exactly the right state for a draft. One real fix needed
-along the way: an invented `opmode_base` field isn't in the actual schema (moved to a comment); the
-intake mechanism is evidenced as `roller` (two `CRServo` continuous-rotation drives in
-`Intake.java` — the SDK-level signature for a spinning roller, not a claw), not guessed.
+First pass produced a draft (`19859-real-draft.yaml` — every field `source: inferred,
+confirmed: false`, `generation_allowed: false`); explicitly not eligible to stand in for `§20`'s
+real-config slot, since static extraction is not the same claim as a live confirmation.
 
-**Not done this pass, and shouldn't be silently claimed as done**: promoting this draft into the
-standing `§20` fixture (replacing the synthetic "real current config" stand-in) requires an actual
-confirmation step — either a real `ftc-team-config` session or explicit user sign-off — not just
-static extraction. This file is a real, concrete step toward F2, not F2 completed.
+**Second pass ran `ftc-team-config` for real**, live against the user, starting from the draft's
+inferred values rather than blank (per the skill's own inference-before-elicitation step 1), asking
+only what genuinely couldn't be inferred or needed resolution:
+
+- Re-ran `extract_feature_vector.py` live (not just cited the earlier run) and `question_order.py`
+  for the empirical ranking, matching the skill's actual step 1/3, not a shortened version.
+- Two things surfaced only by actually running the flow, not by trusting the draft's coverage:
+  - A real **gate mechanism** (`LEFT_GATE`/`RIGHT_GATE` servos, open/close constants in
+    `Intake.java`) — missed in the earlier F1 pattern-extraction pass entirely. `season_mechanisms.
+    classifier_interaction` was independently checked and confirmed genuinely absent (zero matches
+    anywhere in real source) rather than left as an unexamined guess.
+  - **Turret** — F1's open question 3 (is `AutoAimSubsystem` fielded or shelved?) was never
+    resolved by static analysis; resolved directly by the user in this session ("Autoaimsubsystem
+    is the genuine autoaimer... yes as real"), which is exactly the kind of ambiguous finding F1's
+    "ask the actual author" methodology exists for.
+- Wheel diameter/durometer: the user pointed at a specific goBILDA product page; fetched it live
+  and confirmed the exact spec text (`Ø104mm`, `40A` durometer) rather than trusting the URL slug
+  or recalling the number from memory — no catalog entry exists for mecanum wheels to check it
+  against, so a real fetch stood in for the missing catalog lookup.
+- Fabrication capability (`cnc_aluminum_or_carbon`, noting a mixed reality with some stock goBILDA
+  bars) and team experience (`veteran`) confirmed directly, since neither is recoverable from code.
+
+**Result**: `.claude/skills/ftc-team-config/evals/fixtures/19859-real-confirmed.yaml`.
+`validate_config.py`, run for real: `{"valid": true, "generation_allowed": true, "errors": [],
+"unconfirmed_mandatory": []}`. This is the genuine article, not another draft — every field
+`confirmed: true`, with `source: asked` vs `source: inferred` recorded honestly per field. The
+superseded draft was removed (not kept alongside the real file, avoiding two fixtures that could
+drift apart). `§20`'s three-plus-one standing regression set (real + synthetic-rookie +
+synthetic-veteran + the invalid-constraint negative case) is complete for the first time since
+PLAN.md §20 was written.
 
 ## F4 — `stale_pid` validation, checked, insufficient data (honest result, not forced)
 

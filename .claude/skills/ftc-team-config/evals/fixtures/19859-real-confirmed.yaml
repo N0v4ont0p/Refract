@@ -1,0 +1,44 @@
+# The real "real current config" member of §20's three-plus-one standing regression set —
+# replacing what had been an unfilled slot since PLAN.md §20 was written. Confirmed live, through
+# ftc-team-config's actual flow (not a shortened version), against the user directly — team 19859's
+# own real robot. Supersedes 19859-real-draft.yaml (Phase F1/F2 static-extraction draft,
+# confirmed: false throughout); this file is the real promotion, not another draft.
+#
+# Provenance per field: source: inferred = extract_feature_vector.py + direct code reading against
+# 19859crucialcodeauthentic/ (Phase F1); source: asked = confirmed live with the user in this
+# session (2026-07-16), including one field (turret) that inference alone could not resolve
+# (AutoAimSubsystem's fielded status was a genuine open question — F1's finding #3 — resolved here
+# by the user directly: "the genuine autoaimer... yes as real") and two (wheel diameter/durometer)
+# resolved by fetching the actual goBILDA product page rather than recalling a spec from memory.
+_meta: {schema: 1, updated: 2026-07-16, suite_generated_code: true}
+team: {number: 19859, experience: veteran}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  mecanum:
+    wheel_source: {value: goBILDA_stock, source: asked, confirmed: true}
+    wheel_diameter_mm: {value: 104, source: asked, confirmed: true}   # goBILDA GripForce mecanum, Ø104mm — confirmed on the actual product page, not recalled
+    wheel_durometer: {value: "40A", source: asked, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}   # time-gated, sole legal option through 2026-27 — zero info gain to ask
+  expansion_hub_count: {value: 1, source: asked, confirmed: true}
+sensing:
+  vision: {value: none, source: inferred, confirmed: true}   # confirmed absent in real source (checked directly), not just undetected
+  odometry: {value: goBILDA_pinpoint, source: inferred, confirmed: true}
+software_stack:
+  pathing: {value: pedro_pathing, source: inferred, confirmed: true}
+  opmode_style: {value: ftclib_command_based, source: inferred, confirmed: true}   # FTCLib CommandScheduler, built on the raw OpMode base rather than LinearOpMode
+  behavior_layer: {value: none, source: inferred, confirmed: true}   # no TickTree usage found
+fabrication:
+  capability: {value: cnc_aluminum_or_carbon, source: asked, confirmed: true}   # "CNC carbon+aluminum+a little bit of goBILDA aluminum bars" — mixed reality noted, schema is single-select
+team_context:
+  experience: {value: veteran, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: inferred, confirmed: true}   # two CRServo continuous-rotation drives in Intake.java
+  shooter: {value: flywheel, source: inferred, confirmed: true}
+  turret: {value: single_axis, source: asked, confirmed: true}   # AutoAimSubsystem is the genuine auto-aimer, confirmed real/fielded by the user directly — resolves F1's open question 3 for this config's purposes
+  gate_mechanism: {value: present, source: inferred, confirmed: true}   # LEFT_GATE/RIGHT_GATE servos, found during this live session (missed in the earlier F1 mining pass)
+  classifier_interaction: {value: none, source: inferred, confirmed: true}   # checked directly — zero classifier-related code anywhere in real source
+  endgame_parking: {value: mandatory, source: inferred, confirmed: true}   # single-value axis this season, zero info gain to ask
+archetypes: [turreted_shooter]   # turret decouples aim from drivetrain heading (mecanum, not fixed-shooter-on-swerve)
+config_history:
+  - {date: 2026-07-16, change: "initial real confirmation — live ftc-team-config session, replaces the unfilled §20 real-current-config slot"}
