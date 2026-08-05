@@ -28,6 +28,7 @@ unless stated otherwise.
 | `.claude/skills/ftc-corpus-builder/references/patterns/*.yaml` | provenance-tagged elite-team patterns — cited with confidence/provenance displayed faithfully, same discipline as ftc-code-review |
 | `.claude/skills/ftc-hardware-lookup/references/catalogs/` + `scripts/motor_math.py` | any spec/tuning value used in generated code — read by path, never guessed |
 | `.claude/skills/ftc-code-review/scripts/{config_lint.py,failure_mode_lint.py}` | mandatory post-generation verification (step 5 below) |
+| `scripts/emit_tuning.py` (this skill) | tuning constants: `render` supplies them from the confirmed config so none are ever model-authored; `verify` is the mandatory post-generation provenance gate (step 5) |
 | `scripts/check_freshness.py` (suite root) | mandatory post-generation freshness gate, run BEFORE the rule-check below (step 5) |
 | `.claude/skills/ftc-rule-check/scripts/rules.py` | mandatory post-generation legality re-check, at genuine parity with ftc-rule-check's own flow (step 5 below) |
 | `known-failure-modes.md` (suite root) | the taxonomy the quickstart template already counters by construction — still worth checking generated additions against |
@@ -107,9 +108,64 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   read `ftc-dashboard/` first: a `@Config` field alone does not make a value graphable, and other
   FTC-Dashboard-specific mechanics don't fall out of the template's existing wiring by inspection
   alone.
-- **Hardware values** (gear ratios, tuning constants, spec numbers) are never generated — read them
+- **Catalog values** (gear ratios, spec numbers, encoder counts) are never generated — read them
   from `ftc-hardware-lookup`'s catalog and scripts by path, exactly as ftc-hardware-lookup itself
   would.
+- **Device names come from `device_map`, verbatim.** Every `hardwareMap.get()` call this skill
+  writes uses the exact confirmed string from the config — never a convention, never a tidied-up
+  version of it, never a library default. If a device the generated code needs has no `device_map`
+  entry, that is a handback to `ftc-team-config`, not a name to invent: the config is incomplete for
+  what was asked.
+- **Physical tuning constants — the hard rule (standing-principles §13).** A robot's mass, a PIDF
+  gain, a pod offset, a ticks-per-inch scalar: these are properties of one physical robot, derivable
+  from no source that exists. Unlike every other wrong value this suite guards against, a wrong one
+  here compiles, deploys, passes every linter, and drives the robot. Two paths, no third:
+
+  **This is mechanised, not left to care.** Do not type a tuning number into generated code at all
+  — write the structure with placeholders and let the value come from a lookup, the same way
+  `motor_math.py` supplies a motor spec:
+
+  ```bash
+  python3 <this-skill>/scripts/emit_tuning.py render <template> --config <team-config.yaml> -o <out>
+  ```
+
+  `{{tuning.<field>}}` and `{{device.<key>}}` resolve against the confirmed config. A
+  measured+confirmed constant renders as its exact value; anything else renders as `Double.NaN`
+  plus the field's real tuning procedure. A placeholder for a field the config does not carry is a
+  **hard refusal**, not a fallback — that is a handback to `ftc-team-config`.
+
+  **(a) The config carries real tuned values** (`origin: measured`, `confirmed: true`) — carry them
+  forward **verbatim**. Never regenerate, never round, never "adjust to something more reasonable",
+  never substitute a library default because the real value looks unusual. A measured constant that
+  looks wrong is a fact about that robot, not an error to correct. If it genuinely looks wrong, say
+  so to the user; do not quietly change it.
+
+  **(b) The config has no tuned value** (`origin: untuned`, or `tuning_status` is `untuned` /
+  `not_yet_tunable`) — generate a **correctly-structured scaffold** with every tuning-dependent
+  field loudly marked, using the same fail-fast convention this suite already applies elsewhere
+  (the R92/R93 pattern shown publicly on the docs site), now extended to this domain:
+
+  ```java
+  // TODO(UNTUNED): produced by Pedro's ForwardZeroPowerAccelerationTuner — see
+  //   library-docs/pedro-pathing/tuning.md. This is NOT a placeholder to be filled in with a
+  //   plausible number; run the tuner on THIS robot. Path following will be wrong until you do.
+  .forwardZeroPowerAcceleration(UNTUNED)   // no value: this must not silently default
+  ```
+
+  The structure is real, the wiring is real, the value is conspicuously absent. Attach the actual
+  tuning procedure read from `library-docs/<library>/` — Pedro's tuner sequence, RoadRunner's
+  `ForwardPushTest`/`LateralPushTest`/ramp-logger/`ManualFeedforwardTuner` order — never a procedure
+  written from memory, and never a generic "tune the PID until it works."
+
+  **A fabricated-but-plausible tuning constant is never acceptable output. There is no "reasonable
+  default" fallback, and a library default is not an exception** — it is the worst case, because it
+  is a real measured number off somebody else's robot and reads as tuned (Pedro ships
+  `mass = 10.65`, `forwardZeroPowerAcceleration = -34.62719`; RoadRunner ships `inPerTick = 1`,
+  `kS = 0`). This is enforced by construction, not by intent: `origin` is a closed set of
+  `{measured, untuned}` in `core-feature-model.yaml`, `validate_config.py` rejects any other origin
+  and rejects a non-null value under `untuned`, and step 0's `generation_allowed` gate already ran.
+  A guessed constant has no representable form in the config this skill reads from, so there is
+  nothing to carry forward and nothing to launder into output.
 - **Corpus patterns**: when a pattern from `ftc-corpus-builder/references/patterns/*.yaml` applies
   (its `applicable_when` matches the confirmed config), cite it — but display its `confidence` and
   `provenance.classification` exactly as stored, never inflated, and carry its `notes` caveats
@@ -167,6 +223,23 @@ alone is not enough, and a config being *confirmed* is not the same claim as a m
    doesn't ship, same as `ftc-rule-check`'s own step 3.
 4. **Ambiguous is a real outcome.** If reasoning genuinely can't resolve to legal/illegal, the
    verdict is `ambiguous`, not a confident guess — same as `ftc-rule-check`'s own step 4.
+
+**Tuning-constant provenance, unconditional:**
+
+```bash
+python3 <this-skill>/scripts/emit_tuning.py verify <code_dir> --config <team-config.yaml>
+```
+
+This is the gate that actually closes the generation path, and it is not a default-matcher: every
+numeric literal in a tuning-field position must equal what the confirmed config says, exactly. A
+field marked `untuned` must carry `Double.NaN`, not a number. A tuning field with no config entry
+at all is an error. It does not need to recognise a value as invented or as a library default —
+only as *not the number the config says* — which is why it catches cases the check below cannot.
+
+`failure_mode_lint.py`'s `template_default_tuning_constant` check remains as the second layer,
+covering the case `verify` cannot see: constants a team never wrote at all, inherited silently from
+a library's own field initializers (Pedro ships three distinct such sets). A finding from either
+against this skill's own output is a generation bug, not a note to pass along.
 
 Report the **combined** result — "code written and verified against rules and known failure
 patterns," with the actual linter output, the freshness status, and the full `{verdict, citations,

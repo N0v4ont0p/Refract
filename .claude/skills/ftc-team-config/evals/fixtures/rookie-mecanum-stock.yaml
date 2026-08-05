@@ -24,3 +24,9 @@ season_mechanisms:
   gate_mechanism: {value: none, source: asked, confirmed: true}
   classifier_interaction: {value: none, source: asked, confirmed: true}
   endgame_parking: {value: mandatory, source: asked, confirmed: true}
+tuning_constants:
+  # Synthetic fixture. A rookie team on a freshly assembled robot is the textbook not_yet_tunable
+  # case — the tuning OpModes need a wired, drivable robot before they produce anything. No values,
+  # by design. (This fixture's intended failure is the unconfirmed software_stack.pathing; the
+  # tuning block is here so that failure stays isolated rather than joined by a schema artifact.)
+  tuning_status: {value: not_yet_tunable, source: asked, confirmed: true}

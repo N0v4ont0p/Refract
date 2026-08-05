@@ -13,6 +13,22 @@ meta:
   team: "15993"
   season_scope_note: "Batch 1 = season-agnostic architecture/infrastructure. Batch 2 (season-specific mechanisms + evolution insights) tracked separately."
   paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+  tuning_state_caveat: >
+    TEAM-LEVEL LIMITATION, recorded 2026-08-05 (Phase H) — carried forward explicitly rather than
+    left implicit, same as every other limitation in this corpus. This team's repo is NOT fully
+    tuned, and one specific gap is deterministically verifiable, not an impression:
+    roadrunner/MecanumDrive.java line 68 still carries the RoadRunner quickstart's own unchanged
+    expression `lateralInPerTick = inPerTick`, which means LateralPushTest was never run and the
+    robot's strafe distance scaling is the forward scaling by default. Found by
+    failure_mode_lint.py's template_default_tuning_constant check (Phase H), on the LIVE drive class
+    (TuningOpModes.DRIVE_CLASS == MecanumDrive), not on vendored scaffolding.
+    WHAT THIS DOES AND DOES NOT MEAN: it does not weaken any ARCHITECTURAL pattern below — the task
+    framework, telemetry, and lifecycle patterns are structural and independent of tuning state, and
+    this team's competitive record stands on its own (§12: record is context, never a confidence
+    input). It DOES mean this repo must never be cited as an exemplar of tuning practice, and that
+    any pattern whose behavior depends on odometry ACCURACY (rather than odometry architecture)
+    inherits an untuned-strafe caveat — see 15993-I's own notes.
+    Standing-principles §13 is the governing rule; R107 applies to the check's default tables.
 
 patterns:
   - id: 15993-A-task-framework
@@ -192,6 +208,14 @@ patterns:
       The TRANSFERABLE part is the "odometry-first targeting, vision-as-disabled-
       fallback" DESIGN DECISION (the DECODE goal coordinates themselves are
       season-specific). Carry verbatim: vision present-but-disabled.
+      TUNING CAVEAT (added 2026-08-05, Phase H — see meta.tuning_state_caveat): this pattern's
+      aiming accuracy is downstream of odometry accuracy, and this team's repo has a verified
+      untuned strafe scalar (`lateralInPerTick = inPerTick`, the quickstart default expression
+      unchanged). The DESIGN — trust odometry pose over live vision — is what transfers and is
+      unaffected. The IMPLICIT ARGUMENT that odometry was accurate enough here to beat vision is
+      NOT independently established by this repo, because the localization it depends on was never
+      fully tuned. Cite the design decision; do not cite this as evidence that odometry-first
+      targeting outperforms vision in general.
 
   - id: 15993-J-shooter-curve-fit-evolution
     finding_ref: shooter-empirical-vs-physics   # see references/cross-team-findings.yaml (empirical leg)

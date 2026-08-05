@@ -90,6 +90,61 @@ got asked.
 season's mechanism set, and the software stack — because they gate too much downstream to risk
 acting on a guess, however good the guess looks.
 
+**Device names — infer, then confirm; never invent.** `device_map` holds the exact `hardwareMap`
+name string for every device the config implies (drivetrain motors, each declared mechanism's
+actuators, each non-`none` sensor). Two paths:
+
+- **Existing code available** — the extractor reads the real `hardwareMap.get()` calls. Resolve
+  indirection before proposing anything: 34% of the calls surveyed across the mined corpus pass a
+  *constant*, not a literal, and a captured variable identifier is not a device name. Present the
+  resolved names for confirmation as a block, not one at a time.
+- **Building from scratch** — ask directly, and ask for the strings from the Robot Controller
+  configuration exactly as typed. Do not propose a convention: a survey of 578 team-authored
+  `hardwareMap.get()` calls across 16 repos found 105 distinct names in four casing styles, with
+  the front-left drive motor alone spelled `leftFront`, `lf`, and `motorFrontLeft`. Note that
+  `leftFront`/`leftRear`/`rightFront`/`rightRear` are Pedro's *library defaults* — a team on Pedro
+  may be using them without having chosen them.
+
+This block is safe to infer-then-confirm because a wrong device name fails loudly at init. The
+next question is not.
+
+**Tuning constants — the branch that decides everything downstream.** Ask, once the software stack
+is settled and before handing off:
+
+> Do you already have tuning constants from running the tuning procedure on **this** robot — in
+> existing code, or numbers you can give me — or are you not there yet?
+
+The answer sets `tuning_constants.tuning_status`:
+
+| Answer | `tuning_status` | What generation does |
+|---|---|---|
+| Robot isn't built/wired enough to run the tuning OpModes | `not_yet_tunable` | scaffold, every tuning field marked untuned |
+| Could tune, haven't | `untuned` | scaffold, every tuning field marked untuned + procedure attached |
+| Ran the procedure on this robot | `tuned` | real values carried forward verbatim |
+
+Get this right — it is load-bearing for all of `ftc-construct`'s tuning behavior. Three things it
+is easy to get wrong:
+
+- **"There are numbers in the repo" is not the same answer as "we tuned it."** Numbers in existing
+  code may be inherited from a template, copied from another team, or left over from last year's
+  robot. When inferring from a repo, record `source: inferred, confirmed: false` and ask whether
+  those specific numbers came off *this* robot. Run
+  `python3 .claude/skills/ftc-code-review/scripts/failure_mode_lint.py <repo>` — its
+  `template_default_tuning_constant` check names any constant sitting at a library or template
+  default, which is the concrete case where the repo looks tuned and isn't.
+- **A partial answer is normal and must be recorded per-constant, not per-robot.** A team that ran
+  `ForwardPushTest` but never `LateralPushTest` has one measured constant and one untuned one.
+  `origin` is per-constant for exactly this reason.
+- **Never fill a gap.** If the user doesn't know a value, it stays `origin: untuned, value: null`.
+  There is no origin that means "reasonable starting point" — see standing-principles §13, and
+  `validate_config.py` will reject the attempt regardless.
+
+The block's *shape* follows `software_stack.pathing`, and the shapes genuinely differ — Pedro's
+three builder-chained constants objects, RoadRunner's single flat `Params` class with entirely
+different field names and no `mass` at all, and no standard container whatsoever for a team running
+`custom`/`none`. Read the relevant `library-docs/<library>/` before naming fields; don't assume one
+library's shape from another's.
+
 **Hub generation is time-gated.** Read the season start year from the ACTIVE slug (e.g.
 `decode-2025-26` → 2025). Through the 2026-27 season, the REV Control Hub is the sole legal
 control system, so asking has zero information gain — don't ask, record it as inferred. From
@@ -125,9 +180,24 @@ software_stack:
   pathing: {value: pedro_pathing, source: inferred, confirmed: true}
 season_mechanisms:
   intake: {value: roller, source: asked, confirmed: true}
+device_map:                       # keys derived from what the config declares, never a fixed list
+  drive_left_front: {value: "lf", source: inferred, confirmed: true}
+  intake_motor:     {value: "intake", source: asked, confirmed: true}
+tuning_constants:                 # shape follows software_stack.pathing
+  tuning_status: {value: tuned, source: asked, confirmed: true}
+  follower:
+    mass: {value: 14.45, origin: measured, units: kg, source: asked, confirmed: true}
+    lateralZeroPowerAcceleration:
+      {value: null, origin: untuned, units: in/s^2, source: asked, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
 config_history:
   - {date: <date>, change: "initial confirmation"}
 ```
+
+`origin` is a closed set — `measured` or `untuned`, nothing else — and it is the whole hallucination
+control for physical constants. A number may only appear under `measured`; `untuned` carries
+`value: null`. There is no representable way to record a plausible guess, which is the point
+(standing-principles §13).
 
 `source` records how each value arrived (`inferred` vs `asked`); `config_history` appends — a
 mechanism added in week 6 must not silently overwrite what was true in week 1, because "when did

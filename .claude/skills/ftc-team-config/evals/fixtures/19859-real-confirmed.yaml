@@ -10,7 +10,7 @@
 # (AutoAimSubsystem's fielded status was a genuine open question — F1's finding #3 — resolved here
 # by the user directly: "the genuine autoaimer... yes as real") and two (wheel diameter/durometer)
 # resolved by fetching the actual goBILDA product page rather than recalling a spec from memory.
-_meta: {schema: 1, updated: 2026-07-16, suite_generated_code: true}
+_meta: {schema: 1, updated: 2026-08-05, suite_generated_code: true}
 team: {number: 19859, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}
@@ -35,10 +35,68 @@ team_context:
 season_mechanisms:
   intake: {value: roller, source: inferred, confirmed: true}   # two CRServo continuous-rotation drives in Intake.java
   shooter: {value: flywheel, source: inferred, confirmed: true}
-  turret: {value: single_axis, source: asked, confirmed: true}   # AutoAimSubsystem is the genuine auto-aimer, confirmed real/fielded by the user directly — resolves F1's open question 3 for this config's purposes
+  turret: {value: multi_axis, source: asked, confirmed: true}   # AutoAimSubsystem is the genuine auto-aimer, confirmed real/fielded by the user directly (F1 open question 3). CHANGED 2026-08-05 from single_axis: the device_map pass surfaced a `hood` actuator, confirmed by the user as a second actuated axis on the turret assembly — a real contradiction caught by the new pass, not a reclassification
   gate_mechanism: {value: present, source: inferred, confirmed: true}   # LEFT_GATE/RIGHT_GATE servos, found during this live session (missed in the earlier F1 mining pass)
   classifier_interaction: {value: none, source: inferred, confirmed: true}   # checked directly — zero classifier-related code anywhere in real source
   endgame_parking: {value: mandatory, source: inferred, confirmed: true}   # single-value axis this season, zero info gain to ask
+device_map:
+  # Key set derived from what this config declares (drivetrain topology, each season mechanism,
+  # each non-none sensing device) — not a fixed list. 19859 is one of the corpus repos that
+  # centralizes device names in a constants class rather than passing literals, so these were
+  # resolved through `constants/robotConfigs.java` and NOT read off `hardwareMap.get()` call sites:
+  # a raw literal scan of this repo returns the FTC SDK's bundled sample names
+  # (front_left_drive, sensor_ods, navx, m1-m4 ...), none of which are on this robot.
+  # All 16 confirmed live on the current robot by the user, 2026-08-05.
+  drive_front_left:  {value: "lf", source: inferred, confirmed: true}
+  drive_back_left:   {value: "lb", source: inferred, confirmed: true}
+  drive_front_right: {value: "rf", source: inferred, confirmed: true}
+  drive_back_right:  {value: "rb", source: inferred, confirmed: true}
+  odometry_pinpoint: {value: "pp", source: inferred, confirmed: true}
+  shooter_left:      {value: "ls", source: inferred, confirmed: true}
+  shooter_right:     {value: "rs", source: inferred, confirmed: true}
+  turret_rotation:   {value: "turret", source: inferred, confirmed: true}
+  turret_hood:       {value: "hood", source: asked, confirmed: true}     # 2nd actuated turret axis — see season_mechanisms.turret
+  intake_main:       {value: "intake", source: inferred, confirmed: true}
+  intake_left:       {value: "li", source: inferred, confirmed: true}
+  intake_right:      {value: "ri", source: inferred, confirmed: true}
+  gate_left:         {value: "lg", source: inferred, confirmed: true}
+  gate_right:        {value: "rg", source: inferred, confirmed: true}
+  light_left:        {value: "ll", source: asked, confirmed: true}       # no core/season axis declares lights; recorded rather than dropped
+  light_right:       {value: "rl", source: asked, confirmed: true}
+tuning_constants:
+  # Pedro Pathing shape (three builder-chained objects), per software_stack.pathing. Every value
+  # below is carried VERBATIM from 19859crucialcodeauthentic/.../pedroPathing/Constants.java —
+  # none regenerated, none rounded, none adjusted. Confirmed by the user 2026-08-05 as produced by
+  # running Pedro's tuner sequence on THIS robot, which is what makes origin: measured honest here
+  # rather than an assumption from "there are numbers in the repo" (standing-principles §13).
+  # Independently corroborated: failure_mode_lint.py's template_default_tuning_constant check
+  # reports ZERO constants at a Pedro library default in this repo — so these are not inherited
+  # defaults wearing the appearance of measurements.
+  tuning_status: {value: tuned, source: asked, confirmed: true}
+  follower:
+    mass: {value: 14.45, origin: measured, units: kg, source: inferred, confirmed: true}
+    forwardZeroPowerAcceleration:
+      {value: -21.7206592153342, origin: measured, units: in/s^2, source: inferred, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
+    lateralZeroPowerAcceleration:
+      {value: -70.38218664102858, origin: measured, units: in/s^2, source: inferred, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
+    centripetalScaling:
+      {value: 0, origin: measured, units: dimensionless, source: asked, confirmed: true,
+       notes: "0 is a deliberate disable, confirmed by the user — NOT an untuned zero. Pedro's library
+               default is 0.0005, so this is an explicit decision about this robot. Recorded as a
+               decision so a later reader doesn't mistake it for a value nobody ever set."}
+  drivetrain:
+    xVelocity: {value: 79.85462771438237, origin: measured, units: in/s, source: inferred, confirmed: true}
+    yVelocity: {value: 59.02507968211737, origin: measured, units: in/s, source: inferred, confirmed: true}
+  localizer:
+    forwardPodY: {value: -155.5, origin: measured, units: mm, source: inferred, confirmed: true}
+    strafePodX:
+      {value: 0, origin: measured, units: mm, source: asked, confirmed: true,
+       notes: "Confirmed by the user as a real measurement — the strafe pod sits on the robot
+               centerline. Asked explicitly because a 0 pod offset is the classic case where a
+               never-measured placeholder is indistinguishable from a measured value by inspection."}
 archetypes: [turreted_shooter]   # turret decouples aim from drivetrain heading (mecanum, not fixed-shooter-on-swerve)
 config_history:
   - {date: 2026-07-16, change: "initial real confirmation — live ftc-team-config session, replaces the unfilled §20 real-current-config slot"}
+  - {date: 2026-08-05, change: "device_map + tuning_constants added via a second live ftc-team-config session (schema postdates this fixture). Also corrected season_mechanisms.turret single_axis -> multi_axis: the device_map pass surfaced a `hood` actuator the earlier session never asked about, confirmed by the user as a second actuated turret axis."}

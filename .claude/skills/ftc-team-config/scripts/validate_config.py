@@ -32,6 +32,18 @@ MANDATORY = [
     "season_mechanisms",  # the season's mechanism set as a whole
 ]
 
+# --- physical-tuning-constant enforcement (standing-principles §13) ---------------------------
+# These two sets are the STRUCTURAL enforcement of "a fabricated-but-plausible tuning constant is
+# never acceptable output". They are closed on purpose. There is no `estimated`, `default`,
+# `typical`, or `library_recommended` origin, so a number has no representable form in this schema
+# unless it is asserted to have been measured on this specific robot. A model that wants to emit a
+# reasonable-sounding guess has nowhere to put it — the failure is a validation error at config
+# time, not a wrong constant discovered on a field.
+TUNING_ORIGINS = {"measured", "untuned"}
+TUNING_STATUS = {"not_yet_tunable", "untuned", "tuned"}
+# Keys inside a tuning entry that are metadata, not nested constants.
+_ENTRY_KEYS = {"value", "origin", "units", "source", "confirmed", "tuning_procedure_ref", "notes"}
+
 
 def find_suite_root(start: Path) -> Path:
     for p in [start, *start.parents]:
@@ -81,7 +93,10 @@ def main():
 
     # --- 1. core-axis validation (R3) ---
     for axis, fields in cfg.items():
-        if axis in ("_meta", "team", "season_mechanisms", "archetypes", "config_history"):
+        if axis in ("_meta", "team", "season_mechanisms", "archetypes", "config_history",
+                    "device_map", "tuning_constants"):
+            # device_map/tuning_constants are [generative]: their KEY SET is derived per team, so
+            # they can't be checked against a fixed field list. Dedicated checks 5 and 6 below.
             continue
         if axis not in core_axes:
             errors.append(f"unknown core axis '{axis}' — not in core-feature-model.yaml")
@@ -187,6 +202,106 @@ def main():
             _, ok = unwrap(node)
             if not ok:
                 unconfirmed.append(m)
+
+    # --- 5. device_map (generative key set; free-form name strings) ---
+    # A wrong device name fails LOUDLY at init, so this block gates generation only on being
+    # confirmed — not on any name-shape rule. There is deliberately no naming convention enforced:
+    # a survey of 578 team-authored hardwareMap.get() calls across 16 mined repos found 105
+    # distinct names in four different casing styles, with the front-left drive motor alone
+    # spelled `leftFront`, `lf`, and `motorFrontLeft`. Any convention check would be wrong for
+    # most real teams.
+    dmap = cfg.get("device_map") or {}
+    if not isinstance(dmap, dict):
+        errors.append("device_map must be a mapping of device-key -> {value, source, confirmed}")
+        dmap = {}
+    for dev, node in dmap.items():
+        value, ok = unwrap(node)
+        if not isinstance(value, str) or not value:
+            errors.append(f"device_map.{dev} must carry a non-empty hardwareMap name string, got {value!r}")
+        elif value.strip() != value:
+            # leading/trailing whitespace in a hardwareMap name is a real, silent init failure
+            errors.append(f"device_map.{dev} = {value!r} has leading/trailing whitespace — "
+                          f"hardwareMap names match exactly")
+        if not ok:
+            unconfirmed.append(f"device_map.{dev}")
+
+    # --- 6. tuning_constants — the hard rule, enforced here (standing-principles §13) ---
+    tc = cfg.get("tuning_constants")
+    pathing = resolve("software_stack.pathing")
+    if tc is None:
+        if pathing not in (None, "none"):
+            unconfirmed.append("tuning_constants (missing; required once software_stack.pathing "
+                               f"= {pathing!r} — set tuning_status at minimum)")
+    elif not isinstance(tc, dict):
+        errors.append("tuning_constants must be a mapping")
+    else:
+        status, status_ok = unwrap(tc.get("tuning_status"))
+        if status is None:
+            unconfirmed.append("tuning_constants.tuning_status (missing)")
+        elif status not in TUNING_STATUS:
+            errors.append(f"tuning_constants.tuning_status = {status!r} not in {sorted(TUNING_STATUS)}")
+        elif not status_ok:
+            unconfirmed.append("tuning_constants.tuning_status")
+
+        measured, untuned_n = [], []
+
+        def check_entry(path, node):
+            """One leaf constant. This is where a fabricated value becomes a hard error."""
+            origin = node.get("origin")
+            value = node.get("value")
+            if origin is None:
+                errors.append(f"tuning_constants.{path}: no `origin` — every physical constant must "
+                              f"declare where its number came from")
+                return
+            if origin not in TUNING_ORIGINS:
+                # The single most important line in this file. `estimated`, `default`, `typical`,
+                # `library_recommended` and every other invented origin die here.
+                errors.append(
+                    f"tuning_constants.{path}: origin {origin!r} is not one of {sorted(TUNING_ORIGINS)}. "
+                    f"A physical tuning constant is either carried forward from a real measurement on "
+                    f"this robot (`measured`) or has no number at all (`untuned`). There is no third "
+                    f"state by design — see standing-principles.md §13.")
+                return
+            if origin == "untuned":
+                untuned_n.append(path)
+                if value is not None:
+                    errors.append(
+                        f"tuning_constants.{path}: origin `untuned` but carries value {value!r}. "
+                        f"An untuned constant must be null. A plausible number under an `untuned` "
+                        f"label is exactly the failure this schema exists to make unrepresentable.")
+                return
+            # origin == measured
+            measured.append(path)
+            if value is None:
+                errors.append(f"tuning_constants.{path}: origin `measured` but value is null — "
+                              f"a measurement with no number is not a measurement")
+            if not bool(node.get("confirmed", False)):
+                unconfirmed.append(f"tuning_constants.{path}")
+
+        def walk(prefix, node):
+            for k, v in node.items():
+                if k in ("tuning_status", "notes") or k.startswith("_"):
+                    continue
+                path = f"{prefix}.{k}" if prefix else k
+                if not isinstance(v, dict):
+                    errors.append(f"tuning_constants.{path}: bare value {v!r} — a physical constant "
+                                  f"must be a mapping carrying `origin` (see standing-principles §13)")
+                elif "origin" in v or "value" in v or (set(v) & _ENTRY_KEYS):
+                    check_entry(path, v)
+                else:
+                    walk(path, v)   # a grouping level (e.g. Pedro's follower/mecanum/localizer split)
+
+        walk("", tc)
+
+        # status/entry coherence — a claim of `tuned` that still has untuned constants under it is
+        # a config that would read as ready and generate real numbers for a robot that has none.
+        if status == "tuned" and untuned_n:
+            errors.append(f"tuning_constants.tuning_status = 'tuned' but {len(untuned_n)} constant(s) "
+                          f"still have origin `untuned`: {', '.join(sorted(untuned_n)[:6])}"
+                          + (" ..." if len(untuned_n) > 6 else ""))
+        if status in ("untuned", "not_yet_tunable") and measured:
+            warnings.append(f"tuning_constants.tuning_status = {status!r} but {len(measured)} constant(s) "
+                            f"are marked `measured` — if real values exist, status is probably 'tuned'")
 
     result = {
         "valid": not errors,

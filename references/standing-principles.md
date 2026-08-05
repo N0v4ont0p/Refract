@@ -279,3 +279,99 @@ specific platform actually moves, not a fixed calendar rule) is a different, add
 from R100's "check the ones that sound too clean" — R100 catches a claim that was never solid; this
 catches a claim that was solid and stopped being true. A claims inventory that only re-runs R100's
 check will still go stale here, silently, exactly the way this one almost did.
+
+## 13. A physical tuning constant can never be source-derived (R109)
+
+**The canonical case, first, because it is the reason this category exists.** Pedro Pathing's
+current quickstart ships a `Constants.java` containing `new FollowerConstants()` and *no numbers at
+all*. Every physical constant a robot needs therefore comes from the library's own field
+initializers — `mass = 10.65`, `forwardZeroPowerAcceleration = -34.62719`, `xVelocity = 81.34056`,
+`forwardPodY = 1`, `strafePodX = -2.5` — and applies **silently** to any team that never calls the
+corresponding builder method. Nothing appears in the team's code. Nothing looks unset. A reviewer
+reading that repo sees a clean constants file and no evidence of a problem, while the robot follows
+paths computed from a mass that is off by several kilograms and a strafe pod the software believes
+is 2.5 inches from where it is.
+
+Those are not invented numbers. They are real measurements — off somebody else's robot — carried to
+five decimal places, which is exactly what makes them worse than a fabrication. A made-up value
+looks made up. `-34.62719` looks like the output of a tuning run, because it *was* the output of a
+tuning run, on a machine that is not this one.
+
+And there is not one such set. Pedro ships **three**, all live, all different, for the same
+physical fields:
+
+| field | library (current) | Beginner-Quickstart | Quickstart-1.0.9 |
+|---|---|---|---|
+| `mass` | 10.65 | 10.65942 | 13 |
+| `forwardZeroPowerAcceleration` | -34.62719 | -34.62719 | -41.278 |
+| `lateralZeroPowerAcceleration` | -78.15554 | -78.15554 | -59.7819 |
+| `xVelocity` / `xMovement` | 81.34056 | 81.34056 | 57.8741 |
+| `yVelocity` / `yMovement` | 65.43028 | 65.43028 | 52.295 |
+
+Three different masses, none of them any given robot's. A check written against one set silently
+misses the other two — `10.65` and `10.65942` are far enough apart that no near-match tolerance
+bridges them, so covering the library alone would have left the two quickstart sets wide open, and
+covering the quickstarts alone would have left the *silent* case — the one with nothing in team
+code to look at — entirely uncovered. `failure_mode_lint.py`'s `template_default_tuning_constant`
+check carries all three, and RoadRunner's mirror-image case besides: RoadRunner's library ships no
+such numbers, so its defaults live in the quickstart's `Params` class as named fields at inert
+values (`inPerTick = 1`, `kS = 0`, `lateralInPerTick = inPerTick`) that a team is meant to overwrite
+and routinely partly doesn't. All of these are external-project facts under §12's shelf-life rule —
+re-verify them against each library's current source rather than trusting the tables indefinitely.
+
+Everything below is the general rule this case instantiates.
+
+Distinct from every hallucination-control category already in this file, and distinct in a way
+that matters more than the others. §10 (R100) and §12 (R107) both govern *claims about the world
+that could in principle be checked against a source*. This one governs values for which **no source
+exists, anywhere, by nature** — not "not seeded yet", not "the catalog is incomplete", not
+"a better retrieval pass would find it."
+
+**The distinction from the unseeded-catalog-SKU case.** When `ftc-hardware-lookup` abstains on a
+motor outside the seeded catalog, the correct value exists — on a vendor page, in a datasheet — and
+the abstention is about *this system's* coverage. Seed the catalog and the gap closes. A robot's
+mass, a drivetrain PIDF gain, an odometry pod offset, a ticks-per-inch scalar: these are properties
+of one specific physical robot on one specific day. No documentation contains them. No amount of
+retrieval, catalog seeding, or reasoning produces them. The only two honest states are:
+
+1. **carried forward from a real measurement** on that robot — verbatim, never regenerated,
+   never "adjusted to look more reasonable"; or
+2. **loudly marked untuned**, carrying no number at all, with the real procedure that produces it.
+
+**Why the middle ground is categorically worse here than anywhere else in this system.** Every
+other failure this project guards against produces a *wrong answer*: a mis-cited rule number, a
+motor spec that's off, an API call that doesn't exist. Those are read by a person, and most of them
+fail loudly — code that calls a non-existent method does not compile. A fabricated tuning constant
+produces *wrong robot behavior*. It compiles. It deploys. It passes every linter. The robot drives
+— into a wall, or through a path it was supposed to stop short of, at whatever speed the fabricated
+feedforward gain implies. Nothing in the software stack registers a fault, because nothing is
+faulty by software's standards. The failure surface is a physical machine with people around it.
+
+A device name, by contrast, is safe to infer-then-confirm: a wrong `hardwareMap` name throws on
+init and the robot never moves. Loud, immediate, cheap. The two are graded differently in
+`core-feature-model.yaml` for exactly this reason, and the difference is the failure mode, not the
+confidence level.
+
+**The enforcement is structural, not a preference.** "Never fabricate a tuning constant" as prose
+is worth little — it's the kind of instruction that holds until a plausible number is one token
+away and the alternative is an unsatisfying answer. So the schema makes a guess *unrepresentable*:
+`tuning_constants.<field>.origin` is a closed set of exactly `{measured, untuned}`. There is no
+`estimated`, no `default`, no `typical`, no `library_recommended`. A number cannot be written into
+a config without asserting it was measured on that robot; `origin: untuned` with a non-null value
+is a validation error; an unconfirmed `measured` value blocks `generation_allowed`. A model
+inclined to emit a reasonable-sounding value has nowhere to put it — the failure happens at config
+validation, in front of a person, instead of on a field.
+
+**Restating the enforcement boundary, since the lead case is where it bites.** A library default
+that a team never overrode cannot be caught by reading the team's config — there is nothing there to
+read. It is caught deterministically at review time, by the lint check above, against a table of
+real upstream values. The config schema closes the *authoring* path; the lint closes the *inherited*
+path. Neither alone is sufficient, and the inherited path is the one that leaves no trace.
+
+**Config-confirmed and robot-tuned are two separate milestones.** `tuning_status` models them
+separately (`not_yet_tunable` / `untuned` / `tuned`) because collapsing them is what makes a fully
+confirmed config read as a robot ready to run on real numbers. A team can legitimately have every
+config field confirmed and zero real constants; that is a normal state on the way to a working
+robot, not an error, and generation must serve it honestly — a correctly-structured scaffold with
+every tuning-dependent field loudly marked and the real tuning procedure attached, never a
+scaffold silently pre-filled with numbers that came from nowhere.

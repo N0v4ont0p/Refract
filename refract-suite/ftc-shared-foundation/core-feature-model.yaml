@@ -19,6 +19,11 @@
 #   # [mandatory]    a value MUST be confirmed for every team (gates downstream
 #                    logic too much to guess — see §13's always-ask set).
 #   # [conditional]  the sub-block applies only under the stated parent value.
+#   # [generative]   the KEY SET is derived per team from what the config already
+#                    declares — this file defines the entry SHAPE, never a fixed
+#                    field list. Same principle as season_mechanisms' interface
+#                    set. Adding a device or a library must not require editing
+#                    this file.
 #
 # A filled copy of this schema = one "feature-model instance" per team (§14.2).
 # =============================================================================
@@ -67,6 +72,81 @@ software_stack:
   # pathing and opmode_style, not an alternative value within either: TickTree is a reactive
   # arbitration layer that sits ABOVE whatever pathing/command-framework choice a team already made
   # (Phase G1/G3) — a team can be ftclib_command_based + pedro_pathing + ticktree simultaneously.
+
+device_map:                                   # [generative] — key set derived, never enumerated here
+  # The exact `hardwareMap` name string for every device the confirmed config implies.
+  # Wrong name = the OpMode throws on init and the robot never moves: loud, immediate, cheap.
+  # That is why this block is SAFE to infer-then-confirm, and why it is graded differently from
+  # `tuning_constants` below, whose failure is silent and physical.
+  #
+  # KEY SET IS DERIVED (same rule as ftc-construct §1's interface derivation): one key per device
+  # implied by what the config already declares — drivetrain motors (count follows
+  # `drivetrain.type`), the actuators of each declared `season_mechanisms` entry, and each
+  # non-`none` `sensing.*` device. No fixed device list lives in this file; a new mechanism in a
+  # future season extension grows the key set with the season file, not with an edit here.
+  #
+  # WHY FREE-FORM STRINGS, verified not assumed (Step 0.1, 578 team-authored `hardwareMap.get()`
+  # calls across 16 mined repos): 105 distinct name strings, only 22 shared by 2+ teams. Naming
+  # style is genuinely mixed — 172 lowercase, 108 camelCase, 9 snake_case, 6 containing a space.
+  # Even the single most standardized concept, the front-left drive motor, appears as `leftFront`,
+  # `lf`, AND `motorFrontLeft`. Any enum here would be wrong for most teams.
+  _entry_shape:
+    value: string               # the EXACT string passed to hardwareMap.get() — verbatim, not normalized
+    source: [inferred, asked]
+    confirmed: [true, false]
+  _note: >
+    34% of mined calls (199/578) pass a CONSTANT rather than a literal — two repos do so
+    exclusively, centralizing names in a constants class. Inference must resolve that indirection
+    before proposing a name; a captured variable identifier is not a device name.
+    Where the selected pathing library embeds device names in its own constants
+    (Pedro's MecanumConstants.leftFrontMotorName, PinpointConstants.hardwareMapName), THIS block
+    is the single source of truth and `tuning_constants` references it — the name is not stored twice.
+
+tuning_constants:                             # [generative] — shape follows the selected library
+  # A PHYSICAL constant: mass, a PIDF gain, an odometry pod offset, ticks-per-inch. Every value
+  # here can only come from measuring or tuning a specific physical robot. None of it is derivable
+  # from documentation, a catalog, or reasoning — see standing-principles §13.
+  #
+  # This block exists because a plausible-looking wrong value here does NOT fail loudly like a bad
+  # device name. It compiles, deploys, and drives the robot into a wall.
+  tuning_status: [not_yet_tunable, untuned, tuned]
+  # [mandatory: when software_stack.pathing != none]
+  #   not_yet_tunable — robot not yet built/wired enough to run the library's tuning OpModes
+  #   untuned         — tunable now, but the procedure has not been run
+  #   tuned           — the procedure was run on THIS robot and the values below came out of it
+  # Config-confirmed and robot-physically-tuned are two different milestones. A team can have a
+  # fully confirmed config and zero real constants; that is a normal state, not an error.
+  #
+  # KEY SET IS SHAPED BY `software_stack.pathing`, verified per library (Step 0.2), NOT assumed to
+  # follow one library's shape:
+  #   pedro_pathing — three separate builder-chained objects, confirmed against real team code:
+  #     FollowerConstants (mass, forward/lateralZeroPowerAcceleration, drive/translational/heading
+  #     PIDF coefficient objects, predictiveBraking, centripetalScaling), MecanumConstants
+  #     (motor names + directions, xVelocity, yVelocity), and a localizer constants object whose
+  #     TYPE follows `sensing.odometry` (e.g. PinpointConstants: forwardPodY, strafePodX,
+  #     encoderResolution, per-encoder directions).
+  #   roadrunner   — does NOT mirror Pedro. One flat `Params` inner class on the drive class:
+  #     inPerTick, lateralInPerTick, trackWidthTicks, kS, kV, kA, maxWheelVel, min/maxProfileAccel,
+  #     maxAngVel, maxAngAccel, axial/lateral/headingGain, axial/lateral/headingVelGain, plus IMU
+  #     logo/usb facing directions. No `mass` field exists at all; gains are separate scalars, not
+  #     PIDF coefficient objects. Different names, different structure, different tuning procedure.
+  #   custom / none — NO library-standard container exists. Confirmed by inspection of mined teams
+  #     running no pathing library: one had zero drivetrain PID constants of any kind, another used
+  #     an entirely team-invented per-subsystem convention (SHOOT_MOTOR1_PID_KP and similar). So
+  #     this block stays free-form-keyed for those teams, exactly like `device_map` — there is
+  #     nothing standard to key against, and inventing a house shape would be fabrication.
+  _entry_shape:
+    value: number_or_null       # a real number ONLY when origin == measured; otherwise null
+    origin: [measured, untuned]
+    # CLOSED SET, and closed deliberately — there is no `estimated`, `default`, `typical`, or
+    # `library_recommended`. The absence is the enforcement: a number cannot be written into this
+    # config without asserting it was measured on this robot, so "a confident guess" has no
+    # representable form. validate_config.py rejects any other origin, rejects a non-null value
+    # under `untuned`, and rejects a null value under `measured`.
+    units: string               # e.g. kg, in/tick, ticks, mm — recorded because a unit error here is silent
+    source: [inferred, asked, supplied]   # `supplied` = the user gave the number directly, not from a repo
+    confirmed: [true, false]
+    tuning_procedure_ref: optional   # path into library-docs for the procedure that PRODUCES this value
 
 fabrication:
   capability: [stock_gobilda_rev, 3d_printed_custom, cnc_aluminum_or_carbon]

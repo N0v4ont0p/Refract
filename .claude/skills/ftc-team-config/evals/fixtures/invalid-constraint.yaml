@@ -14,4 +14,8 @@ season_mechanisms:
   gate_mechanism: {value: none, source: asked, confirmed: true}
   classifier_interaction: {value: none, source: asked, confirmed: true}
   endgame_parking: {value: mandatory, source: asked, confirmed: true}
+tuning_constants:
+  # Present so this fixture keeps testing exactly ONE thing — the constraints_on_core violation it
+  # was written for — rather than also failing on a schema that postdates it.
+  tuning_status: {value: untuned, source: asked, confirmed: true}
 archetypes: [fixed_shooter_on_swerve]

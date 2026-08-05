@@ -23,4 +23,11 @@ season_mechanisms:
   gate_mechanism: {value: none, source: asked, confirmed: true}
   classifier_interaction: {value: none, source: asked, confirmed: true}
   endgame_parking: {value: mandatory, source: asked, confirmed: true}
+tuning_constants:
+  # Synthetic fixture — predates the tuning_constants schema. There is no real robot behind it, so
+  # `untuned` is the ONLY honest status: inventing measured values to keep the fixture green would
+  # be precisely the failure this schema exists to prevent (standing-principles §13). Carries a
+  # confirmed status and no constants, which is a legal, meaningful state: the team could tune and
+  # hasn't. generation_allowed stays true because a scaffold-with-untuned-fields is valid output.
+  tuning_status: {value: untuned, source: asked, confirmed: true}
 archetypes: [fixed_shooter_on_swerve]
