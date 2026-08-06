@@ -1,0 +1,127 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/localization/otos.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: OTOS
+description: A localizer that uses the SparkFun Optical Tracking Odometry Sensor
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+<Callout title="Prerequisites" type="info">
+  Ensure that the OTOS is properly mounted and connected, and the yellow kapton
+  tape has been pulled off the sensor. The OTOS
+  should be connected to a REV Hub through an I2C cable (not to port 0 because
+  the IMU is there).
+</Callout>
+
+## Setup
+
+In `Constants.java`, add an instance of `OTOSConstants`. Make sure to
+replace the hardware map name with the actual name.
+
+```java title="Constants.java"
+public static OTOSConstants localizerConstants = new OTOSConstants()
+            .hardwareMapName("otos")
+            .linearUnit(DistanceUnit.INCH)
+            .angleUnit(AngleUnit.RADIANS);
+```
+
+Then, add `.OTOSLocalizer` to `createFollower`:
+
+```java title="Constants.java"
+return new FollowerBuilder(followerConstants, hardwareMap)
+    .OTOSLocalizer(localizerConstants)
+    /* other builder steps */
+    .build();
+```
+
+## Offsets
+
+You must specify the sensor's position relative to the center of the robot.
+Measure the X and Y coordinates, and then change the value of `.offset()`.
+If you would like to change the units used, you can change `.linearUnit()`
+and/or `.angleUnit()`. The defaults are inches and radians, respectively.
+
+<Callout title="Important" type="warning">
+  The y axis is the left/right axis, and the x axis is the forward/backward
+  axis.
+
+  Left is positive y and forward is positive x.
+
+  Facing forward is `PI/2` radians or `90` degrees, and clockwise rotation
+  is negative.
+</Callout>
+
+<Callout title="Tip" type="info">
+  It is recommended that you run the following tests multiple times and
+  average the results, as it results in more accurate localization.
+</Callout>
+
+## Linear Scalar
+
+We will now adjust multipliers that convert encoder ticks into real-world
+measurements: inches. This ensures your localizer's readings are accurate.
+
+Since the OTOS has only one linear scalar, you can run either the forward or
+lateral tuner, as they should result in very similar values.
+
+### Option 1: Forward Tuner
+
+In the tuning OpMode, under localization, select and start the forward tuner.
+Then, push the robot **forward 48 inches** (exactly 2 field tiles). This
+distance is configurable if needed. Once you push the robot forward, two
+numbers will be displayed on telemetry:
+
+- The distance the robot thinks it has traveled
+- The linear scalar; this is the number you want.
+
+Add the linear scalar to your `OTOSConstants` by doing the following.
+
+```java title="Constants.java"
+.linearScalar(multiplier)
+```
+
+### Option 2: Lateral Tuner
+
+In the tuning OpMode, under localization, select and start the lateral tuner.
+Then, push the robot **left 48 inches** (exactly 2 field tiles). This
+distance is configurable if needed. Once you push the robot forward, two
+numbers will be displayed on telemetry:
+
+- The distance the robot thinks it has traveled
+- The linear scalar; this is the number you want.
+
+Add the linear scalar to your `OTOSConstants` (or modify the value in the quickstart)
+by doing the following.
+
+```java title="Constants.java"
+.linearScalar(multiplier)
+```
+
+## Turn Tuner
+
+The turn tuner is similar to both the forward tuner and lateral tuner, except it is
+rotational. Place the robot so it aligns to a fixed reference point
+(e.g., edge of a field tile).
+In the tuning OpMode, under localization, select and start the turn tuner.
+Rotate the robot **counterclockwise one full rotation**.
+
+Add the angular scalar to your `OTOSConstants` by doing the following.
+
+```java title="Constants.java"
+.angularScalar(multiplier)
+```
+
+## Testing the localizer
+
+Once you have completed the tuning steps, you can test your localizer as
+described
+[on the localization page](/docs/pathing/tuning/localization#localization-test).
+
+Congratulations on successfully tuning your localizer!
+
+## Troubleshooting
+
+If you have any problems, see the [troubleshooting page](/docs/pathing/troubleshooting).

@@ -1,0 +1,12 @@
+> Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/programming_resources/onbot_java/connecting/connecting.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+Connecting to the Program & Manage Server :bdg-info:`OBJ`
+=========================================================
+
+
+.. toctree::
+
+    /programming_resources/shared/installing_javascript_browser/Installing-a-Javascript-Enabled-Browser
+    /programming_resources/shared/program_and_manage_network/Connecting-a-Laptop-to-the-Program-&-Manage-Network

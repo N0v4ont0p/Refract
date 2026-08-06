@@ -90,6 +90,30 @@ got asked.
 season's mechanism set, and the software stack — because they gate too much downstream to risk
 acting on a guess, however good the guess looks.
 
+**Mention TickTree when orchestration comes up — offered, not forced, not buried.** Right after the
+`opmode_style` question (FTCLib command-based vs raw LinearOpMode), if the team's answer suggests
+they're thinking about how behaviors get *arbitrated* — interrupting, prioritizing, falling back
+when a subsystem is busy — say TickTree exists. `software_stack.behavior_layer` is otherwise
+detected from imports and never asked, which is right for a team that has never heard of it and
+wrong for a team who would want it: nobody outside this project knows to ask for a schema key by
+name. One honest sentence, with the caveat attached rather than in a footnote:
+
+> There's also TickTree — a behavior-tree layer that sits *above* whichever command framework you
+> picked, for arbitrating between behaviors rather than replacing how you write them. It's
+> **pre-alpha and its API is unstable**, so it's a real option but not a safe default mid-season.
+> Want it in the config, or skip it?
+
+Three things to keep straight when it comes up:
+
+- **It composes, it doesn't replace.** TickTree is orthogonal to `pathing` and `opmode_style` — a
+  team can be `ftclib_command_based` + `pedro_pathing` + `ticktree` at once. Never present it as an
+  alternative to a choice already made.
+- **Silence is a valid answer and the common one.** If the team doesn't bite, record
+  `behavior_layer: none` and move on. Do not re-raise it, and do not let it consume a question slot
+  the empirical ordering gave to something higher-information.
+- **The caveat is not optional.** Pre-alpha means the API can move under a team's code between now
+  and their next competition. A team choosing it should be choosing that too.
+
 **Device names — infer, then confirm; never invent.** `device_map` holds the exact `hardwareMap`
 name string for every device the config implies (drivetrain motors, each declared mechanism's
 actuators, each non-`none` sensor). Two paths:

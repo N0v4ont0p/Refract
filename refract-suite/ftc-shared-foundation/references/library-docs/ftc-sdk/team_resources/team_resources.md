@@ -1,0 +1,23 @@
+> Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/team_resources/team_resources.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+Team Resources
+==============
+
+There are several resources that teams might want to access throughout the *FIRST* Tech Challenge
+season.
+
+Pages and Links
+~~~~~~~~~~~~~~~
+
+| FTC Blog - https://community.firstinspires.org/topic/ftc
+| FTC Q&A - https://ftc-qa.firstinspires.org
+| FTC Game and Season Info - https://ftc.game
+| FTC Events site - https://ftc-events.firstinspires.org
+| FTC Technical Support - https://ftc-community.firstinspires.org
+| FTC Avatar Submission - https://community.firstinspires.org/team-avatars
+| FTC Scoring Site (for avatar and hybrid event portfolio submission) - https://ftc-scoring.firstinspires.org
+| FTC Competition Manual - https://ftc.game/manual
+| FTC Competition Manual (HTML) - https://ftc.game/cm-html
+| FTC Competition Manual AI Chatbot - https://ftc-cmchatbot.firstinspires.org

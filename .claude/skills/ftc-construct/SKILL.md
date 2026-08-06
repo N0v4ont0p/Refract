@@ -72,6 +72,35 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   season after DECODE) → write a new class against the mechanism's interface, following the
   template's own conventions (telemetry wired through `TeamOpMode`, no hardware access outside the
   owning subsystem class);
+
+  **If the shipped template is the wrong base entirely** — the team is starting a project from
+  nothing, or the config selects a stack the template's examples don't sit on — offer real upstream
+  starters, **filtered by what the config already confirms**, not as a menu of everything that
+  exists. A team that has confirmed `pedro_pathing` has no use for RoadRunner's starter, and
+  listing it invites a choice that contradicts a decision already made. Verified upstream, not
+  recalled — each name and its state was checked against the real repo:
+
+  | Offer when | Starter | State (verified 2026-08-06) |
+  |---|---|---|
+  | `software_stack.pathing == pedro_pathing` | `Pedro-Pathing/Quickstart` | active, current — Pedro's own official starter |
+  | `software_stack.pathing == roadrunner` | `acmerobotics/road-runner-quickstart` | active — RoadRunner's own official starter; it does exist |
+  | `software_stack.opmode_style == ftclib_command_based` | `FTCLib/FTCLib-Quickstart` | the generic command-based starter; last pushed 2023-08, no newer official one exists |
+  | always | this suite's own `quickstart-template/` | interface-based, config-derived — the default |
+
+  Pedro's starter and FTCLib's are **both** offerable to one team, because they answer different
+  axes (`pathing` vs `opmode_style`) and compose. Two Pedro repos that turn up in a search —
+  `Pedro-Pathing/Pedro-Pathing-Quickstart` and `Pedro-Pathing/Beginner-Quickstart` — are **archived**
+  (both since 2024-12), and the first's own description redirects to the current one. Never offer
+  either; an archived starter is a dead end a team discovers weeks later.
+
+  **Sequencing caveat, flagged rather than resolved.** This filtering works here because
+  `software_stack.pathing` and `opmode_style` are in the mandatory always-ask set, so step 0's
+  `generation_allowed` gate guarantees both are confirmed before this skill runs. It does **not**
+  hold for a team with no project at all asking "how do we start" — that arrives at
+  `ftc-team-config` *before* any stack is confirmed, and there the filter has nothing to filter on.
+  Whether a starter should be offered unfiltered at that point, or whether the pathing question
+  should simply be asked first, is a real open design question about question ordering — not
+  something to settle inside this skill's generation branch. Raise it; don't improvise a resolution.
 - a `season_mechanisms` key is `none` → no code for it, not commented out — same rule as
   ftc-team-config's generation rules.
 

@@ -1,0 +1,117 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/localization/drive-encoder.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Drive Encoder
+description: A localizer that uses the drive motor encoders
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+<Callout title="Prerequisites" type="info">
+  Ensure that you have all four drive motors encoders connected to their
+  respective ports on
+  a REV hub.
+</Callout>
+
+## Setup
+
+In `Constants.java`, add an instance of `DriveEncoderConstants`. Make sure to
+replace the motor names and directions with the correct ones.
+
+```java title="Constants.java"
+public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
+            .rightFrontMotorName("rf")
+            .rightRearMotorName("rr")
+            .leftRearMotorName("lr")
+            .leftFrontMotorName("lf")
+            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.FORWARD)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .rightRearEncoderDirection(Encoder.FORWARD);
+```
+
+Then, add `.driveEncoderLocalizer` to `createFollower`:
+
+```java title="Constants.java"
+return new FollowerBuilder(followerConstants, hardwareMap)
+    .driveEncoderLocalizer(localizerConstants)
+    /* other builder steps */
+    .build();
+```
+
+## Robot Dimensions
+
+Measure your robot's wheelbase in inches.
+
+- Length: the distance between the front and back wheels
+- Width: the distance between the left and right wheels
+
+In your `DriveEncoderConstants`, use `.robotWidth()` and `.robotLength()` to
+set the values you just measured.
+
+## Forward Tuner
+
+We will now adjust multipliers that convert encoder ticks into real-world
+measurements: inches. This ensures your localizer's readings are accurate.
+
+<Callout title="Tip" type="info">
+  It is recommended that you run these tests multiple times and average the
+  results,
+  as it can result in more accurate localization.
+</Callout>
+
+
+In the tuning OpMode, under localization, select and start the forward tuner.
+Then, push the robot **forward 48 inches** (exactly 2 field tiles). This
+distance is configurable if needed. Once you push the robot forward, two
+numbers will be displayed on telemetry:
+
+- The distance the robot thinks it has traveled
+- The multiplier; this is the number you want.
+
+Add the multiplier to your `DriveEncoderConstants` by adding the following.
+
+```java title="Constants.java"
+.forwardTicksToInches(multiplier)
+```
+
+## Lateral Tuner
+
+The lateral tuner is very similar to the forward tuner, except it is
+sideways. In the tuning OpMode, under localization, select and start the
+lateral tuner. Push the robot **left 48 inches** (exactly 2 field tiles). As
+with the forward tuner, this distance is configurable.
+
+Lastly, add the multiplier to `DriveEncoderConstants` by adding the following line.
+
+```java title="Constants.java"
+.strafeTicksToInches(multiplier)
+```
+
+## Turn Tuner
+
+The turn tuner is again, similar to both the forward tuner and lateral tuner, except it is
+rotational. Place the robot so it aligns to a fixed reference point (eg. edge of a field tile).
+In the tuning OpMode, under localization, select and start the
+turn tuner. Rotate the robot **counterclockwise one full rotation**. As
+with the previous tuners, this amount is configurable.
+
+Lastly, add the multiplier to `DriveEncoderConstants` by adding the following line.
+
+```java title="Constants.java"
+.turnTicksToInches(multiplier)
+```
+
+## Testing the localizer
+
+Once you have completed the tuning steps, you can test your localizer as
+described
+[on the localization page](/docs/pathing/tuning/localization#localization-test).
+
+Congratulations on successfully tuning your localizer!
+
+## Troubleshooting
+
+If you have any problems, see the [troubleshooting page](/docs/pathing/troubleshooting).

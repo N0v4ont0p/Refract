@@ -1,0 +1,166 @@
+> Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/persona_pages/coach_admin/coach_admin.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+Coach (Administrative) Resources
+================================
+
+Welcome to the *FIRST* Tech Challenge coach's page! Resources have been organized by
+type to help your team stay organized and be successful throughout the season.
+These resources are focused on the coach or administrator needs to manage the
+team while promoting *FIRST*'s ethos. Just click on the button for the resource you want to explore!
+
+.. grid:: 1 2 2 3
+   :gutter: 2
+
+   .. grid-item-card::
+      :class-header: sd-bg-secondary font-weight-bold sd-text-black
+      :class-body: sd-text-left
+
+      *FIRST* Core Values
+
+      ^^^
+
+      We express the *FIRST* philosophies of Gracious Professionalism 
+      and Coopertition through our Core Values.
+      
+      +++
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+      
+            .. button-ref:: ../../gracious_professionalism/gp
+               :ref-type: doc
+               :color: black
+               :outline:
+               :expand:
+
+               Gracious Professionalism
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+      
+            .. button-link:: https://help.firstinspires.org/s/article/What-is-Coopertition
+               :ref-type: doc
+               :color: black
+               :outline:
+               :expand:
+
+               Coopertition (external)
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+      
+            .. button-link:: https://help.firstinspires.org/s/article/What-are-the-FIRST-Core-Values
+               :ref-type: doc
+               :color: black
+               :outline:
+               :expand:
+
+               Core Values (external)
+
+   .. grid-item-card::
+      :class-header: sd-bg-secondary font-weight-bold sd-text-black
+      :class-body: sd-text-left
+
+      *FIRST* Dashboard Links
+
+      ^^^
+
+      Discover registration and purchasing FAQs. Team Registration requires *FIRST* 
+      Dashboard account access on firstinspires.org.
+   
+      +++
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+
+            .. button-link:: https://my.firstinspires.org/Dashboard/
+               :color: black
+               :outline:
+               :expand:
+
+               Register Your Team (External Login)
+ 
+         .. div:: col-sm pl-1 pr-1
+
+            .. button-link:: https://www.firstinspires.org/programs/youth-registration
+               :color: black
+               :outline:
+               :expand:
+
+               Youth Registration (external)
+
+   .. grid-item-card::
+      :class-header: sd-bg-secondary font-weight-bold sd-text-black
+      :class-body: sd-text-left
+
+      Team Management
+
+      ^^^
+
+      Resources to provide your team a well-paced and successful season.
+
+      +++
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+
+            .. button-link:: https://www.firstinspires.org/resources/library/ftc/team-management-resources
+               :color: black
+               :outline:
+               :expand:
+
+               Team Management Resources (External)
+
+   .. grid-item-card::
+      :class-header: sd-bg-secondary font-weight-bold sd-text-black
+      :class-body: sd-text-left
+
+      Coach Guidance
+
+      ^^^
+
+      Discover the best practices for new coaches.
+
+      +++
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+
+            .. button-link:: https://www.firstinspires.org/hubfs/web/program/ftc/ftc-mentor-manual.pdf
+               :color: black
+               :outline:
+               :expand:
+
+               Mentor Manual (External PDF)
+
+   .. grid-item-card::
+      :class-header: sd-bg-secondary font-weight-bold sd-text-black
+      :class-body: sd-text-left
+
+      Pre-Event Checklists
+
+      ^^^
+
+      Simple checklists to prepare for competition. See the Preparing for Competition heading on the linked page.
+
+      +++
+
+      .. div:: container-fluid p-0
+
+         .. div:: col-sm pl-1 pr-1
+
+            .. button-link:: https://www.firstinspires.org/resources/library/ftc/team-management-resources
+               :color: black
+               :outline:
+               :expand:
+
+               Preparing for Competition (External)
+

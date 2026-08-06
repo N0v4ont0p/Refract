@@ -1,0 +1,71 @@
+# G4/I3 fixture — the first config that actually SELECTS TickTree as a behavior layer.
+#
+# Phase G3 verified TickTree was WIRED (axis exists, detector fires, SKILL.md grounds against the
+# docs). It was never verified as WORKING: no config had ever selected it, so ftc-construct had
+# never once been run against `behavior_layer: ticktree` end to end. This fixture exists to make
+# that test real, at the same standard Phase B's utilization audit applied to Pedro/FTCLib/RoadRunner.
+#
+# Deliberately NOT a copy of 19859's config: this team is `untuned`, so the same run also exercises
+# the Phase H untuned-scaffold path (emit_tuning render -> Double.NaN + procedure, never a number)
+# rather than only the carry-forward-verbatim path a fully-tuned config takes.
+_meta: {schema: 1, updated: 2026-08-06, suite_generated_code: true}
+team: {number: 99999, experience: veteran}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+  mecanum:
+    wheel_source: {value: goBILDA_stock, source: asked, confirmed: true}
+    wheel_diameter_mm: {value: 104, source: asked, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 1, source: asked, confirmed: true}
+sensing:
+  vision: {value: none, source: asked, confirmed: true}
+  odometry: {value: goBILDA_pinpoint, source: asked, confirmed: true}
+software_stack:
+  pathing: {value: pedro_pathing, source: asked, confirmed: true}
+  opmode_style: {value: ftclib_command_based, source: asked, confirmed: true}
+  behavior_layer: {value: ticktree, source: asked, confirmed: true}
+  # Asked, not detected — the team said yes to the pre-alpha caveat at the orchestration question.
+  # This is the axis under test: TickTree composes ABOVE ftclib_command_based, it does not replace it.
+fabrication:
+  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
+team_context:
+  experience: {value: veteran, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  shooter: {value: flywheel, source: asked, confirmed: true}
+  turret: {value: none, source: asked, confirmed: true}
+  gate_mechanism: {value: none, source: asked, confirmed: true}
+  classifier_interaction: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: mandatory, source: inferred, confirmed: true}
+device_map:
+  drive_front_left:  {value: "leftFront", source: asked, confirmed: true}
+  drive_back_left:   {value: "leftRear", source: asked, confirmed: true}
+  drive_front_right: {value: "rightFront", source: asked, confirmed: true}
+  drive_back_right:  {value: "rightRear", source: asked, confirmed: true}
+  odometry_pinpoint: {value: "pinpoint", source: asked, confirmed: true}
+  intake_motor:      {value: "intake", source: asked, confirmed: true}
+  shooter_left:      {value: "shooterLeft", source: asked, confirmed: true}
+  shooter_right:     {value: "shooterRight", source: asked, confirmed: true}
+tuning_constants:
+  # Pre-tuning team: robot is wired and drivable, tuners not yet run. `untuned`, not
+  # `not_yet_tunable`. Every constant null by design — see standing-principles §13.
+  tuning_status: {value: untuned, source: asked, confirmed: true}
+  follower:
+    mass:
+      {value: null, origin: untuned, units: kg, source: asked, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
+    forwardZeroPowerAcceleration:
+      {value: null, origin: untuned, units: in/s^2, source: asked, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
+    lateralZeroPowerAcceleration:
+      {value: null, origin: untuned, units: in/s^2, source: asked, confirmed: true,
+       tuning_procedure_ref: library-docs/pedro-pathing/tuning.md}
+  drivetrain:
+    xVelocity: {value: null, origin: untuned, units: in/s, source: asked, confirmed: true}
+    yVelocity: {value: null, origin: untuned, units: in/s, source: asked, confirmed: true}
+  localizer:
+    forwardPodY: {value: null, origin: untuned, units: mm, source: asked, confirmed: true}
+    strafePodX: {value: null, origin: untuned, units: mm, source: asked, confirmed: true}
+config_history:
+  - {date: 2026-08-06, change: "created for the G4/I3 real TickTree generation test"}

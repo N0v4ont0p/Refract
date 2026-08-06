@@ -1,0 +1,138 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/localization/two-wheel.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Two Wheel
+description: A localizer that uses two odometry wheels
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+<Callout title="Prerequisites" type="info">
+  Ensure that two odometry pods are connected: one that is parallel to the length
+  of your chassis and another that is perpendicular to your chassis length. These should be plugged
+  into ports that have motors on them preferably. Due to technical limitations on REV hubs, encoder ports
+  0 and 3 are the fastest and are recommended for both pods
+</Callout>
+
+## Setup
+
+In `Constants.java`, add an instance of `TwoWheelConstants`. Make sure to replace the hardware map names
+with the actual names of the motor port they are plugged into. You must also set the
+IMU orientation to match the orientation of your Control Hub.
+
+```java title="Constants.java"
+public static TwoWheelConstants localizerConstants = new TwoWheelConstants()
+        .forwardEncoder_HardwareMapName("leftFront")
+        .strafeEncoder_HardwareMapName("rightRear")
+        .IMU_HardwareMapName("imu")
+        .IMU_Orientation(
+            new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+            )
+        );
+```
+
+Then, add `.twoWheelLocalizer` to `createFollower`:
+
+```java title="Constants.java"
+return new FollowerBuilder(followerConstants, hardwareMap)
+    .twoWheelLocalizer(localizerConstants)
+    /* other builder steps */
+    .build();
+```
+
+### Offsets
+
+Offsets can be found **manually** or **automatically**:
+
+- **Automatic**: Use the [offsets tuner](/docs/pathing/tuning/localization/offsets-tuner)
+- **Manual**: Use the diagram below (offsets are in inches)
+
+Set your odometry pod offsets to define where they are relative to your robot's center of rotation.
+
+<img
+  className="inline-block dark:hidden"
+  src="/docs/odometry-light.png"
+  alt="Odometry Pod Offset Diagram"
+/>
+
+<img
+  className="hidden dark:inline-block"
+  src="/docs/odometry-dark.png"
+  alt="Odometry Pod Offset Diagram"
+/>
+
+Once you have found your offsets, add them to your localizer constants by
+using `.forwardPodY()` and `.strafePodX()`.
+
+## Tuning
+
+### Encoder Directions
+
+We will now determine the encoder directions. First, select and run
+localization test under the localization folder in the tuning OpMode. Then,
+move the robot forward. The x coordinate should increase. Next, move the
+robot left. The y coordinate should increase. If either of those does not
+happen, you must reverse the respective encoder. To reverse an encoder, add
+
+To reverse an encoder, add one of the following to `TwoWheelConstants`:
+
+```java title="Constants.java"
+.forwardEncoderDirection(Encoder.REVERSE)
+
+// and/or:
+
+.strafeEncoderDirection(Encoder.REVERSE)
+```
+
+### Forward Tuner
+
+We will now adjust multipliers that convert encoder ticks into real-world
+measurements: inches. This ensures your localizer's readings are accurate.
+
+<Callout title="Tip" type="info">
+  It is recommended that you run these tests multiple times and average the results,
+  as it can result in more accurate localization.
+</Callout>
+
+In the tuning OpMode, under localization, select and start the forward tuner.
+Then, push the robot **forward 48 inches** (exactly 2 field tiles). This
+distance is configurable if needed. Once you push the robot forward, two
+numbers will be displayed on telemetry:
+
+- The distance the robot thinks it has traveled
+- The multiplier; this is the number you want.
+
+Add the multiplier to your `TwoWheelConstants` by adding the following.
+
+```java title="Constants.java"
+.forwardTicksToInches(multiplier)
+```
+
+### Lateral Tuner
+
+The lateral tuner is very similar to the forward tuner, except it is
+sideways. In the tuning OpMode, under localization, select and start the
+lateral tuner. Push the robot **left 48 inches** (exactly 2 field tiles). As
+with the forward tuner, this distance is configurable.
+
+Lastly, add the multiplier to `TwoWheelConstants` by adding the following line.
+
+```java title="Constants.java"
+.strafeTicksToInches(multiplier)
+```
+
+## Testing the localizer
+
+Once you have completed the tuning steps, you can test your localizer as
+described
+[on the localization page](/docs/pathing/tuning/localization#localization-test).
+
+Congratulations on successfully tuning your localizer!
+
+## Troubleshooting
+
+If you have any problems, see the [troubleshooting page](/docs/pathing/troubleshooting).

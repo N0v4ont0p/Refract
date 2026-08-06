@@ -1,0 +1,59 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/drive-algorithm/pidfs/translational.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Translational
+---
+
+### Purpose
+
+The translational PIDF ensures the robot follows a straight path without lateral deviation.
+
+## Setup
+
+1. Open Panels. If you haven't used Panels before, you can read the documentation on the [Panels](https://panels.bylazar.com/docs/com.bylazar.configurables/).
+2. On your Driver Hub or Driver Station, and connect a gamepad to it. Make sure to press "start" + "a" on the gamepad.
+3. Select the `Tuning` Opmode. Use your gamepad to select the `Manual` folder. Then, select `Translational Tuner`.
+4. Run the run the OpMode.
+
+**Note that while running the `Translational Tuner` OpMode, the robot will stay in place. This is intentional.**
+
+## Tuning Process
+
+Follow this video to help you tune the PIDF(s):
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/qe2eo_Mhtes?si=DMqud3FSZ2j5AmPu" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+
+1. Push the robot left or right at varying amounts and observe how the robot corrects back to its starting position.
+2. Adjust the PIDF constants (`coefficientsTranslationalPIDF`) in the `Tuning`-> `Follower` -> `Constants` section of Panels Configurables to ensure that the robot can **accurately correct** back to its starting position with **minimal oscillations.** For example, if the robot has too many oscillations while correcting back to its starting position, try lowering the P value. On the other hand, if the robot corrects back to its starting location too slowly, increase the P value.
+**If you do not have prior experience with tuning PIDFs, we recommend that you check out the resources provided at the bottom of the PIDF Tuners page to learn more about tuning these.**
+
+**If you have a dual PIDF system enabled,** it is recommended to first tune the main PIDF, `coefficientsTranslationalPIDF`, to ensure that the robot can correct from large errors and bring it within the secondary PID's range. Then, tune the secondary PIDF, `coefficientsSecondaryTranslationalPIDF`, so the robot can smoothly correct from smaller errors and minimize oscillations.
+
+<Callout title="Tuning Tips" type="info">
+ Don't worry if the robot does not correct its heading. We are only tuning translational PIDF: whether the robot corrects left/right appropriately.
+</Callout>
+
+<Callout title="Warning!" type="warning">
+After adjusting a value in Panels, **hit "enter"** in order to save it and cause the robot to correct differently. However, any values you modify through Panels **are not saved into your code!** In order to transfer the values you just tuned on Panels into your code, go to the **Update Tuned Values** section.  
+</Callout>
+
+### Feedforward Adjustments (Optional)
+
+If additional feedforward is needed, use the feedforward term directly in the `coefficientsTranslationalPIDF` and/or `coefficientsSecondaryTranslationalPIDF` if
+you are using dual PID.
+
+- The feedforward term applies a minimum power output to the motors to compensate for the friction between the motors, wheels, and the ground.
+- To tune the feedforward, set all other PIDF values to 0 and increase the Feedforward value up until the robot starts moving/jittering.
+
+### Update Tuned values Into Your Code
+
+1. Once you are satisfied with your translationalPIDF values, head over to the `Constants` file, and navigate to the `FollowerConstants` instantiation.
+2. Navigate to or add the line `.translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0))`
+3. Update the parameters in `new PIDFCoefficients(0.1, 0, 0.01, 0)` with the `translationalPIDFCoefficients` values, `P, I, D, F`, you tuned on Panels in that order.
+4. If you are using the dual PIDF system, **add the line** `.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.01,0))` and update the `secondaryTranslationalPIDF` values you tuned on Panels.
+
+## Troubleshooting
+
+If you encounter a problem while tuning the translational PIDF, check out the [troubleshooting page](/docs/pathing/troubleshooting).

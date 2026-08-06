@@ -351,6 +351,49 @@ def _live_drive_class(srcs):
             return m.group(1)
     return None
 
+def strip_comments(src):
+    """Blank out Java comments, preserving offsets so reported line numbers stay right.
+
+    Necessary, and found by running the checks against real generated output rather than by
+    reading them: a generated file that WARNS against copying Pedro's defaults ("do NOT copy
+    mass = 10.65 ...") was itself flagged for containing those numbers. A tuning-constant check
+    that fires on prose telling people not to use a value is worse than useless — it trains
+    readers to ignore the one check that catches the silent case.
+    """
+    out, i, n = [], 0, len(src)
+    state = None  # None | 'line' | 'block' | 'str' | 'char'
+    while i < n:
+        c = src[i]
+        nxt = src[i + 1] if i + 1 < n else ''
+        if state is None:
+            if c == '/' and nxt == '/':
+                state = 'line'; out.append('  '); i += 2; continue
+            if c == '/' and nxt == '*':
+                state = 'block'; out.append('  '); i += 2; continue
+            if c == '"':
+                state = 'str'
+            elif c == "'":
+                state = 'char'
+            out.append(c); i += 1; continue
+        if state == 'line':
+            if c == '\n':
+                state = None; out.append(c)
+            else:
+                out.append(' ')
+            i += 1; continue
+        if state == 'block':
+            if c == '*' and nxt == '/':
+                state = None; out.append('  '); i += 2; continue
+            out.append(c if c == '\n' else ' '); i += 1; continue
+        # inside a string/char literal
+        if c == '\\':
+            out.append(c); out.append(nxt); i += 2; continue
+        if (state == 'str' and c == '"') or (state == 'char' and c == "'"):
+            state = None
+        out.append(c); i += 1
+    return ''.join(out)
+
+
 def _near(a, b):
     # near-match, not just equality: a truncated copy of a default (-34.627 for -34.62719) is the
     # same borrowed number, and is exactly how a default gets laundered into looking measured.
@@ -364,7 +407,9 @@ def check_template_default_tuning(repo):
     # Read every file ONCE. The liveness fallback below compares against all other files, so
     # re-reading per hit is O(n^2) — it timed out on a real repo before this cache existed.
     srcs = {p: read(p) for p in code_files(repo)}
-    for path, src in srcs.items():
+    # Match against comment-stripped source only. See strip_comments().
+    code = {p: strip_comments(t) for p, t in srcs.items()}
+    for path, src in code.items():
         if not re.search(r'FollowerConstants|MecanumConstants|\w+Constants\s*\(|class\s+Params\b'
                          r'|inPerTick|trackWidthTicks', src):
             continue

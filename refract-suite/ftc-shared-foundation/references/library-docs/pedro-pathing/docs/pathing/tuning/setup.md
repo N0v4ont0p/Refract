@@ -1,0 +1,68 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/setup.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Setup
+description: Before you tune Pedro, there are a few simple steps you must complete.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Setting your robot's mass
+
+Your robot's mass is used to compensate for centripetal force. To set the
+mass, simply add `.mass` in `FollowerConstants`. Note that the mass **must
+be in kilograms**.
+
+```java title="Constants.java"
+public static FollowerConstants followerConstants = new FollowerConstants()
+        .mass(5);
+```
+
+<Callout title="Tip" type="info">
+  If you don't have a large enough scale to weigh your robot, you can stand on
+  the scale while holding your robot and then subtract your own weight.
+</Callout>
+
+## Adding drivetrain constants
+
+Next, we will add our drivetrain constants. These include motor names, motor
+directions, and the max power. The max power must be a number from 0 to 1.
+
+### Swerve
+If you have a swerve drivetrain, please refer to the dedicated [swerve page](/docs/pathing/tuning/swerve/swerve-setup)
+for tuning instructions.
+
+### Mecanum
+
+If you have a mecanum drivetrain, add the following to your `Constants` class.
+
+```java title="Constants.java"
+public static MecanumConstants driveConstants = new MecanumConstants()
+        .maxPower(1)
+        .rightFrontMotorName("rf")
+        .rightRearMotorName("rr")
+        .leftRearMotorName("lr")
+        .leftFrontMotorName("lf")
+        .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+        .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+        .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+        .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+```
+
+<Callout title="Important" type="warning">
+  Make sure that your motor names and directions are correct. It's likely
+  that you will have to reverse one side!
+</Callout>
+
+Then, add the mecanum drivetrain to the follower builder in `createFollower`:
+
+```java title="Constants.java"
+public static Follower createFollower(HardwareMap hardwareMap) {
+        return new FollowerBuilder(followerConstants, hardwareMap)
+                .pathConstraints(pathConstraints)
+                .mecanumDrivetrain(driveConstants)
+                .build();
+}
+```

@@ -1,0 +1,28 @@
+> Source: https://docs.revrobotics.com/docs/duo/programming-guides.md · Fetched: 2026-08-06 · Publisher-provided Markdown (REV serves a .md
+> variant of every page, plus an llms.txt index) — not an HTML conversion.
+> Exhaustive mirror (I2 sweep). FTC-relevant sections of a combined FRC+FTC+education
+> site — see library-docs/_MIRROR-README.md for the scope boundary.
+
+> For the complete documentation index, see [llms.txt](https://docs.revrobotics.com/llms.txt). Markdown versions of documentation pages are available by appending `.md` to page URLs; this page is available as [Markdown](https://docs.revrobotics.com/docs/duo/programming-guides.md).
+
+# Programming Guides
+
+### Getting Started
+
+<table data-view="cards"><thead><tr><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Where to Program - Client vs. Browser</strong></td><td><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/n5mjlFC22RofIcGFG3xE">/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/n5mjlFC22RofIcGFG3xE</a></td><td><a href="/files/NvohShAvuNLQRwEg02aJ">/files/NvohShAvuNLQRwEg02aJ</a></td></tr><tr><td><strong>Setting up a Configuration</strong></td><td><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-MJhSpWDdVL6coLFLgIi">/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-MJhSpWDdVL6coLFLgIi</a></td><td><a href="/files/Z0Sw5VeiGJrkAZQ0zKbf">/files/Z0Sw5VeiGJrkAZQ0zKbf</a></td></tr><tr><td><strong>Using a Gamepad</strong></td><td><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/qqwW7jFGIqDy3duAmcIH">/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/qqwW7jFGIqDy3duAmcIH</a></td><td><a href="/files/KDOCjhSb3ocDra4dMcYU">/files/KDOCjhSb3ocDra4dMcYU</a></td></tr></tbody></table>
+
+### Hello Robot - Intro to Blocks Programming
+
+{% hint style="success" %}
+[Click here to jump to the beginning of the Hello Robot - Blocks Tutorial](/duo-control/hello-robot-blocks/welcome.md)
+{% endhint %}
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Part 1: Tackling the Basics</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-MK0iTT96y857Gd7r1yj">Creating an OpMode</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/4V2d2AouRcSyDbhFKOLX">Programming Servos</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/7bAS06Joggptpe0HWe0c">Programming Motors</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/4nS4zdp4AuapeD7nvthy">Programming Touch Sensors</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/zyzOPuRwsrkOheAkcLzW">Programming Color Sensors</a></td><td><a href="/files/EIqa2il2UqCyv8OVSSbm">/files/EIqa2il2UqCyv8OVSSbm</a></td></tr><tr><td><strong>Part 2: Robot Control</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/D7Xcx2OP8KgDGPcImCFW">Programming Drivetrain Motors<br></a><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/VQlO1wxrIDNQbWC3Wwkp">Arcade Style TeleOp</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-M_2CS2aB11oc5irYoJf">Arm Control</a></td><td><a href="/files/KDOCjhSb3ocDra4dMcYU">/files/KDOCjhSb3ocDra4dMcYU</a></td></tr><tr><td><strong>Part 3: Autonomous and Encoders</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-MQYgsH9_6beqJ6n18Wd">ElapsedTime</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-M8MrspdKxbhYTQam28K">Encoder Basics</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/-MYCCTDX_gsPQ81vtecg">Drivetrain Encoders</a></td><td><a href="/files/0OWAbqVS5aYRevLQAStf">/files/0OWAbqVS5aYRevLQAStf</a></td></tr><tr><td><strong>Part 4: Going Beyond!</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/Gli7Gznr3gDULQkuKjSF">Exploring Functions</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/sgqCZO13oVXkTJ4HqVPi">Programming Mecanum</a></td><td><a href="/files/MBDXLvYBdzmeHVEr3oaw">/files/MBDXLvYBdzmeHVEr3oaw</a></td></tr></tbody></table>
+
+### Hello Robot - Intro to OnBot Java Programming
+
+{% hint style="success" %}
+[Click here to jump to the beginning of the Hello Robot - OnBot Java Tutorial](/duo-control/hello-robot-java/welcome.md)
+{% endhint %}
+
+<table data-view="cards"><thead><tr><th></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Part 1: Tackling the Basics</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/2yUilv4zZZu2qwguuWyE">Creating an OpMode</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/0yjtuINDzS5taSv9jxjr">Programming Servos</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/Iyg79dWbI9fG8vbpUm7O">Programming Motors</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/1ttEP2JibdaXC5ZGXUdc">Programming Touch Sensors</a><br></td><td><a href="/files/MJaPZKxUHdlmUKzmDVgK">/files/MJaPZKxUHdlmUKzmDVgK</a></td></tr><tr><td><strong>Part 2: Robot Control</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/HfUj6QA2ALIcD56F9ZBE">Programming Drivetrain Motors</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/fuZjm7Z41jlvR3VY95i3">Arcade Style TeleOp</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/pHqGudBzvFaieQxwiAGb">Arm Control</a></td><td><a href="/files/KDOCjhSb3ocDra4dMcYU">/files/KDOCjhSb3ocDra4dMcYU</a></td></tr><tr><td><strong>Part 3: Autonomous and Encoders</strong><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/W66ZuOL280TVc3BuYtWE">ElapsedTime</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/b8snuFpYaDyjuVENRisb">Encoder Basics</a><br><br><a href="/spaces/UOOiQ4S2QcMWmVoSmeQ8/pages/NMo7JvEVdoyq8XWQD4kx">Drivetrain Encoders</a></td><td><a href="/files/0OWAbqVS5aYRevLQAStf">/files/0OWAbqVS5aYRevLQAStf</a></td></tr></tbody></table>

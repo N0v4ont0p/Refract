@@ -1,0 +1,80 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/drive-algorithm/pidfs/tuning.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Tuning Overview
+---
+
+<Callout type='warn' title="PIDFs vs. Predictive Braking">
+You may either use PIDs or Predictive Braking to control your robot.  
+However, swerve is currently not compatible with Predictive Braking.
+All further steps in the PIDFs section are for PIDFs users only.  
+</Callout>
+
+Pedro Pathing relies on **Proportional-Integral-Derivative (PID)
+controllers** to ensure precise path-following performance. The following pages
+will walk you through tuning the various PID controllers for translational,
+heading, and drive.
+
+## Single vs. Dual PID System
+
+In Pedro Pathing, you can choose between using one or two PID controllers for
+each correction type (translational, heading, and drive).
+
+### Single PID System
+
+In a single PID system, a single PID is responsible for managing all errors.
+This is the simplest option and is the quickest to get started with.
+
+Since a single PID system is the default, you don't have to do anything
+special to use it.
+
+### Dual PID System
+
+In a dual PID system, there is a **main PID** that handles larger errors and
+a **secondary PID** for smaller corrections.
+
+Advantages to using a dual PID system are:
+
+- Better correction
+- Scalable error thresholds
+- Allows for more aggressive tuning
+
+If you want to try using a dual PID system, it is recommended that you start
+with drive, as it will contribute the most to a better auto.
+
+To enable a dual PID system, set any of the following to `true` in
+`FollowerConstants` in the
+`Constants` file.
+
+```java title="Constants.java"
+.useSecondaryTranslationalPIDF(true)
+.useSecondaryHeadingPIDF(true)
+.useSecondaryDrivePIDF(true)
+```
+
+Then, tune both the main and secondary PIDs. The main PID should move the
+error into the secondary PID's range without causing overshoot, and the
+secondary PID should correct for small errors quickly and minimize oscillations.
+
+## Tuning PIDs
+
+Read the
+[PID tuning page on CTRL ALT FTC](https://www.ctrlaltftc.com/the-pid-controller/tuning-methods-of-a-pid-controller)
+to learn how to tune a PID controller. Addtionally, the following videos
+demonstrate how to tune a PID.
+
+<iframe className="mb-5" width="560" height="315"
+        src="https://www.youtube-nocookie.com/embed/qKy98Cbcltw?si=8HYnqB9XWWTazdMe"
+        title="YouTube video player" frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen></iframe>
+
+<iframe width="560" height="315"
+        src="https://www.youtube-nocookie.com/embed/uXnDwojRb1g?si=Zy53je8jd2naUW7a"
+        title="YouTube video player" frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen></iframe>

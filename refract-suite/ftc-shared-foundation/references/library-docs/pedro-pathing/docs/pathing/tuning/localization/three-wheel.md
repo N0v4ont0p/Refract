@@ -1,0 +1,157 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/localization/three-wheel.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Three Wheel
+description: A localizer that uses three odometry wheels
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+<Callout title="Prerequisites" type="info">
+  Ensure that three odometry pods are connected: two that are parallel to the length
+  of your chassis and another that is perpendicular to your chassis length. These should be plugged
+  into ports that have motors on them preferably. Due to technical limitations on REV hubs, encoder ports
+  0 and 3 are the fastest and are recommended for the two parallel pods.
+</Callout>
+
+## Setup
+
+In `Constants.java`, add an instance of `ThreeWheelConstants`. Make sure to replace the hardware map names
+with the actual names of the motor port they are plugged into.
+
+```java title="Constants.java"
+public static ThreeWheelConstants localizerConstants = new ThreeWheelConstants()
+            .forwardTicksToInches(.001989436789)
+            .strafeTicksToInches(.001989436789)
+            .turnTicksToInches(.001989436789)
+            .leftPodY(1)
+            .rightPodY(-1)
+            .strafePodX(-2.5)
+            .leftEncoder_HardwareMapName("leftFront")
+            .rightEncoder_HardwareMapName("rightRear")
+            .strafeEncoder_HardwareMapName("rightFront")
+            .leftEncoderDirection(Encoder.FORWARD)
+            .rightEncoderDirection(Encoder.FORWARD)
+            .strafeEncoderDirection(Encoder.FORWARD);
+```
+
+Then, add `.threeWheelLocalizer` to `createFollower`:
+
+```java title="Constants.java"
+return new FollowerBuilder(followerConstants, hardwareMap)
+    .threeWheelLocalizer(localizerConstants)
+    /* other builder steps */
+    .build();
+```
+
+### Offsets
+
+You must also set your odometry pod offsets, which are
+relative to your robot's center of rotation. You can use the diagram below
+to find them. **Offsets are in inches.**
+
+<img
+  className="inline-block dark:hidden"
+  src="/docs/odometry-light.png"
+  alt="Odometry Pod Offset Diagram"
+/>
+
+<img
+  className="hidden dark:inline-block"
+  src="/docs/odometry-dark.png"
+  alt="Odometry Pod Offset Diagram"
+/>
+
+Once you have found your offsets, add them to your localizer constants by
+using `.leftPodY()`, `.rightPodY()` and `.strafePodX()`.
+
+## Encoder Directions
+
+We will now determine the encoder directions. First, select and run
+localization test under the localization folder in the tuning OpMode. Then,
+move the robot forward. The x coordinate should increase. Next, move the
+robot left. The y coordinate should increase. If these do not happen, the
+respective encoders must be the inverse of what they currently are (NOTE:
+both parallel pods must be inversed if the x coordinate decreases).
+To reverse an encoder, add
+
+To reverse an encoder, add one of the following to `ThreeWheelConstants`:
+
+```java title="Constants.java"
+.leftEncoderDirection(Encoder.REVERSE)
+.rightEncoderDirection(Encoder.FORWARD)
+
+// and/or:
+
+.strafeEncoderDirection(Encoder.REVERSE)
+```
+
+<Callout title="Important" type="warning">
+  If when you push the robot forward both x and y change, it is likely that either your offsets have the wrong sign,
+  or that the hardwareMap is incorrect (ie. forward encoder is actually your strafe encoder and vise versa)
+</Callout>
+
+## Forward Tuner
+
+We will now adjust multipliers that convert encoder ticks into real-world
+measurements: inches. This ensures your localizer's readings are accurate.
+
+<Callout title="Tip" type="info">
+  It is recommended that you run these tests multiple times and average the results,
+  as it can result in more accurate localization.
+</Callout>
+
+In the tuning OpMode, under localization, select and start the forward tuner.
+Then, push the robot **forward 48 inches** (exactly 2 field tiles). This
+distance is configurable if needed. Once you push the robot forward, two
+numbers will be displayed on telemetry:
+
+- The distance the robot thinks it has traveled
+- The multiplier; this is the number you want.
+
+Add the multiplier to your `ThreeWheelConstants` by adding the following.
+
+```java title="Constants.java"
+.forwardTicksToInches(multiplier)
+```
+
+## Lateral Tuner
+
+The lateral tuner is very similar to the forward tuner, except it is
+sideways. In the tuning OpMode, under localization, select and start the
+lateral tuner. Push the robot **left 48 inches** (exactly 2 field tiles). As
+with the forward tuner, this distance is configurable.
+
+Lastly, add the multiplier to `ThreeWheelConstants` by adding the following line.
+
+```java title="Constants.java"
+.strafeTicksToInches(multiplier)
+```
+
+## Turn Tuner
+
+The turn tuner is similar to both the forward tuner and lateral tuner, except it is
+rotational. Place the robot so it aligns to a fixed reference point (e.g., edge of a field tile).
+In the tuning OpMode, under localization, select and start the
+turn tuner. Rotate the robot **counterclockwise one full rotation**. As
+with the previous tuners, this amount is configurable.
+
+Lastly, add the multiplier to `ThreeWheelConstants` by adding the following line.
+
+```java title="Constants.java"
+.turnTicksToInches(multiplier)
+```
+
+## Testing the localizer
+
+Once you have completed the tuning steps, you can test your localizer as
+described
+[on the localization page](/docs/pathing/tuning/localization#localization-test).
+
+Congratulations on successfully tuning your localizer!
+
+## Troubleshooting
+
+If you have any problems, see the [troubleshooting page](/docs/pathing/troubleshooting).

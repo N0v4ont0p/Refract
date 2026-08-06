@@ -104,6 +104,53 @@ Full detail waits for its own dedicated session and prompt, per your instruction
 - **Hard constraint, stated plainly so it can't get lost:** no Claude-generated SVGs, logos, or diagrams, ever. Any visual asset need becomes an explicit question back to you — you have your own generation tools for this. This goes into that future prompt as a rule, not a suggestion.
 - Content will presumably cover: what Refract is, install instructions, the skill lineup, credits, a link to the repo — finalized when that phase actually starts.
 
+**Status: paused mid-build (Stage 4 complete, deployed).** Phase H below takes priority over resuming this — a safety-critical gap in code generation outranks finishing the marketing site for it.
+
+---
+
+## Phase H — Physical Tuning & Device-Naming Safety
+
+**Elevated priority — this jumps ahead of resuming Phase E, despite being added later.** Discovered while tuning 32008's autonomous, surfaced by a real `Constants.java`. This is categorically higher-stakes than any prior finding in this project: every other hallucination-risk category this project has fought produces a wrong *answer*. This one, left unfixed, lets `ftc-construct` generate code carrying a fabricated-but-plausible physical constant that directly drives a real robot's path-following behavior.
+
+**Source-handling note:** the discovered `Constants.java` is 32008-derived — `public_shippable: false` by the same default established at F5. It's real, valuable evidence for this phase's design; it is not a corpus pattern to extract, and it is never a public or shippable example.
+
+### H0. Two distinct problems — different fixes, don't conflate them
+
+- **Device naming** (DS hardwareMap config names — `"rf"`, `"pp"`, etc.): universal, needed by every team regardless of library choice, currently has no schema field at all.
+- **Physical tuning constants** (mass, PIDF gains, velocity constants, pod offsets): library-shape-dependent — Pedro's shape is not RoadRunner's shape is not a raw/custom drivetrain's shape — and fundamentally unmeasurable by any source lookup. No catalog, no library doc, nothing can ever supply these; they only exist once physically tuned on the actual robot. This is a different category from an "unseeded SKU" abstention case — it can never be seeded, by nature, not just not-yet.
+
+### H1. Schema additions
+
+- A `device_map` structure, dynamically generated per declared mechanism/sensor — same dynamic-generation principle already used for `season_mechanisms`' interfaces, not a fixed field list.
+- A `tuning_constants` block, shaped per the selected `pathing`/`software_stack` choice — explicitly not hardcoded to Pedro's field shape as if it were universal. Carries a real `tuning_status` state (`not_yet_tunable` / `untuned` / `tuned`), because "config confirmed" and "robot physically tuned" are two separate real milestones in a team's build, not one.
+
+### H2. `ftc-team-config` elicitation updates
+
+- Device names: inferred-then-confirmed for a team with existing code (same inference-first principle as everywhere else), directly asked for a team building from scratch.
+- A new branch: does the team already have real tuned constants (existing code, or pasted directly) or are they pre-tuning? This determines `ftc-construct`'s downstream path entirely.
+
+### H3. `ftc-construct` generation rules — the actual safety fix
+
+- Real tuned values, from any source: carried forward verbatim, never regenerated, never "helpfully" adjusted.
+- No tuned values yet: generate the correctly-structured scaffold with every tuning-dependent field loudly, explicitly marked untuned — reusing the same fail-fast abstention convention already established (and literally shown on the website's own R92/R93 demo) — never a plausible-looking placeholder. Attach a real walkthrough of the actual tuning procedure, sourced from the library docs already fetched in Phase A.
+- **Hard rule, no exceptions:** a fabricated-but-plausible tuning constant is never acceptable output, under any circumstance. This is the one category where "plausible" is strictly worse than "loudly missing."
+
+### H4. `ftc-code-review` — a new deterministic check
+
+Add to `failure_mode_lint.py`: flag any tuning constant matching or near-matching a known quickstart-template default value, unchanged — a strong, checkable signal the team never actually tuned their robot and may be running on fabricated example constants that happen to compile.
+
+### H5. `standing-principles.md` addition
+
+Name this as its own hallucination-control category, distinct from the unseeded-catalog-SKU case: physical tuning constants can never be source-derived, by nature. The only legitimate states are "carried forward from real measurement" or "explicitly, loudly marked untuned" — never a middle ground.
+
+### H6. Retroactive fixture check
+
+`19859-real-confirmed.yaml` (F2's promoted ground-truth fixture) predates this schema. Once the new fields exist, it needs a follow-up amendment — run through the real live `ftc-team-config` confirmation flow again, same discipline as its original promotion, not patched in after the fact.
+
+### H7. 32008 boundary, explicit
+
+`Constants.java` informs this phase's design. It stays internal-only per F5's existing default — never surfaced as a public example, corpus pattern, or documentation sample.
+
 ---
 
 ## Phase F — 19859 & 32008: The Ground-Truth Corpus Completion
@@ -173,6 +220,31 @@ It's actively changing, more than any other bundled library. Whatever gets store
 
 ---
 
+## Phase I — Starter Choice, Full Documentation Sweep, TickTree Activation
+
+Three distinct threads, none safety-critical like Phase H, all real gaps worth closing.
+
+### I1. Starter-template choice — Pedro's own quickstart, not just FTCLib's
+
+`ftc-construct`'s no-template branch currently offers only `FTCLib/FTCLib-Quickstart`. Verify Pedro Pathing's own official starter/quickstart repo actually exists and get its real name — don't assume a name. Once confirmed, the choice a new team faces should be filtered by what they've already declared, not an unconditional menu: a team that's already confirmed `pathing: pedro_pathing` sees Pedro's own starter as a real option alongside FTCLib's generic one; a team on `pathing: roadrunner` should see RoadRunner's own starter checked for and offered the same way, if one exists. If starter choice would need to happen *before* `pathing` is even confirmed for some team, that's a real sequencing question — surface it rather than deciding unilaterally which comes first.
+
+### I2. Full documentation sweep — exhaustive this time, not curated
+
+Per your explicit instruction: re-run the fetch for every library in `library-docs/`, this time downloading everything reachable rather than judging what's "high value." Reuse Phase D2's completeness-audit mechanism (the real page-list-against-live-source comparison) to find every gap, then close all of them, not just the top pick per library the way D2 did for RoadRunner and Pedro. Same lightweight hygiene as always — source and fetch-date headers, domain-split storage — the instruction changes scope, not the tagging discipline. Worth making this repeatable going forward: extend `corpus-input-scan.py` to flag completeness gaps the same way it already flags staleness, so this doesn't need to be a manual sweep every time.
+
+### I3. TickTree activation — it's wired, but it's never actually been offered or used
+
+`software_stack.behavior_layer` was deliberately built as optional-detected, not mandatory-ask — correct, given TickTree's pre-alpha status, teams shouldn't be forced through a question about it. But optional-and-never-mentioned is functionally invisible to anyone who doesn't already know the exact schema key. Fix: `ftc-team-config`'s elicitation should proactively *mention* TickTree exists, with its honest pre-alpha caveat attached, at the point where orchestration approach naturally comes up (near the FTCLib-command-based vs. raw-LinearOpMode branch) — offered, not forced, but discoverable. Separately: run an actual real generation test selecting TickTree end-to-end through `ftc-construct`, the same standard already applied to Pedro/FTCLib/RoadRunner in Phase B's utilization audit — G3 was verified as wired, never verified as working. This is also the first real chance for G4's feedback loop to have something to catch; re-check TickTree's actual repo for updates since G0/G1's initial read before running this, given how actively it's still developing.
+
+---
+
 ## Status
 
-Phase A: done. Phase B: kickoff prompt sent, awaiting output. Phase C, D, E, F, G: planned, not started.
+Phase A: done. Phase B: done. Phase C: done. Phase D: done. Phase D2: done. Phase E: paused mid-build (Stage 4 shipped and deployed; visual polish pass outstanding). Phase F: done. Phase G: done. Phase H: done — closed to full standard, including the generation-path gap that was honestly left open mid-phase. Phase I: done (I1/I2/I3).
+
+**G4 is no longer empty.** It stayed empty through G0/G1 because nothing had exercised TickTree hard enough to surface anything — an honest result, but a result of not looking rather than of looking and finding nothing. Phase I's real end-to-end generation test (the thing G3 never did: G3 verified TickTree was *wired*, never that it *worked*) produced four TickTree-side findings on first contact, now in `TICKTREE-FEEDBACK.md`. Two are verified facts about the repo, one is a documentation-coverage gap, and one is a compile-level naming trap that a correct reading of the docs walks straight into. All kept TickTree-side per G4's split rather than absorbed into Refract as workarounds.
+
+**Open, carried forward — not silently dropped:**
+
+- **Starter-choice sequencing (from I1).** `ftc-construct` can filter starter offers by confirmed config because `pathing`/`opmode_style` are mandatory-ask and already gated. A team with no project at all asking "how do we start" arrives at `ftc-team-config` *before* any stack is confirmed, where the filter has nothing to filter on. Whether to offer unfiltered there, or to simply ask pathing first, is a real question-ordering decision — flagged rather than resolved unilaterally.
+- **TickTree's staleness special case (G5).** `corpus-input-scan.py`'s commit-tracked branch for TickTree is still required. Re-checked 2026-08-06: the revisit condition is closer (tag `v0.1.1` now points at the docs commit, where `v0.1.0` predated them) but not met — those are tags only, `/releases/latest` 404s, so a release-based check would error. Move it back and delete the branch when real releases exist.

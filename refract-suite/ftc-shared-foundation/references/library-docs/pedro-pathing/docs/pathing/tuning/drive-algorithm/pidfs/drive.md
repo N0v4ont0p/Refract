@@ -1,0 +1,93 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/tuning/drive-algorithm/pidfs/drive.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Drive
+---
+
+### Purpose
+
+The Drive PIDF manages acceleration and braking along a path, ensuring smooth motion and minimizing overshoot.
+
+## Setup
+
+1. Open Panels. If you haven't used Panels before, you can read the documentation on the [Panels Configurables](https://panels.bylazar.com/docs/com.bylazar.configurables/).
+2. On your Driver Hub or Driver Station, and connect a gamepad to it. Make sure to press "start" + "a" on the gamepad.
+3. Select the `Tuning` Opmode. Use your gamepad to select the `Manual` folder. Then, select `Drive Tuner`.
+4. Run the run the OpMode.
+
+<Callout title="Warning!" type="warning">
+- **Immediately after running the `Drive Tuner` Opmode, the robot will move straight back and forth 40 inches. Make sure you have enough space before running this opmode.** You can adjust the distance the robot drives back and forth through Panels.
+- **The robot WILL move laterally and/or change its heading. This is expected behavior since the translational and heading PIDFs are not activated.** If both translational and heading PIDFs are tuned, consider using the `Line Tuner` to ensure the robot stays on the line.
+</Callout>
+
+## Tuning Process
+
+### Setting the BrakingStrength
+
+Before tuning the Drive PIDF, we will need to set the BrakingStrength. Head over to the [deceleration page](/docs/pathing/reference/deceleration) to learn more about it.
+
+The BrakingStrength you set in the `Constants` class will be the default BrakingStrength for all paths the robot follows.
+
+1. Observe how the robot moves back and forth through its path.
+2. Adjust the PIDF constants (`coefficientsDrivePIDF`) in the `Tuning`-> `Follower` -> `Constants` tab of Panels Configurables to ensure that the robot smoothly and accurately drives straight back and forth.
+
+<Callout title="Tuning Tips" type="info">
+  -  PedroPathing does not activate heading and translational PIDF correction for drive tuning. If you would like to test all three of them, navigate yourself to the `Line Tuner` in the `Manual` folder. Use it to adjust `BrakingStrength`, path constraints and making sure all PIDFs are working well together.
+  - Increasing your drive PIDF will make the robot move more quickly along the path, at the risk of more overshoot at the end of the path.
+  - Decreasing your drive PIDF will make the robot move more slowly and reduce the overshoot at the end of the path.
+  - Adjusting the `BrakingStrength` can significantly help manage how smoothly the robot decelerates as it reaches the end of its path.
+  - If the robot drives quickly during the middle of the path but abruptly slows down as it reaches the end of the path, this may be caused by the transition between the main and secondary PIDs. This problem may also be addressed through lowering the BrakingStrength.
+</Callout>
+**If you do not have prior experience with tuning PIDFs, we recommend that you check out the resources provided at the bottom of the PIDF Tuners page to learn more about tuning these.**
+
+**If you have a dual PIDF system enabled,** it is recommended to first tune the main PIDF, `coefficientsDrivePIDF` before tuning the secondary PIDF, `coefficientsSecondaryDrivePIDF`.
+
+<Callout title="Warning!" type="warning">
+After adjusting a value in Panels, **hit `Enter`** in order to save it and cause the robot to correct differently. However, any values you modify through Panels **are not saved into your code!** In order to transfer the values you just tuned on Panels into your code, go to the **Update Tuned Values** section to learn more.
+</Callout>
+
+### Braking Start (Optional)
+
+Braking Start determines when the robot starts braking when global deceleration (deceleration upon the entire PathChain) is active.
+Braking Start can be adjusted just like BrakingStrength.
+
+### Feedforward Adjustments (Optional)
+
+If additional feedforward is needed, use the feedforward term directly in the `coefficientsDrivePIDF` and/or `coefficientsSecondaryDrivePIDF` if
+you are using dual PID.
+
+- The feedforward term applies a minimum power output to the motors to compensate for the friction between the motors, wheels, and the ground.
+- To tune the feedforward, set all other PIDF values to 0 and increase the Feedforward value up until the robot starts moving/jittering.
+
+### Kalman Filter Adjustments (Optional)
+
+The drive PID uses a Kalman filter to smooth error responses:
+
+- Model Covariance: Default is `6`.
+- Data Covariance: Default is `1`.
+- A higher model covariance to data covariance ratio will cause the filter to rely on the previous output rather than the data (raw drive error).
+- A lower model covariance to data covariance ratio will cause the filter to rely on the data rather than the previous output
+- To modify these values, add the line `FollowerConstants.driveKalmanFilterParameters(6, 1)` in your `Constants` file and replace the parameters with the desired ones.
+
+The drive PID also has a filter such that the derivative term is a weighted average of the
+  current derivative and the previous derivative.
+
+- The default time constant `T` for the
+  drive filtered PID is 0.6, meaning that the derivative output is 0.6 times the previous derivative plus 0.4
+  times the current derivative.
+- You can modify this value by changing the **fourth** parameter in the `drivePIDFCoefficients(P, I, D, T, F)`.
+
+Feel free to experiment with these settings for optimal performance.
+
+### Update Tuned values Into Your Code
+
+1. Once you are satisfied with your drivePIDF values, head over to the `Constants` file, and navigate to the `FollowerConstants` instantiation.
+2. Navigate to or add the line `.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0.0,0.01,0.6,0.0))`
+3. Update the parameters in `new FilteredPIDFCoefficients(P, I, D, T, F)` with the `drivePIDFCoefficients` values, `P, I, D, F`, you tuned on Panels.
+4. If you are using the dual PIDF system, **add the line** `.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))` and update the `secondaryDrivePIDF` values you tuned on Panels.
+
+## Troubleshooting
+
+If you encounter a problem while tuning the Drive PIDF, check out the [troubleshooting page](/docs/pathing/troubleshooting).

@@ -58,11 +58,17 @@ LIBRARY_REPOS = {
 #
 # ponytail: this is a correct fix for TickTree's CURRENT temporary state (docs and releases out of
 # sync), not a standing architectural decision — don't let it calcify into permanent special-case
-# logic. Revisit once TickTree's own release practice stabilizes (i.e. it starts tagging releases
-# that track its docs the way every other bundled library already does) — at that point TickTree
-# should move from COMMIT_TRACKED_REPOS back into the ordinary LIBRARY_REPOS release-based check
-# above, and this whole block (plus its branch in scan_libraries()) should be deleted, not kept
-# around as a second, permanently-diverging code path.
+# logic. Revisit once TickTree's own release practice stabilizes, then move it back into the
+# ordinary LIBRARY_REPOS release-based check above and DELETE this block plus its branch in
+# scan_libraries() — do not keep a second, permanently-diverging code path.
+#
+# RE-CHECKED 2026-08-06 (I3): the condition is CLOSER but NOT met, so this stays. What changed:
+# a new tag v0.1.1 now points at 998011a — the exact commit these docs were fetched at — where
+# before, the only tag (v0.1.0, c1f6b13) predated the docs entirely. Tags and docs now move
+# together, which was the stated condition. What is still missing: those are **tags only, not
+# published GitHub releases** — `/repos/N0v4ont0p/Ticktree/releases/latest` returns 404 and the
+# releases list is empty, so the release-based check would error out rather than work. Move it back
+# when a real release exists, not merely a tag.
 COMMIT_TRACKED_REPOS = {"ticktree": "N0v4ont0p/Ticktree"}
 LIBRARY_DOCS_DIR = ROOT / "refract-suite/ftc-shared-foundation/references/library-docs"
 PATTERNS_DIR = ROOT / ".claude/skills/ftc-corpus-builder/references/patterns"
@@ -174,6 +180,103 @@ def scan_libraries():
     return results
 
 
+
+# --- doc-set COMPLETENESS (distinct from staleness) -------------------------------------------
+# Staleness asks "is what we stored out of date?". Completeness asks "is anything MISSING?" — a
+# different question with a different failure mode: a corpus can be perfectly current and still
+# have never fetched an entire section. Phase D2 found exactly that (the FTC SDK's whole
+# apriltag/vision_portal tree was absent, not stale) and closed it by hand. This makes it a
+# standing check so it never has to be a manual sweep again.
+#
+# spec: lib -> (kind, source, selector)
+#   kind "repo"    — count doc files in the upstream git tree under `subdir` with `exts`
+#   kind "sitemap" — count sitemap URLs matching `include` (and, for a sitemapindex, follow subs)
+DOC_SOURCES = {
+    "pedro-pathing": ("repo", "Pedro-Pathing/Docs", {"subdir": "content", "exts": (".mdx", ".md")}),
+    "ftc-sdk":       ("repo", "FIRST-Tech-Challenge/ftcdocs", {"subdir": "docs/source", "exts": (".rst", ".md")}),
+    "ftc-dashboard": ("repo", "acmerobotics/ftc-dashboard", {"subdir": "docs", "exts": (".md",)}),
+    "easyopencv":    ("repo", "OpenFTC/EasyOpenCV", {"subdir": "", "exts": (".md",)}),
+    "ftclib":        ("repo", "FTCLib/FTCLib-Docs", {"subdir": "", "exts": (".md",), "ref": "v2.1.0"}),
+    "ticktree":      ("repo", "N0v4ont0p/Ticktree", {"subdir": "docs", "exts": (".md",)}),
+    "limelight":     ("sitemap", "https://docs.limelightvision.io/sitemap.xml", {"include": "/docs/"}),
+    "roadrunner":    ("sitemap", "https://rr.brott.dev/sitemap.xml", {"include": "/docs/v1-0/"}),
+    "rev-robotics":  ("sitemap", "https://docs.revrobotics.com/sitemap.xml",
+                      {"include_any": ("/duo-control/", "/duo-build/", "/ftc-kickoff-concepts/",
+                                       "/rev-crossover-products/", "/rev-hardware-client/",
+                                       "/rev-hardware-client-2/", "/software-resources/")}),
+    # gobilda-build-guides has no enumerable index — product-page PDFs discovered per part.
+    # Excluded deliberately, not missed; a completeness number there would be fiction.
+}
+_LOC_RE = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
+
+
+def _sitemap_urls(url, depth=0):
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (refract-scan)"})
+        xml = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
+    except Exception as e:
+        raise RuntimeError(f"{type(e).__name__}: {e}")
+    urls = _LOC_RE.findall(xml)
+    if "<sitemapindex" in xml and depth < 2:
+        out = []
+        for sub in urls:
+            try:
+                out += _sitemap_urls(sub, depth + 1)
+            except RuntimeError:
+                pass
+        return out
+    return urls
+
+
+def scan_doc_completeness():
+    results = {}
+    for lib, (kind, source, sel) in DOC_SOURCES.items():
+        lib_dir = LIBRARY_DOCS_DIR / lib
+        if not lib_dir.exists():
+            results[lib] = {"status": "skipped", "reason": "no local library-docs dir"}
+            continue
+        stored = sum(1 for _ in lib_dir.rglob("*.md"))
+        try:
+            if kind == "repo":
+                ref = sel.get("ref")
+                if not ref:
+                    meta, err = _gh_api(f"/repos/{source}")
+                    if err or not meta:
+                        raise RuntimeError(err or "no repo metadata")
+                    ref = meta["default_branch"]
+                tree, err = _gh_api(f"/repos/{source}/git/trees/{ref}", {"recursive": "1"})
+                if err or not tree:
+                    raise RuntimeError(err or "no tree")
+                sub = sel["subdir"]
+                paths = [t["path"] for t in tree.get("tree", []) if t["type"] == "blob"]
+                if sub:
+                    paths = [p for p in paths if p.startswith(sub + "/")]
+                upstream = [p for p in paths if p.endswith(sel["exts"])
+                            and not any(d in p.split("/") for d in
+                                        (".github", "node_modules", "build", "_static", "_templates", "javadoc"))]
+                detail = {"ref": ref, "truncated": bool(tree.get("truncated"))}
+            else:
+                urls = _sitemap_urls(source)
+                if "include" in sel:
+                    upstream = [u for u in set(urls) if sel["include"] in u]
+                else:
+                    upstream = [u for u in set(urls) if any(k in u for k in sel["include_any"])]
+                detail = {"sitemap_total": len(set(urls))}
+        except RuntimeError as e:
+            results[lib] = {"status": "error", "detail": str(e), "source": source, "stored_files": stored}
+            continue
+        n = len(upstream)
+        # stored can legitimately EXCEED upstream: curated syntheses live alongside the mirror
+        # (see library-docs/_MIRROR-README.md). Only a shortfall is a gap.
+        gap = max(0, n - stored)
+        results[lib] = {
+            "status": "COMPLETE" if gap == 0 else "GAP",
+            "kind": kind, "source": source, "stored_files": stored,
+            "upstream_docs": n, "missing_estimate": gap, **detail,
+        }
+    return results
+
+
 def scan_rules():
     r = subprocess.run([sys.executable, str(ROOT / "scripts/check_freshness.py")],
                         capture_output=True, text=True, cwd=ROOT)
@@ -188,8 +291,10 @@ def main():
     ap.add_argument("--team-repos", action="store_true")
     ap.add_argument("--libraries", action="store_true")
     ap.add_argument("--rules", action="store_true")
+    ap.add_argument("--completeness", action="store_true",
+                    help="doc-set completeness (are pages MISSING) — distinct from staleness")
     args = ap.parse_args()
-    run_all = not (args.team_repos or args.libraries or args.rules)
+    run_all = not (args.team_repos or args.libraries or args.rules or args.completeness)
 
     report = {
         "scanned_at": datetime.now(timezone.utc).isoformat(),
@@ -199,6 +304,8 @@ def main():
         report["team_repos"] = scan_team_repos()
     if run_all or args.libraries:
         report["libraries"] = scan_libraries()
+    if run_all or args.completeness:
+        report["doc_completeness"] = scan_doc_completeness()
     if run_all or args.rules:
         report["rules"] = scan_rules()
 

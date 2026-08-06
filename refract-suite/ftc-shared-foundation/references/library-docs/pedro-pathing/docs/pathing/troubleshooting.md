@@ -1,0 +1,96 @@
+> Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/troubleshooting.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
+> Exhaustive mirror (I2 sweep): every reachable doc file from this source is
+> present, not a selection. Completeness is checked by corpus-input-scan.py.
+
+---
+title: Troubleshooting
+description: Something went wrong?
+---
+
+import {Accordions, Accordion} from "fumadocs-ui/components/accordion";
+
+If you have trouble during your tuning, this page may cover some common issues that are had, just click to expand the dropdown.
+Otherwise, join the [Pedro Pathing Discord](https://discord.gg/2GfC4qBP5s) and ask in #general or in the #tuning-help channels. When asking in #tuning-help, please provide additional infomation other than your issue. This could be a video, your constants, telemetry outputs, logcat, or any other infomation.
+
+<Accordions type="single">
+    <Accordion title="Bad Localization">
+        **If you're using a two wheel localizer:**
+        
+        Check whether: 
+        - Your encoder's `HardwareMapName` is incorrect or if the parallel & perpendicular odometry pods' names are swapped.
+        - Your encoders directions are reversed.
+        - Your IMU orientations (`LogoFacingDirection`, `UsbFacingDirection`) are incorrect.
+        - Your odometry pod offests are inaccurate
+
+        Try also running `Forward Tuner` and `Lateral Tuner` more times to get more accurate results for `forwardTicksToInches` and `strafeTicksToInches`.
+        
+        **If you're using a three wheel localizer:**
+        
+        Check whether: 
+        - Your encoder's `HardwareMapName` is incorrect or if a parallel & perpendicular odometry pods' names are swapped (will result in robot rotating and translating if swapped).
+        - Your encoders directions are reversed.
+        - Your IMU orientations (`LogoFacingDirection`, `UsbFacingDirection`) are incorrect (only for Three Wheel IMU).
+        - Your odometry pod offests are inaccurate
+    </Accordion>
+    <Accordion title="Robot Turns 180 and Oscillates During Heading Tuner">
+        This behavior is due to incorrect motor hardwareMap associations. 
+        Usually, this means that the front motors need to be swapped with the rear motors.
+        Or that your odometry offsets offsets have the wrong sign.
+        Try testing that the motors are correctly associated with their hardwareMap names by running the Tuning OpMode and navigating `Localization > Motor Directions` to test.
+        It may require you to swap hardwareMap names or the ports in which motors are plugged into.
+    </Accordion>
+    <Accordion title="Robot Drifts Turning Drive Tuner">
+        **If you're using a drive encoders, two wheel, three wheel, or OTOS,** a small amount of drift will happen over time, as these localizer's aren't perfect. 
+        However, the tolerence should remain manageable for the entire 30 second autonomous period.
+    </Accordion>
+    <Accordion title="Robot Movements are Too Jittery">
+        Check your `brakingStrength` in `PathConstraints` and try decreasing it slightly. This will make the braking smoother and reduce the
+        oscillations.
+    </Accordion>
+
+    <Accordion title="Robot Never Stops during ForwardVelocityTest or StrafeVelocityTest">
+        - This usually happens when your localization is inaccurate, causing the robot to think that it's driving in the opposite direction that it is actually moving in.
+        - Run `LocalizationTest` and check: 
+            - when you move the robot forward, does the x-value increase?
+            - when you move the robot to the left, does the y-value increase?
+            - is the reported heading accurate?
+        - If not, head over back to the localization section and double check your steps. You most likely need to reverse one or more of your encoders.
+        Ensure that your localization is fully accurate before running automatic tuners and tuning PIDFs. 
+    </Accordion>
+
+    <Accordion title="Robot Moves in the Wrong Direction during a Tuning Program">
+        **Check if:** 
+        - Your localization is inaccurate. Run `LocalizationTest` and check: 
+            - when you move the robot forward, does the x-value increase?
+            - when you move the robot to the left, does the y-value increase?
+            - is the reported heading accurate?
+        If not, head over back to the localization section and double check your steps. 
+        Ensure that your localization is fully accurate before running automatic tuners and tuning your PIDFs. 
+        - Your motor directions are reversed. 
+        - Your motor configurations are incorrect.
+    </Accordion>
+
+    <Accordion title="Robot Never Moves During TranslationalTuner or HeadingTuner">
+        **If you are tuning for Translational or Heading PIDF, it is intentional that the robot doesn't initially move.**
+        However, if you push/turn the robot and it still doesn't move, check whether your P value in the PIDF is too low. Increasing it may give more power for your robot to correct back to its original position. 
+    </Accordion>
+    <Accordion title="Cannot See the Constants in Panels">
+        If the Tuning class dropdown in the Panels Configurables is empty, double check that you have selected an OpMode in the Tuning OpMode using the gamepad before reloading the Panels website. The Panels website is accessible at the ip address
+    `192.168.43.1:8001` when connected to robot wifi.
+    </Accordion>
+
+    <Accordion title="Robot Moves in Wrong Direction or Robot Encoder Counting Inaccurately">
+        **My robot drives infinitely in automatic tuners:**
+        - If your robot drives forever in a direction, reverse the respective encoder to that direction.
+        
+        **My robot does not drive the correct way in TeleOp / Localization is not working:**
+            1. Run the LocalizationTest OpMode
+            2. Use gamepad1 joysticks to move around:
+                - Left Stick Y: Forward and Backwards
+                - Left Stick X: Strafe Left and Right
+                - Right stick: Rotation
+            3. If movement directions are wrong then run the Motor Directions OpMode, there is a button to make the motors spin forward, if it spins backwards instead then change the reversal.
+
+        For more information on how mecanum wheels move, refer to [this image](https://cdn11.bigcommerce.com/s-x56mtydx1w/images/stencil/original/products/2005/10985/3213-3606-0003-Product-Insight-4__96315__10052.1701994274.png?c=1) provided by goBILDA®.
+    </Accordion>
+</Accordions>

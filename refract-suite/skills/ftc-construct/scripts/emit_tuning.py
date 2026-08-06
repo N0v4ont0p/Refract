@@ -54,6 +54,49 @@ _NUM = r'(-?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?|-?\.\d+)'
 _PLACEHOLDER = re.compile(r'\{\{\s*(tuning|device)\.([A-Za-z0-9_.]+)\s*\}\}')
 
 
+def strip_comments(src):
+    """Blank out Java comments, preserving offsets so reported line numbers stay right.
+
+    Necessary, and found by running the checks against real generated output rather than by
+    reading them: a generated file that WARNS against copying Pedro's defaults ("do NOT copy
+    mass = 10.65 ...") was itself flagged for containing those numbers. A tuning-constant check
+    that fires on prose telling people not to use a value is worse than useless — it trains
+    readers to ignore the one check that catches the silent case.
+    """
+    out, i, n = [], 0, len(src)
+    state = None  # None | 'line' | 'block' | 'str' | 'char'
+    while i < n:
+        c = src[i]
+        nxt = src[i + 1] if i + 1 < n else ''
+        if state is None:
+            if c == '/' and nxt == '/':
+                state = 'line'; out.append('  '); i += 2; continue
+            if c == '/' and nxt == '*':
+                state = 'block'; out.append('  '); i += 2; continue
+            if c == '"':
+                state = 'str'
+            elif c == "'":
+                state = 'char'
+            out.append(c); i += 1; continue
+        if state == 'line':
+            if c == '\n':
+                state = None; out.append(c)
+            else:
+                out.append(' ')
+            i += 1; continue
+        if state == 'block':
+            if c == '*' and nxt == '/':
+                state = None; out.append('  '); i += 2; continue
+            out.append(c if c == '\n' else ' '); i += 1; continue
+        # inside a string/char literal
+        if c == '\\':
+            out.append(c); out.append(nxt); i += 2; continue
+        if (state == 'str' and c == '"') or (state == 'char' and c == "'"):
+            state = None
+        out.append(c); i += 1
+    return ''.join(out)
+
+
 def load_config(path: Path) -> dict:
     return yaml.safe_load(path.read_text()) or {}
 
@@ -184,7 +227,9 @@ def cmd_verify(args):
                                            if "/build/" not in str(p) and "/libs/" not in str(p)]
     violations, checked = [], 0
     for path in files:
-        src = path.read_text(errors="replace")
+        # Comment-stripped: a TODO(UNTUNED) comment naming a library default must not itself
+        # trip the check it exists to explain. See strip_comments().
+        src = strip_comments(path.read_text(errors="replace"))
         for field in fields:
             pat = re.compile(r'(?<!\w)' + re.escape(field) + r'\s*(?:=\s*|\(\s*)' + _NUM)
             for m in pat.finditer(src):
