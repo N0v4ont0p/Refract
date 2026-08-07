@@ -238,13 +238,32 @@ Per your explicit instruction: re-run the fetch for every library in `library-do
 
 ---
 
+## Phase J — Live Tuning-Session Knowledge Extraction
+
+A genuinely new source category, distinct from everything mined so far. Every prior source has been a code artifact — even 19859's live confirmation flow was still ultimately filling in a static schema. This is a live process record: a separate Claude Code session that has been present for the actual hands-on tuning of 32008's auto and teleop, catching the real gap between what Refract currently models about building a robot and what a human actually has to do that nothing captures.
+
+**Two-step, not one.** Step 1 extracts, structured. Step 2 integrates, once real findings exist to integrate — designing the integration prompt before Step 1 returns would mean designing around a guess instead of real content.
+
+### J1. Extraction categories, and why they're split this way
+
+Not a narrative brain-dump — structured against where each kind of finding would actually need to go:
+
+- **Schema gaps** — physical/config fields or states that came up during tuning with no current representation (extends Phase H's exact work; H found two categories, tuning almost certainly finds more).
+- **Manual procedural steps captured nowhere** — things a human must physically do, in what order, that no current doc or skill mentions.
+- **Doc corrections — a genuinely new verification axis.** Every prior check has verified a doc is *current*. This is the first time a doc gets checked for whether it's *correct when actually followed on a real robot* — a different property entirely. Flag distinctly: doc said X, real robot required Y.
+- **New or refined failure modes** — framed the same way `known-failure-modes.md` already frames things, root cause not just symptom.
+- **32008's real final tuned values**, if tuning completed — a second genuine ground-truth data point alongside 19859's, still internal-only per F5.
+- **`ftc-construct` scaffold gaps** — anything about generated code itself that needed manual patching during tuning that the scaffold should have produced correctly from the start.
+- **A genuine catch-all** — forcing every finding into the above risks losing something real that doesn't fit; an honest overflow bucket beats a forced miscategorization.
+
+**The distinction that matters most for what happens next:** team-specific data about 32008 (its actual measured values, its specific config) stays internal-only, same as everything else 32008-derived. But a correction to Pedro's or REV's own documentation — discovered *while* tuning 32008, but true about the library itself, not about 32008 — isn't really 32008's data at all. It's a fact about a third-party library that happens to have been found this way. Each finding needs to be tagged team-specific or generalizable at extraction time, not sorted out later, since that tag determines whether it can ever improve the public-facing docs and corpus.
+
+### J2. Integration — designed after J1 returns, not before
+
+Once real findings exist: schema additions follow Phase H's exact discipline (dynamic generation, no hardcoded assumptions about shape). Doc corrections get applied to the actual bundled library-doc files, tagged with source and reasoning, same as every other doc edit in this project. New failure modes get added to `known-failure-modes.md` with the same root-cause framing as the rest of it. 32008-specific values stay walled off. Generalizable findings get evaluated for the public corpus the same way everything else has been.
+
+---
+
 ## Status
 
-Phase A: done. Phase B: done. Phase C: done. Phase D: done. Phase D2: done. Phase E: paused mid-build (Stage 4 shipped and deployed; visual polish pass outstanding). Phase F: done. Phase G: done. Phase H: done — closed to full standard, including the generation-path gap that was honestly left open mid-phase. Phase I: done (I1/I2/I3).
-
-**G4 is no longer empty.** It stayed empty through G0/G1 because nothing had exercised TickTree hard enough to surface anything — an honest result, but a result of not looking rather than of looking and finding nothing. Phase I's real end-to-end generation test (the thing G3 never did: G3 verified TickTree was *wired*, never that it *worked*) produced four TickTree-side findings on first contact, now in `TICKTREE-FEEDBACK.md`. Two are verified facts about the repo, one is a documentation-coverage gap, and one is a compile-level naming trap that a correct reading of the docs walks straight into. All kept TickTree-side per G4's split rather than absorbed into Refract as workarounds.
-
-**Open, carried forward — not silently dropped:**
-
-- **Starter-choice sequencing (from I1).** `ftc-construct` can filter starter offers by confirmed config because `pathing`/`opmode_style` are mandatory-ask and already gated. A team with no project at all asking "how do we start" arrives at `ftc-team-config` *before* any stack is confirmed, where the filter has nothing to filter on. Whether to offer unfiltered there, or to simply ask pathing first, is a real question-ordering decision — flagged rather than resolved unilaterally.
-- **TickTree's staleness special case (G5).** `corpus-input-scan.py`'s commit-tracked branch for TickTree is still required. Re-checked 2026-08-06: the revisit condition is closer (tag `v0.1.1` now points at the docs commit, where `v0.1.0` predated them) but not met — those are tags only, `/releases/latest` 404s, so a release-based check would error. Move it back and delete the branch when real releases exist.
+Phase A: done. Phase B: done. Phase C: done. Phase D: done. Phase D2: done. Phase E: paused mid-build (Stage 4 shipped and deployed; visual polish pass outstanding). Phase F: done. Phase G: done. Phase H: done. Phase I: done. Phase J: extraction prompt sent, integration to be designed once real findings return.

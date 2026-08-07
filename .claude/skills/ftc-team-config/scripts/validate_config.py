@@ -40,6 +40,11 @@ MANDATORY = [
 # reasonable-sounding guess has nowhere to put it — the failure is a validation error at config
 # time, not a wrong constant discovered on a field.
 TUNING_ORIGINS = {"measured", "untuned"}
+# Groups whose constants are GEOMETRIC: a number in one of these is meaningless without knowing the
+# axis convention it was stated in, so `frame` is mandatory there (core-feature-model.yaml's
+# tuning_constants.frame_required_categories). Read from the model rather than duplicated, so a new
+# category is added in one place.
+FRAME_REQUIRED_DEFAULT = ["localizer", "goal_positions", "mechanism_offsets", "poses"]
 TUNING_STATUS = {"not_yet_tunable", "untuned", "tuned"}
 # Keys inside a tuning entry that are metadata, not nested constants.
 _ENTRY_KEYS = {"value", "origin", "units", "source", "confirmed", "tuning_procedure_ref", "notes"}
@@ -94,7 +99,8 @@ def main():
     # --- 1. core-axis validation (R3) ---
     for axis, fields in cfg.items():
         if axis in ("_meta", "team", "season_mechanisms", "archetypes", "config_history",
-                    "device_map", "tuning_constants"):
+                    "device_map", "tuning_constants", "reference_frames", "device_ownership",
+                    "cross_opmode_state"):
             # device_map/tuning_constants are [generative]: their KEY SET is derived per team, so
             # they can't be checked against a fixed field list. Dedicated checks 5 and 6 below.
             continue
@@ -227,6 +233,7 @@ def main():
 
     # --- 6. tuning_constants — the hard rule, enforced here (standing-principles §13) ---
     tc = cfg.get("tuning_constants")
+    _tuning_entries = {}
     pathing = resolve("software_stack.pathing")
     if tc is None:
         if pathing not in (None, "none"):
@@ -283,6 +290,8 @@ def main():
                 if k in ("tuning_status", "notes") or k.startswith("_"):
                     continue
                 path = f"{prefix}.{k}" if prefix else k
+                if isinstance(v, dict) and ("origin" in v or "value" in v):
+                    _tuning_entries[path] = v
                 if not isinstance(v, dict):
                     errors.append(f"tuning_constants.{path}: bare value {v!r} — a physical constant "
                                   f"must be a mapping carrying `origin` (see standing-principles §13)")
@@ -302,6 +311,107 @@ def main():
         if status in ("untuned", "not_yet_tunable") and measured:
             warnings.append(f"tuning_constants.tuning_status = {status!r} but {len(measured)} constant(s) "
                             f"are marked `measured` — if real values exist, status is probably 'tuned'")
+
+    # --- 7. reference_frames + frame tagging (R123) ---
+    # A coordinate's correctness is a property of the number AND the frame it is stated in.
+    # `origin: measured` covers the first and is silent on the second.
+    frames = cfg.get("reference_frames") or {}
+    conversions = []
+    if isinstance(frames, dict):
+        conversions = frames.get("_conversions") or []
+    declared_frames = {k for k in frames if not k.startswith("_")} if isinstance(frames, dict) else set()
+    for fname in sorted(declared_frames):
+        node = frames[fname]
+        if not isinstance(node, dict):
+            errors.append(f"reference_frames.{fname} must be a mapping describing the frame")
+            continue
+        if not bool(node.get("confirmed", False)):
+            unconfirmed.append(f"reference_frames.{fname}")
+    conv_index = set()
+    for c in conversions if isinstance(conversions, list) else []:
+        if not isinstance(c, dict):
+            continue
+        fr, to = c.get("from"), c.get("to")
+        for side, val in (("from", fr), ("to", to)):
+            if val not in declared_frames:
+                errors.append(f"reference_frames._conversions: '{side}: {val}' is not a declared frame")
+        if c.get("status") == "declared" and bool(c.get("confirmed", False)):
+            conv_index.add((fr, to))
+
+    frame_required = set(
+        (core.get("tuning_constants") or {}).get("frame_required_categories") or FRAME_REQUIRED_DEFAULT
+    )
+    if tc and isinstance(tc, dict):
+        for path, entry in _tuning_entries.items():
+            group = path.split(".")[0] if "." in path else ""
+            fr = entry.get("frame")
+            if fr is not None and fr not in declared_frames:
+                errors.append(
+                    f"tuning_constants.{path}: frame {fr!r} is not declared in reference_frames. "
+                    f"A free-text frame name is the original bug wearing a label — two constants "
+                    f"can both say 'field' and mean different things.")
+            elif group in frame_required and fr is None and entry.get("value") is not None:
+                # UNCONFIRMED, not an error. An undeclared frame NAME is malformed (above) — but a
+                # config written before this dimension existed is incomplete, not wrong, and the
+                # suite already has a precise word for that. This keeps `valid` meaning "well
+                # formed" and routes the real consequence through generation_allowed, where a
+                # missing frame belongs: it is a question to ask, not a file to reject.
+                unconfirmed.append(
+                    f"tuning_constants.{path}.frame (geometric constant in group '{group}' with a "
+                    f"value but no frame — measured and confirmed is not the same as unambiguous)")
+    # More than one frame in play with no confirmed conversion between them is the exact
+    # precondition for a silent mismatch — surface it rather than waiting for it to bite.
+    if len(declared_frames) > 1:
+        missing = [f"{a} -> {b}" for a in sorted(declared_frames) for b in sorted(declared_frames)
+                   if a != b and (a, b) not in conv_index]
+        if missing:
+            warnings.append(
+                f"{len(declared_frames)} reference frames declared with no confirmed conversion for: "
+                f"{', '.join(missing[:4])}{' ...' if len(missing) > 4 else ''}. Generation will refuse "
+                f"to cross an undeclared conversion rather than guess one.")
+
+    # --- 8. device_ownership: exactly one owner per (device, opmode_type) (R125) ---
+    own = cfg.get("device_ownership") or []
+    if own and not isinstance(own, list):
+        errors.append("device_ownership must be a list of {device, owner, opmode_type} entries")
+        own = []
+    seen_owner = {}
+    for e in own:
+        if not isinstance(e, dict):
+            continue
+        dev, owner, ot = e.get("device"), e.get("owner"), e.get("opmode_type", "both")
+        if dev not in dmap:
+            errors.append(f"device_ownership: '{dev}' is not a key in device_map")
+        for scope in (["auto", "teleop"] if ot == "both" else [ot]):
+            key = (dev, scope)
+            if key in seen_owner and seen_owner[key] != owner:
+                errors.append(
+                    f"device_ownership: '{dev}' claimed by BOTH {seen_owner[key]!r} and {owner!r} "
+                    f"in {scope}. Two subsystems constructing one device is a silent conflict — the "
+                    f"second hardwareMap.get() succeeds and both write to the same hardware.")
+            seen_owner[key] = owner
+        if not bool(e.get("confirmed", False)):
+            unconfirmed.append(f"device_ownership.{dev}[{ot}]")
+
+    # --- 9. cross_opmode_state: the handoff channel (R126) ---
+    xstate = cfg.get("cross_opmode_state") or []
+    if xstate and not isinstance(xstate, list):
+        errors.append("cross_opmode_state must be a list")
+        xstate = []
+    for e in xstate:
+        if not isinstance(e, dict):
+            continue
+        fld = e.get("field")
+        if e.get("written_by") == e.get("read_by"):
+            warnings.append(f"cross_opmode_state.{fld}: written and read by the same opmode type — "
+                            f"that is ordinary state, not a cross-opmode handoff")
+        if e.get("required_before_read") and not e.get("staleness_guard"):
+            errors.append(
+                f"cross_opmode_state.{fld}: required_before_read is true but no `staleness_guard` is "
+                f"declared. Without one, a teleop run standalone reads whatever the last auto left "
+                f"(or a default) and nothing distinguishes that from a fresh handoff.")
+        if not bool(e.get("confirmed", False)):
+            unconfirmed.append(f"cross_opmode_state.{fld}")
 
     result = {
         "valid": not errors,

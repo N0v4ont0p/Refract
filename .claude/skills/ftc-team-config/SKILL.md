@@ -90,6 +90,28 @@ got asked.
 season's mechanism set, and the software stack — because they gate too much downstream to risk
 acting on a guess, however good the guess looks.
 
+**Starting from nothing — the pathing question and the starter question are one decision.** When
+there is no existing project at all ("how do we start"), `ftc-construct`'s starter table cannot be
+filtered, because filtering keys off `software_stack.pathing` and nothing is confirmed yet. The
+resolution is not to offer an unfiltered menu, and not to defer the offer:
+
+> **Ask pathing FIRST, and ask it *as* the starter question** — because for a team with no code,
+> they are the same decision wearing two names. "Pedro Pathing or RoadRunner?" and "which starter
+> repo do we clone?" have the same answer set and the same consequence. Splitting them into two
+> questions asks the team to decide the same thing twice, and lets the second answer contradict the
+> first.
+
+So: for a fresh project, raise the starter choice at the `pathing` question, with the repos attached
+to the options — `Pedro-Pathing/Quickstart` for pedro_pathing, `acmerobotics/road-runner-quickstart`
+for roadrunner, this suite's own `quickstart-template/` for either. Record the answer as
+`software_stack.pathing` in the normal way; the starter follows from it rather than being tracked
+separately. `opmode_style` still gets asked on its own, and FTCLib's starter attaches there.
+
+This resolves the sequencing question flagged in `ftc-construct` §2. It does **not** change
+`ftc-construct`'s behaviour: by the time generation runs, `generation_allowed` guarantees pathing is
+confirmed, so the filter there works exactly as written. The two skills are answering the same
+question at different points in a team's life, not duplicating each other.
+
 **Mention TickTree when orchestration comes up — offered, not forced, not buried.** Right after the
 `opmode_style` question (FTCLib command-based vs raw LinearOpMode), if the team's answer suggests
 they're thinking about how behaviors get *arbitrated* — interrupting, prioritizing, falling back

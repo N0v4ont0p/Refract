@@ -51,7 +51,51 @@ except ImportError:
 UNTUNED_LITERAL = "Double.NaN"
 
 _NUM = r'(-?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?|-?\.\d+)'
-_PLACEHOLDER = re.compile(r'\{\{\s*(tuning|device)\.([A-Za-z0-9_.]+)\s*\}\}')
+# `{{tuning.goal.blue_x | in_frame:pedro_field}}` — the consumer states the frame it will read the
+# number IN. That is the half the config cannot know: a constant records the frame it was STATED in,
+# the call site determines the frame it is CONSUMED in, and a mismatch between the two is invisible
+# in both places separately. Naming it at the call site is what makes it checkable at all.
+_PLACEHOLDER = re.compile(
+    r'\{\{\s*(tuning|device)\.([A-Za-z0-9_.]+)\s*(?:\|\s*in_frame\s*:\s*([A-Za-z0-9_]+)\s*)?\}\}')
+
+
+# --- name reconciliation: Java camelCase vs config snake_case (R122) ---------------------------
+# A gate that is wrong most of the time is worse than no gate: it trains people to stop reading it.
+# Run against a real team's repo, `verify` reported 8 violations of which 5 were the SAME constants
+# the config already confirmed, spelled differently — `forwardZeroPowerAcceleration` in Java against
+# `forward_zero_power_acceleration` in YAML, and `mass` against `mass_kg`. Java and YAML have
+# genuinely different naming conventions; requiring them to match literally was never going to hold.
+#
+# Two-stage, deliberately conservative:
+#   1. NORMALISE  — lowercase, drop every non-alphanumeric. Purely mechanical, no vocabulary.
+#                   forwardZeroPowerAcceleration / forward_zero_power_acceleration -> same key.
+#   2. UNIT STRIP — only if stage 1 finds nothing, drop ONE trailing unit token from the config-side
+#                   name (mass_kg -> mass). This needs a vocabulary, so it is a closed, explicit
+#                   list rather than "strip anything after the last underscore" — which would
+#                   silently collapse distinct fields like forward_pod_y and forward_pod_x.
+#
+# AMBIGUITY IS NEVER RESOLVED BY GUESSING. If a normalised key maps to two entries with different
+# values/origins, it is dropped from the index entirely and reported as ambiguous, exactly as the
+# existing bare-name conflict handling already does. A fuzzy match that silently picks one would
+# reintroduce the class of error this whole script exists to prevent.
+_UNIT_TOKENS = {
+    "kg", "g", "lb", "lbs", "mm", "cm", "m", "in", "inch", "inches", "ft",
+    "deg", "degrees", "rad", "radians", "s", "sec", "ms", "ns", "rpm", "rps",
+    "ticks", "tick", "v", "volts", "a", "amps", "hz", "pct", "percent",
+    "mps", "ips", "inpersec", "degpersec",
+}
+
+
+def _norm(name):
+    return re.sub(r'[^a-z0-9]', '', name.lower())
+
+
+def _strip_unit(name):
+    """Drop one trailing unit token from a snake/camel name, or return None."""
+    parts = re.split(r'[_\-]', name)
+    if len(parts) > 1 and parts[-1].lower() in _UNIT_TOKENS:
+        return "_".join(parts[:-1])
+    return None
 
 
 def strip_comments(src):
@@ -110,7 +154,16 @@ def flatten_tuning(cfg: dict) -> dict:
     rather than silently resolved to one of them.
     """
     out, bare, conflicts = {}, {}, set()
+    norm, norm_conflicts = {}, set()
+    nounit, nounit_conflicts = {}, set()
     tc = cfg.get("tuning_constants") or {}
+
+    def _register(index, conflict_set, key, entry):
+        if key in index and index[key] is not entry:
+            prev = index[key]
+            if prev.get("value") != entry.get("value") or prev.get("origin") != entry.get("origin"):
+                conflict_set.add(key)
+        index[key] = entry
 
     def walk(prefix, node):
         for k, v in node.items():
@@ -119,11 +172,11 @@ def flatten_tuning(cfg: dict) -> dict:
             path = f"{prefix}.{k}" if prefix else k
             if isinstance(v, dict) and ("origin" in v or "value" in v):
                 out[path] = v
-                if k in bare and bare[k] is not v:
-                    prev = bare[k]
-                    if prev.get("value") != v.get("value") or prev.get("origin") != v.get("origin"):
-                        conflicts.add(k)
-                bare[k] = v
+                _register(bare, conflicts, k, v)
+                _register(norm, norm_conflicts, _norm(k), v)
+                stripped = _strip_unit(k)
+                if stripped:
+                    _register(nounit, nounit_conflicts, _norm(stripped), v)
             elif isinstance(v, dict):
                 walk(path, v)
 
@@ -131,7 +184,28 @@ def flatten_tuning(cfg: dict) -> dict:
         walk("", tc)
     for k in conflicts:
         bare.pop(k, None)
-    return {"by_path": out, "by_name": bare, "ambiguous": sorted(conflicts)}
+    for k in norm_conflicts:
+        norm.pop(k, None)
+    for k in nounit_conflicts:
+        nounit.pop(k, None)
+    return {"by_path": out, "by_name": bare, "by_norm": norm, "by_norm_nounit": nounit,
+            "ambiguous": sorted(conflicts | norm_conflicts | nounit_conflicts)}
+
+
+def resolve_field(tuning, name):
+    """(entry, how) for a field name in EITHER convention. `how` is reported, never hidden —
+    a silent fuzzy match is its own hazard, so the caller surfaces which stage matched."""
+    if name in tuning["by_name"]:
+        return tuning["by_name"][name], "exact"
+    n = _norm(name)
+    if n in tuning["by_norm"]:
+        return tuning["by_norm"][n], "normalised (camelCase/snake_case)"
+    if n in tuning["by_norm_nounit"]:
+        return tuning["by_norm_nounit"][n], "normalised + unit suffix stripped"
+    s = _strip_unit(name)
+    if s and _norm(s) in tuning["by_norm"]:
+        return tuning["by_norm"][_norm(s)], "normalised + unit suffix stripped"
+    return None, None
 
 
 def entry_value(entry: dict):
@@ -152,8 +226,14 @@ def cmd_render(args):
     src = Path(args.template).read_text()
     errors, substitutions = [], []
 
+    frames = cfg.get("reference_frames") or {}
+    conversions = frames.get("_conversions") or [] if isinstance(frames, dict) else []
+    declared_conv = {(c.get("from"), c.get("to")) for c in conversions
+                     if isinstance(c, dict) and c.get("status") == "declared"
+                     and bool(c.get("confirmed", False))}
+
     def sub(m):
-        kind, key = m.group(1), m.group(2)
+        kind, key, want_frame = m.group(1), m.group(2), m.group(3)
         if kind == "device":
             node = devices.get(key)
             if node is None:
@@ -165,7 +245,10 @@ def cmd_render(args):
                 errors.append(f"device_map.{key} is not confirmed")
             substitutions.append({"placeholder": m.group(0), "rendered": f'"{value}"'})
             return f'"{value}"'
-        entry = tuning["by_path"].get(key) or tuning["by_name"].get(key)
+        entry = tuning["by_path"].get(key)
+        how = "exact" if entry is not None else None
+        if entry is None:
+            entry, how = resolve_field(tuning, key)
         if entry is None:
             if key in tuning["ambiguous"]:
                 errors.append(f"tuning field '{key}' is ambiguous (same leaf name under multiple "
@@ -174,8 +257,34 @@ def cmd_render(args):
                 errors.append(f"tuning_constants has no entry '{key}' — a tuning field with no "
                               f"config provenance must not be generated (standing-principles §13)")
             return m.group(0)
+        # --- frame reconciliation, before any number is emitted (R123) ---
+        stated = entry.get("frame")
+        if want_frame and stated and want_frame != stated:
+            if (stated, want_frame) not in declared_conv:
+                errors.append(
+                    f"tuning field '{key}' is stated in frame {stated!r} but this call site consumes "
+                    f"it in {want_frame!r}, and no confirmed {stated!r} -> {want_frame!r} conversion "
+                    f"is declared in reference_frames._conversions. REFUSING to emit the number: a "
+                    f"coordinate crossed between frames without a conversion is the silent-wrong-value "
+                    f"case this dimension exists for. Declare the conversion, or state the constant "
+                    f"in the frame it is consumed in.")
+                return m.group(0)
+            # A declared conversion exists, but this script does not APPLY transforms — emitting a
+            # converted number would be generating a value, which is precisely what it must not do.
+            errors.append(
+                f"tuning field '{key}': a {stated!r} -> {want_frame!r} conversion is declared, but "
+                f"conversion is not applied here by design — this script substitutes recorded values, "
+                f"it does not compute new ones. Emit the conversion explicitly in the generated code.")
+            return m.group(0)
+        if want_frame and not stated:
+            errors.append(
+                f"tuning field '{key}' is consumed in frame {want_frame!r} but carries no `frame` tag. "
+                f"Confirm which frame it was stated in rather than assuming they agree.")
+            return m.group(0)
         literal, real, reason = entry_value(entry)
-        substitutions.append({"placeholder": m.group(0), "rendered": literal, "reason": reason})
+        substitutions.append({"placeholder": m.group(0), "rendered": literal, "reason": reason,
+                              **({"frame": stated} if stated else {}),
+                              **({} if how == "exact" else {"matched_by": how})})
         return literal
 
     rendered = _PLACEHOLDER.sub(sub, src)
@@ -223,9 +332,26 @@ def cmd_verify(args):
     tuning = flatten_tuning(cfg)
     fields = _known_fields(tuning)
     root = Path(args.code_path)
+    # A mandatory gate must not return a clean bill of health for something it never looked at.
+    # `verify` on a missing path, or on a directory containing no Java, previously reported
+    # ok: true — indistinguishable from a real pass, and exactly the failure mode Step 1 was
+    # about: a gate that is confidently wrong is worse than no gate.
+    if not root.exists():
+        print(json.dumps({"ok": False, "files_scanned": 0, "tuning_literals_checked": 0,
+                          "reconciled_by_name_normalisation": [],
+                          "violations": [{"reason": f"code path does not exist: {root} — this is a "
+                                                    f"gate failure, not a clean result"}]}, indent=2))
+        sys.exit(1)
     files = [root] if root.is_file() else [p for p in root.rglob("*.java")
                                            if "/build/" not in str(p) and "/libs/" not in str(p)]
-    violations, checked = [], 0
+    if not files:
+        print(json.dumps({"ok": False, "files_scanned": 0, "tuning_literals_checked": 0,
+                          "reconciled_by_name_normalisation": [],
+                          "violations": [{"reason": f"no .java files found under {root} — nothing was "
+                                                    f"verified; treat as a gate failure, not a pass"}]},
+                         indent=2))
+        sys.exit(1)
+    violations, checked, reconciled = [], 0, []
     for path in files:
         # Comment-stripped: a TODO(UNTUNED) comment naming a library default must not itself
         # trip the check it exists to explain. See strip_comments().
@@ -236,27 +362,37 @@ def cmd_verify(args):
                 checked += 1
                 literal = m.group(1)
                 line = src[:m.start()].count("\n") + 1
-                entry = tuning["by_name"].get(field)
+                entry, how = resolve_field(tuning, field)
                 if entry is None:
+                    hint = ""
+                    if field in tuning["ambiguous"]:
+                        hint = (" — NOTE: this name is ambiguous in the config (two entries reduce to "
+                                "it with different values); resolve it there rather than here")
                     violations.append({
                         "file": str(path), "line": line, "field": field, "literal": literal,
                         "reason": "no confirmed tuning_constants entry for this field — a physical "
-                                  "constant with no config provenance (standing-principles §13)"})
+                                  "constant with no config provenance (standing-principles §13)" + hint})
                     continue
+                if how != "exact":
+                    reconciled.append({"java_field": field, "config_entry_matched_by": how})
                 expected, real, why = entry_value(entry)
+                matched = {} if how == "exact" else {"matched_by": how}
                 if not real:
                     violations.append({
                         "file": str(path), "line": line, "field": field, "literal": literal,
                         "reason": f"config says {why}; generated code must carry "
-                                  f"{UNTUNED_LITERAL}, not a number"})
+                                  f"{UNTUNED_LITERAL}, not a number", **matched})
                 elif float(literal) != float(entry["value"]):
                     violations.append({
                         "file": str(path), "line": line, "field": field, "literal": literal,
                         "expected": entry["value"],
                         "reason": "does not match the confirmed measured value — a tuning constant "
-                                  "is carried forward verbatim, never regenerated or adjusted"})
+                                  "is carried forward verbatim, never regenerated or adjusted",
+                        **matched})
     print(json.dumps({"ok": not violations, "files_scanned": len(files),
-                      "tuning_literals_checked": checked, "violations": violations}, indent=2))
+                      "tuning_literals_checked": checked,
+                      "reconciled_by_name_normalisation": reconciled,
+                      "violations": violations}, indent=2))
     sys.exit(0 if not violations else 1)
 
 

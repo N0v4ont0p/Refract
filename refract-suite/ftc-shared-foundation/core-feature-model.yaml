@@ -102,6 +102,43 @@ device_map:                                   # [generative] — key set derived
     (Pedro's MecanumConstants.leftFrontMotorName, PinpointConstants.hardwareMapName), THIS block
     is the single source of truth and `tuning_constants` references it — the name is not stored twice.
 
+reference_frames:                             # [generative] — a new DIMENSION, not a field (R123)
+  # A physical constant can be fully measured, fully confirmed, and still silently wrong — because
+  # correctness of a coordinate is not a property of the number, it is a property of the number
+  # PLUS the frame it is stated in. `origin: measured` says where a number came from. It says
+  # nothing about what it means. Two teams' worth of evidence that this is a real bug class, not a
+  # theoretical one: a goal position stated in a raw odometry-driver frame, consumed unconverted by
+  # a path-follower-frame aim solver, aims at the wrong target with no error and no telemetry flag.
+  #
+  # WHY A DECLARED BLOCK RATHER THAN A `frame: "field"` STRING ON EACH CONSTANT. A free-text tag
+  # lets two constants both say "field" while meaning different things — which is the original bug
+  # wearing a label. Frames are DECLARED ONCE here, with their axis conventions, and constants
+  # REFERENCE a declared frame by key. An undeclared frame name is a validation error, so the
+  # vocabulary cannot drift.
+  #
+  # KEY SET IS DERIVED per team: one entry per frame the team's code actually reads a pose or
+  # position through. A team with a single frame declares one and the whole mechanism costs them
+  # nothing. The risk appears specifically when there are two.
+  _entry_shape:
+    source: string              # what defines this frame — a library, a driver, or legacy team code
+    definition_ref: optional    # path into library-docs where the convention is documented
+    x_positive: [forward, backward, left, right, unknown]
+    y_positive: [forward, backward, left, right, unknown]
+    heading_zero: string        # e.g. "field x-axis", "robot forward at init"
+    units: [in, mm, cm, m, unknown]
+    confirmed: [true, false]
+    notes: optional
+  _conversions:
+    # Explicit, per ordered pair. A conversion that is not declared here does not exist as far as
+    # generation is concerned — see the refusal rule below. `status: undeclared` is the honest
+    # starting state and is what turns an invisible mismatch into a blocking question.
+    _entry_shape:
+      from: string              # a declared frame key
+      to: string                # a declared frame key
+      status: [declared, undeclared]
+      transform: optional       # description of the real transform, when status == declared
+      confirmed: [true, false]
+
 tuning_constants:                             # [generative] — shape follows the selected library
   # A PHYSICAL constant: mass, a PIDF gain, an odometry pod offset, ticks-per-inch. Every value
   # here can only come from measuring or tuning a specific physical robot. None of it is derivable
@@ -147,6 +184,87 @@ tuning_constants:                             # [generative] — shape follows t
     source: [inferred, asked, supplied]   # `supplied` = the user gave the number directly, not from a repo
     confirmed: [true, false]
     tuning_procedure_ref: optional   # path into library-docs for the procedure that PRODUCES this value
+    frame: optional             # a key from `reference_frames` — MANDATORY on geometric constants
+    # A geometric constant with no `frame` is a validation error (see `frame_required_categories`).
+    # `mass` is not geometric and needs none; a pod offset, a goal position, a mechanism offset from
+    # centre of rotation, and any heading all are. This is the field that makes a frame mismatch
+    # representable — and therefore checkable — instead of invisible.
+
+  frame_required_categories:
+    # WHICH constants must carry a `frame`, declared as CATEGORIES rather than a hardcoded name
+    # list, so a new season or a new library grows the requirement without editing this file.
+    # A constant belongs to a category by the group it sits under in `tuning_constants`.
+    - localizer         # pod offsets — forwardPodY/strafePodX and their per-localizer equivalents
+    - goal_positions    # season target coordinates: the exact case that produced the real bug
+    - mechanism_offsets # shooter/turret offset from the robot's centre of rotation
+    - poses             # any stored pose or heading (auto end pose, teleop seed, presets)
+
+  # --- groups the schema previously had no home for (R124) ---------------------------------------
+  # These were being ported verbatim into generated code while having NO config representation at
+  # all, which means `emit_tuning verify` could not check their provenance by construction — the
+  # gate was silent on them not because they were fine, but because it had never heard of them.
+  # Declared as GROUPS, not fields: the leaf names follow the selected library, same as everything
+  # else under `tuning_constants`.
+  _known_groups:
+    localizer: >
+      Odometry pod offsets and encoder scalars. Pedro: forwardPodY/strafePodX (Pinpoint),
+      leftPodY/rightPodY/strafePodX + *TicksToInches (three-wheel), robot_Width/Length (drive
+      encoders). RoadRunner: inPerTick/lateralInPerTick/trackWidthTicks. FRAME REQUIRED.
+    controller_gains: >
+      PIDF coefficient sets, carried as a whole tuple rather than split into scalars, because the
+      tuple is what a tuner produces and splitting it invites a partially-updated set. Pedro:
+      drivePIDFCoefficients, translationalPIDFCoefficients, headingPIDFCoefficients,
+      predictiveBrakingCoefficients. Each is one entry whose `value` is the ordered coefficient
+      list. NOT frame-dependent.
+    mechanism_offsets: >
+      A mechanism's physical offset from the robot's centre of rotation — e.g. a shooter or turret
+      mounted off-centre, which changes the aim solve at every call site. Measured on the robot;
+      no source contains it. FRAME REQUIRED (an offset is meaningless without knowing which axis
+      convention "forward" meant when it was measured).
+    goal_positions: >
+      Season target coordinates. FRAME REQUIRED — this is the category the frame dimension exists
+      for, and the one where a mismatch is completely silent.
+
+device_ownership:                             # [generative] — arbitration, not wiring (R125)
+  # `device_map` answers "what is this device called". It does not answer "who is allowed to grab
+  # it", and two subsystems constructing the same motor is a real, silent conflict: the second
+  # `hardwareMap.get()` succeeds, both objects write to the same hardware, and last-writer-wins
+  # produces behaviour that looks like a tuning problem.
+  #
+  # Observed in the wild as an UNDOCUMENTED BOOLEAN CONVENTION — a subsystem taking a "does someone
+  # else own this?" flag as a constructor parameter, with the actual arbitration living in whoever
+  # remembered to pass the right value. That is a config fact wearing a code disguise.
+  #
+  # Ownership is per OPMODE TYPE, not global: a device legitimately has a different owner in auto
+  # than in teleop. That is why this is its own block rather than a field on `device_map`.
+  _entry_shape:
+    device: string              # a key from `device_map`
+    owner: string               # the ONE subsystem class that may construct it, per opmode_type
+    opmode_type: [auto, teleop, both]
+    confirmed: [true, false]
+  # RULE: exactly one owner per (device, opmode_type). Two owners is a validation error, not a
+  # warning — it is the condition that produces the silent conflict.
+
+cross_opmode_state:                           # [generative] — the auto->teleop handoff (R126)
+  # A field written by one OpMode and read by another, surviving only because statics live on the
+  # Robot Controller app process. Generalizable to any two-phase competition robot: an auto that
+  # ends somewhere and a teleop that must know where.
+  #
+  # The failure this models is NOT "the value is wrong" — it is "the value is from the wrong run,
+  # or from no run at all". A teleop started without its auto reads whatever the last auto left, or
+  # an initial default, and nothing distinguishes that from a fresh valid handoff. This is the same
+  # shape as `tuning_constants.origin`: the danger is a plausible value with unverifiable
+  # provenance, so the schema records the provenance requirement rather than the value.
+  _entry_shape:
+    field: string               # the static field carrying the value
+    written_by: [auto, teleop]  # which opmode type is the sole legitimate writer
+    read_by: [auto, teleop]
+    required_before_read: [true, false]
+    # true  = reading without a prior write in THIS power cycle is a stale read, and generated code
+    #         must carry an explicit freshness check rather than trusting the value
+    # false = a default is genuinely acceptable
+    staleness_guard: optional   # how freshness is established (a run counter, a written flag, a timestamp)
+    confirmed: [true, false]
 
 fabrication:
   capability: [stock_gobilda_rev, 3d_printed_custom, cnc_aluminum_or_carbon]

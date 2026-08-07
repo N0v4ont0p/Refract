@@ -193,6 +193,65 @@ the same ~700-line monolith, so a fix to one must be hand-propagated across ever
 
 ---
 
+### Mechanism state chained to a sensor-fusion result (the aim-lock cascade)
+
+**Shape.** One or more mechanisms are gated on a derived, fallible result — "do we have an aim
+lock?", "is the pose valid?", "did vision see the target?" — that can legitimately have no answer
+on any given loop. When it has no answer, everything downstream of the gate stops together.
+
+**Why it reads as several bugs.** The gate is invisible in the symptom. A real report of this
+looked like four independent failures at once: gate doesn't move, turret doesn't move, auto-aim
+doesn't move, intake doesn't work. Four subsystems, four apparent problems, one cause — a single
+`if (hasLock)` wrapped around all of them. Debugging effort goes to four mechanisms in turn, and
+each one checks out fine in isolation, which is the worst possible position to debug from.
+
+**Why it happens.** It reads as safety at the time it is written: "don't run the intake unless we
+know where we are." But a sensor-fusion result is not a safety interlock, it is an *estimate*, and
+estimates are legitimately absent sometimes — occluded target, bad frame, mid-recalculation. The
+gate converts a normal transient into a total mechanism stop.
+
+**Fix pattern** (confirmed against a team's own working version of the same robot code, which did
+it this way and did not exhibit the failure):
+
+- Command mechanisms **unconditionally, every loop**, from whatever solve is available — a
+  distance-based flywheel/hood command runs off the current distance estimate whether or not an aim
+  lock has converged.
+- Drive sequencing mechanisms (gates, feeders, intakes) from **plain timers or driver input**, not
+  from the fusion result.
+- Let the lock state gate **only the thing it actually describes** — whether to *fire*, not whether
+  the robot is allowed to move its intake.
+
+**Generalizes to:** any auto or teleop where mechanism enablement is chained to vision, odometry
+confidence, AprilTag visibility, or a solver's convergence flag. The test question is: *if this
+estimate returns nothing for two seconds, how many mechanisms stop?* If the answer is more than
+one, the gate is in the wrong place.
+
+**Tier:** corpus-derived, team-reported symptom with a code-confirmed fix pattern. Not from the
+verbatim handoff.
+
+### Two named tuning constants sharing one literal
+
+**Shape.** Two distinct, differently-named tuning fields are set to the identical value — e.g. a
+"fire at this distance" threshold and a "hold at this distance" threshold both hardcoded to the
+same number. Whatever behaviour was supposed to vary between them cannot.
+
+**Why it is silent.** Both constants are individually plausible. Nothing is out of range, nothing
+fails to compile, and each value looks like a real measurement. The symptom is a mechanism that
+appears not to respond to a parameter it genuinely reads — reported in one real case as a shooter
+firing at the wrong range with a hood that "doesn't seem to move", when the hood was in fact
+correctly tracking a distance that never changed.
+
+**Why it happens.** Usually a copy-paste during tuning, or a placeholder that was meant to be split
+later. Sometimes it is legitimate — two thresholds can genuinely coincide — which is why this is a
+**smell, not a defect**: the finding is "confirm this is deliberate", not "this is wrong".
+
+**Detectable deterministically.** `failure_mode_lint.py`'s `duplicate_tuning_literal` check flags
+two or more distinct tuning-constant names in one file sharing an identical non-trivial literal.
+Trivial values (0, 1, -1) are excluded — they coincide constantly and flagging them would bury the
+real signal.
+
+**Tier:** corpus-derived, team-reported symptom, code-confirmed cause.
+
 ## Source tiers (Rule 7)
 
 - **Tier-1:** the ASEE PEER survey; FIRST's own troubleshooting docs.

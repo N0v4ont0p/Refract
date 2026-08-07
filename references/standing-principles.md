@@ -375,3 +375,50 @@ config field confirmed and zero real constants; that is a normal state on the wa
 robot, not an error, and generation must serve it honestly — a correctly-structured scaffold with
 every tuning-dependent field loudly marked and the real tuning procedure attached, never a
 scaffold silently pre-filled with numbers that came from nowhere.
+
+## 14. A measured constant can still be meaningless — coordinate frames (R123)
+
+§13 established that a physical constant has only two honest states: carried forward from a real
+measurement, or loudly marked untuned. That rule is necessary and it is **not sufficient**, because
+it governs only where a number came from. It says nothing about what the number means.
+
+A coordinate is not a number. It is a number **plus a frame**. `origin: measured, confirmed: true`
+on a goal position tells you a human really measured it — and tells you nothing about whether the
+axis convention they measured it in is the one the consumer will read it in. Both halves have to be
+right, and only one of them was modelled.
+
+**The failure is silent in a way §13's is not.** An untuned constant renders as `Double.NaN` and
+fails loudly at the hardware. A constant in the wrong frame is a perfectly valid coordinate that
+points somewhere else. Nothing throws. Telemetry looks healthy. The robot drives confidently to the
+wrong place or aims confidently at the wrong target, and the symptom presents as a *tuning* problem
+— which sends people to the PIDF coefficients, which are fine, which is the worst place to start.
+
+**The real shape it takes.** Rarely a live disagreement between two readers. Usually **constants
+that outlived a migration**: coordinates measured against an old localizer, correct at the time, and
+carried forward unchanged when the team adopted a path-following library with its own frame. Nobody
+re-derived them because nobody had a reason to think a correct number had stopped being correct.
+The same logic as a PID constant after a mechanical change, on a different axis, and with no
+equivalent instinct to re-check.
+
+**Why a free-text `frame: "field"` tag would have been worse than nothing.** Two constants can both
+say "field" and mean different things — that is the original bug with a label on it, and a label
+makes it look handled. So frames are **declared once**, in `reference_frames`, with their axis
+conventions and units; constants **reference a declared frame by key**; an undeclared frame name is
+a validation error. The vocabulary cannot drift because there is only one place it is defined.
+
+**Enforcement, and its honest limit.** A config records the frame a constant was *stated in*. It
+cannot know the frame a call site will *consume it in* — that is a fact about the code, not the
+robot. So the consumer states it: `{{tuning.goal.blue_x | in_frame:pedro_field}}`. If the stated and
+consumed frames differ and no confirmed conversion is declared between them, `emit_tuning render`
+**refuses to emit the number**. And when a conversion *is* declared, it still refuses — because
+applying a transform would mean computing a new value, which is exactly what this machinery exists
+to prevent. The conversion belongs in the generated code, explicitly, where a reader can see it.
+
+The point is not that the tool converts frames. It is that a frame crossing can no longer happen
+**by accident**.
+
+**Generalizes past coordinates.** Any value whose meaning depends on a convention the number does
+not carry: units, alliance-relative vs field-absolute, degrees vs radians, robot-relative vs
+field-relative headings. Frames are the case sharp enough to model first. The test question for
+anything else is: *if this value were read by a different subsystem than the one it was written for,
+would anything notice?*

@@ -22,6 +22,9 @@ Checks (each cites the known-failure-modes.md category it proxies):
                       its template/library default value (standing-principles.md §13). Scoped to
                       fields a tuning PROCEDURE physically produces; policy caps and optional
                       damping terms are deliberately excluded (see the check's own note).
+  8 duplicate_tuning_literal
+                      Software / two named tuning constants sharing one literal — whatever was
+                      meant to vary between them cannot. SMELL, not a defect (see its caveat).
   6 mutable_static_opmode_write
                       Process/runtime-semantics / "Global mutable static / cross-opmode
                       persistence" (corpus-derived, Session 1). Scoped: a non-final public
@@ -495,8 +498,76 @@ def check_template_default_tuning(repo):
             })
     return f, stats
 
+# ------------------------------- 8 two named tuning constants sharing one literal
+# Confirmed NOT already covered before building: the CHECKS list held 7 entries, none matching on
+# duplicate values. See known-failure-modes.md "Two named tuning constants sharing one literal".
+#
+# SMELL, not a defect: two thresholds can legitimately coincide. The finding is "confirm this is
+# deliberate", which is why it is low severity and says so.
+_TRIVIAL_LITERALS = {0.0, 1.0, -1.0, 0.5, 2.0, 100.0, 12.0}
+_CONST_ASSIGN = re.compile(
+    r'(?:static\s+final\s+\w+|final\s+\w+|public\s+static\s+\w+|private\s+static\s+\w+)\s+'
+    r'([A-Z][A-Z0-9_]{2,}|[a-z][A-Za-z0-9]*)\s*=\s*' + _NUM + r'\s*[;,]')
+def _tokens(name):
+    parts = re.split(r'[_\W]+', re.sub(r'(?<=[a-z0-9])(?=[A-Z])', '_', name))
+    return {t.lower() for t in parts if len(t) >= 3}
+
+
+def _share_token(names):
+    """True if EVERY pair among these names shares at least one meaningful token."""
+    toks = [_tokens(n) for n in names]
+    return all(toks[i] & toks[j] for i in range(len(toks)) for j in range(i + 1, len(toks)))
+
+
+def check_duplicate_tuning_literal(repo):
+    f = []
+    stats = {"files_with_named_constants": 0, "duplicate_groups": 0}
+    for path in code_files(repo):
+        src = strip_comments(read(path))
+        pairs = [(m.group(1), m.group(2)) for m in _CONST_ASSIGN.finditer(src)]
+        if not pairs:
+            continue
+        stats["files_with_named_constants"] += 1
+        by_val = {}
+        for name, lit in pairs:
+            try:
+                v = float(lit)
+            except ValueError:
+                continue
+            if v in _TRIVIAL_LITERALS:
+                continue
+            by_val.setdefault(v, set()).add(name)
+        # RELATEDNESS FILTER, added after running this against real repos rather than guessing at
+        # its noise level: a first version flagged RADIUS and RECORD_NUMBER both = 10, and
+        # BASE_FLIGHT_TIME with CHASSIS_ACCEL_FILTER_ALPHA both = 0.4 — pure coincidence between
+        # unrelated concepts. The real signal is two names that describe VARIANTS OF THE SAME THING
+        # (FAR_FIRE_DISTANCE / FAR_HOLD_DISTANCE), so require a shared meaningful token. Unrelated
+        # constants colliding on a value is arithmetic, not a smell.
+        dups = {v: names for v, names in by_val.items()
+                if len(names) >= 2 and _share_token(names)}
+        if not dups:
+            continue
+        stats["duplicate_groups"] += len(dups)
+        rel = os.path.relpath(path, repo)
+        ev = "; ".join(f"{' and '.join(sorted(n))} both = {v:g}" for v, n in
+                       sorted(dups.items(), key=lambda kv: -len(kv[1]))[:5])
+        f.append({"check": "duplicate_tuning_literal", "severity": "low",
+                  "category": "Software / two named tuning constants sharing one literal "
+                              "(known-failure-modes.md, corpus-derived)",
+                  "evidence": f"{rel}: {ev}",
+                  "why": "Two distinctly-named constants holding the same value means whatever was "
+                         "supposed to vary between them cannot. Both values are individually "
+                         "plausible and nothing fails, so it presents as a mechanism ignoring a "
+                         "parameter it genuinely reads.",
+                  "caveat": "SMELL, not a defect — thresholds can legitimately coincide. The ask is "
+                            "'confirm this is deliberate', not 'change it'. Trivial values "
+                            "(0, ±1, 0.5, 2, 12, 100) are excluded because they collide constantly."})
+    return f, stats
+
+
 CHECKS = [check_bus_factor, check_vcs_discipline, check_god_opmode, check_missing_telemetry,
-          check_stale_pid, check_mutable_static_opmode_write, check_template_default_tuning]
+          check_stale_pid, check_mutable_static_opmode_write, check_template_default_tuning,
+          check_duplicate_tuning_literal]
 
 def main():
     if len(sys.argv) < 2:

@@ -10,7 +10,7 @@
 # (AutoAimSubsystem's fielded status was a genuine open question — F1's finding #3 — resolved here
 # by the user directly: "the genuine autoaimer... yes as real") and two (wheel diameter/durometer)
 # resolved by fetching the actual goBILDA product page rather than recalling a spec from memory.
-_meta: {schema: 1, updated: 2026-08-05, suite_generated_code: true}
+_meta: {schema: 1, updated: 2026-08-06, suite_generated_code: true}
 team: {number: 19859, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}
@@ -63,6 +63,76 @@ device_map:
   gate_right:        {value: "rg", source: inferred, confirmed: true}
   light_left:        {value: "ll", source: asked, confirmed: true}       # no core/season axis declares lights; recorded rather than dropped
   light_right:       {value: "rl", source: asked, confirmed: true}
+reference_frames:
+  # Added 2026-08-06 via a live ftc-team-config session, after the frame dimension (R123) landed.
+  # This team has FOUR frames genuinely in play — established by reading the real code, not assumed:
+  # the follower's, the raw Pinpoint driver's (read directly in Drivetrain.java:101/118/212 for
+  # field-oriented teleop drive), a 180-degree-mirrored teleop frame the auto writes its handoff in,
+  # and the robot-relative frame the pod offsets are measured in. This is exactly the cross-consumer
+  # situation library-docs/pedro-pathing/coordinate-frames-cross-consumer.md describes, present in
+  # the flagship fixture's own repo rather than hypothetically.
+  pedro_field:
+    source: pedro_pathing
+    definition_ref: library-docs/pedro-pathing/localization-tuning.md
+    x_positive: forward
+    y_positive: left
+    heading_zero: field x-axis, CCW positive, radians
+    units: in
+    confirmed: true
+    notes: >
+      What follower.getPose() returns. Axis convention read from Pedro's own bundled doc
+      ("moving forward increases x and strafing left increases y"), not recalled.
+  pinpoint_raw:
+    source: gobilda_pinpoint_driver
+    x_positive: forward
+    y_positive: left
+    heading_zero: wherever the driver was last reset; headings read in DEGREES here, not radians
+    units: in
+    confirmed: true
+    notes: >
+      Read directly from the GoBildaPinpointDriver in Drivetrain.java, bypassing the follower.
+      Confirmed by the user: SAME AXES as pedro_field (the driver is configured with the same
+      encoder directions), DIFFERENT ORIGIN — the raw driver's origin is wherever it was last
+      reset, while the follower carries a set starting pose. Same axes is not the same frame.
+  teleop_mirrored:
+    source: team_code
+    x_positive: backward
+    y_positive: right
+    heading_zero: pedro_field heading + pi
+    units: in
+    confirmed: true
+    notes: >
+      The frame the auto->teleop handoff values are written in: autoEndX = 144 - getPose().getX(),
+      autoEndY likewise, autoEndH = pi + getPose().getHeading(). Confirmed by the user as a
+      DELIBERATE 180-degree field mirror (144 in = FTC field size), not an empirical fudge.
+  robot_pedro:
+    source: pedro_pathing
+    x_positive: forward
+    y_positive: left
+    heading_zero: robot forward
+    units: mm
+    confirmed: true
+    notes: >
+      ROBOT-RELATIVE, origin at the centre of rotation — the frame Pedro's PinpointConstants pod
+      offsets are stated in. Called out separately rather than lumped in with pedro_field because
+      a pod offset is measured on the robot with a ruler; tagging it as a FIELD coordinate would
+      itself be the frame error this dimension exists to prevent.
+  _conversions:
+    - from: pedro_field
+      to: teleop_mirrored
+      status: declared
+      confirmed: true
+      transform: "x' = 144 - x;  y' = 144 - y;  h' = h + pi   (180-degree field rotation)"
+    - from: pedro_field
+      to: pinpoint_raw
+      status: undeclared
+      confirmed: false
+      transform: null
+      notes: >
+        Axes agree; the origin offset is whatever the driver was last reset to, which is not a
+        constant and therefore not a declarable transform. Left undeclared deliberately —
+        generation will REFUSE to cross these two rather than guess, which is the correct
+        behaviour for a difference that genuinely varies at runtime.
 tuning_constants:
   # Pedro Pathing shape (three builder-chained objects), per software_stack.pathing. Every value
   # below is carried VERBATIM from 19859crucialcodeauthentic/.../pedroPathing/Constants.java —
@@ -90,13 +160,16 @@ tuning_constants:
     xVelocity: {value: 79.85462771438237, origin: measured, units: in/s, source: inferred, confirmed: true}
     yVelocity: {value: 59.02507968211737, origin: measured, units: in/s, source: inferred, confirmed: true}
   localizer:
-    forwardPodY: {value: -155.5, origin: measured, units: mm, source: inferred, confirmed: true}
+    forwardPodY:
+      {value: -155.5, origin: measured, units: mm, source: inferred, confirmed: true,
+       frame: robot_pedro}
     strafePodX:
-      {value: 0, origin: measured, units: mm, source: asked, confirmed: true,
+      {value: 0, origin: measured, units: mm, source: asked, confirmed: true, frame: robot_pedro,
        notes: "Confirmed by the user as a real measurement — the strafe pod sits on the robot
                centerline. Asked explicitly because a 0 pod offset is the classic case where a
                never-measured placeholder is indistinguishable from a measured value by inspection."}
 archetypes: [turreted_shooter]   # turret decouples aim from drivetrain heading (mecanum, not fixed-shooter-on-swerve)
 config_history:
   - {date: 2026-07-16, change: "initial real confirmation — live ftc-team-config session, replaces the unfilled §20 real-current-config slot"}
+  - {date: 2026-08-06, change: "reference_frames declared via a second live session — four real frames found in this repo (follower, raw Pinpoint driver read directly in Drivetrain, 180-degree-mirrored teleop handoff, robot-relative pod-offset frame). pedro_field->teleop_mirrored confirmed as a deliberate declared conversion; pedro_field<->pinpoint_raw left undeclared because the origin difference is not constant."}
   - {date: 2026-08-05, change: "device_map + tuning_constants added via a second live ftc-team-config session (schema postdates this fixture). Also corrected season_mechanisms.turret single_axis -> multi_axis: the device_map pass surfaced a `hood` actuator the earlier session never asked about, confirmed by the user as a second actuated turret axis."}
