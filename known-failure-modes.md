@@ -252,6 +252,89 @@ real signal.
 
 **Tier:** corpus-derived, team-reported symptom, code-confirmed cause.
 
+### Symptom-patching a layered root cause by extending a wait timer
+
+**Shape.** A mechanism behaves wrong at the boundary between two states (a chassis stop, a
+turn-to-hold transition, a settle). The fix tried first is "wait longer" — extend a settle timer,
+add a sleep, push a threshold. It doesn't work. The timer gets extended again. It still doesn't
+work. Each attempt treats the *symptom* (still moving/wobbling when it should be still) as if it
+had one cause, when it actually has several, stacked.
+
+**Why "add more wait" fails silently instead of obviously.** Extending a timer is never wrong on
+its face — more time can only help a genuine settle problem, so a failed attempt doesn't disprove
+the theory, it just looks like "needs even more." That makes this failure mode self-concealing:
+there is no natural point where the approach announces itself as wrong, only a growing pile of
+timer edits that keep not working.
+
+**A real, worked example — three real, independent causes, each masked by the layer below it:**
+
+1. **The mechanism was never actually stopped.** A path-following library declaring a path
+   "complete" is a statement about the parametric position crossing a threshold, not a statement
+   that the chassis has zero velocity — cutting motor power lets a robot *coast*, it does not brake
+   it. The first "wobble" was the chassis still physically moving when the next step assumed it was
+   still.
+2. **Once genuinely stopped, the thing meant to hold still couldn't.** A feedback controller with a
+   bang-bang or under-damped correction term can hunt around its target instead of settling on it —
+   the classic feedback limit-cycle. Waiting longer doesn't fix a controller that oscillates
+   *because* it's still running its correction loop; it just oscillates for longer.
+3. **Once the controller could genuinely hold, it was holding against stale information.** A
+   filtered rate/velocity estimate computed during a fast preceding motion does not reset to zero
+   the instant that motion ends — a filter carries lag by design. A hold command issued right after
+   a hard turn was fighting a rotation-rate estimate the robot no longer actually had.
+
+Each layer was invisible until the one above it was fixed — you cannot diagnose "does the hold
+controller oscillate" while the chassis is still coasting, and you cannot diagnose "is the rate
+estimate stale" while the controller itself still hunts. That nesting is exactly why this needed
+going one level deeper each time rather than converging on a single culprit.
+
+**The test question:** when a "wait longer" fix doesn't work, the next question is never "wait
+longer still" — it's "what, mechanically, is different about the state *after* the wait that the
+current fix assumes is true?" Chassis actually at rest (a real BRAKE + measured-velocity check, not
+just zero commanded power)? Controller actually converged (read its own error/output, not just
+elapsed time)? Any filtered estimate actually reset for the new context (or still carrying lag from
+what just happened)? A settle problem that survives a second timer extension is a strong signal the
+real cause is structural, not durational.
+
+**Generalizes to:** any transition boundary in an auto or teleop — a stop-then-shoot, a
+turn-then-hold, a deploy-then-verify — where "add a delay" is the first fix reached for. The
+underlying lesson is the same one this whole taxonomy is built on: a runtime-semantics/control
+problem that looks environmental (flaky, inconsistent, "just needs tuning") until traced to its
+actual mechanical cause.
+
+**Tier:** corpus-derived, team-reported symptom sequence with a code-confirmed cause at each layer.
+Not from the verbatim handoff.
+
+### Silent build-toolchain break from an unpinned or partially-pinned version
+
+**Shape.** A fresh clone, or a routine dependency bump, fails to build — and the failure presents
+as a wall of unrelated compile errors, not as a toolchain version message pointing at the real
+cause.
+
+**Concrete mechanism, verified rather than assumed.** An Android Gradle Plugin upgrade began
+requiring a specific Android build-tools version that the project had not pinned, and picked its
+own (newer) default. An explicit `buildToolsVersion` pin placed in one shared Gradle file was
+**silently ignored** — AGP read the pin from a different file than the one it was declared in, so
+the fix looked complete (the pin existed, in a plausible location) while doing nothing. The pin
+only took effect once duplicated into the specific module AGP actually consults for it.
+
+**Why it reads as a code problem.** A build failure surfaces as compile errors in application code,
+because that's where the toolchain gives up — not as a message naming the actual mismatched
+version. Nothing points at Gradle or AGP specifically, so debugging effort goes to the code first.
+
+**The test question:** when a build that previously worked (or a fresh clone of a working repo)
+fails with a broad wall of errors rather than one specific one, check the toolchain version chain
+(AGP version, Gradle wrapper version, any pinned SDK/build-tools versions, and *which specific
+file* each pin actually lives in) before spending time in the application code itself. A pin that
+exists somewhere is not the same claim as a pin that is being read from where it needs to be read.
+
+**Generalizes to:** any FTC team on a recent Android Gradle Plugin version, and more broadly to any
+project where a version pin's *effectiveness* depends on which of several plausible config files it
+was placed in — the existence of a pin and its being honored are two different facts, and only one
+of them is usually checked.
+
+**Tier:** corpus-derived, code-confirmed (the pin's actual point of effect was verified by moving it
+and re-building, not inferred from documentation). Not from the verbatim handoff.
+
 ## Source tiers (Rule 7)
 
 - **Tier-1:** the ASEE PEER survey; FIRST's own troubleshooting docs.

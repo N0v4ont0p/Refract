@@ -80,6 +80,26 @@ equivalent. Candidates, roughly in order of how much they'd earn their cost:
 Without at least (1), port mode would be *less* verified than template mode while operating on code
 the team already trusts — a strictly worse trade, and a reason not to ship it half-built.
 
+## Addendum (Phase J): a fuller retrospective of the same engagement — not a second one
+
+A more detailed narrative of the same 32008/slowstart build later became available, covering the
+same session this proposal was already built on: verbatim porting explicitly chosen over the
+template, an explicit accounting of every deviation from the ported source (two added methods
+across the whole session, each with an inline comment stating what it does and does not touch), and
+the team's own repeated, escalating insistence on porting real code over scaffolding new.
+
+**This is elaboration, not a second data point.** It does not move the count from one engagement to
+two, and it is flagged here explicitly so the added detail doesn't get miscounted as reinforcement
+toward Option A later — the recommendation below is unchanged by it. What it does usefully supply is
+a concrete number for a claim Option B and a future Option A both need eventually: this session's
+own actual deviation-from-source discipline was two methods, both marked, across the entire ported
+subsystem — real evidence for "deviations from a port should be rare, small, and self-documenting"
+as an operating norm, not a hoped-for one. Worth carrying into Option B's wording now (a port is
+expected to stay close to its source, with any departure marked at the point it happens) and into
+Option A's `_entry_shape` design later (an explicit change manifest, item 3 above, is exactly what
+this norm would be checked against) — but as a *design input* for whichever option gets built, not
+as the second engagement that would justify building A now.
+
 ## The three ways this could go
 
 **A. Build port mode as a first-class second path.** Highest value if the observation generalises.

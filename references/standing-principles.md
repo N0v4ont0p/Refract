@@ -229,10 +229,10 @@ tactical fix that gets the current test to a correct result, and the report that
 otherwise-careful test run. This is the more important lesson of the two R101 surfaced, not the bug
 itself.
 
-**A closely related failure shape, recurring three times in one work session — worth naming
-visibly here rather than left scattered across three files' commit history as isolated bug notes:**
-a fix or addition that *reads* as correct is not the same claim as one that has actually been run
-and checked against real output.
+**A closely related failure shape, recurring four times across two work sessions — worth naming
+visibly here rather than left scattered across separate files' commit history as isolated bug
+notes:** a fix or addition that *reads* as correct is not the same claim as one that has actually
+been run and checked against real output.
 
 1. `config_lint.py`'s own fix (R101): the first attempt (scope the `rglob` search to `code_dir`)
    read as a reasonable, targeted correction — and was wrong for the common case (a config at the
@@ -248,12 +248,26 @@ and checked against real output.
    axes reach the output JSON, so the new signature was silently unreachable. Caught only by running
    the script against a real positive case and checking the actual JSON, not by confirming the
    `SIGS` dict looked right.
+4. A path-chain's geometry, reviewed by eye during a real live-tuning session: a control point, a
+   heading-interpolation pair, and a centripetal-correction term can all look completely reasonable
+   read as coordinates in a path export or rendered in a visualizer — a hairpin from an overshot
+   control point, a heading snap between two chained segments, and a saturating correction term on a
+   tight curve are each invisible that way. The instance is not code, which is what makes it worth
+   naming as its own entry rather than folded into the first three: the same "reads correct, isn't
+   verified" failure shape reaches past code review into any artifact reviewed by inspection instead
+   of by computing the actual quantity in question. Caught only by computing curvature, heading
+   continuity, and the correction-term formula numerically across the whole path, not by eyeballing
+   the shape or the coordinate list. See `library-docs/pedro-pathing/path-chain-authoring-gotchas.md`
+   for the three concrete mechanisms this produced.
 
-**The rule, stated once so it doesn't need re-deriving three more times**: all three of the above
-would have shipped silently broken if the check had stopped at "the diff looks right." A change
-that reads as correct on inspection has not yet been verified — only running it and checking the
-real output verifies it. This is the concrete, current evidence for why every fix in this project
-gets an actual re-run, not just a re-read, before being called done.
+**The rule, stated once so it doesn't need re-deriving every time it recurs**: all four of the
+above would have shipped silently broken (or, for the fourth, driven a real robot along a silently
+wrong path) if the check had stopped at "this reads correct." A change — or a path, a config, any
+artifact with a checkable ground truth — that reads as correct on inspection has not yet been
+verified. Only computing the real answer and checking it against what was produced does that. This
+is the concrete, current evidence for why every fix in this project gets an actual re-run or
+recomputation, not just a re-read, before being called done — and why that discipline generalizes
+past code to anything with a mechanically checkable property.
 
 ## 12. A verified claim has a shelf life, not just a confidence level (R107)
 
