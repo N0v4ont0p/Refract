@@ -76,7 +76,39 @@ the segment (using the robot's actual mass and the segment's actual tangential s
 and confirm it stays within the drivetrain's power range at every sampled point, not just check that
 `centripetalScaling` has *some* value.
 
-## The pattern underneath all three
+**The exact formula, and a shortcut for "is this speed safe here."** Verified directly against
+Pedro's real source (`VectorCalculator.getCentripetalForceCorrection()` — see
+`follower-update-branches-and-parking.md` in this directory for the full verification): the clamp
+condition is `centripetalScaling × mass × v² × κ ≤ maxPower`, where `κ` is curvature (`1/radius`)
+and `v` is the tangential speed component. Solved for `v`, that gives a direct saturation-speed
+threshold at any point on a curve:
+
+```
+v_sat = sqrt( maxPower / (centripetalScaling × mass × κ) )
+```
+
+If a leg's required speed at a curve's tightest point (highest `κ`, smallest radius) exceeds
+`v_sat`, the correction term saturates there — not a tuning problem to chase with different
+constants, the geometry itself is asking for more lateral authority than the follower has at that
+speed. Either slow the leg through that point or widen the radius; a saturating correction term
+cannot be tuned away, since tuning changes *which* speed saturates it, not whether saturation is
+possible at that point's curvature.
+
+## 4. Two more checks worth running numerically, not visually
+
+**Arc length by numeric integration, not chord distance.** Summing straight-line distances between a
+curve's control points (or between coarse sampled points) systematically underestimates a curved
+segment's real travel distance — sometimes badly, on a tight curve. Any leg-timing, speed, or
+duration estimate derived from "distance" should integrate the curve's actual arc length at a fine
+sample resolution, not the chord approximation.
+
+**Closest approach to a boundary along the whole curve, not just at its endpoints.** A curve's
+closest approach to a wall, a field boundary, or another robot's expected position is not
+guaranteed to occur at either endpoint — a curve can bow toward an obstacle in its middle while both
+endpoints sit at a comfortable clearance. Checking clearance only at the start and end pose of a
+segment can miss the actual tightest point entirely; sample clearance along the whole curve.
+
+## The pattern underneath all four
 
 None of these are visible from a path visualizer's rendered shape, and none are visible from
 reading the coordinates by eye. Each requires actually computing the relevant quantity — heading

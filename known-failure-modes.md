@@ -335,6 +335,83 @@ of them is usually checked.
 **Tier:** corpus-derived, code-confirmed (the pin's actual point of effect was verified by moving it
 and re-building, not inferred from documentation). Not from the verbatim handoff.
 
+### A latch or freeze silently poisons every downstream read
+
+**Shape.** Some computed state (a sensor-fusion result, an aim solution, any derived struct) gets
+deliberately frozen or latched — a legitimate optimization, done to stop recomputing or re-acting on
+noisy input for a moment. The freeze is real and intentional. What's missing is an audit of
+everything that *reads* that state afterward: every one of those readers is now looking at a
+snapshot, and nothing about the read distinguishes "fresh" from "frozen."
+
+**Concrete mechanism.** A freeze condition triggers (e.g. holding a lock steady): the update path
+short-circuits and stops writing the struct. Readiness or downstream logic keeps reading the same
+struct fields it always did. Those fields are correct at the moment of freeze and **silently stop
+being correct** the instant the real world moves on, with nothing in the read path signaling that.
+
+**Why this is worse than a stale value in isolation.** A single stale read is a bounded bug. A
+latch feeding *multiple* independent downstream consumers turns one freeze into a cascade that can
+loop on itself: consumer A reads the frozen struct and reports "not ready" for an unrelated reason
+(e.g. a different subsystem is still settling); the system waits; once that unrelated reason
+resolves, consumer A re-reads the *same* frozen struct — because nothing ever un-froze it — and
+reports "ready" against data that was true several cycles ago and may no longer be. The action that
+fires does so against the stale snapshot, not the current state.
+
+**The fix, general across any latch/cache/freeze pattern:** when a value gets deliberately frozen,
+audit every reader of it, not just the writer's own logic. Two disciplines, either is sufficient on
+its own but they compose:
+
+- **Mark the freeze visibly** on the struct itself (a `frozenAt` timestamp, a `stale` flag) so a
+  reader can at least detect it's looking at a snapshot, rather than trusting the fields blindly.
+- **Release the latch the instant the condition that justified it is gone.** A freeze that outlives
+  its own justifying condition is not an optimization anymore, it's an unintentional cache with no
+  invalidation.
+
+**Generalizes to:** any latch, cache, debounce, or "hold the last good value" pattern feeding more
+than one downstream consumer — not specific to aim/vision/sensor-fusion, though that's a common
+place to reach for this optimization. The test question: when this value is frozen, does every
+reader of it know, and does anything ever tell them to stop trusting it?
+
+**Tier:** corpus-derived, team-reported symptom sequence (readiness state cycling between multiple
+mechanisms while the frozen struct never actually updated) with a code-confirmed cause. Not from the
+verbatim handoff.
+
+### A proximity-triggered event breaks down as trigger points converge
+
+**Shape.** An autonomous sequence fires an event (a shot, a mechanism action) when the robot's
+position comes within some radius of a target point. This works fine when target points are far
+apart. It silently breaks when two or more target points end up close enough together that no
+single radius can distinguish "near point 1" from "near point 3" — being close to one legitimately
+also satisfies being close to the other, and the trigger fires against the wrong target, or fires
+early, or fires twice.
+
+**Why it's easy to build this way and easy to miss.** Proximity-triggering is the natural first
+design for "do X near this spot" — it doesn't require tracking *which* leg of the path the robot is
+currently on, just distance to a point. It works throughout early testing, when target points happen
+to be well-separated. It breaks specifically once a path gets refined toward tighter, more efficient
+routing — which pulls target points closer together — so the failure tends to appear *later* in
+tuning, on a path that already worked, rather than immediately.
+
+**The fix.** Trigger on **leg arrival**, not proximity to a point: track which segment of the path
+the robot is currently executing (an index, a named waypoint-reached flag, anything that identifies
+the *leg*, not just a distance) and fire the event when that specific leg is reached or completed,
+independent of how close its endpoint happens to sit to some other leg's endpoint. This is a strictly
+stronger signal than proximity — it can't be fooled by two points being near each other, because it
+never asks "how close am I" in the first place.
+
+**The test question:** for any proximity-based trigger, check the actual minimum distance between
+every pair of trigger points the path visits. If any two are closer together than the trigger radius
+you're using — or would be, after the routing gets refined further — the radius cannot tell them
+apart and the trigger needs to become leg-based before it silently misfires.
+
+**Generalizes to:** any autonomous sequence with more than one proximity-triggered event, in any
+season — the failure is about the trigger topology, not about what the event does once triggered.
+
+**Tier:** corpus-derived, calculated finding (real minimum-distance computation on real path
+coordinates showed points within a fraction of an inch of each other), not from the verbatim
+handoff.
+
+## Source tiers (Rule 7)
+
 ## Source tiers (Rule 7)
 
 - **Tier-1:** the ASEE PEER survey; FIRST's own troubleshooting docs.

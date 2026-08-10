@@ -90,6 +90,18 @@ Low retrieval confidence, or a genuine unresolved disagreement, resolves to
 wrong "legal" is worse than an admitted "unclear": the team builds the illegal mechanism. Abstention
 is a correct verdict, not a failure (standing-principles §2).
 
+**A rule whose actual boundary is drawn in a figure, not text, is ambiguous by construction if the
+corpus only stores text.** Some legality questions turn on a zone polygon, a dimension diagram, or a
+marked boundary that the manual defines visually — a launch zone's exact extent, a legal mounting
+region, a size-check silhouette. The tagged manual corpus in this skill stores rule *text*; it does
+not store or reason over figures. When a verdict would require reading a figure the corpus doesn't
+carry, that is not a retrieval-confidence problem to push through with careful reading — inferring a
+polygon's shape from the surrounding prose and presenting that inference as the verdict is exactly
+the confident-wrong-guess this section already rules out, and the stakes are real: several of these
+restrictions carry a MAJOR FOUL per violating element, not a minor deduction. State the verdict as
+`ambiguous`, name specifically what the figure would need to show, and say so rather than resolve it
+by prose alone.
+
 ## Q&A is clarification-tier, never rule-tier
 
 The manual states the official Q&A doesn't supersede the rule text. So Q&A-sourced content is

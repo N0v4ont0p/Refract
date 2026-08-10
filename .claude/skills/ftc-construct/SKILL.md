@@ -130,6 +130,22 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
     `Condition` structure instead, per the library's own documented constraint.
   Read the relevant file before writing a call against an unfamiliar API in either case; don't
   recall it.
+- **When `library-docs/` doesn't resolve a runtime-semantics question, escalate to the library's
+  real current source — don't guess from the doc's silence.** A bundled doc can correctly describe
+  *what* a call does while saying nothing about *which internal branch* handles a specific case
+  (e.g. whether a "park" call actually applies position correction, or just stops commanding power).
+  That gap is not evidence the behavior doesn't matter; it's evidence the doc didn't cover it. Read
+  the actual source: for a Gradle-managed dependency already resolved on this machine,
+  `find ~/.gradle/caches/modules-2 -path "*<library>*" -name "*-sources.jar"` unpacks straight to
+  real, current source, matching the exact version this project depends on — faster and more
+  reliably current than the library's own GitHub if a local resolve already happened. Otherwise,
+  fetch the real file from the library's GitHub repo at its current default branch, the same
+  discipline this suite already applies to every `library-docs/` fetch. Never infer a branch's
+  behavior from a method name, a parameter name, or a doc's description of the *intended* effect —
+  read the actual conditional. A verified example of exactly this trap:
+  `library-docs/pedro-pathing/follower-update-branches-and-parking.md` documents a case where a
+  parking call's name and the one-line doc comment both suggested it was safe, and the real source
+  showed a live bug in that exact branch.
 - **Template-inherited domains — read before extending, not just before adopting.** The quickstart
   template already wires FTC Dashboard (telemetry via `RobotTelemetry`, tunables via
   `RobotConstants`'s `@Config`). Adapting that existing pattern needs no fresh read. But the moment
@@ -195,6 +211,42 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   and rejects a non-null value under `untuned`, and step 0's `generation_allowed` gate already ran.
   A guessed constant has no representable form in the config this skill reads from, so there is
   nothing to carry forward and nothing to launder into output.
+- **Auto/teleop settle-and-commit sequencing — season-agnostic generation rules, not tied to any one
+  mechanism.** Whenever generated code has to decide "has this condition held long enough to act" —
+  a shot, a mechanism commit, a state transition — five rules apply regardless of which season's
+  mechanisms are involved:
+  1. **Gate on a measured condition, never on elapsed time alone.** `follower.getVelocity().getMagnitude() <= threshold`
+     is a real fact about the robot; a timer that merely hopes the robot has settled by then is not.
+     Prefer the measured check; use a timer only as the fallback bound below.
+  2. **Sustained-true beats a blind fixed wait, at equal or less total time.** A short blind floor
+     (covering the fastest case) followed by a *sustained*-ready window that resets to zero the
+     instant the condition drops is a strictly stronger check than one long blind wait of the same
+     total duration — it keeps proving the condition continuously rather than assuming it stayed
+     true. When asked to add settle robustness without adding wall-clock time, this trade is the
+     lever: shrink the blind floor, grow the sustained window, keep the sum constant.
+  3. **Every gated wait needs a timeout, and not all timeouts should behave the same way.** A
+     condition that's merely imperfect if abandoned early (a slightly-off shot still often scores)
+     can time out and proceed. A condition where abandoning early causes active harm (firing while
+     still moving) should not have a give-up path at all — model these differently, not with one
+     global timeout applied uniformly.
+  4. **State the tolerance as its consequence, not just its number.** A velocity or position
+     tolerance held over a sustained window bounds a real drift distance (tolerance × window); at
+     whatever range the generated mechanism is aiming or acting over, convert that drift to the
+     angular or positional error it actually produces before calling a threshold "tight enough."
+  5. **Per-instance settle/timeout constants, not one global value reused everywhere.** A single
+     shared `SETTLE` or `READY_TIMEOUT` used for every shot/commit in a sequence forces every one of
+     them to pay whatever the worst individual case needs. Season-specific instances (which mechanism,
+     how many repeated commits an auto makes) come from the confirmed config's `season_mechanisms`,
+     not hardcoded here — but the STRUCTURE (per-instance constants, not one shared one) is a
+     generation rule regardless of season.
+
+  **Also gate on genuine rest before trusting anything that requires it — the fail-fast form.**
+  A hold/aim/settle state entered while the chassis is still physically moving captures moving data.
+  Before path-following library specifics vary this, the general shape is a one-loop-cost, no-cost
+  latch: `if (!anchored && measuredStillness()) { anchored = true; <lock down what needs a stationary
+  robot>; <reset any filtered/integrated state that was accumulating during motion>; }` — entered
+  once, on the first loop measured stillness is actually true, not on the loop the state was
+  entered.
 - **Corpus patterns**: when a pattern from `ftc-corpus-builder/references/patterns/*.yaml` applies
   (its `applicable_when` matches the confirmed config), cite it — but display its `confidence` and
   `provenance.classification` exactly as stored, never inflated, and carry its `notes` caveats

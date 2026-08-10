@@ -65,6 +65,14 @@ specific driver-station setup. It is genuinely necessary for a usable field-cent
 not appear anywhere in this corpus's bundled Pedro examples — both the flat `examples.md` and the
 mirrored `docs/pathing/examples/teleop.md` show only the 4-argument robot-centric call.
 
+**Use this parameter — don't hand-roll the same rotation separately.** Verified directly against
+`VectorCalculator.setTeleOpMovementVectors`: the drive vector is rotated by the robot's heading only
+if `isRobotCentric`, and is then **always** rotated once more by `offsetHeading`, regardless of that
+flag. A team that doesn't know this parameter exists and instead applies its own alignment rotation
+to the stick input before calling the 4-argument overload is doing the same math by hand, outside
+the library, with no reason to — and a much easier place to introduce a sign or units mistake than
+inside a single, already-tested library parameter.
+
 ## The failure mode this produces
 
 The flag's inverted-reading risk and the missing `offsetHeading` documentation compound: a team that

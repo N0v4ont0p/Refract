@@ -204,6 +204,17 @@ repeatedly hidden the gap this project's own Rule 7 discipline exists to catch. 
 out clean and total, that cleanliness is the signal to go find the tool's *own* source before
 shipping the claim, not confirmation the check can be skipped.
 
+**The same rule applies when the unhedged claim is an accusation, not a self-generated fact** — "this
+script has a bug" needs the identical check "this value is 14.45" does, and it's easier to skip,
+because blaming a tool feels like a conclusion rather than a claim still needing verification. A
+real instance: a tool's output looked wrong mid-session and got reported as the tool's own
+name-matching logic being broken. It wasn't — the actual cause was a malformed data file that had
+silently collapsed to an empty index, and a separate edit made moments earlier had incidentally
+repaired the real problem, which is what made the tool look newly broken instead of newly fixed. The
+fix: before shipping a claim that something else is defective, verify against the artifact itself
+(re-read the file, re-run the tool in isolation) with the same rigor a self-generated fact gets — and
+if the first claim turns out wrong, strike it explicitly rather than quietly move to the real finding.
+
 ## 11. A workaround needed to get a correct result IS the result (R102)
 
 A pattern distinct from both §6 (confidence-driven drift, about generating an unverified fact) and
