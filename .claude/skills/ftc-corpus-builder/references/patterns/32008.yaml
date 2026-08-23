@@ -17,7 +17,7 @@
 # lighter-treatment framing — flagged as a likely-stale metadata inconsistency, not resolved here.
 #
 # Full findings, including 7 real bugs found alongside these patterns (not folded in as patterns):
-# PHASE-F-G-FINDINGS.md.
+# ROOT-ARCHIVE.md.
 
 meta:
   team: "32008"
@@ -109,4 +109,4 @@ patterns:
       unverified by the team.
 
 held:
-  - "SingleMotorStarter.java — filename/registered-name says 'single motor' but the code drives all 4 drivetrain motors (arcade-style). Naming/documentation drift, not a pattern; recorded as a bug in PHASE-F-G-FINDINGS.md, not extracted here."
+  - "SingleMotorStarter.java — filename/registered-name says 'single motor' but the code drives all 4 drivetrain motors (arcade-style). Naming/documentation drift, not a pattern; recorded as a bug in ROOT-ARCHIVE.md, not extracted here."

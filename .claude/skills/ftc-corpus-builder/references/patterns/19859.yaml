@@ -6,7 +6,7 @@
 #   the public plugin corpus, same as any Tier-1/2 team.
 # Mined at full Tier-1-equivalent depth (Phase F1): extract_feature_vector.py run for real, full
 #   git-evolution diff across all 3 commits, pattern-extractor + provenance-checker both run.
-#   Full findings: PHASE-F-G-FINDINGS.md.
+#   Full findings: ROOT-ARCHIVE.md.
 #
 # Feature-vector correction, recorded for future mining methodology: extract_feature_vector.py
 # flagged drivetrain.type=swerve — a false positive sourced entirely from Pedro Pathing's own

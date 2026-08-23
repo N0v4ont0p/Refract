@@ -169,4 +169,4 @@ held:
   - "sim/ package — an (unusual for FTC) simulation harness; not yet examined."
   - "utils/prompter — config prompter; octoquad OctoQuadLocalizer — not yet examined."
 watch:
-  - "comment-out-instead-of-delete: 12808 is the 4th team (HoodInverseKinematics commented in SimpleShooterMath.java:206-210; also the commented addLimelightMeasurement in TrackingThread.java:56-72). Tracked in SESSION-1-CHECKPOINT.md watch-items."
+  - "comment-out-instead-of-delete: 12808 is the 4th team (HoodInverseKinematics commented in SimpleShooterMath.java:206-210; also the commented addLimelightMeasurement in TrackingThread.java:56-72). Tracked in ROOT-ARCHIVE.md watch-items."
