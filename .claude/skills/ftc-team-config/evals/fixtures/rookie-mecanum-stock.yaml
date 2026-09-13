@@ -1,6 +1,6 @@
 # §20 synthetic config: rookie / stock goBILDA / no turret — pathing inferred but NOT confirmed
-# (generation must be BLOCKED: unconfirmed mandatory field — the R73 eval case)
-_meta: {schema: 1, fixture: true}
+# (generation must be BLOCKED: unconfirmed mandatory field — the REQ-73 eval case)
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99902, experience: rookie}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

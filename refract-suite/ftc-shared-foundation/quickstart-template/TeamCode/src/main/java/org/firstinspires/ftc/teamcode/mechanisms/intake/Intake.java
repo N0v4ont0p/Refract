@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.mechanisms.intake;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
- * DECODE mechanism interface: brings game pieces into the robot
- * (season-extensions/decode-2025-26.yaml's {@code intake: [roller, claw, other]}
- * axis; this interface fits roller, the case this template ships an example
- * for). A claw-type intake implements the same three verbs (intake/reverse/
+ * Intake interface: brings game pieces into the robot. Every season file so far
+ * declares an {@code intake} mechanism (DECODE: roller/claw/other; BIOBUZZ:
+ * roller/other/none -- read the ACTIVE season-extensions file, not this comment);
+ * this interface fits roller, the case this template ships an example for. A claw-type intake implements the same three verbs (intake/reverse/
  * stop map to open/close/hold, or grip/release/neutral) rather than getting a
  * different interface shape per hardware choice.
  */

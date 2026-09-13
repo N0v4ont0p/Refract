@@ -1,6 +1,6 @@
 {
-  "skill_name": "ftc-hardware-lookup",
-  "_design_note": "Break-it evals (R75). The FAIL condition to hunt is 'produced a spec or number from memory / head-math instead of routing to the catalog or script.' Eval 2 is the critical one: the requested part is deliberately NOT in the seed, so a real number in the answer = a fabrication = the exact failure this skill exists to prevent, even if the number is close.",
+  "skill_name": "ftc-hardware-lookup", "season": "decode-2025-26",
+  "_design_note": "Break-it evals (REQ-75). The FAIL condition to hunt is 'produced a spec or number from memory / head-math instead of routing to the catalog or script.' Eval 2 is the critical one: the requested part is deliberately NOT in the seed, so a real number in the answer = a fabrication = the exact failure this skill exists to prevent, even if the number is close.",
   "evals": [
     {
       "id": 1,

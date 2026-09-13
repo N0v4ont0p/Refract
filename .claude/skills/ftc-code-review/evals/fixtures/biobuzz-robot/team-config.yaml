@@ -1,0 +1,13 @@
+# Season-transition review fixture (biobuzz-2026-27). Planted: (1) FTC Dashboard streaming (R704),
+# (2) a pre-SDK-12 AprilTag loop reading detection.id off the base AprilTagDetection (compile error on SDK
+# 12.0.0, verified by compiling this fixture against FIRST's v12.0 checkout) that also uses HIVE tags as a field-pose
+# source (SDK v12.0 README), (3) turret code on a turret:none robot. Launcher code is declared (clean).
+_meta: {schema: 1, season: biobuzz-2026-27, fixture: true}
+team: {number: 99905, experience: veteran}
+drivetrain: {type: {value: mecanum, confirmed: true}}
+software_stack: {opmode_style: {value: raw_linear_opmode, confirmed: true}, pathing: {value: pedro_pathing, confirmed: true}}
+season_mechanisms:
+  intake: {value: roller, confirmed: true}
+  hive_launcher: {value: flywheel, confirmed: true}
+  turret: {value: none, confirmed: true}
+  aim_vision: {value: none, confirmed: true}

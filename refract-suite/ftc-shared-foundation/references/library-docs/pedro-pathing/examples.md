@@ -1,3 +1,19 @@
+> SDK VERSION SCOPE (added by Refract, 2026-09-13): the code below predates FTC SDK v12.0 (2026-09-12). In
+> v12.0 the base `AprilTagDetection` type no longer has `.id`, `.metadata` or `.center` — verified by compiling
+> the SDK 11.1 AprilTag samples against the 12.0.0 libraries (compile errors on exactly those fields);
+> `.ftcPose` / `.robotPose` still compile. Check `instanceof AprilTagSingleDetection` /
+> `AprilTagClusterDetection` and cast before reading tag identity (v12.0 README, Breaking Changes).
+
+> SEASON SCOPE (added by Refract, 2026-09-13): two sections below are DECODE (2025-26)-specific:
+> "Example Auto" (a DECODE autonomous: start against the blue goal, Artifact spike-mark pickup poses)
+> and "Example Motif Usage" (DECODE AprilTag IDs 20/24 goals and 21/22/23 motif GPP/PGP/PPG, Artifact
+> row poses). The Pedro/Ivy API usage in them, and the TeleOp and Constants examples, are generic.
+> "Example AprilTag Usage" relocalizes the follower from a camera pose: generic pattern, but see the
+> warning at the end. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ AprilTags (IDs 30-45) are
+> clusters of 4 on the underside of the tipping HIVE's CELLs and, per the FTC SDK v12.0 README, move
+> and are not suitable for absolute field localization.
+
 > Source: https://pedropathing.com/docs/pathing/examples/auto · Fetched: 2026-07-12
 
 # Pedro Pathing — Example OpModes

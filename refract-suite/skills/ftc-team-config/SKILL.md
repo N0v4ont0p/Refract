@@ -192,7 +192,7 @@ different field names and no `mass` at all, and no standard container whatsoever
 library's shape from another's.
 
 **Hub generation is time-gated.** Read the season start year from the ACTIVE slug (e.g.
-`decode-2025-26` → 2025). Through the 2026-27 season, the REV Control Hub is the sole legal
+`biobuzz-2026-27` → 2026). Through the 2026-27 season, the REV Control Hub is the sole legal
 control system, so asking has zero information gain — don't ask, record it as inferred. From
 2027-28 (the hybrid-legal window), `hub_generation` joins the mandatory set — but read
 `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/hub-generations/systemcore-motioncore.md` fresh and
@@ -203,8 +203,9 @@ that file's facts from memory — read it at ask-time; it carries its own source
 ### 4. Confirm back before anything generates
 
 Once the config is filled (inferred + asked), state the complete picture back to the user in
-plain terms — "mecanum on stock goBILDA 96mm, Pinpoint odometry, Pedro Pathing, raw LinearOpMode,
-roller intake, no shooter, no turret" — and get an explicit yes. Only then flip the fields to
+plain terms — "BIOBUZZ season: mecanum on stock goBILDA 96mm, Pinpoint odometry, Pedro Pathing, raw
+LinearOpMode, roller intake, flywheel HIVE launcher, no turret" (mechanism names come from the ACTIVE
+season file, never from this example) — and get an explicit yes. Only then flip the fields to
 `confirmed: true`. Run `validate_config.py` once more; generation is allowed only when it reports
 `generation_allowed: true`.
 
@@ -218,7 +219,7 @@ This is the line that governs the whole skill:
 Write `team-config.yaml` to the team's project root. Schema:
 
 ```yaml
-_meta: {schema: 1, updated: <date>, suite_generated_code: true}   # lineage marker — see below
+_meta: {schema: 1, season: <ACTIVE slug>, updated: <date>, suite_generated_code: true}   # season stamp + lineage marker — see below
 team: {number: 19859, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}
@@ -245,9 +246,34 @@ control for physical constants. A number may only appear under `measured`; `untu
 `value: null`. There is no representable way to record a plausible guess, which is the point
 (standing-principles §13).
 
+**`_meta.season` is mandatory whenever `season_mechanisms` or `archetypes` are recorded** — write the
+ACTIVE slug at confirmation time. The season layer is only true for the game it was confirmed for;
+`validate_config.py` blocks generation on an unstamped config and on one stamped for a different
+season than ACTIVE.
+
 `source` records how each value arrived (`inferred` vs `asked`); `config_history` appends — a
 mechanism added in week 6 must not silently overwrite what was true in week 1, because "when did
 the config change" is exactly the question that matters when behavior changes at the same time.
+
+### 5b. Season boundary — carry the core, re-elicit the season layer
+
+When `validate_config.py` reports `season_mechanisms/archetypes confirmed for <old>, but the active
+season is <new>`, the team is moving to a new game. Do **not** start from scratch and do **not**
+translate old mechanisms into new names ("shooter" → "hive_launcher" is a guess about the team's new
+robot, not a fact):
+
+1. Keep every core axis (drivetrain, localization, software_stack, device_map entries for hardware
+   that still exists, tuning_constants, reference_frames) — core axes are season-agnostic. Re-confirm
+   them in one line ("still mecanum + Pinpoint + Pedro?"), since teams often rebuild at kickoff.
+2. Re-ask the season layer from the NEW season file's `season_mechanisms`. Old values are context
+   only ("last season you ran a turret — is there one this year?").
+3. Tuning constants tied to a mechanism that no longer exists leave the config; drivetrain/localizer
+   constants stay only if the drivetrain didn't change (mass changes with a new robot — re-measure).
+4. Restamp `_meta.season`, and append a `config_history` entry naming both seasons.
+
+A season file still marked `status: DRAFT…` / `not_active: true` can't validate anything (the
+validator errors) — that season hasn't passed its transition sign-off yet; say so instead of
+eliciting against it.
 
 ### 6. Hand off to ftc-construct
 
@@ -266,7 +292,7 @@ here too even though ftc-construct is the one that enforces them:
   `season_mechanisms` block — one interface per declared mechanism the config actually selects.
   No hardcoded mechanism list anywhere: when the season changes, the interface set changes with
   the season file, not with a code edit.
-- **No code for undeclared features.** A team with `turret: none` gets no turret code — not
+- **No code for undeclared features.** A team with `turret: none` (or any mechanism declared `none`) gets no code for it — not
   commented-out, not "just in case". Unused code a team didn't ask for is where stale bugs live.
 - **Never touch `libs/`.** Modifying or omitting the SDK's compiled libraries makes the Robot
   Controller app competition-illegal — this is a hard legality line, not a style preference.

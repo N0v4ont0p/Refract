@@ -1,0 +1,26 @@
+{
+  "table_id": "6-4",
+  "caption": "Connect Award Criteria Connect Award Criteria Required 1 Team demonstrates profe",
+  "rows": [
+    [
+      "Connect Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team demonstrates professional development competency by explaining its plan for developing team member skills, including both : A. the team\u2019s goals for learning, and B. the steps the team has taken or will take to reach those goals."
+    ],
+    [
+      "Encouraged",
+      "2",
+      "Team demonstrates networking competency by building and maintaining meaningful in-person or virtual relationships with professionals in STEM."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Team demonstrates collaboration competency by actively working with members of the engineering community through mentoring, knowledge sharing, technical guidance, or collaborative activities."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-4]] pointer (\u00a78<->\u00a79)"
+}

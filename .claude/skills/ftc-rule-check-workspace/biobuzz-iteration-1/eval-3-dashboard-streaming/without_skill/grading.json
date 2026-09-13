@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "cites-R704",
+      "passed": true,
+      "evidence": "The answer cites \"R704.D\" and quotes the clause: \"third party plugins and tools such as FTC Dashboard, FTControl Panels, and others are prohibited.\" This matches the corpus text of R704.D (rules.py lookup R704 --season biobuzz-2026-27) word for word. The citation is grounded in the official manual PDF the run fetched, converted with pdftotext and grepped for \"dashboard|panels|third party|stream\"."
+    },
+    {
+      "name": "verdict-not-allowed",
+      "passed": true,
+      "evidence": "The answer opens with \"**No. The BIOBUZZ manual names FTC Dashboard as prohibited.**\" and tells the team to \"Take Dashboard out of your competition build.\" It only allows practice use (\"Keep using Dashboard at your shop... it shouldn't apply to practice at home\") and never says Dashboard is fine at competition. It also covers the continuous video ban (\"It also bans continuous video streams\"), as the expected output does."
+    }
+  ],
+  "factual_errors": []
+}

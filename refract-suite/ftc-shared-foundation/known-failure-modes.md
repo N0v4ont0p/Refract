@@ -193,6 +193,255 @@ the same ~700-line monolith, so a fix to one must be hand-propagated across ever
 
 ---
 
+### Mechanism state chained to a sensor-fusion result (the aim-lock cascade)
+
+**Shape.** One or more mechanisms are gated on a derived, fallible result — "do we have an aim
+lock?", "is the pose valid?", "did vision see the target?" — that can legitimately have no answer
+on any given loop. When it has no answer, everything downstream of the gate stops together.
+
+**Why it reads as several bugs.** The gate is invisible in the symptom. A real report of this
+looked like four independent failures at once: gate doesn't move, turret doesn't move, auto-aim
+doesn't move, intake doesn't work. Four subsystems, four apparent problems, one cause — a single
+`if (hasLock)` wrapped around all of them. Debugging effort goes to four mechanisms in turn, and
+each one checks out fine in isolation, which is the worst possible position to debug from.
+
+**Why it happens.** It reads as safety at the time it is written: "don't run the intake unless we
+know where we are." But a sensor-fusion result is not a safety interlock, it is an *estimate*, and
+estimates are legitimately absent sometimes — occluded target, bad frame, mid-recalculation. The
+gate converts a normal transient into a total mechanism stop.
+
+**Fix pattern** (confirmed against a team's own working version of the same robot code, which did
+it this way and did not exhibit the failure):
+
+- Command mechanisms **unconditionally, every loop**, from whatever solve is available — a
+  distance-based flywheel/hood command runs off the current distance estimate whether or not an aim
+  lock has converged.
+- Drive sequencing mechanisms (gates, feeders, intakes) from **plain timers or driver input**, not
+  from the fusion result.
+- Let the lock state gate **only the thing it actually describes** — whether to *fire*, not whether
+  the robot is allowed to move its intake.
+
+**Generalizes to:** any auto or teleop where mechanism enablement is chained to vision, odometry
+confidence, AprilTag visibility, or a solver's convergence flag. The test question is: *if this
+estimate returns nothing for two seconds, how many mechanisms stop?* If the answer is more than
+one, the gate is in the wrong place.
+
+**Tier:** corpus-derived, team-reported symptom with a code-confirmed fix pattern. Not from the
+verbatim handoff.
+
+### Two named tuning constants sharing one literal
+
+**Shape.** Two distinct, differently-named tuning fields are set to the identical value — e.g. a
+"fire at this distance" threshold and a "hold at this distance" threshold both hardcoded to the
+same number. Whatever behaviour was supposed to vary between them cannot.
+
+**Why it is silent.** Both constants are individually plausible. Nothing is out of range, nothing
+fails to compile, and each value looks like a real measurement. The symptom is a mechanism that
+appears not to respond to a parameter it genuinely reads — reported in one real case as a shooter
+firing at the wrong range with a hood that "doesn't seem to move", when the hood was in fact
+correctly tracking a distance that never changed.
+
+**Why it happens.** Usually a copy-paste during tuning, or a placeholder that was meant to be split
+later. Sometimes it is legitimate — two thresholds can genuinely coincide — which is why this is a
+**smell, not a defect**: the finding is "confirm this is deliberate", not "this is wrong".
+
+**Detectable deterministically.** `failure_mode_lint.py`'s `duplicate_tuning_literal` check flags
+two or more distinct tuning-constant names in one file sharing an identical non-trivial literal.
+Trivial values (0, 1, -1) are excluded — they coincide constantly and flagging them would bury the
+real signal.
+
+**Tier:** corpus-derived, team-reported symptom, code-confirmed cause.
+
+### Symptom-patching a layered root cause by extending a wait timer
+
+**Shape.** A mechanism behaves wrong at the boundary between two states (a chassis stop, a
+turn-to-hold transition, a settle). The fix tried first is "wait longer" — extend a settle timer,
+add a sleep, push a threshold. It doesn't work. The timer gets extended again. It still doesn't
+work. Each attempt treats the *symptom* (still moving/wobbling when it should be still) as if it
+had one cause, when it actually has several, stacked.
+
+**Why "add more wait" fails silently instead of obviously.** Extending a timer is never wrong on
+its face — more time can only help a genuine settle problem, so a failed attempt doesn't disprove
+the theory, it just looks like "needs even more." That makes this failure mode self-concealing:
+there is no natural point where the approach announces itself as wrong, only a growing pile of
+timer edits that keep not working.
+
+**A real, worked example — three real, independent causes, each masked by the layer below it:**
+
+1. **The mechanism was never actually stopped.** A path-following library declaring a path
+   "complete" is a statement about the parametric position crossing a threshold, not a statement
+   that the chassis has zero velocity — cutting motor power lets a robot *coast*, it does not brake
+   it. The first "wobble" was the chassis still physically moving when the next step assumed it was
+   still.
+2. **Once genuinely stopped, the thing meant to hold still couldn't.** A feedback controller with a
+   bang-bang or under-damped correction term can hunt around its target instead of settling on it —
+   the classic feedback limit-cycle. Waiting longer doesn't fix a controller that oscillates
+   *because* it's still running its correction loop; it just oscillates for longer.
+3. **Once the controller could genuinely hold, it was holding against stale information.** A
+   filtered rate/velocity estimate computed during a fast preceding motion does not reset to zero
+   the instant that motion ends — a filter carries lag by design. A hold command issued right after
+   a hard turn was fighting a rotation-rate estimate the robot no longer actually had.
+
+Each layer was invisible until the one above it was fixed — you cannot diagnose "does the hold
+controller oscillate" while the chassis is still coasting, and you cannot diagnose "is the rate
+estimate stale" while the controller itself still hunts. That nesting is exactly why this needed
+going one level deeper each time rather than converging on a single culprit.
+
+**The test question:** when a "wait longer" fix doesn't work, the next question is never "wait
+longer still" — it's "what, mechanically, is different about the state *after* the wait that the
+current fix assumes is true?" Chassis actually at rest (a real BRAKE + measured-velocity check, not
+just zero commanded power)? Controller actually converged (read its own error/output, not just
+elapsed time)? Any filtered estimate actually reset for the new context (or still carrying lag from
+what just happened)? A settle problem that survives a second timer extension is a strong signal the
+real cause is structural, not durational.
+
+**Generalizes to:** any transition boundary in an auto or teleop — a stop-then-shoot, a
+turn-then-hold, a deploy-then-verify — where "add a delay" is the first fix reached for. The
+underlying lesson is the same one this whole taxonomy is built on: a runtime-semantics/control
+problem that looks environmental (flaky, inconsistent, "just needs tuning") until traced to its
+actual mechanical cause.
+
+**Tier:** corpus-derived, team-reported symptom sequence with a code-confirmed cause at each layer.
+Not from the verbatim handoff.
+
+### Silent build-toolchain break from an unpinned or partially-pinned version
+
+**Shape.** A fresh clone, or a routine dependency bump, fails to build — and the failure presents
+as a wall of unrelated compile errors, not as a toolchain version message pointing at the real
+cause.
+
+**Concrete mechanism, verified rather than assumed.** An Android Gradle Plugin upgrade began
+requiring a specific Android build-tools version that the project had not pinned, and picked its
+own (newer) default. An explicit `buildToolsVersion` pin placed in one shared Gradle file was
+**silently ignored** — AGP read the pin from a different file than the one it was declared in, so
+the fix looked complete (the pin existed, in a plausible location) while doing nothing. The pin
+only took effect once duplicated into the specific module AGP actually consults for it.
+
+**Why it reads as a code problem.** A build failure surfaces as compile errors in application code,
+because that's where the toolchain gives up — not as a message naming the actual mismatched
+version. Nothing points at Gradle or AGP specifically, so debugging effort goes to the code first.
+
+**The test question:** when a build that previously worked (or a fresh clone of a working repo)
+fails with a broad wall of errors rather than one specific one, check the toolchain version chain
+(AGP version, Gradle wrapper version, any pinned SDK/build-tools versions, and *which specific
+file* each pin actually lives in) before spending time in the application code itself. A pin that
+exists somewhere is not the same claim as a pin that is being read from where it needs to be read.
+
+**Generalizes to:** any FTC team on a recent Android Gradle Plugin version, and more broadly to any
+project where a version pin's *effectiveness* depends on which of several plausible config files it
+was placed in — the existence of a pin and its being honored are two different facts, and only one
+of them is usually checked.
+
+**Tier:** corpus-derived, code-confirmed (the pin's actual point of effect was verified by moving it
+and re-building, not inferred from documentation). Not from the verbatim handoff.
+
+### A latch or freeze silently poisons every downstream read
+
+**Shape.** Some computed state (a sensor-fusion result, an aim solution, any derived struct) gets
+deliberately frozen or latched — a legitimate optimization, done to stop recomputing or re-acting on
+noisy input for a moment. The freeze is real and intentional. What's missing is an audit of
+everything that *reads* that state afterward: every one of those readers is now looking at a
+snapshot, and nothing about the read distinguishes "fresh" from "frozen."
+
+**Concrete mechanism.** A freeze condition triggers (e.g. holding a lock steady): the update path
+short-circuits and stops writing the struct. Readiness or downstream logic keeps reading the same
+struct fields it always did. Those fields are correct at the moment of freeze and **silently stop
+being correct** the instant the real world moves on, with nothing in the read path signaling that.
+
+**Why this is worse than a stale value in isolation.** A single stale read is a bounded bug. A
+latch feeding *multiple* independent downstream consumers turns one freeze into a cascade that can
+loop on itself: consumer A reads the frozen struct and reports "not ready" for an unrelated reason
+(e.g. a different subsystem is still settling); the system waits; once that unrelated reason
+resolves, consumer A re-reads the *same* frozen struct — because nothing ever un-froze it — and
+reports "ready" against data that was true several cycles ago and may no longer be. The action that
+fires does so against the stale snapshot, not the current state.
+
+**The fix, general across any latch/cache/freeze pattern:** when a value gets deliberately frozen,
+audit every reader of it, not just the writer's own logic. Two disciplines, either is sufficient on
+its own but they compose:
+
+- **Mark the freeze visibly** on the struct itself (a `frozenAt` timestamp, a `stale` flag) so a
+  reader can at least detect it's looking at a snapshot, rather than trusting the fields blindly.
+- **Release the latch the instant the condition that justified it is gone.** A freeze that outlives
+  its own justifying condition is not an optimization anymore, it's an unintentional cache with no
+  invalidation.
+
+**Generalizes to:** any latch, cache, debounce, or "hold the last good value" pattern feeding more
+than one downstream consumer — not specific to aim/vision/sensor-fusion, though that's a common
+place to reach for this optimization. The test question: when this value is frozen, does every
+reader of it know, and does anything ever tell them to stop trusting it?
+
+**Tier:** corpus-derived, team-reported symptom sequence (readiness state cycling between multiple
+mechanisms while the frozen struct never actually updated) with a code-confirmed cause. Not from the
+verbatim handoff.
+
+### A proximity-triggered event breaks down as trigger points converge
+
+**Shape.** An autonomous sequence fires an event (a shot, a mechanism action) when the robot's
+position comes within some radius of a target point. This works fine when target points are far
+apart. It silently breaks when two or more target points end up close enough together that no
+single radius can distinguish "near point 1" from "near point 3" — being close to one legitimately
+also satisfies being close to the other, and the trigger fires against the wrong target, or fires
+early, or fires twice.
+
+**Why it's easy to build this way and easy to miss.** Proximity-triggering is the natural first
+design for "do X near this spot" — it doesn't require tracking *which* leg of the path the robot is
+currently on, just distance to a point. It works throughout early testing, when target points happen
+to be well-separated. It breaks specifically once a path gets refined toward tighter, more efficient
+routing — which pulls target points closer together — so the failure tends to appear *later* in
+tuning, on a path that already worked, rather than immediately.
+
+**The fix.** Trigger on **leg arrival**, not proximity to a point: track which segment of the path
+the robot is currently executing (an index, a named waypoint-reached flag, anything that identifies
+the *leg*, not just a distance) and fire the event when that specific leg is reached or completed,
+independent of how close its endpoint happens to sit to some other leg's endpoint. This is a strictly
+stronger signal than proximity — it can't be fooled by two points being near each other, because it
+never asks "how close am I" in the first place.
+
+**The test question:** for any proximity-based trigger, check the actual minimum distance between
+every pair of trigger points the path visits. If any two are closer together than the trigger radius
+you're using — or would be, after the routing gets refined further — the radius cannot tell them
+apart and the trigger needs to become leg-based before it silently misfires.
+
+**Generalizes to:** any autonomous sequence with more than one proximity-triggered event, in any
+season — the failure is about the trigger topology, not about what the event does once triggered.
+
+**Tier:** corpus-derived, calculated finding (real minimum-distance computation on real path
+coordinates showed points within a fraction of an inch of each other), not from the verbatim
+handoff.
+
+### A verified citation from the wrong season
+
+**Shape.** Every season FIRST publishes a new Competition Manual at the *same URL*, reuses the same
+rule-numbering scheme, and rewrites what the numbers mean. A rule number, table ID, AprilTag ID or
+field dimension that was correct last season is still *well-formed* this season — and often still
+*exists* — while now meaning something else. Every existence check passes; the answer is about the
+wrong game.
+
+**Concrete instances (found at the DECODE → BIOBUZZ boundary, 2026-09-12, all verified in both
+corpora).** DECODE R101 was the 18-inch starting cube; in BIOBUZZ the cube is R102 and R101 is "It is
+your team's ROBOT". DECODE G416 was "LAUNCHING in the LAUNCH ZONE only"; BIOBUZZ G416 is ROBOT
+construction limits. DECODE R503 allowed 10 servos; BIOBUZZ R503 allows 8. A citation-existence
+guard (`rules.py verify`) certifies all of them. The failure also runs *through* official documents:
+BIOBUZZ Team Update 00 calls the motor rule "R510", which does not exist in the V1 manual (it is
+R501), and the V1 manual's own R601.A points to R610 for fuses after renumbering (R610 is now wire
+colors). And it runs through tooling that keys off a URL: a freshness check comparing Team Update
+numbers read DECODE's corpus (TU 32) against the new season's page (TU 00) — a naive "live ≤ stored"
+compare reports CURRENT.
+
+**Why it survives review.** Nothing looks wrong. The rule ID is real, the quoted text is real, the
+tool says "verified", and a reviewer who remembers last season's numbers is *more* likely to accept
+it, not less.
+
+**The fix, general to any season-scoped reference data:** make the season part of the key, never an
+implicit default. Store corpora per season; every lookup takes a season and echoes it in its
+output; freshness checks confirm the live source still names the stored game (by visible text — the
+BIOBUZZ manual HTML contains "DECODE" inside a reused photo's alt attribute); team configs carry the
+season their season-specific fields were confirmed for; and a quoted rule's *text* is checked against
+the claim, since existence alone cannot catch reuse.
+
+## Source tiers (Rule 7)
+
 ## Source tiers (Rule 7)
 
 - **Tier-1:** the ASEE PEER survey; FIRST's own troubleshooting docs.

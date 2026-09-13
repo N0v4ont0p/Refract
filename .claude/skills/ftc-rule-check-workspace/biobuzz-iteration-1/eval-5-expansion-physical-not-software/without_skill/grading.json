@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "physical-constraint",
+      "passed": true,
+      "evidence": "The answer says: \"R105.B: The robot has to be held within those limits by its physical build, without using software\". It also quotes the R105 note: a robot that can mechanically go past the limit \"would be in violation even if the ROBOT has software limiting the position of the extension during the MATCH\". Both match the corpus text from rules.py lookup R105 (biobuzz-2026-27). The verdict \"No, that's not legal\" matches the expected output."
+    },
+    {
+      "name": "traverses-G416",
+      "passed": true,
+      "evidence": "The answer cites G416 next to R105: \"G416: Going past the R105 limits during a match is a verbal warning, or a MAJOR FOUL each time if the referee judges it deliberate.\" This matches the corpus G416 text (\"VERBAL WARNING. MAJOR FOUL per instance, if STRATEGIC\"). G416 is also listed in Sources."
+    },
+    {
+      "name": "height-29",
+      "passed": true,
+      "evidence": "The answer says: \"be no taller than 29 in. above the field floor at any time\". It uses 29 in. throughout (\"can't go above 29 in.\", \"If it's over 29 in., add the stop\"). The value comes from the BIOBUZZ manual the run fetched and grepped (cm.txt), and matches the R105.A corpus text \"18 in. ... by 24 in. ... by 29 in. (73.65 cm) tall\". No DECODE value (38 in.) appears."
+    }
+  ],
+  "factual_errors": []
+}

@@ -11,7 +11,7 @@
 # provenance-checker pass was run (deliberate, per the lighter-treatment decision); lineage judgment
 # below is the pattern-extractor's own inline call, not independently re-verified.
 #
-# team-config.yaml sitting alongside these files (found during Phase F0's pre-mining check, R103)
+# team-config.yaml sitting alongside these files (found during Phase F0's pre-mining check, REQ-103)
 # is Refract's own earlier test artifact, NOT source material — excluded from mining. That same
 # file also declares team.experience: veteran, which contradicts both the code itself and this
 # lighter-treatment framing — flagged as a likely-stale metadata inconsistency, not resolved here.
@@ -25,6 +25,8 @@ meta:
 
 patterns:
   - id: 32008-A-gamepad-deadzone
+    season_scope: invariant
+    season_scope_basis: "Per-axis joystick deadzone + output scaling before mecanum mixing; matches the file's season-agnostic prose (code predates DECODE, Feb 2024)."
     finding_ref: []
     problem: >
       Raw analog joystick input has center-drift/jitter that produces unwanted motor creep if mixed
@@ -51,6 +53,8 @@ patterns:
       design choice.
 
   - id: 32008-B-dpad-edge-trigger-step-adjust
+    season_scope: invariant
+    season_scope_basis: "Edge-triggered dpad step adjustment of a servo setpoint; tuning UI, matches the file's season-agnostic prose."
     finding_ref: []
     problem: >
       Need a driver-operable way to incrementally tune a servo setpoint live during teleop/practice
@@ -79,6 +83,8 @@ patterns:
       not reliable as shipped.
 
   - id: 32008-C-mecanum-kinematics-plus-normalization
+    season_scope: invariant
+    season_scope_basis: "Textbook mecanum mixing + max-magnitude normalization; drivetrain kinematics, matches the file's season-agnostic prose."
     finding_ref: []
     problem: >
       Convert 3 joystick axes into 4 mecanum wheel powers without exceeding +/-1.0 motor power while

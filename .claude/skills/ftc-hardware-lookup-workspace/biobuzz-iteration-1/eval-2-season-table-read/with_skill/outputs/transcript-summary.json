@@ -1,0 +1,15 @@
+{
+  "scripts_run": [
+    "cat season-extensions/ACTIVE",
+    "cat refract-suite/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/INDEX.json",
+    "cat .../biobuzz-2026-27/table-12-1.json; cat .../decode-2025-26/table-12-1.json",
+    "python3 scripts/motor_math.py spec WDM12 (from refract-suite/skills/ftc-hardware-lookup; exit 3 abstain)"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/INDEX.json",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/skills/ftc-hardware-lookup/references/manual-tables/decode-2025-26/table-12-1.json"
+  ]
+}

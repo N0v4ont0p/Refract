@@ -1,0 +1,16 @@
+{
+  "scripts_run": [
+    "python3 scripts/check_freshness.py --season decode-2025-26",
+    "python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G416 --season decode-2025-26",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term \"LAUNCH ZONE\" --season decode-2025-26",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term \"LAUNCH LINE\" --season decode-2025-26",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term LAUNCH --season decode-2025-26",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify G416 --season decode-2025-26",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G416 --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md"
+  ]
+}

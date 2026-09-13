@@ -1,5 +1,5 @@
 # §20 synthetic config: veteran / CNC / swerve / turret — fully confirmed (generation_allowed case)
-_meta: {schema: 1, fixture: true}
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99901, experience: veteran}
 drivetrain:
   type: {value: swerve, source: asked, confirmed: true}

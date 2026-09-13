@@ -15,6 +15,8 @@ meta:
 
 patterns:
   - id: 15083-A-shooter-empirical-lut-sotm
+    season_scope: decode-2025-26
+    season_scope_basis: "Coupled-LUT + iterative time-of-flight SOTM + bang-bang + turret-wrap hysteresis structure transfers; velTable/hoodTable/timeTable are measured Artifact shots into DECODE goals."
     finding_ref: [shooter-empirical-vs-physics, moving-shot-compensation]   # SIXTH empirical leg + a SOTM leg
     problem: >
       Produce flywheel-velocity / hood / time-of-flight setpoints for a variable-distance turreted
@@ -54,6 +56,8 @@ patterns:
       ±180° is a nice transferable practical detail for any turret that can wrap.
 
   - id: 15083-B-solverslib-command-adoption
+    season_scope: invariant
+    season_scope_basis: "Provenance guard on SolversLib / Pedro ivy command-framework imports; concerns software lineage only, no game dependence."
     # NOT an orchestration-nonblocking leg. Shared-ancestry PROVENANCE data point (§12 gate).
     problem: >
       (Provenance) 15083's subsystem/command architecture LOOKS like a full command framework
@@ -77,6 +81,8 @@ patterns:
       false-converged as an "independent orchestration leg" without the import check. See PLAN §12.
 
   - id: 15083-C-sensing-limelight-plus-color-array
+    season_scope: decode-2025-26
+    season_scope_basis: "Localization + held-ball colour-array pairing transfers; the green-vs-other channel test and colour-gated hood are tuned to DECODE Artifact colours, and Limelight field localization does not carry to BIOBUZZ moving HIVE tags."
     finding_ref: sensing-modality   # breadth leg
     problem: >
       Answer two different questions: WHERE am I (localization) and WHAT TYPE is the held ball (colour).

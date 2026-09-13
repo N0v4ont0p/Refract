@@ -95,9 +95,12 @@ Claude: (ftc-construct) Config confirmed — generating ShooterOpMode.java, grou
 
 ## Current season
 
-**DECODE (2025-26).** Built to carry forward when the season changes — see
-[`docs/architecture.md`](docs/architecture.md) for how the schema keeps season-specific data
-separate from what doesn't change.
+**BIOBUZZ (2026-27)** — `season-extensions/ACTIVE` = `biobuzz-2026-27` since 2026-09-13 (see
+[`SEASON-TRANSITION-BIOBUZZ.md`](SEASON-TRANSITION-BIOBUZZ.md)). The DECODE (2025-26) corpus is kept for
+questions about last season; every rules/table/physics lookup takes `--season`, because rule numbers,
+table IDs and field data are reused with new meanings each year. Next season:
+`.claude/skills/ftc-season-transition/` — see [`docs/architecture.md`](docs/architecture.md) for the
+core-model/season-extension split.
 
 ## Credits
 

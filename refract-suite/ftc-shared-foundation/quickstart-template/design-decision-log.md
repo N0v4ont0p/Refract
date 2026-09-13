@@ -78,3 +78,26 @@ genuinely needs cross-cutting state (e.g. a turret that must know the
 shooter's spin-up state to decide when it's safe to move), that coordination
 belongs in a command or a thin orchestrating class that depends on both
 interfaces -- not in either mechanism's own class, and not in the OpMode.
+
+## 0002 - Season-scoped mechanism examples; competition-legal telemetry default
+
+Date: 2026-09-13
+Status: accepted
+
+Context: the first season transition (DECODE 2025-26 -> BIOBUZZ 2026-27). 0001's
+mechanism set was a DECODE-season choice: `ExampleTeleOp` wired a shooter and a
+turret into every generated robot, and `RobotTelemetry` streamed to FTC Dashboard
+from every OpMode. BIOBUZZ R704 names FTC Dashboard and FTControl Panels as
+prohibited streaming at events.
+
+Decision:
+- `ExampleTeleOp` wires only the drivetrain and intake. Shooter/Turret stay as
+  DECODE (2025-26) examples, generated only for configs that declare them.
+- `RobotTelemetry.wrap` returns Driver Station telemetry only. Dashboard fan-out
+  moves to `tuning/DashboardTelemetry.java`, practice/tuning OpModes only.
+  Telemetry stays default-on (0001's reason is unchanged); only the channel changed.
+
+Consequence: ftc-code-review's `config_lint` season constraint for R704 flags
+exactly one file in the template (`tuning/DashboardTelemetry.java`), so a reviewer
+confirms competition code is clean by checking that nothing outside `tuning/`
+references it. Compile-tested against FTC SDK + FTCLib 2.1.1 + FTC Dashboard.

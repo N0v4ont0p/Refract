@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "purpose": "Season-invariant physics constants for trajectory_solver.py. Scoring-element constants (diameter, mass, drag) are season data and live in physics/<season>/<element>.json.",
+    "gravity_source": "standard gravity 9.80665 m/s^2 = 386.088 in/s^2; 386.4 (32.2 ft/s^2 x 12) kept for continuity with the corrected DECODE constants file (was 385.0 in team 24089's source)"
+  },
+  "gravity_in_s2": 386.4
+}

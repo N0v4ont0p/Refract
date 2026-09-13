@@ -1,3 +1,13 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the "Square Field (Inverted ALLIANCE AREA)" subsection
+> (DECODE figure and axis directions) and the "Coordinate Position Example" (the DECODE Red Goal
+> AprilTag at (-58.3727, 55.6425, 29.5)) below are DECODE (2025-26)-specific. The Scope, Reference
+> Frame and Coordinate System definitions are generic; the diamond/square field examples are earlier
+> seasons. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. No BIOBUZZ field-axis definition has
+> been published on ftc-docs as of 2026-09-13; the BIOBUZZ manual (§9.5) only says the red ALLIANCE
+> AREA is on the left from the audience. Do not infer BIOBUZZ axes or pick a coordinate conversion
+> from the DECODE material.
+
 > Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/game_specific_resources/field_coordinate_system/field-coordinate-system.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

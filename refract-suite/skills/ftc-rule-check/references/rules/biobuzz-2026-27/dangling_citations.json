@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "season": "biobuzz-2026-27",
+    "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+    "game_name": "BIOBUZZ",
+    "incorporates_through": "Team Update 00",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "tu_index_url": "https://ftc-resources.firstinspires.org/ftc/game",
+    "retrieved": "2026-09-13",
+    "asterisk_meaning": "Evergreen: subject and presence constant season to season, but game-specific details may change (manual \u00a71.7.1) \u2014 NOT 'unchanged'",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "note": "target rule number not found anywhere in the manual \u2014 FLAG FOR HUMAN REVIEW (possible stale cross-ref from a Team Update, or a manual typo)",
+  "dangling": []
+}

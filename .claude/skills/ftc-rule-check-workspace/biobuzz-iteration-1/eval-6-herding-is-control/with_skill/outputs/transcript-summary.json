@@ -1,0 +1,20 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term CONTROL --season biobuzz-2026-27",
+    "python3 (inline) scan of references/rules/biobuzz-2026-27/rules.json and glossary.json for CONTROL / POLLEN / SCORING ELEMENT",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G407 G408 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term HERDING POSSESSION DRIVE --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term STRATEGIC MOMENTARY MOMENTARILY --season biobuzz-2026-27",
+    "python3 (inline) scan of rules.json / sections.json for POLLEN|SCORING ELEMENT|herd|bulldoz|push",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G411 G405 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify G407 G411 --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/glossary.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/sections.json"
+  ]
+}

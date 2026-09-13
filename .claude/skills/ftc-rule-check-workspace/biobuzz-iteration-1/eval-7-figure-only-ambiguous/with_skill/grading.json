@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "cites-tile-with-tier",
+      "passed": true,
+      "evidence": "The answer names tile A1 and says where it comes from: \"Our season file (season-extensions/biobuzz-2026-27.yaml) takes tile labels from the Event Field Setup Guide V1.0 \u00a78.3-8.4. That's an official field document, not rule text. It lists red GARDEN at tile A1, blue at F6...\" This matches yaml lines 81-83 (tile_positions garden red: A1, with the note 'official field doc, not rule text'). The grep of the season yaml and the full file read both appear in scripts_run/files_read."
+    },
+    {
+      "name": "orientation-figure-only",
+      "passed": true,
+      "evidence": "The answer never says which physical corner A1 is. It says: \"which way the A-F / 1-6 grid runs relative to the audience and the ALLIANCE AREAs is only drawn in the manual's tile-grid figures (Fig 9-4/9-5). I won't guess 'near' or 'far' from the labels alone.\" It also tells the user to check Figure 9-2 and Fig 9-4/9-5 to see which way the A-F and 1-6 labels run. The only prose it uses (\u00a710.3.1 POLLEN staging, 'corner closest to the ALLIANCE AREA') is quoted accurately, and the answer says outright that the text doesn't settle whether that is the red or the blue alliance area."
+    }
+  ],
+  "factual_errors": []
+}

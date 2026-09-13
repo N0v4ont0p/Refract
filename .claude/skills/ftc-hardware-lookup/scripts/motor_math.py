@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Deterministic FTC motor/drivetrain arithmetic (R30). The model NEVER computes these numbers;
+"""Deterministic FTC motor/drivetrain arithmetic (REQ-30). The model NEVER computes these numbers;
 it calls this script and reports the output. Every base value comes from the catalog files, cited
 there. The script ABSTAINS (exit 3, clear message) on any part not in the catalog — a coverage gap
-is an abstention, never a guess (R38, INDEX.json abstain_rule).
+is an abstention, never a guess (REQ-38, INDEX.json abstain_rule).
 
 Subcommands:
   spec        <PART>                             — dump the catalog record + its source (no math)

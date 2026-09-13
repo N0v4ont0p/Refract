@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "decode-corpus",
+      "passed": false,
+      "evidence": "The headline is quoted correctly: \"LAUNCHING in the LAUNCH ZONE only.\" It matches `rules.py lookup G416 --season decode-2025-26` short_title. But the run never used the DECODE corpus. scripts_run contains only pdftotext, grep and sed on a downloaded manual PDF (webfetch-...pdf -> manual.txt). There is no rules.py call with --season decode-2025-26, and files_read has no corpus file. The assertion requires use of the DECODE corpus, and a web-fetched PDF is not that, so it fails."
+    },
+    {
+      "name": "season-labeled",
+      "passed": true,
+      "evidence": "The answer opens with \"G416 in DECODE (2025-2026) was the rule that you could only launch from inside a launch zone.\" It uses past tense throughout (\"cost you more\", \"that was a G416 foul\") and never presents the rule as current. It does not mention that BIOBUZZ G416 is a different rule (construction limits), but this assertion does not require that."
+    }
+  ],
+  "factual_errors": []
+}

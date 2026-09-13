@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "decode-corpus",
+      "passed": true,
+      "evidence": "scripts_run includes \"rules.py lookup G416 --season decode-2025-26\" and \"rules.py verify G416 --season decode-2025-26\". The answer says: G416, \"LAUNCHING in the LAUNCH ZONE only\", section 11.4.4 ROBOT. This matches the corpus short_title exactly, and the quoted rule text matches the stored text."
+    },
+    {
+      "name": "season-labeled",
+      "passed": true,
+      "evidence": "The answer opens with \"In DECODE (2025-26), G416 limited where a robot could launch...\", using past tense throughout. It says: \"The freshness check says WRONG_SEASON for DECODE... the live manual is now BIOBUZZ, and you asked about last season, so the DECODE corpus is the right source.\" It also points out that BIOBUZZ (2026-27) G416 is \"ROBOTS have construction limits\", which is a different rule. Nothing presents the DECODE rule as current."
+    }
+  ],
+  "factual_errors": []
+}

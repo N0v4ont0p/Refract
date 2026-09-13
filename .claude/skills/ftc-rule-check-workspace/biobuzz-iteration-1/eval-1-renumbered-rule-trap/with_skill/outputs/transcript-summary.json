@@ -1,0 +1,16 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && ls; cat season-extensions/ACTIVE; ls references/rules/; ls .claude/skills/ftc-rule-check/scripts/; head -120 references/standing-principles.md",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 scripts/check_freshness.py",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R101 R102 --season biobuzz-2026-27",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R103 --season biobuzz-2026-27",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py term \"STARTING CONFIGURATION\" --season biobuzz-2026-27",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R102 G304 R105 --season biobuzz-2026-27",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R101 --season decode-2025-26"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE"
+  ]
+}

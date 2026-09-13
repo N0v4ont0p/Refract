@@ -1,122 +1,238 @@
 # =============================================================================
-# season-extensions/biobuzz-2026-27.yaml  —  DRAFT PREVIEW (NOT MERGED, NOT ACTIVE)
+# season-extensions/biobuzz-2026-27.yaml  —  REPLACEABLE season layer (LIVE, ACTIVE since 2026-09-13)
 # =============================================================================
-# Produced by the Season Transition Protocol (§19), steps 1-3 ONLY, against
-# PUBLIC PRE-SEASON PREVIEW material — the full manual does not exist yet.
+# Season Transition Protocol (§19): steps 1-3 DONE against the OFFICIAL manual.
+#   Source: BIOBUZZ Competition Manual V1 + Team Update 00, both dated 2026-09-12, retrieved
+#   2026-09-13 from ftc-resources.firstinspires.org (sha256 of cm.html + TU00 recorded in
+#   corpus-staging/manual-biobuzz-2026-27/SOURCES.md). Rules corpus: tag_manual.py --season.
 #
-#   *** THIS IS A DRAFT. It is NOT in season-extensions/ACTIVE and MUST NOT be. ***
-#   *** DECODE (decode-2025-26) remains the ACTIVE season. ***
+#   Step 6 sign-off given 2026-09-13 (taxonomy accepted as drafted; Q&A-dependent open questions stay
+#   open below). transition_check.py passed before the flip.
 #
-# Purpose of this file at this stage: demonstrate the protocol end-to-end on a
-# real upcoming boundary (BIOBUZZ, FIRST CANOPY, kickoff 2026-09-12) and prove
-# the season-agnostic claim — core-feature-model.yaml and every other layer
-# (§5/§8/§11/§12) are UNTOUCHED; only this replaceable slot changes.
+# This replaces the pre-kickoff preview draft. What the preview got wrong, for the record:
+#   - it knew one scoring element (Pollen); there are two (POLLEN + NECTAR)
+#   - its 2.8-3.0 in "range" was an artifact; the manual gives one nominal 2.8 in (+ "may vary")
+#   - scoring target / launcher / zones / endgame were UNKNOWN; all are now defined (below)
 #
-# EVERYTHING below is tier-2 preview (§11 Rule 7): ecosystem-partner StarterBot
-# posts + pre-season community reports, NOT an official manual. Every value is
-# provisional and MUST be re-verified at kickoff. Unknowns are marked UNKNOWN and
-# left UNKNOWN — not invented (deterministic-first / abstain-over-guess).
+# Every value carries a manual citation. UNKNOWN = the manual text does not state it.
+# FIGURE-ONLY = defined only in a figure/CAD the corpus does not store as text — treat as
+# `ambiguous` (standing rule, ftc-rule-check), never resolve by guessing from prose.
 # =============================================================================
 
 _meta:
   slug: biobuzz-2026-27
-  schema_version: 1                    # same schema as decode-2025-26.yaml — proves the slot is stable
+  schema_version: 1                     # same schema as decode-2025-26.yaml — the slot is stable
   scope: season_specific
-  status: DRAFT_PREVIEW                 # NOT 'live'. §19 step 3 (draft only); steps 4-6 pending.
-  not_active: true                      # season-extensions/ACTIVE must still read 'decode-2025-26'
+  status: live                          # manual-grounded; §19.5-6 signed off 2026-09-13
+  not_active: false
   replaced_by: season_transition_protocol
   protocol_progress:
-    step_1_detection: done              # boundary detected: BIOBUZZ / FIRST CANOPY announced
-    step_2_full_manual_ingestion: DEFERRED   # no manual until 2026-09-12 — nothing to chunk yet
-    step_3_taxonomy_draft: this_file    # draft only, from preview material
-    step_4_quant_strategy: BLOCKED      # needs point values + time constraints from the manual (Opus xhigh)
-    step_5_deliberation: see deliberation_checkpoint below
-    step_6_merge: BLOCKED               # only after full manual + sign-off
+    step_1_detection: done              # 2026-09-12 kickoff; cm-html URL now serves BIOBUZZ
+    step_2_full_manual_ingestion: done  # rules/biobuzz-2026-27 (171 rules, 34 tables, 161 sections, 68 terms)
+    step_3_taxonomy_draft: this_file
+    step_4_quant_strategy: DRAFT        # strategy/biobuzz-2026-27/ (provisional; revise after first events)
+    step_5_deliberation: done (taxonomy accepted; Q&A-dependent questions remain open in deliberation_checkpoint)
+    step_6_merge: done 2026-09-13       # ACTIVE -> biobuzz-2026-27
 
-season: BIOBUZZ (part of FIRST CANOPY, 2026-2027)
+season: BIOBUZZ presented by RTX (FIRST CANOPY, 2026-2027)
+game_name: BIOBUZZ
 kickoff: 2026-09-12
-rules_current_through: NONE — no official manual published yet (preview material only)
+rules_current_through: Team Update 00 (2026-09-12)   # Q&A opens 2026-09-28 (manual §1.7.4)
 
 # ----------------------------------------------------------------------------
-# SCORING ELEMENT — the one thing preview material actually pins down (loosely).
+# SCORING ELEMENTS (§9.8, §10.3.1)
 # ----------------------------------------------------------------------------
-scoring_element:
-  name: Pollen
-  form: plastic ball
-  diameter_in:
-    value: UNCONFIRMED
-    reported_range: [2.8, 3.0]          # "roughly 2.8-3 in across different sources" — a RANGE, not a spec
-    source_tier: 2                      # multiple pre-season sources disagree at the decimal; NOT official
-    confidence: single-source-equivalent # "different sources" that may all trace to one preview image
-    reverify_at: kickoff
+scoring_elements:
+  POLLEN:
+    diameter_in: 2.8          # "approximately 2.8 in. (7.1 cm)" §9.8
+    material: "Gopher ResisDent polyethylene ball, yellow (am-5851_yellow)"
+    count_per_match: 40       # §9.8
+    staging: "4 in each of 4 FLOWERS, 4 in each GARDEN, 4 pre-loaded per ROBOT (§10.3.1)"
+  NECTAR:
+    diameter_in: 3.6          # "approximately 3.6 in. (9.1 cm)" §9.8
+    material: "Gopher ResisDent polyethylene ball, red (am-5852_red) / blue (am-5852_blue)"
+    count_per_match: {red: 8, blue: 8}
+    staging: "3 in each upward-facing CELL of its color, 5 in each ALLIANCE AREA (§10.3.1)"
+  tolerance: "not perfectly spherical and may vary in size — no numeric tolerance (§9.8)"
   mass_g: UNKNOWN
-  material_notes: "plastic; hollow-vs-solid UNKNOWN (matters for intake compliance + any launch)"
-  cross_season_comparison:
-    claim_in_plan: "PLAN.md §19 calls Pollen 'similar physical characteristics' to DECODE Artifacts"
-    corpus_check: >
-      FLAG (do not paper over): the DECODE Artifact is ~5.0 in diameter (corpus-verified —
-      references/physics/decode-artifact-ballistics.json ball.diameter_in = 5.0, from team 24089's
-      data). Pollen's reported 2.8-3.0 in is ~40% SMALLER in diameter. "Similar" may hold for
-      material (plastic, ball-shaped) but is FALSE on the dimension that most drives intake/launch
-      geometry. This directly feeds the deliberation checkpoint below — do NOT assume the DECODE
-      intake/shooter mechanism category transfers on size grounds.
+  hollow_or_solid: UNKNOWN
 
 # ----------------------------------------------------------------------------
-# SEASON MECHANISMS — populate ONLY what preview material supports; the rest UNKNOWN.
-# Mirrors decode-2025-26.yaml's season_mechanisms block (§4), so the core's dynamic
-# interface generation (§10) works identically — no schema change, no core edit.
+# FIELD FACTS that generated code / autonomous planning touches
+# ----------------------------------------------------------------------------
+field:
+  size_in: [144, 144]                   # §9.2, 36 TILES
+  cad_tolerance_in: 1.0                 # §9.1: official CAD, general tolerance +/- 1 in
+  alliance_sides: {red: [A, B, C], blue: [D, E, F]}   # G304.A / G402 — column grid itself FIGURE-ONLY
+  hive:
+    pivot_axis_height_in: 43.95         # §9.6.1
+    cell_opening_in: {width: 20, height: 14, depth: 12}   # §9.6.2; opening HEIGHT ABOVE TILES: FIGURE-ONLY
+    tip_threshold:                      # manual §9.6 only says "until enough ... are LAUNCHED"
+      source: "Event Field Setup Guide V1.0 §12.3 Calibration Requirements (official field doc, NOT a rule)"
+      calibrated_to: "with 3 NECTAR in the CELL: 2nd POLLEN tossed = no tip, 3rd tossed = tip; empty CELL: 7th POLLEN tossed = no tip, 8th tossed = tip"
+      caveat: "a calibration TARGET per field — setup guide says 3 POLLEN + 3 NECTAR has less mass than 8 POLLEN and fields vary; plan for margin, verify on the event field"
+  flower:
+    count: 4                            # §9.7; positions on perimeter FIGURE-ONLY
+    top_opening_diameter_in: 4
+    top_opening_height_in: 21.5
+    retrieval_opening_in: {height: 3.55, depth: 3.57, width: UNKNOWN}
+  loading_zone_in: {width: 23, depth: 11}   # §9.3
+  garden_in: {length: 23, width: 2}         # §9.3
+  tile_positions:                           # Event Field Setup Guide V1.0 §8.3-8.4 (official field doc, not rule text)
+    loading_zone: {red: A5, blue: F2}
+    garden: {red: A1, blue: F6}
+    note: "tile LABELS are text; which way the A-F / 1-6 grid runs relative to the audience and alliance areas is defined only by the tile-grid figures (manual Fig 9-4/9-5) — read the figure before planning paths"
+  apriltags:
+    family: 36h11
+    size_in: 3.25
+    placement: "clusters of 4 on the BOTTOM of each CELL, facing DOWN toward the TILES (§9.9)"
+    ids: {red_far_side: [30, 31, 32, 33], red_audience_side: [34, 35, 36, 37],
+          blue_audience_side: [38, 39, 40, 41], blue_far_side: [42, 43, 44, 45]}
+    note: "the HIVE flips on every TIP, so WHICH tags face the floor changes during a MATCH; no wall tags (§9.9)"
+    sdk: "FTC SDK v12.0 (2026-09-12): tags are CLUSTERS; getCurrentGameTagLibrary() returns BIOBUZZ tags with each cluster origin at the center of the CELL opening"
+    localization: "SDK v12.0 README: 'since BIOBUZZ AprilTags move, they are not suitable for absolute Field Localization' — DECODE-era AprilTag relocalization patterns do NOT transfer"
+
+match:
+  auto_s: 30
+  transition_s: 8          # G403: no powered movement during transition
+  teleop_s: 120
+  endgame_period: none     # no period named ENDGAME; the last 60 s unlock NECTAR->FLOWER (G410) and all NECTAR entry (G426)
+
+scoring:                   # Table 10-2 [[TABLE:10-2]]; RP thresholds Table 10-3 (non-premier events)
+  leave: {auto: 3}
+  park_loading_zone: {auto: 5, teleop: 5}
+  hive_tip: {auto: 20, teleop: 20}          # LAUNCH into upward CELL is the only legal way (§10.5.1, G417)
+  element_in_cell_at_end: {teleop: 2}
+  bottom_nectar_bonus: {teleop: 5}
+  element_in_owned_flower: {teleop: 2}
+  element_in_garden: {teleop: 1}
+  ranking_points: {win: 3, tie: 1, swarm: {threshold: "16 LEAVE+PARK points"},
+                   pollinator_1: {threshold: "4 TIPS"}, pollinator_2: {threshold: "7 TIPS"}}
+  fouls: {minor: 5, major: 20}              # Table 10-4
+
+# ----------------------------------------------------------------------------
+# SEASON MECHANISMS — taxonomy (signed off 2026-09-13), same list-shape as decode-2025-26.yaml so
+# validate_config.py and the dynamic interface generation (§10) work unchanged.
+# Each key exists because a rule makes it relevant; options are placeholders unless a rule names them.
 # ----------------------------------------------------------------------------
 season_mechanisms:
-  intake:
-    options: [roller, other]            # StarterBot Base (REV/goBILDA/AndyMark/Studica) ships a drivetrain+intake
-    basis: "ecosystem-partner StarterBot Base preview designs (tier-2)"
-    caveat: "specific intake TYPE not standardized across partners; 'roller' is the common preview shape, not confirmed"
-  # --- Everything below is UNKNOWN pending the manual. Left UNKNOWN on purpose. ---
-  scoring_target: UNKNOWN               # is Pollen deposited? launched into a goal? placed in a structure? unknown
-  launch_mechanism: UNKNOWN             # ball-shaped element MIGHT imply a shooter — but UNCONFIRMED, do not assume
-  turret: UNKNOWN                       # depends on whether there's a launch/aim element at all
-  zones: UNKNOWN
-  endgame: UNKNOWN
+  intake: [roller, other, none]                   # G407 note "active pickup/intaking"; R801 note: rollers are not airflow devices
+  hive_launcher: [flywheel, other, none]          # §10.5.1: LAUNCH is the only way to TIP; R801 note names flywheels
+  turret: [none, single_axis, other]              # NO rule basis either way — open design question, carried as-is
+  aim_vision: [upward_apriltag, other, none]      # §9.9 tags "aid in ROBOT navigation and targeting", face DOWN
+  element_color_sensing: [present, none]          # G408 no CONTROL of opponent NECTAR; FLOWER ownership is by color
+  capacity_limiter: [present, none]               # G407: max 4 CONTROLLED (herding counts, §16); note encourages a hard stop
+  flower_placer: [present, none]                  # §9.7 4 in opening at 21.5 in; G418.A top entry only
+  flower_pollen_retrieval: [present, none]        # G418.B POLLEN out of the bottom only
+  endgame_parking: [loading_zone_park, none]      # scored, NOT mandatory (DECODE's was `mandatory`)
+  # Deliberately absent: DECODE's gate_mechanism / classifier_interaction (no such terms in BIOBUZZ);
+  # climb/hang (no scoring for it; G415 forbids suspending from ARENA elements).
 
-known_archetypes: UNKNOWN               # do NOT port DECODE's turreted_shooter / fixed_shooter_on_swerve — unverified for BIOBUZZ
+code_tokens:
+  # mechanism key -> identifier prefixes for config_lint.py. [] = behavior/logic with no reliable
+  # class-name token (explicitly not lintable by name, rather than silently skipped).
+  intake: [Intake]
+  hive_launcher: [Launcher, Shooter, Flywheel, Catapult]
+  turret: [Turret]
+  aim_vision: []                # AprilTag/vision classes are also used for non-aiming purposes — name grep would mislead
+  element_color_sensing: []
+  capacity_limiter: []
+  flower_placer: [FlowerPlacer, FlowerDeposit]
+  flower_pollen_retrieval: [FlowerRetriev, PollenRetriev]
+  endgame_parking: []
 
-constraints_on_core: []                 # none derivable yet; a real entry needs the manual (cf. DECODE's fixed_shooter_on_swerve)
+known_archetypes: UNKNOWN        # the manual defines none; do NOT port DECODE's turreted_shooter / fixed_shooter_on_swerve
+
+constraints_on_core: []          # no rule constrains drivetrain type (R204 floor-grab and R801 vacuum bans are type-agnostic)
+
+constraints_on_mechanisms:
+  - if: {season_mechanisms.turret: {not: none}}
+    requires: {season_mechanisms.hive_launcher: {not: none}}
+    reason: "a turret aims a launcher; a turret with no launcher is incoherent"
+  - if: {season_mechanisms.aim_vision: {not: none}}
+    requires: {season_mechanisms.hive_launcher: {not: none}}
+    reason: "the only AprilTags are on CELL undersides (§9.9); their targeting use serves LAUNCHING"
 
 # ----------------------------------------------------------------------------
-# §19 STEP 5 — MANDATORY DELIBERATION CHECKPOINT (surfaced here, not auto-merged)
-# Engineering-specific questions the manual/regional-meta must answer before this
-# draft can mature. These are the "what's genuinely ambiguous" items, per §19.5.
+# CODE CONSTRAINTS — season rules that change what generated/reviewed CODE may do.
+# Consumed by ftc-construct (generation) and ftc-code-review (review). Each is a rule, verified
+# with rules.py lookup --season biobuzz-2026-27; re-verify after every Team Update.
+# ----------------------------------------------------------------------------
+code_constraints:
+  - id: no-dashboard-streaming
+    rule: R704
+    text: "third party logging/streaming such as FTC Dashboard, FTControl Panels, and others are prohibited; no continuous video stream"
+    applies_to: "competition builds — tuning tools stay usable in practice, but must be removable/disabled for events"
+    detect: {pattern: 'FtcDashboard\.getInstance|MultipleTelemetry|TelemetryPacket|sendTelemetryPacket|com\.bylazar\.(telemetry|panels|fullpanels)|PanelsTelemetry'}
+    detect_note: "targets streaming calls, not the @Config annotation (config exposure, not streaming); also disable the Dashboard server during matches per ftc-dashboard competition docs"
+  - id: stationary-starting-configuration
+    rule: R102
+    text: "in the STARTING CONFIGURATION all parts of the ROBOT must be fully stationary"
+    applies_to: "INIT — no pre-spinning flywheels/rollers before START"
+  - id: no-transition-motion
+    rule: G403
+    text: "Any powered movement is not allowed during the transition period"
+    applies_to: "AUTO end / TELEOP INIT — an OpMode INIT that moves actuators must not be pressed during the 8 s transition"
+  - id: expansion-physically-limited
+    rule: R105
+    text: "18 x 24 x 29 in tall sizing volume; physically constrained without the use of software"
+    applies_to: "software soft-limits do NOT satisfy the rule (DECODE allowed software vertical limits)"
+  - id: nectar-flower-timer-gate
+    rule: G410
+    text: "may not enter NECTAR into the FLOWER scoring volume until the last 60 seconds"
+    applies_to: "any automated NECTAR placement must be gated on match time (MAJOR FOUL per NECTAR)"
+  - id: capacity-four
+    rule: G407
+    text: "may not simultaneously CONTROL more than 4 SCORING ELEMENTS"
+    applies_to: "intake logic — count held elements; herding counts as CONTROL (§16)"
+  - id: actuator-budget
+    rule: R503
+    text: "limited to a total of 8 motors and 8 servos"
+    applies_to: "device_map — DECODE allowed 10 servos (TU00: servo max reduced to 8)"
+  - id: auto-side
+    rule: G402
+    text: "may not disrupt AUTO for the opposing ALLIANCE; columns A-C red, D-F blue"
+    applies_to: "autonomous paths — crossing is a MAJOR FOUL per MATCH even when not STRATEGIC"
+
+  - id: sdk-12-apriltag-cluster-api
+    rule: "FTC SDK v12.0 README, Breaking Changes (not a manual rule)"
+    text: "AprilTag Cluster capability: the base AprilTagDetection type no longer has id / metadata / center (compile errors, verified 2026-09-13 by compiling SDK 11.1 samples against 12.0.0 libraries); ftcPose / robotPose still compile on the base type. Check instanceof AprilTagSingleDetection / AprilTagClusterDetection and cast before reading tag identity"
+    applies_to: "any generated or reviewed vision code on SDK >= 12.0"
+    detect: {pattern: '(?s)\bAprilTagDetection\b.*\.(id|metadata|center)\b', unless: 'AprilTagSingleDetection|AprilTagClusterDetection'}
+  - id: no-apriltag-absolute-localization
+    rule: "FTC SDK v12.0 README, Enhancements (not a manual rule)"
+    text: "BIOBUZZ AprilTags move (they are on the tipping HIVE) and are not suitable for absolute Field Localization"
+    applies_to: "do not generate AprilTag->field-pose relocalization for BIOBUZZ; targeting relative to a cluster is the supported use"
+
+# ----------------------------------------------------------------------------
+# §19 STEP 5 — DELIBERATION CHECKPOINT (not auto-merged)
 # ----------------------------------------------------------------------------
 deliberation_checkpoint:
   core_untouched_proof: >
-    PROVEN: producing this draft required ZERO edits to core-feature-model.yaml and zero to §5/§8/
-    §11/§12. Drivetrain stays the one always-core-fixed interface (§10); every BIOBUZZ mechanism
-    interface will generate dynamically from this file's season_mechanisms keys, exactly as DECODE's
-    do. The season-agnostic claim holds on a real second season.
+    Producing this file needed zero edits to core-feature-model.yaml. It DID expose season data and
+    assumptions living outside this slot (rules corpus, freshness registry, unstamped team configs,
+    DECODE-only examples) — those are fixed/planned in SEASON-TRANSITION-BIOBUZZ.md, not hidden.
   open_questions:
-    - id: intake-transfer
-      q: >
-        Does the DECODE intake mechanism category transfer to Pollen, or does the ~40% smaller
-        diameter (2.8-3.0 in vs 5.0 in) force a new category? Smaller, possibly-solid balls change
-        compliance, spacing, and retention geometry. LEAN: do NOT assume transfer — size delta is
-        the exact variable an intake is designed around. Needs: confirmed Pollen spec + field geometry.
-    - id: is-there-a-launcher
-      q: >
-        Is BIOBUZZ even a launch/shooter game? Pollen being ball-shaped is suggestive but NOT
-        dispositive (could be a place/deposit game). If there IS launching, the whole shooter-empirical-
-        vs-physics + moving-shot-compensation corpus becomes relevant; if not, it doesn't. Do not
-        pre-wire a shooter interface on a hunch. Needs: the manual's scoring definition.
-    - id: pollen-count-per-cycle
-      q: >
-        How many Pollen per cycle / per possession limit? Drives whether a spindexer/magazine
-        (cf. 22105 per-slot color sensing) is relevant or overkill. Needs: manual possession rules.
-    - id: spec-uncertainty
-      q: >
-        The 2.8-3.0 in range must collapse to a single official number before any mechanism math.
-        Treat the range as a Rule-7 open item, not an average — a shooter/intake tuned to 3.0 that
-        meets a 2.8 element (or vice versa) is a real miss. Needs: official Team Manual Part 2.
+    - id: tip-threshold
+      q: "Manual is silent; the Field Setup Guide calibrates to 3rd POLLEN (with 3 NECTAR) / 8th POLLEN (empty). INFERENCE (not stated): since each upward CELL starts with 3 NECTAR (§10.3.1), a first TIP needs ~3 POLLEN and a CELL with no NECTAR ~8 — confirm by watching real fields. Field-to-field variation is acknowledged — quant modeling should use a range, and teams should test on real fields."
+    - id: cell-height
+      q: "Upward CELL opening height above TILES is FIGURE-ONLY. With a 29 in robot cap and 43.95 in pivot, launch geometry can't be computed until it is measured from CAD. Needs: CAD Reference / Field Setup Guide."
+    - id: launch-into-flower
+      q: "§10.5.2 says 'Placing' is the only way to score a FLOWER; G418.A only says 'into the top'. Is a launched entry legal? Ambiguous — Q&A."
+    - id: pollen-flower-before-60s
+      q: "G410 restricts NECTAR only, but §10.5.2 says FLOWER scoring cannot begin before 1:00 and earlier achievements are 'subject to penalties'. Early POLLEN placement: penalized under which rule? Q&A."
+    - id: opponent-nectar-garden
+      q: "§10.5.3 scores either alliance's NECTAR in a GARDEN, but herding is CONTROL (§16) and G408 bans CONTROL of opponent NECTAR. How can opponent NECTAR legally get there? Q&A."
+    - id: loading-zone-conflict
+      q: "A robot PARKed in the 23x11 in LOADING ZONE vs own HUMAN PLAYER NECTAR entry that must touch that zone's TILE first (G427.C). Strategy/Q&A."
+    - id: turret-value
+      q: "No rule basis for or against a turret. Upward-facing tags on a flipping HIVE change the aiming problem vs DECODE's goal tags — decide from quant modeling + testing, not by porting DECODE archetypes."
+    - id: intake-two-diameters
+      q: "One intake must handle 2.8 in POLLEN and 3.6 in NECTAR (0.8 in difference) and stop at 4 elements. Does a DECODE (5 in Artifact) intake category transfer? Size delta says re-derive, don't assume."
+  manual_inconsistencies_found:
+    - "TU00 cites 'R510 *Only specific motors are allowed'; the V1 manual numbers that rule R501 (R510 does not exist)."
+    - "R601.A says fuse 'installed per R610'; R610 in V1 is wire color — the fuse rule appears to be R604. Stale cross-ref after renumbering (existence check can't catch it)."
+    - "R903 says 'refer to R203' for console fair play; that content is in R202 in V1."
   do_not_do_yet:
-    - "Do NOT run §19 step 4 (quantitative strategy modeling) — no point values / time constraints exist."
-    - "Do NOT add this slug to season-extensions/ACTIVE."
-    - "Do NOT port DECODE archetypes or constraints_on_core as if confirmed for BIOBUZZ."
-    - "Do NOT collapse the Pollen diameter range to a point estimate."
+    - "Do NOT port DECODE archetypes, ballistics (5.0 in Artifact), or goal-AprilTag assumptions."
+    - "Do NOT resolve FIGURE-ONLY geometry from prose."

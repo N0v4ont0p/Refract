@@ -1,3 +1,10 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the ARTIFACT_PURPLE / ARTIFACT_GREEN swatches mentioned
+> below were tuned for DECODE (2025-26) Artifacts (RED/BLUE/YELLOW for INTO THE DEEP Samples); the
+> color-locator workflow is generic. BIOBUZZ POLLEN is yellow and NECTAR is red/blue per the manual;
+> no swatch has been tuned for them in this doc, so verify ranges on real elements. It does not
+> describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+
 > Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/color_processing/color-locator-explore/color-locator-explore.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

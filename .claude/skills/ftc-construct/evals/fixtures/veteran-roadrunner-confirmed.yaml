@@ -1,5 +1,5 @@
 # synthetic config: veteran / mecanum / roadrunner — fully confirmed (generation_allowed case)
-_meta: {schema: 1, fixture: true}
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99902, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

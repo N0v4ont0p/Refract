@@ -1,0 +1,16 @@
+{
+  "scripts_run": [
+    "python3 .claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py -d 120 -t 24 -v 400 --season biobuzz-2026-27 --element pollen",
+    "python3 .claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py --help",
+    "python3 .claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py -d 120 -t 24 -v 400 --season biobuzz-2026-27 --element pollen --arc high",
+    "python3 .claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py -d 120 -t 24 -v 400 --season biobuzz-2026-27 --element pollen --high-arc",
+    "find . -name trajectory_solver.py; find . -path '*physics*' -name '*.json'; cat season-extensions/ACTIVE; find . -name standing-principles.md",
+    "ls .claude/skills/ftc-hardware-lookup/scripts/ .claude/skills/ftc-hardware-lookup/references/physics/",
+    "grep -n -i -A12 'deterministic-first|abstention|Rule 7|Rule-7' references/standing-principles.md"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE"
+  ]
+}

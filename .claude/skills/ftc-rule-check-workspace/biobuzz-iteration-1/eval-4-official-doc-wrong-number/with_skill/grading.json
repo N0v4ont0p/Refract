@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "does-not-cite-R510",
+      "passed": true,
+      "evidence": "Answer: \"No R510 exists in the V1 manual\" and \"The rule lookup reports R510 as `found: false`, and the citation check lists R510 as `missing`\"; citations array contains only R501, R503, R505; closing line \"R510 does not (`missing: [\\\"R510\\\"]`), so it is not cited as a rule.\" scripts_run includes `rules.py verify R510` (independently confirmed: exists R510=false, missing [R510])."
+    },
+    {
+      "name": "cites-R501-table",
+      "passed": true,
+      "evidence": "Reasoning: \"R501 allows only the motors in Table 12-1. That table (BIOBUZZ V1, manual-tables/biobuzz-2026-27/table-12-1.json) has a row 'WATTOS Stingray 12V DC', part number WDM12\". files_read includes .../manual-tables/biobuzz-2026-27/table-12-1.json; R501 citation text includes [[TABLE:12-1]]. Independently confirmed row ['WATTOS Stingray 12V DC','WDM12',''] in table-12-1.json and R501 short_title 'Only specific motors are allowed' with table_pointers ['12-1']."
+    }
+  ],
+  "factual_errors": []
+}

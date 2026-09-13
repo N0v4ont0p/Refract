@@ -1,0 +1,31 @@
+# §20 season-transition fixture (biobuzz-2026-27): veteran mecanum robot with a flywheel HIVE launcher,
+# no turret. Mechanism keys/values come from season-extensions/biobuzz-2026-27.yaml only.
+# Expected: valid=False while that season file is DRAFT (validator refuses a draft ACTIVE season);
+# valid=True, generation_allowed=True once ACTIVE=biobuzz-2026-27 has passed §19 sign-off.
+_meta: {schema: 1, season: biobuzz-2026-27, fixture: true}
+team: {number: 99904, experience: veteran}
+drivetrain:
+  type: {value: mecanum, source: asked, confirmed: true}
+control_hardware:
+  hub_generation: {value: REV_Control_Hub, source: inferred, confirmed: true}
+  expansion_hub_count: {value: 1, source: inferred, confirmed: true}
+sensing:
+  vision: {value: none, source: asked, confirmed: true}
+  odometry: {value: goBILDA_pinpoint, source: inferred, confirmed: true}
+software_stack:
+  pathing: {value: pedro_pathing, source: inferred, confirmed: true}
+  opmode_style: {value: raw_linear_opmode, source: asked, confirmed: true}
+fabrication:
+  capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
+season_mechanisms:
+  intake: {value: roller, source: asked, confirmed: true}
+  hive_launcher: {value: flywheel, source: asked, confirmed: true}
+  turret: {value: none, source: asked, confirmed: true}
+  aim_vision: {value: none, source: asked, confirmed: true}
+  element_color_sensing: {value: present, source: asked, confirmed: true}
+  capacity_limiter: {value: present, source: asked, confirmed: true}
+  flower_placer: {value: none, source: asked, confirmed: true}
+  flower_pollen_retrieval: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: loading_zone_park, source: asked, confirmed: true}
+tuning_constants:
+  tuning_status: {value: untuned, source: asked, confirmed: true}

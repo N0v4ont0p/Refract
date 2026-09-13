@@ -1,0 +1,12 @@
+{
+  "scripts_run": [
+    "mkdir -p .../scratchpad/evalruns && pdftotext -layout <downloaded manual pdf> manual.txt && grep -n -i -E \"servo|DC motor|motors\" manual.txt",
+    "sed -n 4414,4540p manual.txt; grep -n -E \"^R10[0-9]|^R20[0-9]|expansion|18 in|Starting Configuration\" manual.txt",
+    "sed -n 4045,4067p manual.txt; sed -n 4100,4130p manual.txt; grep -n -i \"amps @6V\" manual.txt",
+    "pdftoppm -f 132 -l 132 -r 80 -png <downloaded manual pdf> p"
+  ],
+  "files_read": [
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/manual.txt",
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/p-132.png"
+  ]
+}

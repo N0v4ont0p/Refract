@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "season": "decode-2025-26",
+    "manual": "DECODE Competition Manual (2025-2026)",
+    "game_name": "DECODE",
+    "incorporates_through": "Team Update 32",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "retrieved": "2026-07-03",
+    "asterisk_meaning": "relatively unchanged from season to season (manual \u00a71.6)",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "note": "target rule number not found anywhere in the manual \u2014 FLAG FOR HUMAN REVIEW (possible stale cross-ref from a Team Update, or a manual typo)",
+  "dangling": []
+}

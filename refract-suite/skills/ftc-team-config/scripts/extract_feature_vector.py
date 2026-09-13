@@ -20,6 +20,10 @@ SIGS = {
     ("software_stack.pathing", "roadrunner"): [r'com\.acmerobotics\.roadrunner', r'\bRoadRunner\b', r'roadrunner'],
     ("software_stack.opmode_style", "ftclib_command_based"): [r'com\.arcrobotics\.ftclib\.command', r'\bCommandOpMode\b', r'\bCommandScheduler\b', r'\bSubsystemBase\b', r'extends\s+CommandBase'],
     ("software_stack.opmode_style", "raw_linear_opmode"): [r'extends\s+LinearOpMode', r'extends\s+OpMode\b', r':\s*LinearOpMode'],
+    # G2 (Phase G): recognize TickTree as a legitimate library dependency, not hand-rolled
+    # orchestration code — same reason FTCLib's CommandScheduler gets its own signature above
+    # instead of being silently attributed to the team (see 19859-J's provenance note).
+    ("software_stack.behavior_layer", "ticktree"): [r'io\.github\.n0v4ont0p\.ticktree', r'\bBehaviorTree\b', r'\bOpModeTreeRunner\b'],
     ("sensing.vision", "limelight_3a"): [r'Limelight3A', r'limelightvision', r'\bLimelight\b'],
     ("sensing.vision", "webcam_easyopencv"): [r'org\.openftc\.easyopencv', r'OpenCvCamera', r'EasyOpenCV'],
     ("sensing.odometry", "goBILDA_pinpoint"): [r'Pinpoint', r'GoBildaPinpoint', r'GoBildaPinpointDriver'],
@@ -93,7 +97,8 @@ def main():
         "sensing": {"vision": resolve(hits, "sensing.vision"),
                     "odometry": resolve(hits, "sensing.odometry")},
         "software_stack": {"pathing": resolve(hits, "software_stack.pathing"),
-                           "opmode_style": resolve(hits, "software_stack.opmode_style")},
+                           "opmode_style": resolve(hits, "software_stack.opmode_style"),
+                           "behavior_layer": resolve(hits, "software_stack.behavior_layer")},
         "fabrication": {"capability": {"value": "unknown", "note": "not recoverable from code — needs BOM/CAD/human"}},
         "team_context": {"experience": {"value": "unknown", "note": "not recoverable from code"}},
     }

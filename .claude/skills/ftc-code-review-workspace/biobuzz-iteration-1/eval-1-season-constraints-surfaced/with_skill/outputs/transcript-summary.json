@@ -1,0 +1,37 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review\" && find evals/fixtures/biobuzz-robot -type f | head -100; ls",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && ls; ls .claude/skills/ftc-code-review/scripts; ls references; ls .claude/agents; cat .claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/team-config.yaml",
+    "cat -n TeamCode/*.java; cat .claude/agents/full-review.md",
+    "python3 .claude/skills/ftc-code-review/scripts/failure_mode_lint.py .claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot",
+    "python3 .claude/skills/ftc-code-review/scripts/config_lint.py .claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode",
+    "cat season-extensions/ACTIVE",
+    "python3 scripts/check_freshness.py --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R704 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R704 --season biobuzz-2026-27",
+    "grep -rn -i hive season-extensions/biobuzz-2026-27.yaml; sed -n 55,240p season-extensions/biobuzz-2026-27.yaml",
+    "grep corpus cross-team-findings.yaml / patterns for apriltag, relocaliz, confidence",
+    "git rev-parse --show-toplevel (in fixture dir); grep git calls in failure_mode_lint.py",
+    "grep -n unchecked|declared_absent|tokens config_lint.py",
+    "grep -rl AprilTagSingleDetection / 'not suitable for absolute' across repo",
+    "grep SDK VERSION SCOPE headers in library-docs/ftc-sdk/apriltag/vision_portal",
+    "grep setVelocity mode in library-docs"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/agents/full-review.md",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/team-config.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/LauncherSubsystem.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TurretAim.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/HiveRelocalizer.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TelemetryHelper.java",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/biobuzz-2026-27.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/cross-team-findings.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/scripts/config_lint.py",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/scripts/failure_mode_lint.py",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/ftc-shared-foundation/references/library-docs/ftc-sdk/apriltag/vision_portal/apriltag_id_code/apriltag-id-code.md",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/ftc-shared-foundation/references/library-docs/ftc-sdk/apriltag/vision_portal/apriltag_localization/apriltag-localization.md"
+  ]
+}

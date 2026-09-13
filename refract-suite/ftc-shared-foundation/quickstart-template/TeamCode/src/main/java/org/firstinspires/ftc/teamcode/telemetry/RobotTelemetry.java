@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.telemetry;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
@@ -16,11 +13,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * add telemetry -- {@link org.firstinspires.ftc.teamcode.opmodes.TeamOpMode}
  * calls {@link #wrap} for every OpMode automatically.
  *
- * Implementation is one line on purpose: FTC Dashboard's own
- * {@link MultipleTelemetry} already fans a single addData/update call out to
- * both the Driver Station and the dashboard's graphing UI. There is nothing
- * here worth re-inventing -- the value is that every OpMode gets it without
- * asking.
+ * Competition-legal by default: telemetry goes to the Driver Station only. The
+ * BIOBUZZ (2026-27) manual, R704, allows streaming robot data only through the
+ * FTC Driver Station application and names FTC Dashboard and FTControl Panels as
+ * prohibited streaming services. Graphing through FTC Dashboard during practice
+ * lives in {@link org.firstinspires.ftc.teamcode.tuning.DashboardTelemetry}, used
+ * only by tuning OpModes -- never by a competition OpMode. Re-check the ACTIVE
+ * season's rule (rules.py lookup R704 --season <slug>) each season: the wording
+ * of this rule changes.
  */
 public final class RobotTelemetry {
 
@@ -29,15 +29,10 @@ public final class RobotTelemetry {
     }
 
     /**
-     * Wrap the Driver Station's Telemetry instance so every addData/update also
-     * reaches FTC Dashboard.
-     *
-     * @param driverStationTelemetry the {@code telemetry} field the SDK hands
-     *                                every OpMode
-     * @return a Telemetry that fans out to both the Driver Station and the
-     *         dashboard
+     * @param driverStationTelemetry the {@code telemetry} field the SDK hands every OpMode
+     * @return the Driver Station telemetry, unchanged -- the one legal competition channel
      */
     public static Telemetry wrap(Telemetry driverStationTelemetry) {
-        return new MultipleTelemetry(driverStationTelemetry, FtcDashboard.getInstance().getTelemetry());
+        return driverStationTelemetry;
     }
 }

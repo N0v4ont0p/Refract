@@ -1,0 +1,32 @@
+{
+  "scripts_run": [
+    "python3 .claude/skills/ftc-code-review/scripts/failure_mode_lint.py .claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot",
+    "python3 .claude/skills/ftc-code-review/scripts/config_lint.py .claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode",
+    "python3 .claude/skills/ftc-code-review/scripts/config_lint.py --help",
+    "python3 scripts/check_freshness.py --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R704 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R704 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 9.9 --season biobuzz-2026-27",
+    "grep -n -i apriltag/relocal season-extensions/biobuzz-2026-27.yaml",
+    "grep -rn -i relocali|apriltag .claude/skills/ftc-corpus-builder/references/",
+    "grep -rn -i 'not suitable for absolute' .",
+    "grep -n -i relocali|apriltag known-failure-modes.md"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/team-config.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/HiveRelocalizer.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/LauncherSubsystem.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TelemetryHelper.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TurretAim.java",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/biobuzz-2026-27.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/cross-team-findings.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/patterns/19043.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/patterns/12808.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/patterns/18742.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-corpus-builder/references/patterns/3543.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/known-failure-modes.md",
+    "/Users/georgehu/Desktop/FTC Training AI/refract-suite/ftc-shared-foundation/references/library-docs/ftc-sdk/apriltag/vision_portal/apriltag_localization/apriltag-localization.md"
+  ]
+}

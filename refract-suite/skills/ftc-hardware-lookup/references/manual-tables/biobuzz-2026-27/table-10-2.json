@@ -1,0 +1,86 @@
+{
+  "table_id": "10-2",
+  "caption": "BIOBUZZ Point Values",
+  "rows": [
+    [
+      "",
+      "MATCH points",
+      "RANKING POINTS"
+    ],
+    [
+      "AUTO",
+      "TELEOP"
+    ],
+    [
+      "LEAVE",
+      "",
+      "3",
+      "",
+      "-"
+    ],
+    [
+      "PARK",
+      "",
+      "5",
+      "5",
+      "-"
+    ],
+    [
+      "HIVE",
+      "HIVE TIP",
+      "20",
+      "20",
+      "-"
+    ],
+    [
+      "POLLEN and/or NECTAR remaining in CELL",
+      "-",
+      "2",
+      "-"
+    ],
+    [
+      "FLOWER",
+      "Bottom NECTAR Bonus",
+      "-",
+      "5",
+      "-"
+    ],
+    [
+      "POLLEN and/or NECTAR in an owned FLOWER",
+      "-",
+      "2",
+      "-"
+    ],
+    [
+      "GARDEN",
+      "POLLEN and/or NECTAR in GARDEN",
+      "-",
+      "1",
+      "-"
+    ],
+    [
+      "SWARM RP - Combined LEAVE + PARK points earned at or above threshold",
+      "1"
+    ],
+    [
+      "POLLINATOR 1 RP - The number of TIPS at or above threshold",
+      "1"
+    ],
+    [
+      "POLLINATOR 2 RP - The number of TIPS at or above threshold",
+      "1"
+    ],
+    [
+      "WIN",
+      "Completing a MATCH with more MATCH points than your opponent",
+      "3"
+    ],
+    [
+      "TIE",
+      "Completing a MATCH with the same MATCH points as your opponent",
+      "1"
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-2]] pointer (\u00a78<->\u00a79)"
+}

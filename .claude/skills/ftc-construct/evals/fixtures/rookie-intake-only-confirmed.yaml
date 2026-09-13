@@ -1,7 +1,7 @@
 # §22 eval fixture: fully confirmed, rookie, intake-only — no shooter, no turret.
 # Purpose: generation-quality eval "no code for undeclared features" — a request for intake code
 # against this config must NOT produce shooter/turret stub code, commented-out or otherwise.
-_meta: {schema: 1, fixture: true}
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99904, experience: rookie}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

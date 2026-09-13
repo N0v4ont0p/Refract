@@ -25,6 +25,8 @@ meta:
 
 patterns:
   - id: 22105-A-terror-hardware-wrappers
+    season_scope: invariant
+    season_scope_basis: "Typed per-device wrapper layer + central RobotHardware inventory; hardware abstraction, the 31 devices are robot-specific, not game logic."
     problem: >
       Wrap each SDK hardware device type in a typed team abstraction and centralize the robot's
       full device inventory, so subsystems depend on typed wrappers rather than raw hardwareMap.get.
@@ -46,6 +48,8 @@ patterns:
     notes: "Season-agnostic. VERBATIM caveat: motorRearLeftAbsEncoder '// TODO: fnd whch s the elc v1 or v2 and figure out which one is reversed or not'. Single-source (common idiom, distinguished by completeness)."
 
   - id: 22105-B-shooter-empirical-lut
+    season_scope: decode-2025-26
+    season_scope_basis: "Empirical table + calibration-tuner stance transfers; the (distance, velocity) points are measured Artifact shots at DECODE goals."
     problem: >
       Turn distance-to-goal into flywheel velocity (and hood angle) for a distance-variable shooter.
     solution_approach: >
@@ -64,6 +68,8 @@ patterns:
     notes: "Season-specific mechanism; the transferable part is the empirical-table + calibration-tuner stance. Numeric data points are season/robot-specific."
 
   - id: 22105-C-spindexer-encoder-lut
+    season_scope: decode-2025-26
+    season_scope_basis: "Commanded->actual absolute-encoder angle LUT technique transfers; the 3-slot 0/120/240 deg spindexer exists to index the DECODE 3-Artifact load."
     problem: >
       Command a motorized spindexer (3 slots) to precise slot positions read by an absolute encoder,
       correcting for mechanical offset/nonlinearity between commanded and actual angle.
@@ -87,6 +93,8 @@ patterns:
       SpindexLookupValue lines are commented out.
 
   - id: 22105-D-batch-color-sensor
+    season_scope: decode-2025-26
+    season_scope_basis: "Same-package I2C batch read of REV colour sensors is game-independent; here it serves per-slot DECODE Artifact colour classification (BallColor) in the 3-slot spindexer."
     problem: >
       Read 3x REV Color Sensor V3 each loop for per-slot ball-color classification without the I2C
       round-trip cost of three separate reads blowing the loop-time budget.

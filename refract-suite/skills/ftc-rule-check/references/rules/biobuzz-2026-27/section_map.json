@@ -1,0 +1,821 @@
+{
+  "meta": {
+    "season": "biobuzz-2026-27",
+    "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+    "game_name": "BIOBUZZ",
+    "incorporates_through": "Team Update 00",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "tu_index_url": "https://ftc-resources.firstinspires.org/ftc/game",
+    "retrieved": "2026-09-13",
+    "asterisk_meaning": "Evergreen: subject and presence constant season to season, but game-specific details may change (manual \u00a71.7.1) \u2014 NOT 'unchanged'",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "headings": [
+    {
+      "pos": 2079,
+      "number": "1",
+      "title": "Introduction"
+    },
+    {
+      "pos": 2094,
+      "number": "1.1",
+      "title": "About FIRST \u00ae"
+    },
+    {
+      "pos": 3612,
+      "number": "1.2",
+      "title": "FIRST \u00ae Tech Challenge"
+    },
+    {
+      "pos": 5627,
+      "number": "1.3",
+      "title": "FIRST Ethos and Core Values"
+    },
+    {
+      "pos": 5659,
+      "number": "1.3.1",
+      "title": "Gracious Professionalism \u00ae"
+    },
+    {
+      "pos": 9257,
+      "number": "1.3.2",
+      "title": "Coopertition \u00ae"
+    },
+    {
+      "pos": 9745,
+      "number": "1.3.3",
+      "title": "Core Values"
+    },
+    {
+      "pos": 10415,
+      "number": "1.3.4",
+      "title": "Why Embrace the FIRST Ethos and Gracious Professionalism ?"
+    },
+    {
+      "pos": 12126,
+      "number": "1.4",
+      "title": "The Spirit of the Competition"
+    },
+    {
+      "pos": 12160,
+      "number": "1.4.1",
+      "title": "A Note from the FIRST Staff"
+    },
+    {
+      "pos": 17495,
+      "number": "1.4.2",
+      "title": "Framework of Behaviors"
+    },
+    {
+      "pos": 19100,
+      "number": "1.4.3",
+      "title": "The Role of Mentors"
+    },
+    {
+      "pos": 20732,
+      "number": "1.4.4",
+      "title": "The Sprit of FIRST Volunteers"
+    },
+    {
+      "pos": 23438,
+      "number": "1.5",
+      "title": "Competition Integrity Contract (CIC)"
+    },
+    {
+      "pos": 24030,
+      "number": "1.5.1",
+      "title": "Sporting Ethics Code"
+    },
+    {
+      "pos": 25826,
+      "number": "1.5.2",
+      "title": "Behavior Guidelines"
+    },
+    {
+      "pos": 29715,
+      "number": "1.5.3",
+      "title": "Infractions, Mitigations, & Escalation"
+    },
+    {
+      "pos": 30915,
+      "number": "1.6",
+      "title": "Accessibility and Inclusion"
+    },
+    {
+      "pos": 31429,
+      "number": "1.7",
+      "title": "Understanding & Using the Competition Manual"
+    },
+    {
+      "pos": 31478,
+      "number": "1.7.1",
+      "title": "This Document & Its Conventions"
+    },
+    {
+      "pos": 36411,
+      "number": "1.7.2",
+      "title": "Translations & Other Versions"
+    },
+    {
+      "pos": 37297,
+      "number": "1.7.3",
+      "title": "Team Updates"
+    },
+    {
+      "pos": 37949,
+      "number": "1.7.4",
+      "title": "Question & Answer System"
+    },
+    {
+      "pos": 40245,
+      "number": "2",
+      "title": "FIRST Season Overview"
+    },
+    {
+      "pos": 40819,
+      "number": "3",
+      "title": "Competition Eligibility and Inspection (I)"
+    },
+    {
+      "pos": 40864,
+      "number": "3.1",
+      "title": "Team Eligibility Rules"
+    },
+    {
+      "pos": 43675,
+      "number": "3.2",
+      "title": "Awards Eligibility Rules"
+    },
+    {
+      "pos": 44162,
+      "number": "3.3",
+      "title": "MATCH Eligibility Rules"
+    },
+    {
+      "pos": 44984,
+      "number": "3.3.1",
+      "title": "Inspection"
+    },
+    {
+      "pos": 47797,
+      "number": "3.3.2",
+      "title": "Re-Inspection"
+    },
+    {
+      "pos": 50164,
+      "number": "4",
+      "title": "Advancement"
+    },
+    {
+      "pos": 52409,
+      "number": "4.1",
+      "title": "Advancement Points Calculation"
+    },
+    {
+      "pos": 53088,
+      "number": "4.1.1",
+      "title": "Qualification Phase Performance"
+    },
+    {
+      "pos": 54265,
+      "number": "4.1.2",
+      "title": "ALLIANCE Selection Results"
+    },
+    {
+      "pos": 55139,
+      "number": "4.1.3",
+      "title": "Playoff Performance"
+    },
+    {
+      "pos": 55538,
+      "number": "4.1.4",
+      "title": "Team Judged Awards"
+    },
+    {
+      "pos": 56479,
+      "number": "4.2",
+      "title": "Advancement Distribution by Region"
+    },
+    {
+      "pos": 57727,
+      "number": "5",
+      "title": "Event Rules (E)"
+    },
+    {
+      "pos": 59128,
+      "number": "5.1",
+      "title": "General Rules"
+    },
+    {
+      "pos": 68568,
+      "number": "5.2",
+      "title": "Machine Shops and Host Team Build Spaces"
+    },
+    {
+      "pos": 69010,
+      "number": "5.3",
+      "title": "Wireless Rules"
+    },
+    {
+      "pos": 70202,
+      "number": "5.4",
+      "title": "Load-In"
+    },
+    {
+      "pos": 70756,
+      "number": "5.5",
+      "title": "Pits"
+    },
+    {
+      "pos": 75996,
+      "number": "5.6",
+      "title": "ROBOT Carts"
+    },
+    {
+      "pos": 76383,
+      "number": "5.7",
+      "title": "Ceremonies"
+    },
+    {
+      "pos": 78293,
+      "number": "6",
+      "title": "Awards (A)"
+    },
+    {
+      "pos": 80705,
+      "number": "6.1",
+      "title": "Team Judged Awards Overview and Schedule"
+    },
+    {
+      "pos": 82880,
+      "number": "6.1.1",
+      "title": "Sources of Information Considered for Awards"
+    },
+    {
+      "pos": 84517,
+      "number": "6.1.2",
+      "title": "Initial Interview"
+    },
+    {
+      "pos": 87565,
+      "number": "6.1.3",
+      "title": "Pit Interview(s)"
+    },
+    {
+      "pos": 88345,
+      "number": "6.1.4",
+      "title": "Sustained Outreach and Demonstrating Impact by Numbers"
+    },
+    {
+      "pos": 88982,
+      "number": "6.2",
+      "title": "Team Judged Award Rules"
+    },
+    {
+      "pos": 98418,
+      "number": "6.3",
+      "title": "Team Judged Award Descriptions"
+    },
+    {
+      "pos": 98453,
+      "number": "6.3.1",
+      "title": "Inspire Award"
+    },
+    {
+      "pos": 99112,
+      "number": "6.3.2",
+      "title": "Think Award"
+    },
+    {
+      "pos": 99560,
+      "number": "6.3.3",
+      "title": "Connect Award"
+    },
+    {
+      "pos": 100019,
+      "number": "6.3.4",
+      "title": "Reach Award"
+    },
+    {
+      "pos": 100359,
+      "number": "6.3.5",
+      "title": "Sustain Award"
+    },
+    {
+      "pos": 101441,
+      "number": "6.3.6",
+      "title": "Innovate Award sponsored by RTX"
+    },
+    {
+      "pos": 102033,
+      "number": "6.3.7",
+      "title": "Control Award"
+    },
+    {
+      "pos": 102647,
+      "number": "6.3.8",
+      "title": "Design Award"
+    },
+    {
+      "pos": 103058,
+      "number": "6.3.9",
+      "title": "Judges\u2019 Choice Award"
+    },
+    {
+      "pos": 103423,
+      "number": "6.4",
+      "title": "Tournament ALLIANCE Awards"
+    },
+    {
+      "pos": 103454,
+      "number": "6.4.1",
+      "title": "Winning Alliance Award"
+    },
+    {
+      "pos": 103812,
+      "number": "6.4.2",
+      "title": "Finalist Alliance Award"
+    },
+    {
+      "pos": 104145,
+      "number": "6.5",
+      "title": "Individual Awards"
+    },
+    {
+      "pos": 104167,
+      "number": "6.5.1",
+      "title": "FIRST Leadership Award"
+    },
+    {
+      "pos": 104680,
+      "number": "6.5.2",
+      "title": "Compass Award"
+    },
+    {
+      "pos": 105562,
+      "number": "6.6",
+      "title": "Project-Based Global Awards"
+    },
+    {
+      "pos": 105925,
+      "number": "7",
+      "title": "Game Sponsor Recognition"
+    },
+    {
+      "pos": 106033,
+      "number": "8",
+      "title": "Game Overview"
+    },
+    {
+      "pos": 107160,
+      "number": "9",
+      "title": "ARENA"
+    },
+    {
+      "pos": 107452,
+      "number": "9.1",
+      "title": "Dimensions and Accuracy"
+    },
+    {
+      "pos": 109375,
+      "number": "9.2",
+      "title": "FIELD"
+    },
+    {
+      "pos": 111129,
+      "number": "9.3",
+      "title": "Areas, Zones, & Markings"
+    },
+    {
+      "pos": 112997,
+      "number": "9.4",
+      "title": "TILE Coordinates"
+    },
+    {
+      "pos": 113311,
+      "number": "9.5",
+      "title": "ALLIANCE AREA"
+    },
+    {
+      "pos": 113938,
+      "number": "9.6",
+      "title": "HIVE Structure"
+    },
+    {
+      "pos": 114538,
+      "number": "9.6.1",
+      "title": "Frame"
+    },
+    {
+      "pos": 115081,
+      "number": "9.6.2",
+      "title": "HIVE and CELL"
+    },
+    {
+      "pos": 115685,
+      "number": "9.7",
+      "title": "FLOWER"
+    },
+    {
+      "pos": 116797,
+      "number": "9.8",
+      "title": "SCORING ELEMENTS"
+    },
+    {
+      "pos": 117395,
+      "number": "9.9",
+      "title": "AprilTags"
+    },
+    {
+      "pos": 118966,
+      "number": "9.10",
+      "title": "FIELD STAFF"
+    },
+    {
+      "pos": 120796,
+      "number": "9.11",
+      "title": "Event Management System"
+    },
+    {
+      "pos": 121502,
+      "number": "10",
+      "title": "Game Details"
+    },
+    {
+      "pos": 121706,
+      "number": "10.1",
+      "title": "MATCH Overview"
+    },
+    {
+      "pos": 122405,
+      "number": "10.2",
+      "title": "DRIVE TEAM"
+    },
+    {
+      "pos": 124182,
+      "number": "10.3",
+      "title": "Setup"
+    },
+    {
+      "pos": 124278,
+      "number": "10.3.1",
+      "title": "SCORING ELEMENTS"
+    },
+    {
+      "pos": 124508,
+      "number": "10.3.2",
+      "title": "DRIVE TEAMS"
+    },
+    {
+      "pos": 127364,
+      "number": "10.3.3",
+      "title": "OPERATOR CONSOLES"
+    },
+    {
+      "pos": 128015,
+      "number": "10.3.4",
+      "title": "ROBOTS"
+    },
+    {
+      "pos": 129316,
+      "number": "10.4",
+      "title": "MATCH Periods"
+    },
+    {
+      "pos": 129606,
+      "number": "10.5",
+      "title": "Scoring"
+    },
+    {
+      "pos": 131534,
+      "number": "10.5.1",
+      "title": "HIVE Scoring Criteria"
+    },
+    {
+      "pos": 132853,
+      "number": "10.5.2",
+      "title": "FLOWER Scoring Criteria"
+    },
+    {
+      "pos": 133948,
+      "number": "10.5.3",
+      "title": "GARDEN Scoring Criteria"
+    },
+    {
+      "pos": 134515,
+      "number": "10.5.4",
+      "title": "ROBOT Scoring Criteria"
+    },
+    {
+      "pos": 134812,
+      "number": "10.5.5",
+      "title": "Point Values"
+    },
+    {
+      "pos": 135144,
+      "number": "10.6",
+      "title": "Violations"
+    },
+    {
+      "pos": 137171,
+      "number": "10.6.1",
+      "title": "YELLOW and RED CARDS"
+    },
+    {
+      "pos": 139632,
+      "number": "10.6.2",
+      "title": "YELLOW and RED CARD application"
+    },
+    {
+      "pos": 140091,
+      "number": "10.6.3",
+      "title": "YELLOW and RED CARDS during Playoff MATCHES"
+    },
+    {
+      "pos": 140420,
+      "number": "10.6.4",
+      "title": "Violation Details"
+    },
+    {
+      "pos": 140766,
+      "number": "10.7",
+      "title": "Head REFEREE"
+    },
+    {
+      "pos": 141171,
+      "number": "10.8",
+      "title": "Other Logistics"
+    },
+    {
+      "pos": 141192,
+      "number": "10.8.1",
+      "title": "Practice MATCH Participation"
+    },
+    {
+      "pos": 141393,
+      "number": "10.8.2",
+      "title": "SCORING ELEMENT Logistics"
+    },
+    {
+      "pos": 142321,
+      "number": "10.8.3",
+      "title": "FIELD Mitigation"
+    },
+    {
+      "pos": 142480,
+      "number": "10.8.4",
+      "title": "FIELD Reset"
+    },
+    {
+      "pos": 142986,
+      "number": "11",
+      "title": "Game Rules (G)"
+    },
+    {
+      "pos": 143004,
+      "number": "11.1",
+      "title": "Personal Safety"
+    },
+    {
+      "pos": 144083,
+      "number": "11.2",
+      "title": "Conduct"
+    },
+    {
+      "pos": 149489,
+      "number": "11.3",
+      "title": "Pre-MATCH"
+    },
+    {
+      "pos": 157686,
+      "number": "11.4",
+      "title": "In-MATCH"
+    },
+    {
+      "pos": 157763,
+      "number": "11.4.1",
+      "title": "AUTO"
+    },
+    {
+      "pos": 159503,
+      "number": "11.4.2",
+      "title": "TELEOP"
+    },
+    {
+      "pos": 160888,
+      "number": "11.4.3",
+      "title": "SCORING ELEMENT"
+    },
+    {
+      "pos": 167210,
+      "number": "11.4.4",
+      "title": "ROBOT"
+    },
+    {
+      "pos": 173503,
+      "number": "11.4.5",
+      "title": "Opponent Interaction"
+    },
+    {
+      "pos": 178340,
+      "number": "11.4.6",
+      "title": "Human"
+    },
+    {
+      "pos": 183164,
+      "number": "12",
+      "title": "ROBOT Construction Rules (R)"
+    },
+    {
+      "pos": 190958,
+      "number": "12.1",
+      "title": "General ROBOT Design"
+    },
+    {
+      "pos": 197097,
+      "number": "12.2",
+      "title": "Fair Play & Damage Prevention"
+    },
+    {
+      "pos": 200842,
+      "number": "12.3",
+      "title": "Fabrication"
+    },
+    {
+      "pos": 204342,
+      "number": "12.4",
+      "title": "ROBOT SIGN Rules"
+    },
+    {
+      "pos": 208250,
+      "number": "12.5",
+      "title": "Motors & Actuators"
+    },
+    {
+      "pos": 212375,
+      "number": "12.6",
+      "title": "Power Distribution"
+    },
+    {
+      "pos": 221357,
+      "number": "12.7",
+      "title": "Control, Command & Signals System"
+    },
+    {
+      "pos": 231511,
+      "number": "12.8",
+      "title": "Pneumatic Systems & Airflow Devices"
+    },
+    {
+      "pos": 232794,
+      "number": "12.9",
+      "title": "OPERATOR CONSOLE"
+    },
+    {
+      "pos": 235864,
+      "number": "13",
+      "title": "Tournament (T)"
+    },
+    {
+      "pos": 235882,
+      "number": "13.1",
+      "title": "Overview"
+    },
+    {
+      "pos": 236697,
+      "number": "13.2",
+      "title": "MATCH Replays"
+    },
+    {
+      "pos": 239956,
+      "number": "13.3",
+      "title": "Clarifications on MATCH Play Results (\u201cQuestion Box\u201d)"
+    },
+    {
+      "pos": 243622,
+      "number": "13.4",
+      "title": "General Tournament Rules"
+    },
+    {
+      "pos": 250726,
+      "number": "13.5",
+      "title": "Practice MATCHES"
+    },
+    {
+      "pos": 251424,
+      "number": "13.5.1",
+      "title": "Filler Line"
+    },
+    {
+      "pos": 252314,
+      "number": "13.6",
+      "title": "Qualification MATCHES"
+    },
+    {
+      "pos": 252341,
+      "number": "13.6.1",
+      "title": "Schedule"
+    },
+    {
+      "pos": 253478,
+      "number": "13.6.2",
+      "title": "MATCH Assignment"
+    },
+    {
+      "pos": 255210,
+      "number": "13.6.3",
+      "title": "Qualification Ranking"
+    },
+    {
+      "pos": 256329,
+      "number": "13.7",
+      "title": "Playoff MATCHES"
+    },
+    {
+      "pos": 259075,
+      "number": "13.7.1",
+      "title": "ALLIANCE Selection Process"
+    },
+    {
+      "pos": 260242,
+      "number": "13.7.2",
+      "title": "Playoff MATCH Bracket"
+    },
+    {
+      "pos": 262844,
+      "number": "13.7.3",
+      "title": "2-ALLIANCE Bracket and Typical Timing"
+    },
+    {
+      "pos": 263123,
+      "number": "13.7.4",
+      "title": "4-ALLIANCE Bracket and Typical Timing"
+    },
+    {
+      "pos": 264060,
+      "number": "13.7.5",
+      "title": "6-ALLIANCE Bracket and Typical Timing"
+    },
+    {
+      "pos": 265178,
+      "number": "13.7.6",
+      "title": "8-ALLIANCE Bracket and Typical Timing"
+    },
+    {
+      "pos": 266484,
+      "number": "13.8",
+      "title": "Dual Division Event s"
+    },
+    {
+      "pos": 266921,
+      "number": "13.8.1",
+      "title": "Dual Division Advancement Points"
+    },
+    {
+      "pos": 269738,
+      "number": "13.8.2",
+      "title": "Dual Division Playoffs"
+    },
+    {
+      "pos": 271812,
+      "number": "14",
+      "title": "League Play Tournaments (L)"
+    },
+    {
+      "pos": 273894,
+      "number": "15",
+      "title": "FIRST Championship (C)"
+    },
+    {
+      "pos": 274359,
+      "number": "15.1",
+      "title": "Awards Modifications"
+    },
+    {
+      "pos": 274841,
+      "number": "15.2",
+      "title": "Game Modification"
+    },
+    {
+      "pos": 276118,
+      "number": "15.3",
+      "title": "3-ROBOT ALLIANCES"
+    },
+    {
+      "pos": 277809,
+      "number": "15.4",
+      "title": "FIRST Championship Pit Crews"
+    },
+    {
+      "pos": 278207,
+      "number": "15.5",
+      "title": "FIRST Championship Playoffs"
+    },
+    {
+      "pos": 278365,
+      "number": "16",
+      "title": "Glossary"
+    }
+  ]
+}

@@ -1,3 +1,10 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the `_Circle` sample defaults described below
+> (Erode/Dilate 15 px, order swap, the purple Artifact walkthrough) were tuned for DECODE (2025-26)
+> Artifacts. The ColorBlobLocator API and circleFit concepts are generic. BIOBUZZ elements differ
+> (yellow POLLEN ~2.8 in, red/blue NECTAR ~3.6 in per the manual): re-tune rather than reuse DECODE
+> values. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+
 > Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/color_processing/color-locator-round-blobs/color-locator-round-blobs.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "does-not-cite-R510",
+      "passed": true,
+      "evidence": "The answer refuses to use R510 as a citation. It says \"there is no rule R510 anywhere in it\" (the V1 manual) and \"'R510' in Team Update 00 is a typo\", and tells the team to \"cite **R501** when talking to an inspector.\" That meets the \"doesn't exist in V1\" branch of the assertion. The corpus agrees: rules.py lookup R510 --season biobuzz-2026-27 returns found:false with the message \"R510 is not in the biobuzz-2026-27 manual\"."
+    },
+    {
+      "name": "cites-R501-table",
+      "passed": false,
+      "evidence": "The answer's content is right. It cites R501 in Section 12.5 and \"Table 12-1 includes the row 'WATTOS Stingray 12V DC \u2014 WDM12'\", which matches row 71-72 of table-12-1.json. The grounding requirement is not met, though. The assertion requires Table 12-1 to be read by pointer from manual-tables/biobuzz-2026-27/table-12-1.json. files_read lists only scratchpad manual.txt and tu00.txt, and scripts_run shows pdftotext and grep on a web-fetched PDF. The table JSON was never read, and neither was the R501 [[TABLE:12-1]] pointer. With no partial credit, this fails."
+    }
+  ],
+  "factual_errors": []
+}

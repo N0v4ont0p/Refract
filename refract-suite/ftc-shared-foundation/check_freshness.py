@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""Corpus-currency check (R79). Calibrated abstention for currency, not just completeness:
+"""Corpus-currency check (REQ-79). Calibrated abstention for currency, not just completeness:
 a correct citation against a STALE manual is still a wrong answer, so flag it instead of answering.
 
 Parameterized by the ACTIVE season. Resolves that season's stored manual metadata
-(source_url, incorporates_through), fetches the live page, extracts the highest "Team Update N",
-and compares. Any of {live newer, fetch failed, no marker found} => flagged, not silently passed.
+(source_url, game_name, incorporates_through, tu_index_url), fetches the live pages, and checks:
+  1. SEASON IDENTITY — the live manual page still names this season's game. FIRST reuses the same
+     manual URL every season (cm-html served DECODE, now serves BIOBUZZ). Without this check a
+     prior season's corpus compared against the new season's low TU number (e.g. 5 < 32) reads
+     CURRENT — a false clear.
+  2. TU currency — highest "Team Update N" on the TU index page (or the manual page) vs stored.
+Any of {wrong season, live newer, fetch failed, no marker found} => flagged, not silently passed.
 
   check_freshness.py                 # check the ACTIVE season
   check_freshness.py --season <slug> # check a specific season (BIOBUZZ later = just this arg)
@@ -21,13 +26,10 @@ ROOT = Path(__file__).resolve().parent.parent
 # plugin root and the rules corpus is under skills/; in the source repo ROOT is the repo root and the
 # corpus is under .claude/skills/. Detect by which layout actually exists.
 _PLUGIN = (ROOT / "skills" / "ftc-rule-check").exists()
-_RULES = (ROOT / "skills/ftc-rule-check/references/rules/rules.json") if _PLUGIN \
-    else (ROOT / ".claude/skills/ftc-rule-check/references/rules/rules.json")
+_RULES_BASE = (ROOT / "skills/ftc-rule-check/references/rules") if _PLUGIN \
+    else (ROOT / ".claude/skills/ftc-rule-check/references/rules")
 _SEASON_DIR = (ROOT / "ftc-shared-foundation/season-extensions") if _PLUGIN else (ROOT / "season-extensions")
-# season slug -> where that season's stored rules meta lives. One entry today; BIOBUZZ is one line later.
-SEASON_CORPUS = {
-    "decode-2025-26": _RULES,
-}
+# each ingested season's corpus lives at <rules base>/<season slug>/rules.json (tag_manual.py --season)
 
 
 def active_season():
@@ -39,30 +41,52 @@ def tu_num(s):
     return max(nums) if nums else None
 
 
-def fetch_live_tu(url):
+def names_game(page, game, min_mentions=5):
+    """Visible-text, whole-word, case-sensitive count of the game name. A substring test is fooled:
+    the BIOBUZZ manual HTML carries a reused photo whose alt attribute reads "...DECODE Presented by
+    RTX playing field" — 0 visible DECODE mentions vs 36 BIOBUZZ; the DECODE manual has 27 DECODE."""
+    text = re.sub(r"<[^>]+>", " ", page)
+    return len(re.findall(r"\b" + re.escape(game) + r"\b", text)) >= min_mentions
+
+
+def fetch(url):
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "ftc-skill-freshness/1.0"})
         with urllib.request.urlopen(req, timeout=15) as r:
-            return tu_num(r.read(2_000_000).decode("utf-8", "replace")), None
+            return r.read(2_000_000).decode("utf-8", "replace"), None
     except Exception as e:  # network/parse/403 — abstain, don't guess currency
         return None, f"{type(e).__name__}: {e}"
 
 
-def check(season, live_tu=None):
-    corpus = SEASON_CORPUS.get(season)
-    if not corpus or not corpus.exists():
+def check(season, live_tu=None, live_game=None):
+    corpus = _RULES_BASE / season / "rules.json"
+    if not corpus.exists():
         return {"status": "UNVERIFIABLE", "flag": True, "season": season,
                 "reason": f"no stored corpus registered for season '{season}' — cannot judge currency"}
     meta = json.loads(corpus.read_text())["meta"]
     stored = tu_num(meta.get("incorporates_through"))
     err = None
-    if live_tu is None:
-        live_tu, err = fetch_live_tu(meta.get("source_url", ""))
+    game = meta.get("game_name")
+    if live_tu is None or live_game is None:
+        page, err = fetch(meta.get("source_url", ""))
+        if live_game is None and page is not None:
+            live_game = game if (game and names_game(page, game)) else "OTHER"
+        if live_tu is None:
+            tu_page, err2 = fetch(meta["tu_index_url"]) if meta.get("tu_index_url") else (page, err)
+            live_tu, err = tu_num(tu_page), (err2 if meta.get("tu_index_url") else err)
 
     out = {"season": season, "stored_incorporates_through": meta.get("incorporates_through"),
            "stored_tu": stored, "live_tu": live_tu, "source_url": meta.get("source_url"),
-           "retrieved": meta.get("retrieved")}
-    if live_tu is None:
+           "game_name": game, "retrieved": meta.get("retrieved")}
+    if not game:
+        out.update(status="UNVERIFIABLE", flag=True,
+                   reason="stored corpus meta has no game_name — cannot confirm the live manual is still this season's")
+    elif live_game == "OTHER":
+        out.update(status="WRONG_SEASON", flag=True,
+                   reason=f"the live manual at source_url no longer names {game} — FIRST has moved to a new season; "
+                          f"this corpus is a PRIOR season's. Answer from it only if the question is explicitly about "
+                          f"{game}, and say so.")
+    elif live_tu is None:
         out.update(status="UNVERIFIABLE", flag=True,
                    reason=f"could not read a live Team Update number ({err or 'no marker on page'}); "
                           "treat corpus as possibly stale and say so in the answer")
@@ -79,10 +103,16 @@ def check(season, live_tu=None):
 
 
 def _self_test():
-    assert check("decode-2025-26", live_tu=32)["status"] == "CURRENT"
-    assert check("decode-2025-26", live_tu=40)["status"] == "STALE"
+    assert check("decode-2025-26", live_tu=32, live_game="DECODE")["status"] == "CURRENT"
+    assert check("decode-2025-26", live_tu=40, live_game="DECODE")["status"] == "STALE"
+    # the false clear this guards: new season's low TU number vs old corpus's high one
+    assert check("decode-2025-26", live_tu=5, live_game="OTHER")["status"] == "WRONG_SEASON"
+    assert check("biobuzz-2026-27", live_tu=0, live_game="BIOBUZZ")["status"] == "CURRENT"
+    assert check("biobuzz-2026-27", live_tu=3, live_game="BIOBUZZ")["status"] == "STALE"
     assert check("no-such-season", live_tu=1)["status"] == "UNVERIFIABLE"
     assert tu_num("incorporates Team Update 09 and Team Update 32") == 32
+    assert not names_game('<img alt="DECODE Presented by RTX playing field">' + "BIOBUZZ " * 40, "DECODE")
+    assert names_game("<p>BIOBUZZ</p> " * 6, "BIOBUZZ")
     print("self-test OK")
 
 

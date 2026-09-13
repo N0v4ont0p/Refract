@@ -1,4 +1,4 @@
-_meta: {schema: 1}
+_meta: {schema: 1, season: decode-2025-26}
 team: {number: 12345, experience: rookie}
 drivetrain: {type: {value: mecanum, confirmed: true}}
 software_stack: {opmode_style: {value: raw_linear_opmode, confirmed: true}, pathing: {value: none, confirmed: true}}

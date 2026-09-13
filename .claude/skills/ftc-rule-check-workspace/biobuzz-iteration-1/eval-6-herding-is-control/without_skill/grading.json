@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "uses-glossary-control",
+      "passed": true,
+      "evidence": "The run pulled the CONTROL definition from the downloaded manual (scripts_run: 'grep -n -i CONTROL manual.txt', 'sed -n 3500,3550p ...'), which counts as equivalent retrieved text. The answer applies the herding clause: 'intentionally pushes a SCORING ELEMENT to a desired location or in a preferred direction (i.e., herding)'. It also uses the transitive-contact clause and the 'flat or concave face' indicator. All of these match `rules.py term CONTROL` word for word."
+    },
+    {
+      "name": "cites-G407",
+      "passed": true,
+      "evidence": "The answer says 'G407, \"No more than 4 at a time\" ... A robot may not CONTROL more than 4 SCORING ELEMENTS at once. The penalty is a VERBAL WARNING, or a MAJOR FOUL plus a YELLOW CARD per match if it's STRATEGIC'. This matches `rules.py lookup G407` ('Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC')."
+    },
+    {
+      "name": "not-overconfident",
+      "passed": true,
+      "evidence": "The answer does not say it is legal because the balls aren't picked up. It opens with 'No, not deliberately.' It separates the G407 bulldozing exception ('inadvertent contact ... while in the path of the ROBOT') from deliberate herding. It also explains that STRATEGIC means 'done to gain an advantage' and asks whether the pushing 'is on purpose, or does the robot tend to gather a pile while driving'. The verdict depends on intent and STRATEGIC, which is what the assertion requires."
+    }
+  ],
+  "factual_errors": []
+}

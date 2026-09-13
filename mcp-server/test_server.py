@@ -22,19 +22,27 @@ def check(name, mcp_result, direct_result, compare_keys):
     print(f"PASS  {name}")
 
 
-# 1. rule_check — same premise verified live earlier: flywheel shooters, R207.
-mcp_rc = rule_check(ids=["R207"])
-direct_lookup = direct(str(ROOT / ".claude/skills/ftc-rule-check/scripts/rules.py"), "lookup", "R207")
-direct_verify = direct(str(ROOT / ".claude/skills/ftc-rule-check/scripts/rules.py"), "verify", "R207")
+# 1. rule_check — pinned to DECODE (the season R207 "flywheel" was verified in); rule numbers
+#    are season-scoped, so an unpinned test would silently change meaning when ACTIVE flips.
+D = ["--season", "decode-2025-26"]
+mcp_rc = rule_check(ids=["R207"], season="decode-2025-26")
+direct_lookup = direct(str(ROOT / ".claude/skills/ftc-rule-check/scripts/rules.py"), "lookup", "R207", *D)
+direct_verify = direct(str(ROOT / ".claude/skills/ftc-rule-check/scripts/rules.py"), "verify", "R207", *D)
 assert mcp_rc["lookup"]["rules"][0]["text"] == direct_lookup["rules"][0]["text"], "rule_check: cited text drifted from source"
 assert mcp_rc["verify"] == direct_verify, "rule_check: verify result drifted"
 assert "flywheel" in mcp_rc["lookup"]["rules"][0]["text"].lower()
-print("PASS  rule_check (ids=[R207]) — citation text and verify result byte-match the direct skill path")
+print("PASS  rule_check (ids=[R207], decode) — citation text and verify result byte-match the direct skill path")
 
 # 1b. rule_check by query — same rule should resolve from a keyword search.
-mcp_rc_q = rule_check(query="flywheel scoring element")
+mcp_rc_q = rule_check(query="flywheel scoring element", season="decode-2025-26")
 assert "R207" in mcp_rc_q["resolved_ids"], f"rule_check query resolution missed R207: {mcp_rc_q['resolved_ids']}"
-print("PASS  rule_check (query='flywheel scoring element') — resolved R207 by keyword search")
+print("PASS  rule_check (query='flywheel scoring element', decode) — resolved R207 by keyword search")
+
+# 1c. season isolation — R207 does not exist in BIOBUZZ; the servo cap R503 does, with BIOBUZZ text.
+bb = rule_check(ids=["R207", "R503"], season="biobuzz-2026-27")
+assert bb["verify"]["missing"] == ["R207"] and bb["verify"]["season"] == "biobuzz-2026-27", bb["verify"]
+assert "8 servos" in [r for r in bb["lookup"]["rules"] if r["rule_id"] == "R503"][0]["text"]
+print("PASS  rule_check (biobuzz) — DECODE-only R207 reported missing; R503 answers from the BIOBUZZ manual")
 
 # 2. hardware_lookup — a real seeded SKU.
 mcp_hw = hardware_lookup(action="spec", part="5203-2402-0019")

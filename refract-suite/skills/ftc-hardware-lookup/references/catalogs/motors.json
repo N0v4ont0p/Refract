@@ -1,5 +1,5 @@
 {
-  "_schema": "Every numeric spec is a manufacturer-published value. Each part carries a `_source` block (url, tier, retrieved date). No field may be surfaced to a user without its source — that is the whole point of this file (R28/R35/R68). Values are stored AS PUBLISHED; unit conversions (kg.cm -> N.m etc.) are done deterministically by scripts/motor_math.py, never pre-baked here, so the catalog stays a pure record of sourced facts.",
+  "_schema": "Every numeric spec is a manufacturer-published value. Each part carries a `_source` block (url, tier, retrieved date). No field may be surfaced to a user without its source — that is the whole point of this file (REQ-28/REQ-35/REQ-68). Values are stored AS PUBLISHED; unit conversions (kg.cm -> N.m etc.) are done deterministically by scripts/motor_math.py, never pre-baked here, so the catalog stays a pure record of sourced facts.",
   "_tier_legend": {"1": "manufacturer product page / official docs", "2": "community/third-party — must be labeled tier-2 downstream"},
   "parts": {
     "5203-2402-0019": {

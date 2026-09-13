@@ -1,6 +1,6 @@
 # Negative fixture: fixed_shooter_on_swerve archetype on a MECANUM drivetrain
-# (the R7/R69 constraint must fire) + an invented axis value (R3 must fire)
-_meta: {schema: 1, fixture: true}
+# (the REQ-7/REQ-69 constraint must fire) + an invented axis value (REQ-3 must fire)
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99903, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

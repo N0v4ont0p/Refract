@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Empirical elicitation ordering (R47/R48) — deterministic, no LLM.
+"""Empirical elicitation ordering (REQ-47/REQ-48) — deterministic, no LLM.
 
 Counts which feature-model axes the pattern corpus's `applicable_when` conditions actually branch
 on. A feature many patterns key off has high information gain as a question; a feature nothing
@@ -56,18 +56,35 @@ def main():
         patterns_dir = suite / ".claude/skills/ftc-corpus-builder/references/patterns"
     core = yaml.safe_load((suite / "core-feature-model.yaml").read_text())
     core_axes = {k for k in core if not k.startswith("_")}
+    # Season filter: a pattern scoped to another season can't justify a question this season, and a
+    # mechanism token (e.g. DECODE's `shooter.requires`) the ACTIVE season doesn't declare isn't askable.
+    active = (suite / "season-extensions" / "ACTIVE").read_text().strip()
+    season = yaml.safe_load((suite / "season-extensions" / f"{active}.yaml").read_text()) or {}
+    season_mechs = set((season.get("season_mechanisms") or {}).keys())
+    other_season_mechs = set()
+    for sf in (suite / "season-extensions").glob("*.yaml"):
+        other_season_mechs |= set(((yaml.safe_load(sf.read_text()) or {}).get("season_mechanisms") or {}).keys())
+    other_season_mechs -= season_mechs
 
     per_path, per_axis, total = Counter(), Counter(), 0
+    skipped_other_season, dropped_tokens = Counter(), Counter()
     for f in sorted(patterns_dir.glob("*.yaml")):
         data = yaml.safe_load(f.read_text()) or {}
         for pat in data.get("patterns", []) or []:
             cond = str(pat.get("applicable_when", ""))
             if not cond or cond.startswith("n/a"):
                 continue
+            scope = pat.get("season_scope", "invariant")
+            if scope not in ("invariant", active):
+                skipped_other_season[scope] += 1
+                continue
             total += 1
             for tok in set(TOKEN.findall(cond)):
-                per_path[tok] += 1
                 axis = tok.split(".")[0]
+                if axis in other_season_mechs:
+                    dropped_tokens[tok] += 1
+                    continue
+                per_path[tok] += 1
                 # 'season' tokens are season-extension features, not core axes — kept but labeled
                 per_axis[axis if axis in core_axes else f"season:{axis}"] += 1
 
@@ -76,7 +93,10 @@ def main():
         for path, n in per_path.most_common()
     ]
     print(json.dumps({
+        "active_season": active,
         "patterns_with_conditions": total,
+        "skipped_patterns_scoped_to_other_seasons": dict(skipped_other_season),
+        "dropped_tokens_not_in_active_season": dict(dropped_tokens.most_common()),
         "ranked_features": ranked,
         "axis_totals": dict(per_axis.most_common()),
         "note": "soft ordering for NON-mandatory questions only; mandatory set asks first regardless",

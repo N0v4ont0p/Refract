@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.telemetry.RobotTelemetry;
  *
  * Two things happen here, once, so no subclass can forget them:
  *
- * 1. Telemetry is wired to both the Driver Station and FTC Dashboard before
- *    {@link #onInit()} runs, and flushed automatically every loop after
- *    {@link #onRun()} runs. Telemetry is default-on, not something a subsystem
+ * 1. Telemetry is wired (Driver Station only -- competition-legal, see
+ *    {@link RobotTelemetry}) before {@link #onInit()} runs, and flushed
+ *    automatically every loop after {@link #onRun()} runs. Telemetry is default-on, not something a subsystem
  *    or OpMode author opts into.
  * 2. {@code initialize()}/{@code run()} (FTCLib's {@link CommandOpMode} hooks)
  *    are sealed with {@code final} so the scaffolding above cannot be

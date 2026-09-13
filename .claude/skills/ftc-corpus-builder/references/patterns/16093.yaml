@@ -29,6 +29,8 @@ meta:
 
 patterns:
   - id: 16093-A-followerex
+    season_scope: invariant
+    season_scope_basis: "Pedro Follower end-of-path tolerance latch + hard brake is pathing/drivetrain behaviour; no game dependence."
     problem: >
       Pedro's stock Follower oscillates/hunts near the target pose and doesn't positively
       brake at end-of-segment.
@@ -59,6 +61,8 @@ patterns:
       flagged weak code is not carried forward.
 
   - id: 16093-B-pathchain-interleaving
+    season_scope: invariant
+    season_scope_basis: "Parallel PathChain/Command lists with a fail-fast size guard; the DECODE field poses are data, not the pattern (per its notes)."
     problem: >
       Keep autonomous path segments and their paired waypoint actions in sync as a routine is
       edited over a season.
@@ -78,6 +82,8 @@ patterns:
     notes: "Field poses are DECODE-season-specific (NOT the pattern); the transferable part is the interleaving STRUCTURE + fail-fast size guard. Single-source."
 
   - id: 16093-C-newmecanumdrive-pinpoint
+    season_scope: invariant
+    season_scope_basis: "RoadRunner MecanumDrive fed goBILDA Pinpoint pose via overridden encoder getters; localization plumbing, no game dependence."
     problem: >
       Use RoadRunner's MecanumDrive/localizer machinery while the actual localization hardware is
       a goBILDA Pinpoint odometry computer, not drive-motor encoders.
@@ -106,6 +112,8 @@ patterns:
       TRANSITIONAL; the lineage's mature state carries no RoadRunner at all.
 
   - id: 16093-D-shooter-preset
+    season_scope: decode-2025-26
+    season_scope_basis: "Preset-vs-continuous stance and onboard velocity-PIDF hold transfer; the velocity/hood preset values are tuned for Artifact shots from DECODE firing spots."
     problem: >
       Set flywheel velocity + hood angle for scoring, for a team whose firing positions are few
       and predictable.
@@ -149,6 +157,8 @@ patterns:
       the lineage outgrew — not a permanent design position.
 
   - id: 16093-E-prelimitcommand
+    season_scope: invariant
+    season_scope_basis: "One always-scheduled FTCLib command driving coupled outputs from shared flags; the flag set is robot state, not DECODE field or scoring logic."
     problem: >
       Decide several coupled outputs (shooter-accel state, intake limit-servo, LED color) from a
       few shared driver-toggled flags, without scattering the coupling across per-button lambdas.

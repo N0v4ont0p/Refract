@@ -1,0 +1,28 @@
+{
+  "table_id": "13-2",
+  "caption": "Number of playoff ALLIANCES based on all Qualification Match participating teams",
+  "rows": [
+    [
+      "Total playoff eligible teams",
+      "Number of playoff ALLIANCES formed"
+    ],
+    [
+      "4-10 Teams",
+      "2"
+    ],
+    [
+      "11-20 Teams",
+      "4"
+    ],
+    [
+      "21-40 Teams",
+      "6"
+    ],
+    [
+      "41-64 Teams",
+      "8"
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:13-2]] pointer (\u00a78<->\u00a79)"
+}

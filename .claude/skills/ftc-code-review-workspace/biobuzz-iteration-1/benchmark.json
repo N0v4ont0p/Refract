@@ -1,0 +1,50 @@
+{
+  "season": "biobuzz-2026-27",
+  "iteration": "biobuzz-iteration-1",
+  "date": "2026-09-13",
+  "evals": [
+    {
+      "id": 1,
+      "name": "season-constraints-surfaced",
+      "variant": "with_skill",
+      "passed": 4,
+      "total": 4,
+      "factual_errors": 0
+    },
+    {
+      "id": 1,
+      "name": "season-constraints-surfaced",
+      "variant": "without_skill",
+      "passed": 4,
+      "total": 4,
+      "factual_errors": 1
+    },
+    {
+      "id": 2,
+      "name": "moving-tag-localization",
+      "variant": "with_skill",
+      "passed": 2,
+      "total": 2,
+      "factual_errors": 0
+    },
+    {
+      "id": 2,
+      "name": "moving-tag-localization",
+      "variant": "without_skill",
+      "passed": 2,
+      "total": 2,
+      "factual_errors": 0
+    }
+  ],
+  "with_skill": {
+    "passed": 6,
+    "total": 6,
+    "factual_errors": 0
+  },
+  "without_skill": {
+    "passed": 6,
+    "total": 6,
+    "factual_errors": 1
+  },
+  "notes": "Runner/grader: independent subagents (workflow biobuzz-eval-iteration-1). Baseline had web access and no repo access; several baseline failures are grounding-only (correct content via a downloaded manual, no corpus path)."
+}

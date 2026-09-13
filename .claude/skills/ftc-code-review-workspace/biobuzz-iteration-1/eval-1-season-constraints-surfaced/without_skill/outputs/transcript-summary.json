@@ -1,0 +1,20 @@
+{
+  "scripts_run": [
+    "find \"/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/\" -type f | head -100; find \"/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/\" -type f -exec wc -l {} +",
+    "WebFetch https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/README.md (v12.0 AprilTag notes, twice)",
+    "WebSearch: FTC BIOBUZZ 2026-2027 competition manual FTC Dashboard robot network rule",
+    "WebFetch https://ftc-resources.firstinspires.org/ftc/game/manual (saved PDF)",
+    "mkdir -p <scratchpad>/evalruns && pdftotext -layout <saved manual pdf> manual.txt && grep -n -i -E \"R70[0-9]|dashboard|wireless|Wi-Fi|stream\" manual.txt",
+    "sed -n 4836,4920p manual.txt; grep -n -i \"dashboard\\|R704\\|R705\\|apriltag\\|HIVE tag\\|singleton\\|cluster\" manual.txt",
+    "sed -n 2295,2310p manual.txt; sed -n 2395,2440p manual.txt; grep -n -i \"CELL.*\\(rotat\\|move\\|spin\\|lower\\|raise\\)\" manual.txt",
+    "WebFetch https://raw.githubusercontent.com/FIRST-Tech-Challenge/FtcRobotController/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/ConceptAprilTag.java"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/team-config.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/LauncherSubsystem.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TurretAim.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/HiveRelocalizer.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TelemetryHelper.java",
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/manual.txt"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scripts_run": [
+    "WebSearch: FTC 2026-2027 game BIOBUZZ pollen flower",
+    "WebSearch: BIOBUZZ FTC kickoff FLOWER scoring pollen launch competition manual",
+    "WebSearch: BIOBUZZ FLOWER pollen \"FLOWER\" scoring rule launched placed",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game/manual (saved PDF)",
+    "mkdir -p .../scratchpad/evalruns && pdftotext -layout <saved manual pdf> manual.txt; grep -n -i flower manual.txt",
+    "sed -n (sections 8, 9.7, 10.1, 10.5.x) manual.txt",
+    "grep -n -E 'G418|G410|LAUNCH|PLACE' manual.txt; sed -n G410/G418/glossary ranges",
+    "D=.../scratchpad/evalruns/bb_flower_$$; pdftotext -layout <saved manual pdf> $D/bb.txt; /usr/bin/grep -n LAUNCH $D/bb.txt (re-extracted to a unique file after the shared manual.txt was overwritten by another run)",
+    "sed -n 3525,3550p / 3664,3672p / 5998,6004p / 2805,2835p / 5970,5978p $D/bb.txt; /usr/bin/grep -n 'Q&A|FLOWER' $D/bb.txt"
+  ],
+  "files_read": [
+    "/Users/georgehu/.claude/projects/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/tool-results/webfetch-1789273664923-awwgvg.pdf (official BIOBUZZ V1 Competition Manual downloaded from ftc-resources.firstinspires.org, text-extracted)",
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/bb_flower_25093/bb.txt"
+  ]
+}

@@ -84,7 +84,7 @@
       "id": 13,
       "query": "what's team 14584's OPR right now?",
       "expected": "NONE",
-      "why": "R65 deferred (FTCScout live data) -> abstain, no skill owns it yet"
+      "why": "REQ-65 deferred (FTCScout live data) -> abstain, no skill owns it yet"
     },
     {
       "id": 14,
@@ -102,7 +102,7 @@
       "id": 16,
       "query": "we're brand new this year \u2014 what should our first robot even look like?",
       "expected": "NONE",
-      "why": "R78 explicitly-deferred gap: from-scratch design advice owned by no skill this pass"
+      "why": "REQ-78 explicitly-deferred gap: from-scratch design advice owned by no skill this pass"
     },
     {
       "id": 17,
@@ -132,7 +132,7 @@
       "id": 21,
       "query": "write me a teleop OpMode for our shooter",
       "expected": "ftc-construct",
-      "why": "the exact §23 boundary-test phrase: pure generation request, no config-setup or config-change language attached -> CO. CO's own precondition (R82) hands back to TC if no config is confirmed yet -- routing here tests the FIRST hop, not the full turn"
+      "why": "the exact §23 boundary-test phrase: pure generation request, no config-setup or config-change language attached -> CO. CO's own precondition (REQ-82) hands back to TC if no config is confirmed yet -- routing here tests the FIRST hop, not the full turn"
     },
     {
       "id": 22,
@@ -164,7 +164,7 @@
     "exact": 19,
     "acceptable_ambiguous": 2,
     "new_findings_not_caused_by_construct": 2,
-    "boundary_test_result_the_user_asked_for": "PASS. q21 ('write me a teleop OpMode for our shooter') and q22 ('generate the ShooterOpMode.java for us') both routed cleanly to ftc-construct with no hedging \u2014 the bare-generation-request case the user's Step 5 explicitly named. q23 ('add an intake subsystem', TIGHT PAIR C) resolved as AMBIGUOUS:ftc-team-config|ftc-construct exactly as designed \u2014 accepted per the same standard q17 already set, since either owner's body correctly hands off/back (TC hands to CO once confirmed; CO hands back to TC if unconfirmed \u2014 see R82, live-tested separately below in the runbook, not just described). q1 and q8 (config-setup / mid-season-change language) still correctly resolved to ftc-team-config, NOT ftc-construct \u2014 confirms construct's overlapping example phrasing does not over-trigger when the query carries config-establishing context.",
+    "boundary_test_result_the_user_asked_for": "PASS. q21 ('write me a teleop OpMode for our shooter') and q22 ('generate the ShooterOpMode.java for us') both routed cleanly to ftc-construct with no hedging \u2014 the bare-generation-request case the user's Step 5 explicitly named. q23 ('add an intake subsystem', TIGHT PAIR C) resolved as AMBIGUOUS:ftc-team-config|ftc-construct exactly as designed \u2014 accepted per the same standard q17 already set, since either owner's body correctly hands off/back (TC hands to CO once confirmed; CO hands back to TC if unconfirmed \u2014 see REQ-82, live-tested separately below in the runbook, not just described). q1 and q8 (config-setup / mid-season-change language) still correctly resolved to ftc-team-config, NOT ftc-construct \u2014 confirms construct's overlapping example phrasing does not over-trigger when the query carries config-establishing context.",
     "handback_mechanism_live_test": "Ran `python3 .claude/skills/ftc-team-config/scripts/validate_config.py .claude/skills/ftc-team-config/evals/fixtures/rookie-mecanum-stock.yaml` directly (real script, real fixture with an unconfirmed mandatory field) \u2014 returned `generation_allowed: false, unconfirmed_mandatory: [\"software_stack.pathing\"]`. This is the exact signal ftc-construct's \u00a70 precondition checks before generating; confirms the mechanism CO's handback depends on already works correctly. Separately discovered and fixed: validate_config.py raises an unhandled traceback (not a clean result) when the config file doesn't exist at all rather than being merely unconfirmed \u2014 ftc-construct's \u00a70 was written to check file existence with a plain check FIRST, before ever invoking the script, to avoid depending on the script handling that case (it doesn't).",
     "incidental_findings_pre_existing_not_introduced_by_construct": [
       {
@@ -184,7 +184,7 @@
     "note": "HW's and CR's descriptions were tightened to fix q6 and q14 (see SKILL.md diffs \u2014 HW now explicitly carves out legality-verdict phrasing to RC; CR now explicitly excludes pure connectivity/networking symptoms). Re-ran the full blind classifier fresh (new agent, zero prior context) against the updated descriptions to confirm.",
     "q6_battery_legality": "FIXED, confirmed \u2014 classifier now resolves cleanly to ftc-rule-check, explicitly citing HW's new carve-out text. No longer ambiguous.",
     "q14_wifi_networking": "FIXED, confirmed \u2014 classifier now resolves to NONE, explicitly citing CR's new exclusion text. No longer over-triggers ftc-code-review.",
-    "new_observation_not_a_defect": "This re-run's classifier resolved the bare generation queries (q21 'write me a teleop OpMode for our shooter', q22 'generate the ShooterOpMode.java for us', q23 'add an intake subsystem') to ftc-team-config rather than ftc-construct \u2014 different from the PRIOR blind run, which picked ftc-construct for q21/q22 and AMBIGUOUS for q23. The agent itself flagged why: a stateless classifier with no repo context cannot know whether a team-config.yaml already exists and is confirmed, so it defaults conservatively to ftc-team-config (a reasonable default under uncertainty, not a bug) \u2014 construct's own precondition (R82) is designed to be checked WITH real session/repo state, which a bare-string classification test cannot simulate. This is a known limitation of the stateless-classifier proxy, not of the actual routing mechanism: the real, session-aware behavior (does TC correctly recognize an ALREADY-confirmed config on disk and hand off to construct) was independently validated by the trimmed TC re-eval's scenario 3 (rookie/veteran fixtures, real validate_config.py run, real hand-off transcript) \u2014 see evals/post-construct-split-reeval.md. Both runs of the stateless test are defensible; neither represents a routing collision or a wrong-skill lock-in.",
+    "new_observation_not_a_defect": "This re-run's classifier resolved the bare generation queries (q21 'write me a teleop OpMode for our shooter', q22 'generate the ShooterOpMode.java for us', q23 'add an intake subsystem') to ftc-team-config rather than ftc-construct \u2014 different from the PRIOR blind run, which picked ftc-construct for q21/q22 and AMBIGUOUS for q23. The agent itself flagged why: a stateless classifier with no repo context cannot know whether a team-config.yaml already exists and is confirmed, so it defaults conservatively to ftc-team-config (a reasonable default under uncertainty, not a bug) \u2014 construct's own precondition (REQ-82) is designed to be checked WITH real session/repo state, which a bare-string classification test cannot simulate. This is a known limitation of the stateless-classifier proxy, not of the actual routing mechanism: the real, session-aware behavior (does TC correctly recognize an ALREADY-confirmed config on disk and hand off to construct) was independently validated by the trimmed TC re-eval's scenario 3 (rookie/veteran fixtures, real validate_config.py run, real hand-off transcript) \u2014 see evals/post-construct-split-reeval.md. Both runs of the stateless test are defensible; neither represents a routing collision or a wrong-skill lock-in.",
     "verdict": "Both incidental findings confirmed fixed with no new collisions introduced. The construct-reachability question is better answered by the session-aware re-eval than by a stateless classifier, and that re-eval already passed."
   }
 }

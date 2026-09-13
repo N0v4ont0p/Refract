@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "identifies-moving-tags",
+      "passed": true,
+      "evidence": "The answer says \"The HIVE tags aren't in fixed spots, so they can't tell you where the robot is on the field\" and quotes the v12.0 README: \"since BIOBUZZ AprilTags move, they are not suitable for absolute Field Localization\". That quote matches season-extensions/biobuzz-2026-27.yaml apriltags.localization. It also explains that robotPose assumes fixed tag positions, so resets would jump \"wherever the HIVE ended up\". Weakness: it never says the HIVE tips or flips, which is the actual mechanism (season file note: \"the HIVE flips on every TIP\"). It even asks \"Does the HIVE actually move during autonomous in your matches, and are there any tags on the BIOBUZZ field that never move?\" The core of the assertion (tags move with the HIVE, not a fixed field reference, SDK v12.0 note cited) is still met."
+    },
+    {
+      "name": "no-decode-pattern-endorsement",
+      "passed": true,
+      "evidence": "No DECODE-season relocalization pattern is cited or endorsed. The answer rejects the approach (\"Short answer: no.\"), recommends odometry tuning and cluster-relative aiming (\"Use the HIVE tags for aiming, not position\"), and cites only the FTC SDK v12.0 README and the BIOBUZZ game page. scripts_run shows no DECODE lookups either."
+    }
+  ],
+  "factual_errors": []
+}

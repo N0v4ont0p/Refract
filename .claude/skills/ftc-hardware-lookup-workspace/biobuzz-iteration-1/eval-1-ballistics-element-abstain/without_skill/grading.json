@@ -1,0 +1,23 @@
+{
+  "assertions": [
+    {
+      "name": "no-drag-reported",
+      "passed": false,
+      "evidence": "The table does show the right number (\"No drag | 20.0\u00b0, still rising (+14 in/s)\"), and my run of trajectory_solver.py --season biobuzz-2026-27 -d 120 -t 24 -v 400 gives no_drag_angle_deg 20.01. But the assertion requires the value to come from the script output. scripts_run shows only a homemade traj.py; trajectory_solver.py was never run and files_read is empty. The answer also leads with the drag angles (\"set your launch angle to about 21 to 24 degrees\"), not the no-drag angle."
+    },
+    {
+      "name": "drag-withheld",
+      "passed": false,
+      "evidence": "The answer gives drag-aware angles as the recommendation: \"Short answer: set your launch angle to about 21 to 24 degrees above horizontal\", plus table rows \"20.5\u00b0\", \"21.4\u00b0\" and \"24.1\u00b0\". It admits \"I don't have reliable details on the BIOBUZZ game or its 'pollen' game piece\", but never gives the solver's reason for withholding (no BIOBUZZ element constants), and it does not withhold the angle."
+    },
+    {
+      "name": "no-decode-ball",
+      "passed": true,
+      "evidence": "21.25\u00b0 and the DECODE Artifact constants (5 in / 75 g) never appear. The closest row is an assumed \"5 in foam ball, 60 g, Cd 0.5 | 21.4\u00b0\", which is similar in spirit but is not the DECODE constants and is not quoted as 21.25."
+    }
+  ],
+  "factual_errors": [
+    "The corpus defines POLLEN (rules.py term POLLEN, biobuzz-2026-27) as 2.8 in (7.1 cm) polyethylene balls. All three drag cases the answer uses to set its headline 21-24 degree range assume a 3 in or 5 in piece, so no case matches the real 2.8 in size. The 5 in foam and wiffle cases are the ones that drive the range up to about 24 degrees. The answer labels them assumptions, but they are not grounded in the manual.",
+    "Minor: the answer uses g = 386.1 in/s\u00b2. The corpus invariant used by trajectory_solver.py (references/physics/invariants.json) is 386.4 in/s\u00b2. The no-drag results still agree (20.0 vs 20.01 degrees for the flat shot, 81.3 degrees for the lob)."
+  ]
+}

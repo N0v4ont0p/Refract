@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "season-pinned",
+      "passed": false,
+      "evidence": "The answer does name the season ('BIOBUZZ Competition Manual (V1)'). But the assertion requires grounding in the BIOBUZZ corpus through rules.py output. scripts_run lists only WebSearch, a WebFetch of ftc-resources.firstinspires.org, and pdftotext/grep/sed on a downloaded manual.txt. rules.py was never run with --season biobuzz-2026-27 or through ACTIVE, and no corpus file appears in files_read. The content matches the corpus, but it did not come from it."
+    },
+    {
+      "name": "cites-R102-not-R101",
+      "passed": false,
+      "evidence": "R102 is correctly the governing rule, and R101 is not cited as the size rule ('In the BIOBUZZ Competition Manual (V1), R101 is the rule that your team must build its own robot'). The assertion also requires R102's verbatim BIOBUZZ text, and the answer only paraphrases it: 'every part of the robot must be still and fit inside an 18 in. (45.70 cm) wide \u00d7 18 in. long \u00d7 18 in. high box.' Nothing is quoted. The corpus wording is 'all parts of the ROBOT must be fully stationary, and the ROBOT must be fully self-contained within an 18 in. (45.70 cm) wide, by 18 in. (45.70 cm) long, by 18 in. (45.70 cm) high volume.' No partial credit, so this fails."
+    },
+    {
+      "name": "flags-number-reuse",
+      "passed": true,
+      "evidence": "'The rule this season is R102, not R101... The starting size rule moved to R102 (last season in DECODE it was R101, so you remembered right).' The corpus confirms this: DECODE R101 is 'STARTING CONFIGURATION is limited to an 18-inch Cube', and BIOBUZZ R101 is 'It is your team's ROBOT'."
+    }
+  ],
+  "factual_errors": []
+}

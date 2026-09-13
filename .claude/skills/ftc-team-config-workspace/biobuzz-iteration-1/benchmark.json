@@ -1,0 +1,43 @@
+{
+  "season": "biobuzz-2026-27",
+  "iteration": "biobuzz-iteration-1",
+  "date": "2026-09-13",
+  "evals": [
+    {
+      "id": 1,
+      "name": "season-boundary-carry-core",
+      "variant": "with_skill",
+      "passed": 4,
+      "total": 4,
+      "factual_errors": 0
+    },
+    {
+      "id": 1,
+      "name": "season-boundary-carry-core",
+      "variant": "without_skill",
+      "passed": 2,
+      "total": 4,
+      "factual_errors": 2
+    },
+    {
+      "id": 2,
+      "name": "validator-states",
+      "variant": "deterministic",
+      "passed": 1,
+      "total": 1,
+      "factual_errors": 0,
+      "detail": "ACTIVE=biobuzz live: valid True, generation_allowed True; --active decode-2025-26: valid True, generation blocked, 'ACTIVE is behind' message; suite root with BIOBUZZ file DRAFT: valid False, draft-season error. Run by script 2026-09-13."
+    }
+  ],
+  "with_skill": {
+    "passed": 4,
+    "total": 4,
+    "factual_errors": 0
+  },
+  "without_skill": {
+    "passed": 2,
+    "total": 4,
+    "factual_errors": 2
+  },
+  "notes": "Runner/grader: independent subagents (workflow biobuzz-eval-iteration-1). Baseline had web access and no repo access; several baseline failures are grounding-only (correct content via a downloaded manual, no corpus path)."
+}

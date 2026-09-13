@@ -1,0 +1,16 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && cat references/standing-principles.md | head -150; cat season-extensions/ACTIVE; python3 scripts/check_freshness.py; echo EXIT=$?",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R510 R501; echo EXIT=$?",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && ls .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/; cat .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/*12-1*; grep -ril \"stingray\\|wattos\" .claude/skills references corpus-staging 2>/dev/null | head",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R501 R503 R505; echo EXIT=$?; python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R510; echo EXIT=$?; grep -i -B2 -A2 stingray .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-4.json .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-5.json",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && grep -i -o '\"[^\"]*\\(stingray\\|wattos\\)[^\"]*\"' .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-4.json .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-5.json; python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R505 | grep -A40 '\"rule_id\": \"R505\"' | head -5; cat .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-3.json"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-3.json"
+  ]
+}

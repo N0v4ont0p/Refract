@@ -102,7 +102,7 @@ device_map:                                   # [generative] — key set derived
     (Pedro's MecanumConstants.leftFrontMotorName, PinpointConstants.hardwareMapName), THIS block
     is the single source of truth and `tuning_constants` references it — the name is not stored twice.
 
-reference_frames:                             # [generative] — a new DIMENSION, not a field (R123)
+reference_frames:                             # [generative] — a new DIMENSION, not a field (REQ-123)
   # A physical constant can be fully measured, fully confirmed, and still silently wrong — because
   # correctness of a coordinate is not a property of the number, it is a property of the number
   # PLUS the frame it is stated in. `origin: measured` says where a number came from. It says
@@ -199,7 +199,7 @@ tuning_constants:                             # [generative] — shape follows t
     - mechanism_offsets # shooter/turret offset from the robot's centre of rotation
     - poses             # any stored pose or heading (auto end pose, teleop seed, presets)
 
-  # --- groups the schema previously had no home for (R124) ---------------------------------------
+  # --- groups the schema previously had no home for (REQ-124) ---------------------------------------
   # These were being ported verbatim into generated code while having NO config representation at
   # all, which means `emit_tuning verify` could not check their provenance by construction — the
   # gate was silent on them not because they were fine, but because it had never heard of them.
@@ -225,7 +225,7 @@ tuning_constants:                             # [generative] — shape follows t
       Season target coordinates. FRAME REQUIRED — this is the category the frame dimension exists
       for, and the one where a mismatch is completely silent.
 
-device_ownership:                             # [generative] — arbitration, not wiring (R125)
+device_ownership:                             # [generative] — arbitration, not wiring (REQ-125)
   # `device_map` answers "what is this device called". It does not answer "who is allowed to grab
   # it", and two subsystems constructing the same motor is a real, silent conflict: the second
   # `hardwareMap.get()` succeeds, both objects write to the same hardware, and last-writer-wins
@@ -245,7 +245,7 @@ device_ownership:                             # [generative] — arbitration, no
   # RULE: exactly one owner per (device, opmode_type). Two owners is a validation error, not a
   # warning — it is the condition that produces the silent conflict.
 
-cross_opmode_state:                           # [generative] — the auto->teleop handoff (R126)
+cross_opmode_state:                           # [generative] — the auto->teleop handoff (REQ-126)
   # A field written by one OpMode and read by another, surviving only because statics live on the
   # Robot Controller app process. Generalizable to any two-phase competition robot: an auto that
   # ends somewhere and a teleop that must know where.

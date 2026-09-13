@@ -1,0 +1,28 @@
+{
+  "assertions": [
+    {
+      "name": "core-carried",
+      "passed": true,
+      "evidence": "Section 2 'What probably carries over (please confirm each one)' lists swerve, Control Hub + Expansion Hub, Limelight 3A, Pinpoint, Pedro Pathing, FTCLib command-based, and Q1 says 'If yes, I keep the carry-over items as drafts to confirm.' The core axes are kept and sent back for confirmation, not collected again from scratch. It does this across a table plus Q2-Q4 instead of one line, and it opens the door to switching ('SolversLib, NextFTC, Road Runner'), but it never throws them away."
+    },
+    {
+      "name": "no-silent-translation",
+      "passed": false,
+      "evidence": "The run never read season-extensions/biobuzz-2026-27.yaml (files_read has only the fixture; scripts_run has only a WebSearch). Q5 asks an open-ended 'Intake type, how you score Pollen (flywheel, arm, something else), turret or fixed, and any endgame mechanism.' It does not ask from the BIOBUZZ file's keys (hive_launcher, aim_vision, element_color_sensing, capacity_limiter, flower_placer, flower_pollen_retrieval, endgame_parking: loading_zone_park). It did avoid writing DECODE values as BIOBUZZ values ('I'm clearing all of these'), but the assertion also requires the questions to come from the BIOBUZZ file, and they don't."
+    },
+    {
+      "name": "season-stamp",
+      "passed": false,
+      "evidence": "No config was produced: 'Until then I'm not generating robot code, and I haven't changed any files.' It only promises 'I rewrite the config for `biobuzz-2026-27`' later. There is no _meta.season: biobuzz-2026-27 and no config_history entry naming decode-2025-26 and biobuzz-2026-27."
+    },
+    {
+      "name": "draft-respected",
+      "passed": true,
+      "evidence": "This check applies only if the BIOBUZZ file is still DRAFT, and it isn't. season-extensions/ACTIVE = 'biobuzz-2026-27', and biobuzz-2026-27.yaml has '_meta.status: live' with step_6_merge done 2026-09-13. The answer never falsely claims the transition is unsigned, so it passes by default. It also never checked ACTIVE or the season file; instead it says 'I haven't checked the BIOBUZZ manual', so the pass shows no grounding."
+    }
+  ],
+  "factual_errors": [
+    "'Pollen, plastic balls about 3 in. across that behave much like DECODE's Artifacts': the corpus defines POLLEN as a 2.8 in. (7.1 cm) polyethylene ball, and a DECODE ARTIFACT as a 5 in. (12.70 cm) polypropylene ball. The size difference contradicts 'much like'. BIOBUZZ also has two scoring elements (POLLEN and NECTAR per season-extensions/biobuzz-2026-27.yaml), not just Pollen.",
+    "'the parking rule was a DECODE rule': BIOBUZZ also defines PARK as a scoring achievement (the robot is at least partially in the LOADING ZONE; rules.py term PARK --season biobuzz-2026-27). Parking is not DECODE-only; only the 'mandatory' value was DECODE-specific (season file: 'scored, NOT mandatory')."
+  ]
+}

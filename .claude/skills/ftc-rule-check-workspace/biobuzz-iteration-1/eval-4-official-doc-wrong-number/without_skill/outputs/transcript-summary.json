@@ -1,0 +1,18 @@
+{
+  "scripts_run": [
+    "WebSearch: WATTOS Stingray motor FTC",
+    "WebSearch: FTC 2026-2027 Competition Manual Team Update 00 R510 motors",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game/manual",
+    "D=/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns; mkdir -p $D; pdftotext -layout <saved manual pdf> $D/manual.txt; grep -n -i -E \"wattos|stingray|team update|R510|R50[0-9]|R51[0-9]\" $D/manual.txt",
+    "sed -n 4405,4450p $D/manual.txt; sed -n 4490,4520p $D/manual.txt; grep -n R510 $D/manual.txt; sed -n 640,665p $D/manual.txt",
+    "grep -n -o -E \"^ *R5[0-9]{2} \\*?[^.]{0,70}\" $D/manual.txt; grep -c R510 $D/manual.txt",
+    "WebSearch: \"Team Update 00\" 2026-2027 FIRST Tech Challenge BIOBUZZ",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game/tu-00",
+    "pdftotext -layout <saved tu-00 pdf> $D/tu00.txt; cat $D/tu00.txt"
+  ],
+  "files_read": [
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/manual.txt",
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/tu00.txt"
+  ]
+}

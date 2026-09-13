@@ -1,0 +1,21 @@
+{
+  "scripts_run": [
+    "cat references/standing-principles.md | head -150; cat season-extensions/ACTIVE",
+    "python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py --help",
+    "python3 -c (search rules.json for servo/motor/actuator rules)",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R503 R502 R501 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup I302 --season biobuzz-2026-27",
+    "cat .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json table-12-2.json",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term MECHANISM --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R503 R501 R502 I302 --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-2.json"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "table_id": "6-6",
+  "caption": "Sustain Award Criteria Sustain Award Criteria Required 1 Team demonstrates organ",
+  "rows": [
+    [
+      "Sustain Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team demonstrates organizational sustainability competency by explaining its plans for long-term success, including one or more of the following: financial sustainability, season planning, and/or long-term team sustainability objectives."
+    ],
+    [
+      "Required",
+      "2",
+      "Team demonstrates project management competency by explaining how it measures, reviews, and tracks progress toward its sustainability plans and objectives."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Team demonstrates leadership development competency through clearly defined team roles and an intentional process for preparing future student leaders."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Team demonstrates risk management competency by identifying organizational constraints, implementing mitigation strategies, and adapting plans when challenges arise."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-6]] pointer (\u00a78<->\u00a79)"
+}

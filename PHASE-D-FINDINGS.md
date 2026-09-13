@@ -1,7 +1,7 @@
 # Phase D findings — final hardening, Part 1
 
 Per ROADMAP.md's D1: a real final inspection across all 5 skills before the website. Not a
-formality — one real bug was caught and fixed along the way (R101).
+formality — one real bug was caught and fixed along the way (REQ-101).
 
 ---
 
@@ -46,11 +46,11 @@ version) and running the skill's actual scripts for real:
 | ftc-rule-check | New scenario: expansion-hub separate-battery legality | Regression-free — full 5-part flow ran for real (freshness UNVERIFIABLE, correctly carried into the verdict; R601/R602/R605 lookup+verify; verdict illegal, citations byte-quotable) |
 | ftc-construct | RoadRunner re-test (autonomous + teleop, real trajectory-building + localizer gap) | Regression-free — trajectory calls grounded to exact doc lines; localizer/pose-read still absent from the docs, correctly stubbed with a TODO, not fabricated; matches the Phase B finding and standing-principles §10's own citation of it |
 | ftc-construct | goBILDA re-test (viper-slide soft limit) | Regression-free — guide re-confirmed to still lack the net-travel figure; generation abstained immediately (no repeated searching), fail-safe placeholder + TODO shipped, not a fabricated number |
-| ftc-code-review | **New** legality-flavored existing-code scenario (turret expansion-limit question — deliberately different from Phase C's flywheel/R207 case) | **§5 generalizes correctly** — real freshness check (UNVERIFIABLE, carried forward), real rule IDs found by grep (G414/R105/R101), real lookup+verify, verdict `ambiguous` (correctly — code alone can't establish physical constraint compliance). Ordinary §§1-4 review ran alongside it unmodified and surfaced real findings. **Also surfaced R101 (below)** — a real config-discovery bug, not previously known. |
+| ftc-code-review | **New** legality-flavored existing-code scenario (turret expansion-limit question — deliberately different from Phase C's flywheel/R207 case) | **§5 generalizes correctly** — real freshness check (UNVERIFIABLE, carried forward), real rule IDs found by grep (G414/R105/R101), real lookup+verify, verdict `ambiguous` (correctly — code alone can't establish physical constraint compliance). Ordinary §§1-4 review ran alongside it unmodified and surfaced real findings. **Also surfaced REQ-101 (below)** — a real config-discovery bug, not previously known. |
 
 ---
 
-## R101 — a real bug, caught live, fixed at root cause
+## REQ-101 — a real bug, caught live, fixed at root cause
 
 The CR legality re-test above ran `config_lint.py` without `--config` and got a **silent
 false-negative**: the script's old discovery logic (`Path(".").rglob("team-config.yaml")`,
@@ -68,11 +68,11 @@ against the exact failing scenario: now correctly finds the fixture's own config
 `clean: false` with the real finding, exit 1. Self-test extended to cover both the sibling-discovery
 case and the original "must not pick up an unrelated config" case. Fixed identically in both the
 source and plugin copies (`.claude/skills/ftc-code-review/scripts/config_lint.py` and its plugin
-mirror), confirmed byte-identical. Full record: TRACEABILITY.md R101.
+mirror), confirmed byte-identical. Full record: TRACEABILITY.md REQ-101.
 
 ---
 
-## R100 self-scan — this project's docs, checked against its own new rule
+## REQ-100 self-scan — this project's docs, checked against its own new rule
 
 Grepped ROADMAP.md, TRACEABILITY.md, and all 5 skills' SKILL.md files across several passes for
 unhedged, total-sounding phrasing ("fully verified", "always", "100%", "guarantees", "catch all",
@@ -90,7 +90,7 @@ verified independently: neither `config_lint.py` nor `failure_mode_lint.py` make
 confirmed by reading both scripts directly). Tightened at first mention to scope it explicitly, not
 rewritten wholesale — the substance was correct, only the first-read clarity needed fixing.
 
-No other claim required correction. This is itself evidence for R100's own thesis: the claims found
+No other claim required correction. This is itself evidence for REQ-100's own thesis: the claims found
 here were already either hedged or precisely bounded; the one exception was a wording-clarity gap
 around an otherwise-true claim, not a claim that had actually been fabricated or gone unverified.
 

@@ -1,0 +1,45 @@
+{
+  "skill_name": "ftc-hardware-lookup",
+  "season": "biobuzz-2026-27",
+  "_design_note": "Season-transition evals (PLAN \u00a720). Ground truths checked 2026-09-13 against BIOBUZZ CM V1 + TU00, SDK v12.0 README, and by running the deterministic scripts named in each case. FAIL to hunt: drag-aware angles computed with DECODE's 5 in Artifact for BIOBUZZ, POLLEN/NECTAR mass from memory or an unlabeled vendor listing, legal-parts answers from the DECODE tables.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ballistics-element-abstain",
+      "prompt": "BIOBUZZ: we launch pollen at 400 in/s from 120 in away into a target 24 in above the launcher. what hood angle with drag?",
+      "expected_output": "trajectory_solver.py --season biobuzz-2026-27 returns the no-drag angle (20.01 deg) and drag_aware_angle_deg null with drag_aware_abstain: no BIOBUZZ element constants exist. The answer reports the no-drag angle, withholds a drag-aware angle, and asks for measured POLLEN mass/diameter (manual gives ~2.8 in nominal diameter, no mass). It does not reuse DECODE's 5 in / 75 g Artifact constants (which would give 21.25 deg).",
+      "files": [],
+      "assertions": [
+        {
+          "name": "no-drag-reported",
+          "text": "Reports ~20.01 deg no-drag from the script output"
+        },
+        {
+          "name": "drag-withheld",
+          "text": "Does not present a drag-aware angle for POLLEN; surfaces the abstain reason"
+        },
+        {
+          "name": "no-decode-ball",
+          "text": "Does not use or quote 21.25 deg / the DECODE Artifact constants as the POLLEN answer"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "season-table-read",
+      "prompt": "is the WATTOS Stingray motor on the allowed list this year?",
+      "expected_output": "Yes for BIOBUZZ: row 'WATTOS Stingray 12V DC' in manual-tables/biobuzz-2026-27/table-12-1.json (Table 12-1, referenced by R501). Not present in the DECODE table. Names the manual/season; routes the legality verdict framing through ftc-rule-check if asked as 'are we allowed'.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "reads-biobuzz-table",
+          "text": "Reads the biobuzz-2026-27 Table 12-1 file (or equivalent script/pointer), naming the season"
+        },
+        {
+          "name": "no-memory",
+          "text": "Motor list comes from the table file, not recall"
+        }
+      ]
+    }
+  ]
+}

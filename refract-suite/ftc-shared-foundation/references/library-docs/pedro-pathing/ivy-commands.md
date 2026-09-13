@@ -1,3 +1,8 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): only the "Example Repos" section near the end is DECODE
+> (2025-26)-specific (DECODE team codebases with DECODE shooter/turret/auto logic). The Ivy command
+> API documented above it is generic. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+
 > Source: https://pedropathing.com/docs/ivy · Fetched: 2026-07-12
 
 # Ivy — Command-Based Autonomous Framework for Pedro Pathing

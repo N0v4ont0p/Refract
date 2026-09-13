@@ -1,0 +1,18 @@
+{
+  "scripts_run": [
+    "python3 scripts/check_freshness.py --season biobuzz",
+    "python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py --help",
+    "python3 -c (print rule_index.json for biobuzz-2026-27)",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup R102 R105 G416 --season biobuzz-2026-27",
+    "python3 -c (scan rules.json for R105/29 in/sizing/software mentions)",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify R105 G416 R102 --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rule_index.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "physical-constraint",
+      "passed": true,
+      "evidence": "The answer says: \"R105.B says the robot must stay inside that limit without relying on software. R105 also names your exact case: a robot that can mechanically exceed the limit is in violation even if software limits the extension during the match.\" The R105 citation quotes \"B. ROBOTS must be physically constrained to fit within these limits without the use of software\" and the blue-box text about software limiting. Both match `rules.py lookup R105` word for word."
+    },
+    {
+      "name": "traverses-G416",
+      "passed": true,
+      "evidence": "G416 is cited next to R105 and quoted exactly: \"ROBOTS may not violate the limits outlined in R105 during the MATCH... Violation: VERBAL WARNING. MAJOR FOUL per instance, if STRATEGIC.\" The reasoning also says \"In a match, going over the limit is a G416 violation.\" scripts_run includes `rules.py lookup R102 R105 G416` and `rules.py verify R105 G416 R102`."
+    },
+    {
+      "name": "height-29",
+      "passed": true,
+      "evidence": "The answer says: \"the height limit is 29 in.\" and \"R105.A sets the height limit at 29 in. above the field surface.\" It uses the BIOBUZZ text retrieved by the lookup (\"18 in. ... by 24 in. ... by 29 in. (73.65 cm) tall sizing volume\"). No DECODE value of 18 or 38 in. is used as the expansion height. The 18 in. figure appears only for the R102 starting cube, which is correct."
+    }
+  ],
+  "factual_errors": []
+}
