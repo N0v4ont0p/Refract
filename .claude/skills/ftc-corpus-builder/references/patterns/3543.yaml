@@ -19,6 +19,8 @@ meta:
 
 patterns:
   - id: 3543-A-trcautotask
+    season_scope: invariant
+    season_scope_basis: "TrcAutoTask state-machine base over TrcTaskMgr (layer: framework); cross-platform orchestration, no game dependence."
     layer: framework
     problem: >
       Run multi-step non-blocking auto-assist behaviors (aim-and-shoot, find-and-
@@ -49,6 +51,8 @@ patterns:
       of a different kind, ruling out "the platform just forced it."
 
   - id: 3543-B-trcownershipmgr
+    season_scope: invariant
+    season_scope_basis: "Exclusive subsystem ownership manager (layer: framework); control infrastructure, no game dependence."
     layer: framework
     problem: >
       Multiple concurrent callers (auto-tasks, driver control) may command the same
@@ -71,6 +75,8 @@ patterns:
     notes: "High-value infra enabling preemptible exclusive subsystem control; season-agnostic."
 
   - id: 3543-C-trcsubsystem
+    season_scope: invariant
+    season_scope_basis: "Uniform TrcSubsystem lifecycle with static fan-out (layer: framework); no game dependence."
     layer: framework
     problem: >
       Give OpModes a season-independent way to operate on "all subsystems" (cancel,
@@ -93,6 +99,8 @@ patterns:
     notes: "Uniform-lifecycle + 'all subsystems' fan-out is a strong reusable design; season-agnostic."
 
   - id: 3543-D-drivebase-robottype
+    season_scope: invariant
+    season_scope_basis: "RobotType enum selecting RobotInfo/drivebase (layer: framework); DecodeRobot constants are robot tuning, the selection mechanism is built for cross-season reuse."
     layer: framework
     problem: >
       Keep developing autonomous/vision/drive code across a season transition (or
@@ -122,6 +130,8 @@ patterns:
       are commented out. Preserve verbatim.
 
   - id: 3543-E-ftcopmode
+    season_scope: invariant
+    season_scope_basis: "FtcOpMode cooperative-multitasking bridge over LinearOpMode (layer: framework); no game dependence."
     layer: framework
     problem: >
       Provide cooperative multitasking over the stock LinearOpMode loop — separating
@@ -155,6 +165,8 @@ patterns:
       TaskType→thread mapping above is confirmed from the enum docs + registration code.)
 
   - id: 3543-F-mechanism-templates
+    season_scope: invariant
+    season_scope_basis: "Game-piece-agnostic TrcShooter/TrcRollerIntake/TrcPidStorage templates (layer: framework); TrcShooter predates DECODE (2024 copyright)."
     layer: framework
     problem: >
       Reuse game-piece-agnostic building blocks (flywheel/turret shooter, roller
@@ -180,6 +192,8 @@ patterns:
   # ---- Batch 2 (framework + season_app), approved 2026-07-03 ----
 
   - id: 3543-G-swerve-mecanum-drivebase
+    season_scope: invariant
+    season_scope_basis: "Unified mecanum/swerve drivebase kinematics (layer: framework); no game dependence."
     layer: framework
     problem: >
       Support both mecanum and swerve drivetrains through one platform-independent
@@ -202,6 +216,8 @@ patterns:
     notes: "steerPowerCompConstant (Dashboard.java:64) is season/robot tuning (defaulted 0.0); only the framework kinematics abstraction + the steer-power-comp CALLBACK HOOK is core. First STANDALONE high in the corpus (design merit, not convergence)."
 
   - id: 3543-H-preferences-master-switches
+    season_scope: invariant
+    season_scope_basis: "Compile-time final-boolean subsystem master switches (layer: framework); flag names like useSpindexer are season data, the pattern is game-independent."
     layer: framework
     problem: >
       Enable/disable individual subsystems/features at one config point so code for a
@@ -223,6 +239,8 @@ patterns:
     notes: "Flag NAMES (useSpindexer/useShooter/useAutoShoot…) are season-specific; the master-switch config PATTERN (final-boolean gates before subsystem construction, dev-safety, competition-coupled dashboard flag) is the core item. Second STANDALONE high."
 
   - id: 3543-I-config-dashboard-usage
+    season_scope: invariant
+    season_scope_basis: "FTC Dashboard @Config live tunables (layer: framework); no game dependence."
     layer: framework
     problem: >
       Provide live, in-match-safe tunable parameters (PID, vision, drive scaling) from
@@ -243,6 +261,8 @@ patterns:
     notes: "Capped at medium (shared-ancestry) — the eye-catching @Config surface is borrowed. The transferable VALUE lives in 3543-J, recorded separately so it isn't dragged down by this cap."
 
   - id: 3543-J-observability-discipline
+    season_scope: invariant
+    season_scope_basis: "Tunables mirroring compiled defaults + per-match TraceLogs (layer: framework); no game dependence."
     layer: framework
     problem: >
       Keep live-tunable params from drifting away from the compiled source-of-truth, and
@@ -268,6 +288,8 @@ patterns:
     notes: "STRONG observability signal (Phase 9 taxonomy positive) — the compiled-default MIRRORING (not duplicating) + real competition TraceLogs are the transferable practice, tagged medium-high on its own merit (NOT inheriting 3543-I's shared-ancestry cap)."
 
   - id: 3543-K-submodule-framework-discipline
+    season_scope: invariant
+    season_scope_basis: "Multi-season trclib/ftclib submodule discipline (layer: framework_meta); explicitly cross-season."
     layer: framework_meta
     problem: >
       Keep a multi-season, cross-FRC/FTC shared library evolving independently of any one
@@ -295,6 +317,8 @@ patterns:
       framework (the corpus's central season-agnostic thesis) is actually maintained.
 
   - id: 3543-L-ftcmenu-match-config
+    season_scope: decode-2025-26
+    season_scope_basis: "FtcMenu gamepad-menu mechanism transfers; the menu CONTENTS are DECODE (verified FtcAuto.java:400-451: 'Use Classifier Vision', 'Open Gate', 'Start Position Goal Zone', 'Decode Auto')."
     layer: season_app
     problem: >
       Let the drive team pick match options (alliance, start position, delay) before the
@@ -320,6 +344,8 @@ patterns:
     notes: "CAVEAT (verbatim): FtcMenu.walkMenuTree internals (ftclib/driverio/FtcMenu.java, 346 lines) NOT traced — only the call site (FtcAuto.java:474) and role confirmed; the tree-walk internals remain unverified."
 
   - id: 3543-M-taskautoshoot
+    season_scope: decode-2025-26
+    season_scope_basis: "Reusable param-object auto-assist task idiom transfers; the State enum and game logic (Artifacts, motifs, goal AprilTags, spindexer exit slots) are DECODE-specific (layer: season_app)."
     layer: season_app
     problem: >
       Combine vision tracking, a shooting-solution model, multi-artifact sequencing, and

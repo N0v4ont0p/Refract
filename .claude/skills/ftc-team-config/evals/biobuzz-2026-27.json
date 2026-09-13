@@ -1,0 +1,49 @@
+{
+  "skill_name": "ftc-team-config",
+  "season": "biobuzz-2026-27",
+  "_design_note": "Season-transition evals (PLAN \u00a720). Ground truths checked 2026-09-13 against BIOBUZZ CM V1 + TU00, SDK v12.0 README, and by running the deterministic scripts named in each case. FAIL to hunt: translating DECODE mechanisms into BIOBUZZ names without asking, discarding core axes at a season boundary, confirming against a DRAFT season file, omitting the _meta.season stamp.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "season-boundary-carry-core",
+      "prompt": "it's kickoff! we want to start our BIOBUZZ robot code. here's our config from last season.",
+      "expected_output": "validate_config reports the season layer was confirmed for decode-2025-26. The skill keeps core axes (swerve, Limelight, Pinpoint, Pedro, command-based) and re-confirms them in one line; re-asks season mechanisms from the BIOBUZZ file's keys (intake, hive_launcher, turret, aim_vision, ...) without mapping 'shooter: flywheel' to 'hive_launcher: flywheel' on its own; drops the DECODE archetype fixed_shooter_on_swerve; restamps _meta.season and appends config_history. If ACTIVE still points at DECODE or the BIOBUZZ file is DRAFT, it says the season transition isn't signed off rather than eliciting against it.",
+      "files": [
+        "evals/fixtures/veteran-swerve-turret.yaml"
+      ],
+      "assertions": [
+        {
+          "name": "core-carried",
+          "text": "Core axes are kept and re-confirmed, not re-elicited from scratch"
+        },
+        {
+          "name": "no-silent-translation",
+          "text": "Season mechanisms are asked from the BIOBUZZ file; DECODE values are offered only as context, never written as BIOBUZZ values unasked"
+        },
+        {
+          "name": "season-stamp",
+          "text": "The resulting config carries _meta.season: biobuzz-2026-27 and a config_history entry naming both seasons"
+        },
+        {
+          "name": "draft-respected",
+          "text": "If the BIOBUZZ season file is still DRAFT/not ACTIVE, the skill surfaces that the transition needs sign-off instead of confirming against it"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "validator-states",
+      "prompt": "(deterministic) run validate_config.py on evals/fixtures/biobuzz-veteran-launcher.yaml in three suite states",
+      "expected_output": "ACTIVE=biobuzz-2026-27 (live): valid, generation_allowed true. With --active decode-2025-26: valid, generation blocked, message says ACTIVE is behind the config (don't re-elicit). Suite root where the BIOBUZZ file is still DRAFT: invalid (draft season refused).",
+      "files": [
+        "evals/fixtures/biobuzz-veteran-launcher.yaml"
+      ],
+      "assertions": [
+        {
+          "name": "three-states",
+          "text": "The three outcomes match expected_output exactly (verified by script on 2026-09-13)"
+        }
+      ]
+    }
+  ]
+}

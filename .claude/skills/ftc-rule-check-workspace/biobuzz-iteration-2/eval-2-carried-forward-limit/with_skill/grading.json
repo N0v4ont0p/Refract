@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "verdict-illegal-R503",
+      "passed": true,
+      "evidence": "Answer JSON has \"verdict\": \"illegal\" and cites R503 with text \"A ROBOT may not have more than 8 motors and 8 servos from the allowable actuator lists per R501 and R502...\", which matches `rules.py lookup R503 --season biobuzz-2026-27` word for word. Reasoning: \"10 servos is 2 over the limit, so the robot as described is illegal.\""
+    },
+    {
+      "name": "no-decode-limit",
+      "passed": true,
+      "evidence": "No 10-servo limit appears anywhere as a current rule. 10 only shows up as the team's servo count (\"With 10 servos the robot won't pass BIOBUZZ inspection\"). Every limit stated is 8 and 8. DECODE is never mentioned or relied on."
+    },
+    {
+      "name": "citations-verified",
+      "passed": true,
+      "evidence": "JSON citations are R503 and I302. The prose also cites R501, R502, R505 and I303. The run verified R503, I302, R501, R502 and R505. I ran an independent check, `rules.py verify R503 I302 R501 R502 R505 I303 --season biobuzz-2026-27`, and it returned all_valid: true, missing: []. The quoted I302 text matches the corpus exactly."
+    }
+  ],
+  "factual_errors": []
+}

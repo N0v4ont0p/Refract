@@ -1,0 +1,104 @@
+Team Update 00
+
+General
+
+Overview
+Team Update 00 is provided as a quick reference of rule changes from last season, and updates from
+the V0 Preview Release. The approach taken in this Team Update is to describe changes to content
+only. Editorial changes to verbiage, rule and section references, game specific examples that relate to
+evergreen content, and formatting changes are not described.
+As always, it’s important to read the whole BIOBUZZTM Presented by RTX Competition Manual at least
+once and become an expert on sections of the manual that directly relate to your role and
+responsibilities on your team. Teams are welcome to view existing questions and answers and to ask
+thoughtful and informed questions through the official Q&A system opening September 28, 2026,
+12:00p.m. ET.
+
+Notable Changes from Last Season
+
+New Competition Manual Format
+Rules in the BIOBUZZ Competition Manual are written to emphasize intended gameplay and make it
+simpler for participants and volunteers to understand the spirit and intent of the rule. Important
+changes include:
+   •   Introduction of the Competition Integrity Contract (CIC) which includes a Sporting Ethics Code
+       and Behavior Guidelines in Section 1 Introduction.
+   •   Adding STRATEGIC as a defined term described in Section 10.6 Violations and utilizing it in
+       many rules and violations.
+           o   STRATEGIC describes actions done with the aim of getting a competitive advantage.
+           o   Some rules prohibit specific actions if they are perceived to be STRATEGIC or provide an
+               increased violation for actions perceived to be STRATEGIC (e.g., impeding or enabling
+               scoring actions).
+           o   This includes actions that are deliberate or reckless with foreseeable consequences.
+           o   Accidental/unforeseeable occurrences cannot be STRATEGIC.
+The BIOBUZZ manual is written to allow event volunteers to make good-faith judgement calls at events
+instead of writing rules that are highly detailed and overly complex that try to cover every scenario a
+volunteer may encounter. This philosophy is reflected throughout the Competition Manual.
+
+
+
+
+ Team Update 00                           September 12, 2026                                      1 of 3
+Section 3 Competition Eligibility and Inspection
+Changes were made to the Inspection and Re-Inspection portions of this section to move content from
+rules to process descriptions. Additionally:
+   •   I302 *Enter only 1 ROBOT was moved to Section 5 Event Rules.
+
+Section 5 Event Rules
+   •   Pit and Cart Rules have been adjusted and condensed
+   •   E510 *Don’t heat or cool ROBOT components to gain an advantage has been added
+
+Section 6 Awards
+The Structured Interview is now the Initial Interview and the team judging experience may be different
+in certain events and regions. The Initial Interviews may either be: scheduled in-person, unscheduled in-
+person, or remote. Many portions of Section 6 have been adjusted to reflect this change.
+
+Section 11 Game Rules
+Rules in this section have been changed to reflect and point to the Competition Integrity Contract (CIC).
+Many violations have been adjusted to include increased violations for specific actions if they are
+perceived to be STRATEGIC or provide an increased violation for actions perceived to be STRATEGIC.
+Many violations utilize a VERBAL WARNING for non-STRATEGIC violations.
+   •   G202 *Follow the Competition Integrity Contract (CIC) has been added.
+           o   Teams are required to not cheat, play by the rules, and behave with integrity as outlined
+               in the Competition Integrity Contract (CIC).
+           o   Multiple rules in the G2XX section have been condensed and are covered as part of
+               G202.
+   •   G406 *Do not damage or make a mess in the ARENA combines previous rules G407 (Do not
+       damage SCORING ELEMENTS) and G412 (Don’t damage the FIELD).
+
+Section 12 ROBOT Construction Rules
+Many of the ROBOT Construction rules have been reorganized to match the new additions in Section 1.
+At the event, Inspectors are not expected to check every rule, but as part of the Competition Integrity
+Contract (CIC) teams are still expected to follow every rule.
+Several rules which included recommendations for robot construction and best practices were
+removed and moved to other resources that can be found on the FTC-Resources and FTC-docs pages.
+   •   Removed the rule restricting allowed gamepads (previously R903)
+   •   R101 *It is your team’s ROBOT has been added to the ROBOT Construction Rules.
+   •   R105 *A ROBOT must stay as one assembly, and there are limits to how much it can expand.
+
+
+
+ Team Update 00                           September 12, 2026                                      2 of 3
+          o   Expansion Limits have been adjusted for BIOBUZZ with updated wording and examples.
+          o   Now includes deliberately detaching COMPONENTS.
+          o   Expansion is regulated during gameplay with G416 *ROBOTS have construction limits.
+   •   R201 *ROBOTS should be designed so they don’t damage anything or make a mess in the
+       ARENA has been added and replaces content from previous rules.
+   •   R510 *Only specific motors are allowed. WATTOS Stingray has been added to the allowed
+       motors list.
+   •   R503 *ROBOTS are limited to a total of 8 motors and 8 servos. The maximum number of
+       allowed servos is reduced to 8.
+   •   R801 *No Pneumatics is now No Pneumatic Actuators, High-Speed Blowers, or Vacuums now
+       includes combined content from other previous rules.
+
+Section 13 Tournament
+Section 13 Tournament has been reorganized to re-order content – rule numbers have changed.
+Recommended Award break timing has been adjusted to 15 minutes.
+   •   T301 *Head REFEREE Interactions allows for up to 2 team members to talk with the Head
+       REFEREE.
+   •   T701 *Send one or two STUDENT representatives allows for up to two STUDENT team
+       members to participate in ALLIANCE selection.
+
+
+
+
+ Team Update 00                        September 12, 2026                                     3 of 3
+

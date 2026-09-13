@@ -1,3 +1,9 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the game scenario below (a DECODE 2025-26 autonomous:
+> start against the blue goal, score preloads, cycle Artifacts from spike marks, and all the Pose
+> values) is DECODE-specific. The Pedro/Ivy path-building and command structure it teaches is generic.
+> It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+
 > Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/examples/auto.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

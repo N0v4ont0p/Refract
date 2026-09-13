@@ -17,7 +17,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/standing-principles.md` (suite
 | File | Role |
 |---|---|
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-code-review/scripts/failure_mode_lint.py` | 6 deterministic checks (bus-factor, vcs, god-opmode, telemetry, stale-pid, mutable-static) |
-| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-code-review/scripts/config_lint.py` | flags code referencing a mechanism the confirmed config declares absent (R40/R34) |
+| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-code-review/scripts/config_lint.py` | flags code referencing a mechanism the confirmed config declares absent (REQ-40/REQ-34) |
 | `team-config.yaml` (team's project) | the confirmed config this review is *against* — read it first |
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/` | the pattern corpus + `cross-team-findings.yaml` |
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/known-failure-modes.md` (suite root) | the failure-mode taxonomy the linter checks operationalize |
@@ -36,8 +36,20 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-code-review/scripts/config_lint.py <cod
 Report these as **findings**, not suggestions — a script confirmed them. `failure_mode_lint`'s
 mutable-static check in particular catches the "behaved differently for no reason" class that reads
 like a hardware flake but is cross-opmode state (see `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/known-failure-modes.md`). `config_lint` findings
-are the R34 case: code for a mechanism the config says the team doesn't have — flag as "not referenced
+are the REQ-34 case: code for a mechanism the config says the team doesn't have — flag as "not referenced
 by current config; confirm if stale or a config mismatch," don't assume which.
+
+Both linters' season knowledge comes from the season file named by the config's `_meta.season`
+(else ACTIVE) — mechanism code tokens and `code_constraints`. So:
+- `config_lint`'s `season_constraint` findings are season rules the code appears to break (BIOBUZZ:
+  FTC Dashboard/Panels streaming under R704; pre-SDK-12 AprilTag code reading `.id`/`.metadata`/`.center` off the base `AprilTagDetection`). Report with the
+  rule ID and re-verify the rule text via ftc-rule-check's scripts with `--season` before calling it
+  a violation — a detect regex is a pointer, not a verdict.
+- `unchecked_mechanisms` is **not clean**: the season file has no token entry for a mechanism the
+  config declares `none`, so absence of findings proves nothing for it. Say so.
+- Reviewing last season's code for this season (the kickoff port): every mechanism, constant and
+  rule citation in it was confirmed for another game. Name that up front rather than reviewing it as
+  if its assumptions still hold.
 
 ### 2. Config-aware structural review against the corpus
 
@@ -50,20 +62,27 @@ not re-grading. Two specific traps:
 
 - **Never upgrade a pattern's confidence in presentation** because it happens to fit well here. "Six
   teams do this" is not independent confirmation if the corpus tagged them shared-ancestry — repeat the
-  corpus's own framing, not a headcount (R43).
+  corpus's own framing, not a headcount (REQ-43).
+- **Never present a pattern mined in one season as evidence for another without saying so.** The
+  corpus was mined from DECODE-season repos. Mechanism-specific patterns (shooter lookup tables,
+  AprilTag relocalization, motif/colour sorting) were tuned for that game's element and field — a
+  BIOBUZZ launcher throws smaller, different balls, and BIOBUZZ AprilTags move with the HIVE (SDK
+  v12.0 README: not suitable for absolute field localization). Core-layer patterns (subsystem
+  ownership, loop timing, localization fusion structure) carry over; cite the season they were
+  observed in either way.
 - **A pattern candidate you notice mid-review that isn't in the corpus** gets *routed to the corpus
-  process*, not classified inline. This review skill displays provenance; it doesn't mint it (R46). Say
+  process*, not classified inline. This review skill displays provenance; it doesn't mint it (REQ-46). Say
   "this looks like a candidate pattern — worth running through corpus construction," and move on.
 
 Every recommendation ties back to a confirmed config feature AND the source pattern/rule that triggered
-it (R39) — an untethered "you should refactor this" is not a review, it's an opinion.
+it (REQ-39) — an untethered "you should refactor this" is not a review, it's an opinion.
 
 ### 3. LLM-judgment tier — heuristic, evidence not verdict
 
 For structural smells the linter can't catch deterministically (god classes forming, missing subsystem
 separation, tangled control flow), delegate a Sonnet subagent. Its output **shows the flagged code as
 evidence and explains the concern** — it never asserts "this is wrong." The reader judges; the tier is
-explicitly heuristic (R63). Keep it lean — don't over-invest reasoning in what is by nature a hunch.
+explicitly heuristic (REQ-63). Keep it lean — don't over-invest reasoning in what is by nature a hunch.
 
 ### 4. Full pre-competition review
 
@@ -78,14 +97,14 @@ If a review request is genuinely a legality question about code that already exi
 mechanism legal", "will this pass inspection") rather than a structural/pattern review question,
 don't review it as a code-quality matter and don't guess at a verdict. Resolve it the same way
 `ftc-rule-check` would, by invoking its actual tools directly — the same sequential-boundary this
-project already uses for hardware tables (R27: a rule citing an embedded table resolves BY POINTER
+project already uses for hardware tables (REQ-27: a rule citing an embedded table resolves BY POINTER
 into HW's structured file, never re-derived inline; here, a review that turns legal resolves BY
 POINTER into RC's own scripts, never re-derived inline either):
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/check_freshness.py                 # freshness first
-python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py lookup <id>       # rule + one-hop cross-refs
-python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py verify <id>       # citation existence, non-negotiable
+python3 ${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/check_freshness.py --season <slug>                 # freshness first
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py lookup <id> --season <slug>       # rule + one-hop cross-refs
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-rule-check/scripts/rules.py verify <id> --season <slug>       # citation existence, non-negotiable
 ```
 
 Reason over the retrieved (and cross-referenced) text against what the *existing* code actually
@@ -101,12 +120,12 @@ in progress turns out to hinge on legality.
 ## Boundaries that shape a review, not just decorate it
 
 - **`fabrication.capability` changes tuning values you *advise*, never which pattern you recommend**
-  (R4). A CNC team and a stock-goBILDA team get the same architecture, different acceleration limits.
-- **`experience: rookie` changes explanation depth, never the finding** (R5) — explain the *why* of a
+  (REQ-4). A CNC team and a stock-goBILDA team get the same architecture, different acceleration limits.
+- **`experience: rookie` changes explanation depth, never the finding** (REQ-5) — explain the *why* of a
   God-class smell more, don't soften or omit it.
-- **SDK integrity is a hard line** (R52): never suggest modifying or omitting anything in `libs/` —
+- **SDK integrity is a hard line** (REQ-52): never suggest modifying or omitting anything in `libs/` —
   that makes the Robot Controller competition-illegal. Flag it if you see it.
-- **Attribution stays on cited corpus code** (R51): reference by team + file/line, never present
+- **Attribution stays on cited corpus code** (REQ-51): reference by team + file/line, never present
   distilled elite-team structure as anonymous.
 
 ## Not this skill

@@ -1,0 +1,48 @@
+{
+  "table_id": "10-6",
+  "caption": "Violation examples",
+  "rows": [
+    [
+      "Example Violation",
+      "Expanded Interpretation"
+    ],
+    [
+      "MINOR FOUL",
+      "Upon violation, a MINOR FOUL is assessed against the violating ALLIANCE."
+    ],
+    [
+      "MAJOR FOUL and YELLOW CARD per instance.",
+      "Upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE. After the MATCH, the team is issued a YELLOW CARD."
+    ],
+    [
+      "MINOR FOUL per SCORING ELEMENT.",
+      "Upon violation, a MINOR FOUL is assessed against the violating ALLIANCE equal to the number of SCORING ELEMENTS used in violation of the rule."
+    ],
+    [
+      "MAJOR FOUL per instance. MAJOR FOUL per instance and YELLOW CARD per MATCH if REPEATED.",
+      "Upon initial violation in a MATCH, a MAJOR FOUL is assessed against the violating ALLIANCE per instance of a violation occurring. If the condition of REPEATED in the second statement is met -- the ROBOT repeats the infraction in the MATCH, then an additional MAJOR FOUL is assessed against the violating ALLIANCE and after the MATCH, the violating team is issued a YELLOW CARD. Assuming no additional infractions of that rule by that ROBOT in that MATCH, the ROBOT is assessed two MAJOR FOULS and a YELLOW CARD for their ALLIANCE. Additional violations during the MATCH would increase the number of MAJOR FOULS assessed during the MATCH but not the number of YELLOW CARDS issued for the MATCH."
+    ],
+    [
+      "MAJOR FOUL and an additional MAJOR FOUL for every 3 seconds in which the situation is not corrected",
+      "Upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE and the REFEREE begins to count. Their count continues until the criteria to discontinue the count are met, and for each 3 seconds within that time, an additional MAJOR FOUL is assessed against the violating ALLIANCE. A ROBOT in violation of this type of rule for 15 seconds is assessed a total of 6 MAJOR FOULS (assuming no other rules were being simultaneously violated)."
+    ],
+    [
+      "VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC.",
+      "Upon a general violation of the rule, a VERBAL WARNING is issued to the violating team. However, if the violation is perceived to be STRATEGIC by the REFEREES, then a MAJOR FOUL is assessed against the violating ALLIANCE and after the MATCH, the violating team is issued a YELLOW CARD."
+    ],
+    [
+      "MAJOR FOUL per instance of violation. MAJOR FOUL and YELLOW CARD if REPEATED.",
+      "Upon the first violation, a MAJOR FOUL is assessed against the violating team. If the condition \u201cif REPEATED\u201d (e.g., a subsequent violation by the same team in the same MATCH) is met, then the violating team is issued another MAJOR FOUL. If these are the only violations during the MATCH: after the MATCH, the violating team is assessed a YELLOW CARD for the second violation of this rule. In total, 2 MAJOR FOULS and a YELLOW CARD were assessed during the MATCH."
+    ],
+    [
+      "VERBAL WARNING. YELLOW CARD if subsequent violations occur during the event.",
+      "Upon the first violation, a VERBAL WARNING is issued to the violating team. If an additional violation of the same rule occurs later in the event, that is: a MATCH during the same event phase or a later event phase, then following any subsequent violation: after the MATCH, the violating team is issued a YELLOW CARD."
+    ],
+    [
+      "VERBAL WARNING. MAJOR FOUL and YELLOW CARD per instance, if STRATEGIC. MAJOR FOUL and RED CARD per instance, if STRATEGIC and either CONTINUOUS opponent ROBOT is unable to drive.",
+      "Upon a general violation of this rule, a VERBAL WARNING is issued to the violating team. However, if the violation is perceived to be STRATEGIC by the REFEREES, then a MAJOR FOUL is assessed against the violating ALLIANCE and after the MATCH, the team is issued a YELLOW CARD. However, if the violation is perceived to be STRATEGIC by the REFEREES and the opponent ROBOT is unable to drive or the entanglement persists for 10 seconds or more, then upon violation, a MAJOR FOUL is assessed against the violating ALLIANCE. After the MATCH, the team is issued a RED CARD. Only 1 MAJOR FOUL and 1 CARD can be earned for a single violation instance; however, multiple MAJOR FOULS and CARDS may be earned in a single MATCH if multiple instances of the violation occurred during the MATCH."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-6]] pointer (\u00a78<->\u00a79)"
+}

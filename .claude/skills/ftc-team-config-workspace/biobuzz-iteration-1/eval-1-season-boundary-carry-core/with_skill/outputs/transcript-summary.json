@@ -1,0 +1,19 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && cat season-extensions/ACTIVE; ls season-extensions; ls; ls team-config.yaml 2>&1; python3 .claude/skills/ftc-team-config/scripts/validate_config.py .claude/skills/ftc-team-config/evals/fixtures/veteran-swerve-turret.yaml",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && grep -n \"season_mechanisms\" -A 80 season-extensions/biobuzz-2026-27.yaml",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 .claude/skills/ftc-team-config/scripts/question_order.py",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && grep -n \"mandatory|MANDATORY|device_map|tuning_status|behavior_layer|archetype\" .claude/skills/ftc-team-config/scripts/validate_config.py",
+    "cat > <scratchpad>/evalruns/carry-core.yaml (core axes carried, season layer dropped, restamped biobuzz-2026-27) && python3 .claude/skills/ftc-team-config/scripts/validate_config.py <scratchpad>/evalruns/carry-core.yaml",
+    "find . -type d -name library-docs; grep -ril swerve refract-suite/ftc-shared-foundation/references/library-docs/pedro-pathing"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/evals/fixtures/veteran-swerve-turret.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/core-feature-model.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/biobuzz-2026-27.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-team-config/scripts/validate_config.py"
+  ]
+}

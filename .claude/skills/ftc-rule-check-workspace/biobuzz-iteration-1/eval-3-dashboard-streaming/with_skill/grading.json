@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "cites-R704",
+      "passed": true,
+      "evidence": "The answer cites R704 and quotes the full text, which matches the `rules.py lookup R704` output word for word. The Why section repeats the key clause: \"logging/streaming services, such as those hosted by third party plugins and tools such as FTC Dashboard, FTControl Panels, and others are prohibited.\" R704 was also looked up and verified (scripts_run: `rules.py lookup R704 R904 E301`, `rules.py verify R704 R904 E301 T405`)."
+    },
+    {
+      "name": "verdict-not-allowed",
+      "passed": true,
+      "evidence": "The answer opens with \"No. At a BIOBUZZ event you can't have FTC Dashboard streaming your flywheel graph\". The verdict field reads \"illegal (Dashboard streaming during competition)\". Nowhere does it say Dashboard is fine at competition. It says field use \"stays no\" and treats pit or calibration use as \"unresolved\", not allowed."
+    }
+  ],
+  "factual_errors": []
+}

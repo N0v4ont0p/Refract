@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "no-drag-reported",
+      "passed": true,
+      "evidence": "The answer says \"The angle without drag is 20.01\u00b0 (low arc)\" and the table shows \"Angle without drag | **20.01\u00b0**\". This matches the script output I re-ran from scripts_run[0]: \"no_drag_angle_deg\": 20.01."
+    },
+    {
+      "name": "drag-withheld",
+      "passed": true,
+      "evidence": "The table shows \"Angle with drag | none (solver refused)\" for both arcs. The answer also quotes the reason the script gave: \"no ballistics constants for element 'pollen' in season 'biobuzz-2026-27' (have: [])\". This matches the actual drag_aware_abstain field, and drag_aware_angle_deg is null."
+    },
+    {
+      "name": "no-decode-ball",
+      "passed": true,
+      "evidence": "The answer never gives 21.25\u00b0. It mentions the DECODE constants only to rule them out: \"I did not borrow DECODE's ball file instead. That file describes a 5 in hollow 75 g ball, which is a different game piece, so a drag angle from it would be wrong.\""
+    }
+  ],
+  "factual_errors": []
+}

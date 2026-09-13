@@ -1,7 +1,7 @@
 # Utilization-audit fixture: fully confirmed, webcam+EasyOpenCV vision, no shooter/turret.
 # Purpose: gives EasyOpenCV and FTC Dashboard scenarios a config that actually selects them,
 # since neither has a clean season_mechanisms hook of its own.
-_meta: {schema: 1, fixture: true}
+_meta: {schema: 1, season: decode-2025-26, fixture: true}
 team: {number: 99905, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

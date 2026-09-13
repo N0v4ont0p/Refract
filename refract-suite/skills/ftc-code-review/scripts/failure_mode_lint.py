@@ -244,7 +244,7 @@ def check_mutable_static_opmode_write(repo):
 # somebody else's numbers: the code compiles, deploys, and drives — wrongly, and silently.
 #
 # DEFAULT VALUES BELOW ARE VERIFIED, NOT RECALLED. Each was read from the real current upstream
-# source at the fetch date noted; re-verify on the R107 shelf-life cadence, these are external-
+# source at the fetch date noted; re-verify on the REQ-107 shelf-life cadence, these are external-
 # project facts with an expiration date.
 #
 #   RoadRunner   acmerobotics/road-runner-quickstart @ master, MecanumDrive.java `Params`
@@ -492,7 +492,7 @@ def check_template_default_tuning(repo):
                            "measured value, and a team may legitimately not have tuned yet. The "
                            "finding is 'this number's origin is unverified', which is exactly what "
                            "team-config's `tuning_constants.origin` field is meant to record. "
-                           "Defaults are external-project facts with a shelf life (R107) — "
+                           "Defaults are external-project facts with a shelf life (REQ-107) — "
                            "re-verify them against the library's current source before treating a "
                            "non-match as proof of tuning."),
             })

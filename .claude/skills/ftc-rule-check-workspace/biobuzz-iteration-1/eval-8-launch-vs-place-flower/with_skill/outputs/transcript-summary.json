@@ -1,0 +1,27 @@
+{
+  "scripts_run": [
+    "cat references/standing-principles.md; cat season-extensions/ACTIVE; python3 scripts/check_freshness.py --season biobuzz",
+    "python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py --help",
+    "python3 -c (search rules.json / glossary.json for LAUNCH/FLOWER/POLLEN)",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G418 G417 --season biobuzz-2026-27",
+    "python3 -c (search sections.json for LAUNCH and place/FLOWER)",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.2 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.3 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.4 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G407 G409 G410 G411 G415 G416 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify G418 G417 G407 G410 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term FLOWER LAUNCH --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term \"LAUNCH/LAUNCHING\" --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/glossary.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/sections.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/section_map.json"
+  ]
+}

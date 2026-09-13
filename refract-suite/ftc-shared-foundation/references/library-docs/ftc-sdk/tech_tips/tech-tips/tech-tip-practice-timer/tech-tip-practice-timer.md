@@ -1,3 +1,9 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the "Endgame (30s endgame, not updated for DECODE)"
+> timer option below reflects pre-BIOBUZZ match structure. It does not describe BIOBUZZ (2026-27). For
+> BIOBUZZ facts read `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ has AUTO
+> 30 s, an 8 s transition, TELEOP 120 s and no period named ENDGAME (the last 60 s unlock NECTAR
+> actions).
+
 > Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/tech_tips/tech-tips/tech-tip-practice-timer/tech-tip-practice-timer.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

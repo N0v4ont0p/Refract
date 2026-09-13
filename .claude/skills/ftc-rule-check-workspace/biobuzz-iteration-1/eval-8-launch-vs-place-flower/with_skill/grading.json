@@ -1,0 +1,17 @@
+{
+  "assertions": [
+    {
+      "name": "retrieves-section-note",
+      "passed": true,
+      "evidence": "scripts_run includes \"python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.2 --season biobuzz-2026-27\" and \"rules.py lookup G418 G417 --season biobuzz-2026-27\". The answer quotes \u00a710.5.2 word for word: \"Placing SCORING ELEMENTS into the top of the FLOWER is the only allowable way to score. ROBOTS must follow G418 while interacting with the FLOWER.\" It also quotes the full G418 text, and both match the corpus."
+    },
+    {
+      "name": "ambiguous-verdict",
+      "passed": true,
+      "evidence": "\"verdict\": \"ambiguous \u2014 worth filing a Q&A\". The short answer says \"unclear... file a Q&A\" and \"I'm not going to guess 'legal.'\" Step 1 of what to do gives suggested Q&A wording. The answer does not give a confident legal or illegal verdict."
+    }
+  ],
+  "factual_errors": [
+    "The answer says \"G418 is the only in-match rule about putting things into a FLOWER\". The corpus contradicts this: G410 is also an in-match rule (11.4.3) about entering NECTAR into the FLOWER scoring volume, and the answer cites G410 itself. This is a small overstatement and does not change the verdict."
+  ]
+}

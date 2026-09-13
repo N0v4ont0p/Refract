@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.mechanisms.shooter;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
- * DECODE mechanism interface: a scoring mechanism that launches game pieces at
+ * DECODE (2025-26) mechanism interface -- a season-scoped EXAMPLE, generated only
+ * for a config that declares it (BIOBUZZ's launch mechanism key is
+ * {@code hive_launcher}; reuse this structure only after checking that season's
+ * rules). A scoring mechanism that launches game pieces at
  * a commanded speed (season-extensions/decode-2025-26.yaml lists
  * {@code shooter: [flywheel, elastic_catapult, none]}; this interface fits the
  * flywheel case, the one this template ships an example for).

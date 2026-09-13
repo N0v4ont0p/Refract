@@ -1,0 +1,22 @@
+{
+  "assertions": [
+    {
+      "name": "verdict-illegal-R503",
+      "passed": true,
+      "evidence": "Verdict: \"illegal (as described: 10 servos exceeds the limit; 8 motors is at the limit and OK on count)\". R503 is cited with the BIOBUZZ text \"A ROBOT may not have more than 8 motors and 8 servos from the allowable actuator lists per R501 and R502...\". This matches rules.py lookup R503 --season biobuzz-2026-27 word for word. The answer also says \"you must remove 2\", which matches the expected output."
+    },
+    {
+      "name": "no-decode-limit",
+      "passed": true,
+      "evidence": "The answer never says 10 servos is allowed. It states \"You have 10 and BIOBUZZ allows 8\" and warns \"Don't assume last season's approvals still apply\". The only other mention of 10 is \"If that pushes motors over 8 or servos above 10, the fix gets bigger\". That refers to the team's current count of 10, not a limit. It is awkwardly worded but does not treat 10 as the current limit."
+    },
+    {
+      "name": "citations-verified",
+      "passed": true,
+      "evidence": "The answer cites R503, I302, R501 and R502. I ran rules.py verify R503 R501 R502 I302 --season biobuzz-2026-27 and it returned \"all_valid\": true with \"missing\": []. The run's own command list also includes this verify call."
+    }
+  ],
+  "factual_errors": [
+    "Minor oversimplification: \"each servo must be at most 8 W output power and at most 4 A stall current at 6V\". BIOBUZZ Table 12-2 applies those limits only to the standard 'Servo' class. Linear Servos have mechanical output power N/A and a stall current limit of \u2264 1 A @6V. Under the answer's blanket statement, a linear servo drawing 1-4 A would look legal, but it is not."
+  ]
+}

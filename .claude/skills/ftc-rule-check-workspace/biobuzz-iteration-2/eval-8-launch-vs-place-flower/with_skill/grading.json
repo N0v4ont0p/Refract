@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "retrieves-section-note",
+      "passed": true,
+      "evidence": "scripts_run includes \"rules.py section 10.5.2 9.7 --season biobuzz-2026-27\" and \"rules.py lookup G418 G418 G410 G409 G407\" plus \"verify G418 G417 G405\". The answer quotes 10.5.2 word for word: \"Placing SCORING ELEMENTS into the top of the FLOWER is the only allowable way to score. ROBOTS must follow G418 while interacting with the FLOWER.\" It also quotes G418 in full in the citations. Both match the corpus output of rules.py section 10.5.2 and lookup G418."
+    },
+    {
+      "name": "ambiguous-verdict",
+      "passed": true,
+      "evidence": "Structured verdict: \"ambiguous \u2014 worth filing a Q&A\". The short answer says \"That gap is worth an official Q&A\" and the answer drafts a suggested Q&A question. It leans toward \"most likely won't count\" but never gives a confident legal or illegal ruling, and it states the placing-vs-LAUNCHING line is \"for the referees to call, and there's no text to settle it.\""
+    }
+  ],
+  "factual_errors": []
+}

@@ -410,6 +410,36 @@ season — the failure is about the trigger topology, not about what the event d
 coordinates showed points within a fraction of an inch of each other), not from the verbatim
 handoff.
 
+### A verified citation from the wrong season
+
+**Shape.** Every season FIRST publishes a new Competition Manual at the *same URL*, reuses the same
+rule-numbering scheme, and rewrites what the numbers mean. A rule number, table ID, AprilTag ID or
+field dimension that was correct last season is still *well-formed* this season — and often still
+*exists* — while now meaning something else. Every existence check passes; the answer is about the
+wrong game.
+
+**Concrete instances (found at the DECODE → BIOBUZZ boundary, 2026-09-12, all verified in both
+corpora).** DECODE R101 was the 18-inch starting cube; in BIOBUZZ the cube is R102 and R101 is "It is
+your team's ROBOT". DECODE G416 was "LAUNCHING in the LAUNCH ZONE only"; BIOBUZZ G416 is ROBOT
+construction limits. DECODE R503 allowed 10 servos; BIOBUZZ R503 allows 8. A citation-existence
+guard (`rules.py verify`) certifies all of them. The failure also runs *through* official documents:
+BIOBUZZ Team Update 00 calls the motor rule "R510", which does not exist in the V1 manual (it is
+R501), and the V1 manual's own R601.A points to R610 for fuses after renumbering (R610 is now wire
+colors). And it runs through tooling that keys off a URL: a freshness check comparing Team Update
+numbers read DECODE's corpus (TU 32) against the new season's page (TU 00) — a naive "live ≤ stored"
+compare reports CURRENT.
+
+**Why it survives review.** Nothing looks wrong. The rule ID is real, the quoted text is real, the
+tool says "verified", and a reviewer who remembers last season's numbers is *more* likely to accept
+it, not less.
+
+**The fix, general to any season-scoped reference data:** make the season part of the key, never an
+implicit default. Store corpora per season; every lookup takes a season and echoes it in its
+output; freshness checks confirm the live source still names the stored game (by visible text — the
+BIOBUZZ manual HTML contains "DECODE" inside a reused photo's alt attribute); team configs carry the
+season their season-specific fields were confirmed for; and a quoted rule's *text* is checked against
+the claim, since existence alone cannot catch reuse.
+
 ## Source tiers (Rule 7)
 
 ## Source tiers (Rule 7)

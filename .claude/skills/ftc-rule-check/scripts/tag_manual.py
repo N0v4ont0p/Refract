@@ -7,44 +7,82 @@ the source text, not generated. No model in the loop. The §12.6 sample proved a
 regex edge-scan matches the LLM extraction exactly, so the primary extractor is
 this script; an LLM verification pass is a separate optional safety net.
 
-Inputs  : corpus-staging/manual/cm.html  (structure: tables, sections)
-          corpus-staging/manual/cm.txt   (flattened text, tag-stripped)
-Outputs : ftc-rule-check/references/rules/{rules.json, cross_refs.json,
+Inputs  : <season in_dir>/cm.html  (structure: tables, headings, rule markup)
+          <season in_dir>/cm.txt   (flattened text, tag-stripped)
+Outputs : ftc-rule-check/references/rules/<season>/{rules.json, cross_refs.json,
                                            rule_index.json, dangling_citations.json,
                                            section_map.json, STATS.md}
-          ftc-hardware-lookup/references/manual-tables/{table-<id>.json, INDEX.json}
+          ftc-hardware-lookup/references/manual-tables/<season>/{table-<id>.json, INDEX.json}
 
-Design decisions grounded in the manual's actual structure:
-  * Rule series = A,E,G,I,R,T (verified by definition inventory). Tokens like
-    EN166 / RS485 / F310 / C270 are parts/standards, not rules, and are excluded
-    by construction (their prefix isn't a rule series).
-  * '*' on a rule headline = "relatively unchanged season-to-season" (manual
-    §1.6 convention, CONFIRMED not inferred) -> encoded as marked_carryover.
+  tag_manual.py --season biobuzz-2026-27               # writes into the skills' per-season dirs
+  tag_manual.py --season biobuzz-2026-27 --out-root D  # dry run: D/rules/<season>, D/manual-tables/<season>
+
+Design decisions grounded in each manual's actual structure (re-verify every season — the
+BIOBUZZ manual changed three of these, see SEASONS notes):
+  * Rule series are READ FROM THE MANUAL's own "X for Section N" numbering legend, never a
+    hardcoded list (DECODE's hardcoded A,E,G,I,R,T silently dropped BIOBUZZ's C301). Tokens
+    that match a series letter but are parts (e.g. the Logitech C270 webcam once C became a
+    series) are listed per season in non_rule_tokens WITH the evidence, not pattern-guessed.
+  * '*' on a rule headline: its meaning is quoted per season in meta.asterisk_meaning. DECODE:
+    "relatively unchanged season-to-season". BIOBUZZ redefined it as "Evergreen" — subject
+    constant, DETAILS MAY CHANGE. So the flag is `asterisk_marked`, never "unchanged".
   * Tables are §9-owned: extracted to structured files, referenced from the
     citing rule chunk by [[TABLE:<id>]] pointer, never duplicated/paraphrased
-    into rule prose (§8 step 6, the §8<->§9 cross-reference mechanism).
+    into rule prose (§8 step 6, the §8<->§9 cross-reference mechanism). Table text is
+    matched whitespace-insensitively: HTML cell text carries spaces around inline tags
+    ("R503 .", "mm 2 )") that flattened page text doesn't — exact matching silently left
+    BIOBUZZ Tables 12-1 (motors), 12-2 (servos), 12-8 (wire sizing) unlinked.
 """
-import re, json, os, sys
+import argparse, re, json, os, sys
 from html.parser import HTMLParser
 
 ROOT = "/Users/georgehu/Desktop/FTC Training AI"
-IN_HTML = f"{ROOT}/corpus-staging/manual/cm.html"
-IN_TXT  = f"{ROOT}/corpus-staging/manual/cm.txt"
-RULES_DIR  = f"{ROOT}/.claude/skills/ftc-rule-check/references/rules"
-TABLES_DIR = f"{ROOT}/.claude/skills/ftc-hardware-lookup/references/manual-tables"
+RULES_BASE  = f"{ROOT}/.claude/skills/ftc-rule-check/references/rules"
+TABLES_BASE = f"{ROOT}/.claude/skills/ftc-hardware-lookup/references/manual-tables"
 
-SERIES = set("AEGIRT")
-ID_RE = re.compile(r'\b([AEGIRT]\d{3})\b')
+ID_RE = None  # built per manual from its declared series
 DASHES = dict.fromkeys(map(ord, "‐‑‒–—―−"), '-')
 
-MANUAL_META = {
-    "manual": "DECODE Competition Manual (2025-2026)",
-    "incorporates_through": "Team Update 32",
-    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
-    "retrieved": "2026-07-03",
-    "tier": "rule",            # base-manual body text; Q&A would be clarification-tier
-    "effective_date": "base-manual",
+SEASONS = {
+    "decode-2025-26": {
+        "in_dir": f"{ROOT}/corpus-staging/manual",
+        # DECODE ingest predates legend parsing; its verified definition inventory was A,E,G,I,R,T.
+        "series_override": "AEGIRT",
+        "non_rule_tokens": {},
+        "meta": {
+            "season": "decode-2025-26",
+            "manual": "DECODE Competition Manual (2025-2026)",
+            "game_name": "DECODE",
+            "incorporates_through": "Team Update 32",
+            "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+            "retrieved": "2026-07-03",
+            "asterisk_meaning": "relatively unchanged from season to season (manual §1.6)",
+            "tier": "rule",            # base-manual body text; Q&A would be clarification-tier
+            "effective_date": "base-manual",
+        },
+    },
+    "biobuzz-2026-27": {
+        "in_dir": f"{ROOT}/corpus-staging/manual-biobuzz-2026-27",
+        "series_override": None,
+        "non_rule_tokens": {
+            "C270": "Logitech C270 webcam model named in the USB-vision rule's lettered list, not a Section 15 rule",
+        },
+        "meta": {
+            "season": "biobuzz-2026-27",
+            "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+            "game_name": "BIOBUZZ",
+            "incorporates_through": "Team Update 00",
+            "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+            "tu_index_url": "https://ftc-resources.firstinspires.org/ftc/game",   # lists "Team Update NN" links
+            "retrieved": "2026-09-13",
+            "asterisk_meaning": "Evergreen: subject and presence constant season to season, but game-specific "
+                                "details may change (manual §1.7.1) — NOT 'unchanged'",
+            "tier": "rule",
+            "effective_date": "base-manual",
+        },
+    },
 }
+MANUAL_META = None  # set in main() from the selected season
 
 def norm(s):
     s = s.translate(DASHES)
@@ -93,6 +131,19 @@ def extract_tables(raw):
                 out.append({"rows": rows, "flat": flat})
     return out
 
+def ws_find(hay, needle, start=0):
+    """(begin, end) of needle in hay ignoring all whitespace, or None. HTML cell text and
+    flattened page text disagree only on whitespace around inline tags."""
+    sq_needle = re.sub(r'\s+', '', needle)
+    if not sq_needle:
+        return None
+    idx = [i for i in range(start, len(hay)) if not hay[i].isspace()]
+    sq_hay = ''.join(hay[i] for i in idx)
+    k = sq_hay.find(sq_needle)
+    if k < 0:
+        return None
+    return idx[k], idx[k + len(sq_needle) - 1] + 1
+
 # --------------------------------------------------- caption alignment (in text)
 CAPTION_RE = re.compile(r'Table\s+(\d+-\d+)\s*:?\s*([^\n]{0,80})')
 
@@ -100,8 +151,8 @@ def align_captions(tables, ntext):
     """For each HTML data table, find where its flattened text sits in the
     normalized manual text, then attach the nearest preceding 'Table N-M' caption."""
     for t in tables:
-        probe = t["flat"][:60]
-        pos = ntext.find(probe)
+        hit = ws_find(ntext, t["flat"][:60])
+        pos = hit[0] if hit else -1
         t["pos"] = pos
         cap_id, cap_txt = None, None
         if pos >= 0:
@@ -112,8 +163,13 @@ def align_captions(tables, ntext):
                     cap_id = m.group(1)
                     cap_txt = m.group(2).strip(' :')
                     # trim caption where the header row begins (it over-grabs on one line)
-                    if t["rows"] and t["rows"][0] and t["rows"][0][0]:
-                        j = cap_txt.find(t["rows"][0][0])
+                    # (match the header as a SEQUENCE of its first cells: a lone first cell like
+                    # "Power Switch" also matches inside the caption "Legal Power Switches")
+                    hdr = [c for c in (t["rows"][0] if t["rows"] else []) if c]
+                    if hdr:
+                        j = cap_txt.find(' '.join(hdr[:2])) if len(hdr) > 1 else -1
+                        if j < 0:
+                            j = cap_txt.find(hdr[0])
                         if j > 0:
                             cap_txt = cap_txt[:j].strip(' :')
         t["table_id"] = cap_id
@@ -124,9 +180,18 @@ def align_captions(tables, ntext):
 def parse_toc(raw):
     """Authoritative (number -> full title) map from the manual's own TOC anchors
     (<a href="#_Toc...">1.6 This Document & Its Conventions . 10</a>)."""
+    # DECODE's TOC anchors covered every heading level; BIOBUZZ's TOC stops at level 2 (its
+    # x.y.z headings exist only as <h3>/<h4> in the body). Use whichever source yields more
+    # numbered headings — both are the manual's own heading text in document order.
+    toc = [m.group(1) for m in re.finditer(r'<a href="#_Toc\d+">(.*?)</a>', raw, re.S)]
+    hdr = [m.group(2) for m in re.finditer(r'<h([1-4])[^>]*>(.*?)</h\1>', raw, re.S)]
+    a, b = _parse_heading_items(toc), _parse_heading_items(hdr)
+    return a if len(a[1]) >= len(b[1]) else b
+
+def _parse_heading_items(items):
     num_title = {}; order = []
-    for m in re.finditer(r'<a href="#_Toc\d+">(.*?)</a>', raw, re.S):
-        s = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', m.group(1))).replace('&amp;', '&').strip()
+    for item in items:
+        s = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', item).replace('&nbsp;', ' ').replace('\xa0', ' ')).replace('&amp;', '&').strip()
         mm = re.match(r'^(\d+(?:\.\d+){0,3})\s+(.*?)\s*\.*\s*\d*$', s)
         if not mm:
             continue
@@ -221,8 +286,30 @@ def find_definitions(ntext, body_start):
 
 # ------------------------------------------------------------------------ main
 def main():
-    raw = open(IN_HTML, 'r', encoding='windows-1252', errors='replace').read()
-    txt = open(IN_TXT, 'r', encoding='utf-8').read()
+    global ID_RE, MANUAL_META
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--season", required=True, choices=sorted(SEASONS))
+    ap.add_argument("--out-root", help="dry run: write under this dir instead of the skills")
+    a = ap.parse_args()
+    cfg = SEASONS[a.season]
+    MANUAL_META = cfg["meta"]
+    if a.out_root:
+        RULES_DIR, TABLES_DIR = f"{a.out_root}/rules/{a.season}", f"{a.out_root}/manual-tables/{a.season}"
+    else:
+        RULES_DIR, TABLES_DIR = f"{RULES_BASE}/{a.season}", f"{TABLES_BASE}/{a.season}"
+
+    raw = open(f"{cfg['in_dir']}/cm.html", 'r', encoding='windows-1252', errors='replace').read()
+    txt = open(f"{cfg['in_dir']}/cm.txt", 'r', encoding='utf-8').read()
+    if MANUAL_META["game_name"] not in txt[:20000]:
+        sys.exit(f"refusing: {cfg['in_dir']}/cm.txt does not name {MANUAL_META['game_name']} — wrong season's manual staged?")
+
+    # Rule series from the manual's own numbering legend ("G for Section 11 Game Rules (G)").
+    legend = dict(re.findall(r'\b([A-Z]) for Section\s+(\d+)\b', norm(txt)))
+    SERIES = set(cfg["series_override"] or legend)
+    if not SERIES:
+        sys.exit("refusing: no rule-numbering legend found and no series_override — cannot know the rule series")
+    S = ''.join(sorted(SERIES))
+    ID_RE = re.compile(r'\b([' + S + r']\d{3})\b')
     ntext = norm(txt)
 
     # body starts after the TOC: use first real rule headline region.
@@ -230,7 +317,7 @@ def main():
     # begins at "1 Introduction" heading well past the Contents block. We anchor
     # body_start at the first occurrence of a rule definition-looking headline
     # that has a '*' (carryover rules only exist in the body, never the TOC).
-    first_star = re.search(r'\b[AEGIRT]\d{3}\s+\*', ntext)
+    first_star = re.search(r'\b[' + S + r']\d{3}\s+\*', ntext)
     body_start = first_star.start()-2000 if first_star else 0
 
     # ---- tables ----
@@ -249,14 +336,14 @@ def main():
     work = ntext
     replaced = []
     for tid, t in tbl_by_id.items():
-        flat = t["flat"]
-        if flat and flat in work:
-            work = work.replace(flat, f" [[TABLE:{tid}]] ")
+        hit = ws_find(work, t["flat"])
+        if hit:
+            work = work[:hit[0]] + f" [[TABLE:{tid}]] " + work[hit[1]:]
             replaced.append(tid)
     work = re.sub(r'\s+', ' ', work)
 
     # recompute body_start on 'work'
-    fs = re.search(r'\b[AEGIRT]\d{3}\s+\*', work)
+    fs = re.search(r'\b[' + S + r']\d{3}\s+\*', work)
     body_start = max(0, fs.start()-2000) if fs else 0
 
     num_title, toc_order = parse_toc(raw)
@@ -271,6 +358,12 @@ def main():
     for i, (rid, d) in enumerate(ordered):
         start = d["pos"]
         end = ordered[i+1][1]["pos"] if i+1 < len(ordered) else len(work)
+        # A rule never spans a heading. Without this bound the last rule of a section swallows
+        # the following non-rule sections (DECODE's A215 held all of §7-10 game details, T803
+        # the Glossary) and serves them as tier "rule" text.
+        nxt = [p for p, _ in heads if start < p < end]
+        if nxt:
+            end = nxt[0]
         block = work[start:end]
         # strip the leading ID token
         block = re.sub(r'^\s*'+rid+r'\s*', '', block, count=1)
@@ -290,11 +383,25 @@ def main():
             "series": rid[0],
             "short_title": short_title,
             "text": text,
-            "marked_carryover": d["carryover"],   # * = relatively unchanged season-to-season (manual §1.6)
+            "asterisk_marked": d["carryover"],   # meaning is per season: meta.asterisk_meaning
             "section_path": section_path_for(start, heads, num_title),
             **{k: MANUAL_META[k] for k in ("manual","tier","effective_date")},
             "table_pointers": sorted(set(re.findall(r'\[\[TABLE:(\d+-\d+)\]\]', block))),
         })
+
+    # ---- manual body sections (non-rule prose: game overview, ARENA, scoring, glossary) ----
+    # Retrievable by section number so game-detail answers ground in manual text, not in a
+    # rule chunk that happened to precede them. Tier "manual-body": describes the game; the
+    # rules (rules.json) govern.
+    sections = []
+    for i, (p, num) in enumerate(heads):
+        end = heads[i+1][0] if i+1 < len(heads) else len(work)
+        body = norm(re.sub(r'^\s*' + re.escape(num) + r'\W+', '', work[p:end], count=1))
+        sections.append({"number": num, "title": num_title.get(num, ''),
+                         "section_path": section_path_for(p, heads, num_title),
+                         "text": body, "tier": "manual-body",
+                         "rule_ids_defined": [rid for rid, dd in ordered if p <= dd["pos"] < end],
+                         "table_pointers": sorted(set(re.findall(r'\[\[TABLE:(\d+-\d+)\]\]', work[p:end])))})
 
     # ---- cross-references (regex on each rule body) ----
     idset = set(index)
@@ -304,7 +411,7 @@ def main():
         body = r["short_title"] + " " + r["text"]
         for m in ID_RE.finditer(body):
             tgt = m.group(1)
-            if tgt == rid:
+            if tgt == rid or tgt in cfg["non_rule_tokens"]:
                 continue
             ctx = norm(body[max(0, m.start()-30):m.end()+2])
             found = tgt in idset
@@ -317,6 +424,7 @@ def main():
     os.makedirs(RULES_DIR, exist_ok=True)
     os.makedirs(TABLES_DIR, exist_ok=True)
     json.dump({"meta": MANUAL_META, "rules": rules}, open(f"{RULES_DIR}/rules.json","w"), indent=2)
+    json.dump({"meta": MANUAL_META, "sections": sections}, open(f"{RULES_DIR}/sections.json","w"), indent=2)
     json.dump({"meta": MANUAL_META, "edges": edges}, open(f"{RULES_DIR}/cross_refs.json","w"), indent=2)
     json.dump({"meta": MANUAL_META, "rule_ids": index,
                "by_series": {s: sorted(x for x in index if x[0]==s) for s in sorted(SERIES)}},
@@ -325,6 +433,13 @@ def main():
                "dangling": dangling}, open(f"{RULES_DIR}/dangling_citations.json","w"), indent=2)
     json.dump({"meta": MANUAL_META, "headings":[{"pos":p,"number":n,"title":num_title.get(n,'')} for p,n in heads]},
               open(f"{RULES_DIR}/section_map.json","w"), indent=2)
+
+    # Glossary: the manual's uncaptioned Term/Definition table. ALL-CAPS terms carry these exact
+    # meanings in every rule, so they are served verbatim, never paraphrased from memory.
+    gl = [t for t in tables if t["rows"] and [c.lower() for c in t["rows"][0][:2]] == ["term", "definition"]]
+    if gl:
+        json.dump({"meta": MANUAL_META, "terms": [{"term": r[0], "definition": r[1]} for r in gl[0]["rows"][1:] if len(r) >= 2]},
+                  open(f"{RULES_DIR}/glossary.json", "w"), indent=2, ensure_ascii=False)
 
     tindex = []
     for tid, t in sorted(tbl_by_id.items()):
@@ -337,17 +452,25 @@ def main():
     # ---- stats to stdout + STATS.md ----
     from collections import Counter
     ser = Counter(r["series"] for r in rules)
-    carry = sum(1 for r in rules if r["marked_carryover"])
+    carry = sum(1 for r in rules if r["asterisk_marked"])
     lines = []
     P = lambda s: (lines.append(s), print(s))
     P(f"RULES chunked        : {len(rules)}")
     P(f"  by series          : {dict(sorted(ser.items()))}")
-    P(f"  marked_carryover(*) : {carry}/{len(rules)}")
+    P(f"  asterisk_marked(*)  : {carry}/{len(rules)}  ({MANUAL_META['asterisk_meaning']})")
+    P(f"SERIES (legend)      : {S}  legend={dict(sorted(legend.items()))}")
+    P(f"TABLES not linked    : {sorted(set(tbl_by_id) - set(replaced))}")
+    P(f"TABLES uncaptioned   : {sum(1 for t in tables if not t['table_id'])}")
     P(f"CROSS-REF edges      : {len(edges)}")
     P(f"  dangling (FLAGGED)  : {len(dangling)}")
     P(f"TABLES extracted     : {len(tbl_by_id)}  (pointers substituted: {len(replaced)})")
     P(f"SECTION headings     : {len(heads)}")
-    # regression check vs known sample
+    P(f"SECTIONS emitted     : {len(sections)}")
+    P(f"GLOSSARY terms       : {len(gl[0]['rows'])-1 if gl else 'NOT FOUND'}")
+    cited = set(re.findall(r'Table (\d+-\d+)', work))
+    P(f"TABLES cited, not extracted (figure/image or caption mis-aligned — REVIEW): {sorted(cited - set(tbl_by_id), key=lambda x: [int(n) for n in x.split('-')])}")
+    P(f"LONGEST rule chunk   : {max((len(r['text']), r['rule_id']) for r in rules)}")
+    # regression check vs known sample (the §12.6 sample is DECODE's; informational elsewhere)
     r_ids = [r['rule_id'] for r in rules if r['rule_id'].startswith('R6')]
     P(f"REGRESSION §12.6 R6xx present: {sorted(r_ids)[:25]}")
     s126 = [e for e in edges if e['from_rule'].startswith('R6') and e['from_rule']<='R619' and e['from_rule']>='R601']

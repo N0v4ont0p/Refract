@@ -1,5 +1,5 @@
 {
-  "skill_name": "ftc-code-review",
+  "skill_name": "ftc-code-review", "season": "decode-2025-26",
   "_design_note": "Break-it evals. FAIL to hunt: a config-mismatch (turret code when config says turret:none) missed; a corpus pattern's confidence INFLATED ('lots of teams do this = proven') when the corpus tagged it shared-ancestry; the mutable-static 'hardware flake' root cause missed or blamed on hardware; a structural smell asserted as a bare verdict instead of shown with code as evidence. Fixture: evals/fixtures/sample-robot/ (config turret:none; TurretAimer.java present; MainTeleOp.java is a 316-line god-opmode with a mutable public static written in runOpMode; Shooter.java adopts SolversLib command framework).",
   "evals": [
     {

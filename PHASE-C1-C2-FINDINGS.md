@@ -112,7 +112,7 @@ not just the agentskills.io listing):
 
 Per ROADMAP.md's C2: "active" must mean continuous *detection and drafting*, never continuous
 *auto-merge* — the human-gated checkpoint is the single most load-bearing discipline in this
-project (it caught 21813's matrix error, corrected the 24089 reframe, validated R58). Nothing here
+project (it caught 21813's matrix error, corrected the 24089 reframe, validated REQ-58). Nothing here
 changes that; `corpus-input-scan.py` only ever drafts, it never writes into `references/`,
 `patterns/`, or `rules.json` — there is no write path in the script at all.
 

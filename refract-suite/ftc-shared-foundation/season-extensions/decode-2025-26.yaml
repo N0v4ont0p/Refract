@@ -24,6 +24,16 @@ season_mechanisms:
   classifier_interaction: [present, none]
   endgame_parking: [mandatory]
 
+code_tokens:
+  # mechanism key -> identifier prefixes that would appear in code for it. Read by
+  # ftc-code-review/scripts/config_lint.py (was hardcoded there; season data belongs here).
+  turret: [Turret]
+  shooter: [Shooter, Flywheel, Launcher]
+  intake: [Intake]
+  gate_mechanism: [Gate]
+  classifier_interaction: [Classifier]
+  endgame_parking: []           # behavior, not a class — not lintable by name
+
 known_archetypes:
   - turreted_shooter          # turret decouples aim from drivetrain heading, enables shoot-while-moving
   - fixed_shooter_on_swerve   # the drivetrain itself provides aim

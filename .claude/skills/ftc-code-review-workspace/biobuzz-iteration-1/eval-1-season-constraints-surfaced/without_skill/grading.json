@@ -1,0 +1,27 @@
+{
+  "assertions": [
+    {
+      "name": "dashboard-R704",
+      "passed": true,
+      "evidence": "Answer: \"Rule R704.D in the BIOBUZZ manual says robot data may only be streamed through the FTC Driver Station app. It says extra logging or streaming tools 'such as FTC Dashboard, FTControl Panels, and others are prohibited.'\" The text came from the BIOBUZZ manual itself (scripts_run: pdftotext on the saved manual, then grep for R70x/dashboard and sed -n 4836,4920p), not rules.py. It matches `rules.py lookup R704 --season biobuzz-2026-27` word for word (R704.D names FTC Dashboard and FTControl Panels as prohibited)."
+    },
+    {
+      "name": "sdk12-cluster",
+      "passed": true,
+      "evidence": "Answer: \"BLOCKER (won't compile on SDK 12): HiveRelocalizer.java line 12 ... Each detection is now either an AprilTagSingleDetection or an AprilTagClusterDetection, and you have to cast to the right one ... So detection.id on the base AprilTagDetection should fail to compile.\" This matches the season file's sdk-12-apriltag-cluster-api constraint."
+    },
+    {
+      "name": "turret-config-mismatch",
+      "passed": true,
+      "evidence": "Answer: \"CONFIG MISMATCH: turret code on a robot with no turret. File: TurretAim.java. Your confirmed config says turret: none, but this class exists.\" It then asks to confirm whether the file is stale: \"A. Did you add a turret, or is TurretAim leftover code? If leftover: delete it ... If you added a turret: update team-config.yaml first\"."
+    },
+    {
+      "name": "launcher-not-flagged",
+      "passed": true,
+      "evidence": "Answer: \"5. LauncherSubsystem.java: no bugs, three optional hardening steps ... all are optional.\" It raises no rule or config violation. hive_launcher: flywheel in the config matches the code, and the answer does not claim a mismatch."
+    }
+  ],
+  "factual_errors": [
+    "Answer says SDK 12.0 was \"released Sept 7, 2026\". The corpus (season-extensions/biobuzz-2026-27.yaml line 92) records \"FTC SDK v12.0 (2026-09-12)\"."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "reads-biobuzz-table",
+      "passed": false,
+      "evidence": "files_read has only the downloaded manual PDF (webfetch-...awwgvg.pdf) and its pdftotext dump (scratchpad/evalruns/manual.txt). It does not include .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json. scripts_run has no equivalent script or pointer either: no rules.py lookup R501 resolving [[TABLE:12-1]] and no hardware-lookup script, only WebSearch/WebFetch and grep/sed on the PDF text. The answer does name the season ('2026-2027 season (BIOBUZZ)') and Table 12-1, but that came from a raw web copy of the manual, not the season table file this assertion asks for."
+    },
+    {
+      "name": "no-memory",
+      "passed": true,
+      "evidence": "The motor row came from the manual text, not recall. scripts_run shows `grep -n -i -E \"wattos|stingray\" $O/manual.txt` and `sed -n '4405,4450p;4488,4510p'`, and the answer quotes the row as \"WATTOS Stingray 12V DC, WDM12\". That row and part number match table-12-1.json exactly. The source was the official manual's Table 12-1 rather than the skill's JSON copy, but nothing rests on memory."
+    }
+  ],
+  "factual_errors": []
+}

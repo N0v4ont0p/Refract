@@ -28,6 +28,8 @@ meta:
 
 patterns:
   - id: 19043-A-hardwarequeue
+    season_scope: invariant
+    season_scope_basis: "Staleness x urgency priority scheduling of hardware writes within a loop-time budget; no game dependence."
     problem: >
       Writing to many motors/servos every loop can blow the loop-time budget; schedule
       hardware WRITES so the most-needed device is serviced within a time budget.
@@ -64,6 +66,8 @@ patterns:
       then. Season-agnostic. Medium (shared community idiom + unresolved provenance).
 
   - id: 19043-B-npriorityservo
+    season_scope: invariant
+    season_scope_basis: "Simulated servo position per ServoType for priority writes; actuator infrastructure, no game dependence."
     problem: >
       Apply the priority-write scheme to servos, whose motion is not instantaneous and
       whose "reached target" state has no hardware feedback.
@@ -89,6 +93,8 @@ patterns:
       medium. ServoType speed/position constants are hardware tuning, not asserted here.
 
   - id: 19043-C-ekf-localizer
+    season_scope: decode-2025-26
+    season_scope_basis: "EKF odometry/Pinpoint fusion and latency-compensated past-pose innovation transfer; the AprilTag update step relies on DECODE fixed field tags, which BIOBUZZ lacks (HIVE tags move, SDK v12.0)."
     problem: >
       Fuse heterogeneous asynchronous localization sources (3-wheel odometry, Pinpoint,
       AprilTag vision) with different rates/noise/latency into one robust pose estimate.
@@ -119,6 +125,8 @@ patterns:
       Medium: novel-for-FTC integration but self-described unproven + tuning-dependent.
 
   - id: 19043-D-gvf-pathfollower
+    season_scope: invariant
+    season_scope_basis: "Guided-vector-field spline follower with repulsion points and PID-to-point fallback; pathing, no game dependence."
     problem: >
       Follow spline paths in autonomous with dynamic re-routing around obstacles, rather
       than committing to a rigid pre-planned trajectory.
@@ -142,6 +150,8 @@ patterns:
       author flags stuck-skip as not-fully-validated → medium. Season-agnostic pathing.
 
   - id: 19043-E-composition-root
+    season_scope: invariant
+    season_scope_basis: "Robot composition root sequencing sensors -> subsystems -> HardwareQueue flush -> telemetry; no game dependence."
     problem: >
       Keep OpModes thin and subsystems independently testable, avoiding a monolithic OpMode.
     solution_approach: >
@@ -159,6 +169,8 @@ patterns:
     notes: "The distinctive/creditable part is the coupling to the priority HardwareQueue as the SINGLE write-flush point (Robot.java:72), not the composition root itself (commodity). Medium. Season-agnostic."
 
   - id: 19043-F-request-state-machine
+    season_scope: invariant
+    season_scope_basis: "Request-flag + readiness-gated enum state machine; the shooter/intake aiming content is season-specific but not the pattern (per its notes)."
     problem: >
       Sequence multi-step subsystem behaviors driven by async gamepad/auto requests without
       blocking the main loop.
@@ -179,6 +191,8 @@ patterns:
   # ---- Batch 2 (mechanisms + sensing), approved 2026-07-03 ----
 
   - id: 19043-G-shooter-empirical-table
+    season_scope: decode-2025-26
+    season_scope_basis: "Two-axis interpolated table idiom transfers; distance->flywheel-velocity and actual-velocity->hood breakpoints are measured Artifact shots at DECODE goals."
     problem: >
       Turn distance-to-goal into flywheel-velocity + hood-angle setpoints for a
       distance-variable shooter, without solving closed-form ballistics at runtime.
@@ -209,6 +223,8 @@ patterns:
       finding (domain-forcing discount + 24089 counterexample cap it below high).
 
   - id: 19043-H-flywheel-control
+    season_scope: invariant
+    season_scope_basis: "Velocity PID + empirical FF sweep + battery-sag scaling + belt-skip accel clamp depend on flywheel hardware, not DECODE elements; gains need re-tuning on a BIOBUZZ hive_launcher."
     problem: >
       Hold flywheel velocity accurately across battery sag and a wide range, avoiding
       belt-slip at low speed.
@@ -229,6 +245,8 @@ patterns:
     notes: "Season-specific mechanism; transferable control idiom. Kept medium: velocity PID+FF and voltage scaling are individually commonplace; the value is the belt-skip-aware clamp."
 
   - id: 19043-I-turret-lead-prediction
+    season_scope: invariant
+    season_scope_basis: "Servo slew-lag lead from filtered target angular velocity x loop time; generic tracking control, no DECODE element or field geometry."
     problem: >
       Compensate servo slew-rate lag when tracking a continuously moving target angle, rather
       than always commanding the instantaneous target and lagging behind.
@@ -247,6 +265,8 @@ patterns:
     notes: "Season-specific turret; transferable servo-lag-compensation technique. Medium (broadly-recognized control idiom, no cross-team replication in-batch to lift higher)."
 
   - id: 19043-J-balldetection-field-position
+    season_scope: decode-2025-26
+    season_scope_basis: "Detector -> field-frame projection + ranking structure transfers; the NN pipeline, inverse-cube area->distance fit and ranking heuristic are fitted to DECODE Artifacts on the DECODE field."
     problem: >
       Detect game-piece (artifact) presence and FIELD POSITION from a distance, to drive
       intake path-planning / auto-aim.
@@ -271,6 +291,8 @@ patterns:
       target, but the Limelight-detector->field-position technique transfers.
 
   - id: 19043-K-analog-held-color
+    season_scope: decode-2025-26
+    season_scope_basis: "Filtered analog-sensor thresholding transfers; the 0.008V/0.007V cutoffs classify DECODE Artifact green/purple, not POLLEN yellow or NECTAR red/blue."
     problem: >
       Classify the COLOR/type of an artifact currently HELD in the intake (distinct from the
       field-position detection above).

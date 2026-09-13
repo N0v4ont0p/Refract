@@ -1,0 +1,53 @@
+{
+  "skill_name": "ftc-code-review",
+  "season": "biobuzz-2026-27",
+  "_design_note": "Season-transition evals (PLAN \u00a720). Ground truths checked 2026-09-13 against BIOBUZZ CM V1 + TU00, SDK v12.0 README, and by running the deterministic scripts named in each case. FAIL to hunt: reviewing BIOBUZZ code with DECODE assumptions, treating a season-rule detect hit as a verdict without rule text, missing the moving-AprilTag localization misuse that has no regex.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "season-constraints-surfaced",
+      "prompt": "review our new BIOBUZZ robot code before our first scrimmage",
+      "expected_output": "config_lint (season biobuzz-2026-27) findings: TurretAim.java referenced with turret:none (confirm if stale); TelemetryHelper.java streams via FTC Dashboard \u2014 R704 prohibits third-party streaming at events; HiveRelocalizer.java reads detection.id off the base AprilTagDetection, which fails to compile on SDK v12.0 (id/metadata/center moved to AprilTagSingleDetection). Each season finding carries its rule/source and the R704 text is retrieved via rules.py --season biobuzz-2026-27, not asserted from the regex alone.",
+      "files": [
+        "evals/fixtures/biobuzz-robot/"
+      ],
+      "assertions": [
+        {
+          "name": "dashboard-R704",
+          "text": "TelemetryHelper.java flagged under R704 with the rule text retrieved for BIOBUZZ (FTC Dashboard/FTControl Panels named as prohibited)"
+        },
+        {
+          "name": "sdk12-cluster",
+          "text": "HiveRelocalizer.java flagged for the SDK v12.0 AprilTag Cluster breaking change: .id read off the base AprilTagDetection without casting to AprilTagSingleDetection"
+        },
+        {
+          "name": "turret-config-mismatch",
+          "text": "TurretAim.java surfaced as not referenced by the current config (turret: none), confirm-if-stale"
+        },
+        {
+          "name": "launcher-not-flagged",
+          "text": "LauncherSubsystem.java is NOT flagged \u2014 hive_launcher is declared flywheel"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "moving-tag-localization",
+      "prompt": "our auto drifts, we reset odometry from the apriltags on the hive every loop (HiveRelocalizer). is that a good approach for BIOBUZZ?",
+      "expected_output": "No: BIOBUZZ AprilTags are on the CELLs of the tipping HIVE, facing down, and the SDK v12.0 README states they 'are not suitable for absolute Field Localization'. Using detection.robotPose to reset field odometry will jump every time a HIVE tips. Targeting relative to a cluster is the supported use; fix drift with odometry tuning instead. Cites the season file's code_constraints / SDK README, not a DECODE relocalization pattern.",
+      "files": [
+        "evals/fixtures/biobuzz-robot/"
+      ],
+      "assertions": [
+        {
+          "name": "identifies-moving-tags",
+          "text": "Explains the tags move with the HIVE (tip) and are not a fixed field reference, citing the SDK v12.0 note or the season file"
+        },
+        {
+          "name": "no-decode-pattern-endorsement",
+          "text": "Does not endorse the approach by citing a DECODE-season AprilTag relocalization pattern as current evidence"
+        }
+      ]
+    }
+  ]
+}

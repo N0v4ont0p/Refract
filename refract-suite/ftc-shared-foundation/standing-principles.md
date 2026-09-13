@@ -1,11 +1,11 @@
 # Standing principles — shared by all four FTC skills
 
 One copy, pointed to by every SKILL.md (ftc-team-config, ftc-hardware-lookup, ftc-rule-check,
-ftc-code-review). Implements R5, R16, R38, R41, R53, R77, R100, R102, R107 (+ the R58 echo) from
+ftc-code-review). Implements REQ-5, REQ-16, REQ-38, REQ-41, REQ-53, REQ-77, REQ-100, REQ-102, REQ-107 (+ the REQ-58 echo) from
 TRACEABILITY.md. Edit here, never in a skill body — five drifting copies of the same rule was the
 failure this file exists to prevent.
 
-## 1. Deterministic first (R16)
+## 1. Deterministic first (REQ-16)
 
 If a script or a structured file can answer it, run the script or read the file — don't generate
 the answer, even when you're confident. Confidence is the problem, not the solution: everything
@@ -25,7 +25,7 @@ The lesson generalizes: a value's pedigree (a paper, a veteran team's repo, your
 datasheet) is never a substitute for reading the structured table or running the script. That's
 why the tables and scripts exist.
 
-## 2. Abstention is a valid answer (R38)
+## 2. Abstention is a valid answer (REQ-38)
 
 When no supporting source exists, the correct output is "Unknown — I'd need X" (the specific
 missing artifact: a BOM entry, a CAD file, a rule number, a catalog row). A filled gap that turns
@@ -36,7 +36,7 @@ Abstaining is not failing the task. Answering "what's team X's OPR" with "I don'
 ranking data — check FTCScout" is the system working. Guessing a plausible OPR is the system
 failing in the exact way it was built to prevent.
 
-## 3. Source tiering — Rule 7 (R41)
+## 3. Source tiering — Rule 7 (REQ-41)
 
 - **Tier-1:** official FIRST manuals and Team Updates, FIRST/REV/goBILDA published specs, SDK and
   vendor source code.
@@ -54,7 +54,7 @@ re-verified against the actual code. When you find yourself repeating a claim be
 established earlier, that is the moment to re-check it at source, not the moment you're excused
 from checking.
 
-## 4. Ask, don't guess (R53 — the §15 standing instruction)
+## 4. Ask, don't guess (REQ-53 — the §15 standing instruction)
 
 When an answer would change what code gets generated, ask the user — don't guess, and don't wait
 to be asked to check. Inference is for pre-filling defaults; it never silently decides what ships.
@@ -64,13 +64,13 @@ The persona line, verbatim (its home is ftc-team-config; it applies everywhere):
 > "If a recommendation would differ depending on information you don't have, stop and ask before
 > generating code. A wrong guess that compiles is worse than a question that costs one turn."
 
-## 5. Experience gates explanation depth, never recommendations (R5)
+## 5. Experience gates explanation depth, never recommendations (REQ-5)
 
 `team_context.experience: rookie` means explain more — define terms, show the why, link the
 reference. It never means recommend something different or withhold an option. Gating
 recommendations by experience quietly ships worse robots to the teams least equipped to notice.
 The same applies to `fabrication.capability`: it changes which *tuning values* you advise
-(acceleration limits, PID starting points), never which code or pattern you recommend (R4).
+(acceleration limits, PID starting points), never which code or pattern you recommend (REQ-4).
 
 ## 6. Why a deterministic gate, not good judgment (confidence-driven drift)
 
@@ -104,7 +104,7 @@ the broken branch. The confident dismissal was the bug; the check was the fix. S
 and 12808 — a conclusion reached by reasoning-from-the-usual instead of looking. The rule that caught
 all three is the same: when it feels settled enough to skip the check, that's the check that matters.
 
-## 7. Cross-skill data access (R77)
+## 7. Cross-skill data access (REQ-77)
 
 A skill that needs another skill's bundled data **reads it directly by path**, exactly as it reads
 its own reference files. Never hand off mid-turn to a separately-triggered skill, and never
@@ -116,14 +116,22 @@ Canonical paths (relative to the suite root — the directory containing `core-f
 |---|---|
 | Core feature model | `core-feature-model.yaml` |
 | Active season | `season-extensions/ACTIVE` → `season-extensions/<slug>.yaml` |
-| Tagged rules + cross-refs | `.claude/skills/ftc-rule-check/references/rules/` |
-| Manual tables (structured) | `.claude/skills/ftc-hardware-lookup/references/manual-tables/` |
-| Hardware catalogs + physics | `.claude/skills/ftc-hardware-lookup/references/` |
+| Tagged rules + sections + glossary (per season) | `.claude/skills/ftc-rule-check/references/rules/<slug>/` — read via `rules.py --season` |
+| Manual tables (structured, per season) | `.claude/skills/ftc-hardware-lookup/references/manual-tables/<slug>/` |
+| Hardware catalogs | `.claude/skills/ftc-hardware-lookup/references/catalogs/` |
+| Ballistics constants | `.claude/skills/ftc-hardware-lookup/references/physics/invariants.json` + `physics/<slug>/<element>.json` |
+| Staged manual sources + hashes | `corpus-staging/manual-<slug>/SOURCES.md` |
 | Hub-generation briefing | `.claude/skills/ftc-hardware-lookup/references/hub-generations/` |
 | Pattern corpus + findings | `.claude/skills/ftc-corpus-builder/references/` |
 | Team's confirmed config | `team-config.yaml` in the team's project root (written by ftc-team-config) |
 | Failure-mode taxonomy | `known-failure-modes.md` (suite root) |
 | These principles | `references/standing-principles.md` (suite root) |
+
+**Season-scoped data is never read without naming the season.** Manual rule numbers, table IDs,
+field geometry, AprilTag IDs and scoring-element physics are reused or replaced every season; a
+lookup that doesn't carry its season slug can return a real, verifiable answer about the wrong game.
+The season comes from the question, else the team config's `_meta.season`, else `ACTIVE` — and the
+answer says which.
 
 ## 8. Pointer vs. home copy: reference data vs. behavioral gates
 
@@ -140,7 +148,7 @@ The distinction is *look-up-able vs. must-be-honored-in-the-moment*. You can loo
 a question arrives. You cannot look up "stop and ask before generating code" reliably at the instant
 you're about to generate — a gate fetched from another file mid-decision is a gate easily skipped. So
 it belongs where the decision happens. The worked case: the "ask-before-generating" persona line
-(R58) has its home in ftc-team-config (the only skill that generates code — where the gate is
+(REQ-58) has its home in ftc-team-config (the only skill that generates code — where the gate is
 operative) and a canonical copy in §4 here (which the non-generating skills inherit by pointer,
 because for them it's guidance, not an operative gate).
 
@@ -154,30 +162,29 @@ When assembling a new skill (quickstart-builder, season-transition, …): ask of
 this get executed at a decision point in this body, or merely consulted?* Executed → home copy here +
 canonical pointer. Consulted → pointer only. Default to pointer; earn the home copy.
 
-## 9. Season transition scope — design linkage, noted not built
+## 9. Season transition — built from the first real run (REQ-66)
 
-`ftc-season-transition` (R66, still deferred) is scoped in PLAN.md §19 around `season_mechanisms`:
-detect the boundary, ingest the new manual, redraft the mechanism taxonomy, merge into
-`season-extensions/`. That scope is necessary but not sufficient. Two artifacts introduced after §19
-was written also carry season-specific assumptions and are NOT covered by that scope as written:
+`ftc-season-transition` was deferred until the first real boundary (DECODE → BIOBUZZ, 2026-09-12) and
+built from it (`.claude/skills/ftc-season-transition/`). The §19 scope as first written — detect,
+ingest, redraft `season_mechanisms`, merge — was necessary but not sufficient, and this section's
+earlier scope note predicted two of the gaps. The run confirmed them and found more:
 
-- **The quickstart template** (`ftc-shared-foundation/quickstart-template/`) ships concrete example
-  implementations (Shooter/Turret/Intake) built against a specific season's mechanism set. A season
-  boundary that removes or reshapes a mechanism category (see `season-extensions/biobuzz-2026-27.yaml`'s
-  open question on whether BIOBUZZ has a launcher at all) can leave the template's examples describing
-  mechanisms the new season doesn't have, silently — nothing currently checks this.
-- **The library docs corpus** (`ftc-shared-foundation/references/library-docs/`) is season-agnostic at
-  the library-API level (FTCLib/RoadRunner/REV SDK docs don't change with the game), but the *guidance
-  that cites them* (which pattern to reach for, which example to point at) can go stale the same way
-  `check_freshness.py` already watches for elsewhere in this project.
+- **Quickstart template** — predicted here: its examples (Shooter/Turret) and its telemetry wiring
+  were season-bound. Confirmed: `ExampleTeleOp` wired a shooter and turret into every robot, and
+  `RobotTelemetry` streamed to FTC Dashboard, which BIOBUZZ R704 prohibits at events. Fixed and
+  compile-tested against SDK v12.0.
+- **Library docs guidance** — predicted here. Confirmed: the Pedro coordinate conversion, motif tag
+  IDs, StarterBot guides and AprilTag relocalization docs describe DECODE; the SDK AprilTag examples
+  predate v12.0's API change. Tagged with SEASON SCOPE / SDK VERSION SCOPE headers, upstream text
+  untouched.
+- **Not predicted:** the rules corpus, manual tables, freshness registry, ballistics constants, lint
+  tokens, question ordering, pattern corpus, team configs and eval fixtures were all keyed to one
+  season. Each is now keyed by season slug (§7 path table).
 
-When `ftc-season-transition` is actually built, its trigger set should extend to: does the new
-season's `season_mechanisms` block imply the quickstart template's example implementations need
-revision or replacement, and does anything in the library-docs corpus need a re-fetch check. This is
-a scope note for that future build, not new work now — `ftc-season-transition` stays deferred exactly
-as R66 already records it.
+Standing consequence: the season is part of every lookup key, and a season's layer can't be flipped
+ACTIVE until `transition_check.py` passes and a human signs off on the deliberation checkpoint.
 
-## 10. The unhedged claim is the one that needed the check (R100)
+## 10. The unhedged claim is the one that needed the check (REQ-100)
 
 A pattern worth naming on its own, distinct from §6's confidence-driven drift (which is about
 *generating* an unverified fact mid-task). This one is about *reporting a finding* once real work
@@ -215,7 +222,7 @@ fix: before shipping a claim that something else is defective, verify against th
 (re-read the file, re-run the tool in isolation) with the same rigor a self-generated fact gets — and
 if the first claim turns out wrong, strike it explicitly rather than quietly move to the real finding.
 
-## 11. A workaround needed to get a correct result IS the result (R102)
+## 11. A workaround needed to get a correct result IS the result (REQ-102)
 
 A pattern distinct from both §6 (confidence-driven drift, about generating an unverified fact) and
 §10 (about how a finding gets *reported* once work is already done). This one is about what happens
@@ -223,7 +230,7 @@ A pattern distinct from both §6 (confidence-driven drift, about generating an u
 failure shape: the workaround gets treated as a solved problem (the test still produced a correct
 result, so the run counts as a pass) instead of as the finding it actually is.
 
-**Concretely, from this project's own history (R101):** a Phase B regression test needed to pass
+**Concretely, from this project's own history (REQ-101):** a Phase B regression test needed to pass
 `config_lint.py` an explicit `--config` because the script's own default discovery grabbed the
 wrong file. The agent running that test noticed, worked around it, got a correct result, and
 reported the workaround in passing. That was the right *tactical* move — but the workaround itself
@@ -237,7 +244,7 @@ standing as a wrong answer would have had. Escalate it the moment it happens ("t
 workaround, and here's why"), not after it recurs enough times to become obviously a pattern. The
 tactical fix that gets the current test to a correct result, and the report that the fix was
 *necessary*, are two different obligations — doing only the first is how a real defect survives an
-otherwise-careful test run. This is the more important lesson of the two R101 surfaced, not the bug
+otherwise-careful test run. This is the more important lesson of the two REQ-101 surfaced, not the bug
 itself.
 
 **A closely related failure shape, recurring four times across two work sessions — worth naming
@@ -245,7 +252,7 @@ visibly here rather than left scattered across separate files' commit history as
 notes:** a fix or addition that *reads* as correct is not the same claim as one that has actually
 been run and checked against real output.
 
-1. `config_lint.py`'s own fix (R101): the first attempt (scope the `rglob` search to `code_dir`)
+1. `config_lint.py`'s own fix (REQ-101): the first attempt (scope the `rglob` search to `code_dir`)
    read as a reasonable, targeted correction — and was wrong for the common case (a config at the
    project root, a *sibling* of `code_dir`, not nested inside it). Caught only by running it against
    the real fixture and getting an unexpected "no config found," not by re-reading the diff.
@@ -280,9 +287,9 @@ is the concrete, current evidence for why every fix in this project gets an actu
 recomputation, not just a re-read, before being called done — and why that discipline generalizes
 past code to anything with a mechanically checkable property.
 
-## 12. A verified claim has a shelf life, not just a confidence level (R107)
+## 12. A verified claim has a shelf life, not just a confidence level (REQ-107)
 
-Distinct from §10's rule (R100 — an unhedged claim that was *wrong at the time it was made*). This
+Distinct from §10's rule (REQ-100 — an unhedged claim that was *wrong at the time it was made*). This
 is a different failure mode, adjacent but not the same: a claim that was genuinely, correctly
 verified against a real source at the time — cited accurately, read correctly, nothing rushed —
 and is no longer true, because the external thing it described changed afterward. Both are real
@@ -293,7 +300,7 @@ compatibility check found Cursor did not scan `.claude/skills/`, cited directly 
 documentation at the time. That finding was correct when made — not an unhedged guess, not a
 stretched inference. A later pass (building this project's own `docs/` tree) re-checked the same
 question against Cursor's *current* documentation and found it now states "for compatibility,
-Cursor also loads skills from Claude and Codex directories." The earlier finding didn't fail R100's
+Cursor also loads skills from Claude and Codex directories." The earlier finding didn't fail REQ-100's
 test — it had a real citation, correctly read. It just didn't stay true, because Cursor's own
 product changed underneath it.
 
@@ -301,11 +308,11 @@ product changed underneath it.
 expiration date, not a permanent fact once verified — carry a "verified as of" sense with it, not
 just the citation. Re-checking that class of claim on some real cadence (tied to how fast the
 specific platform actually moves, not a fixed calendar rule) is a different, additional discipline
-from R100's "check the ones that sound too clean" — R100 catches a claim that was never solid; this
-catches a claim that was solid and stopped being true. A claims inventory that only re-runs R100's
+from REQ-100's "check the ones that sound too clean" — REQ-100 catches a claim that was never solid; this
+catches a claim that was solid and stopped being true. A claims inventory that only re-runs REQ-100's
 check will still go stale here, silently, exactly the way this one almost did.
 
-## 13. A physical tuning constant can never be source-derived (R109)
+## 13. A physical tuning constant can never be source-derived (REQ-109)
 
 **The canonical case, first, because it is the reason this category exists.** Pedro Pathing's
 current quickstart ships a `Constants.java` containing `new FollowerConstants()` and *no numbers at
@@ -347,7 +354,7 @@ re-verify them against each library's current source rather than trusting the ta
 Everything below is the general rule this case instantiates.
 
 Distinct from every hallucination-control category already in this file, and distinct in a way
-that matters more than the others. §10 (R100) and §12 (R107) both govern *claims about the world
+that matters more than the others. §10 (REQ-100) and §12 (REQ-107) both govern *claims about the world
 that could in principle be checked against a source*. This one governs values for which **no source
 exists, anywhere, by nature** — not "not seeded yet", not "the catalog is incomplete", not
 "a better retrieval pass would find it."
@@ -401,7 +408,7 @@ robot, not an error, and generation must serve it honestly — a correctly-struc
 every tuning-dependent field loudly marked and the real tuning procedure attached, never a
 scaffold silently pre-filled with numbers that came from nowhere.
 
-## 14. A measured constant can still be meaningless — coordinate frames (R123)
+## 14. A measured constant can still be meaningless — coordinate frames (REQ-123)
 
 §13 established that a physical constant has only two honest states: carried forward from a real
 measurement, or loudly marked untuned. That rule is necessary and it is **not sufficient**, because

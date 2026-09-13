@@ -1,0 +1,31 @@
+{
+  "table_id": "6-5",
+  "caption": "Reach Award Criteria Reach Award Criteria Required 1 Team demonstrates outreach",
+  "rows": [
+    [
+      "Reach Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team demonstrates outreach planning competency by clearly explaining all of the following: A. its outreach objectives, B. the strategy behind its outreach activities, and C. how these activities support the growth of the FIRST community."
+    ],
+    [
+      "Required",
+      "2",
+      "Team demonstrates successful recruitment of new teams, coaches, mentors, or volunteers who have not previously participated in the FIRST community"
+    ],
+    [
+      "Encouraged",
+      "3",
+      "Team demonstrates strong communication competencies by serving as an ambassador for FIRST and increasing public awareness of FIRST programs through effective outreach and communication."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Demonstrates media and promotion competencies by developing creative, continuously improving outreach materials that effectively introduce both the team and FIRST to the public."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-5]] pointer (\u00a78<->\u00a79)"
+}

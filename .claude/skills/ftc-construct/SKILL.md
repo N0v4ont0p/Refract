@@ -1,6 +1,6 @@
 ---
 name: ftc-construct
-description: 'Config-gated FTC robot code generation, grounded in library documentation, the elite-team pattern corpus, and the hardware catalog: scaffolds new OpModes, subsystems, and mechanisms from the quickstart interface template (Drivetrain/Shooter/Turret/Intake) once a team config is confirmed, and runs a mandatory rule-check and code-review verification pass on everything it writes before declaring anything done. Use whenever the user wants NEW robot code written from scratch — a new OpMode, subsystem, or mechanism feature ("write a teleop", "add an intake subsystem", "generate the shooter code"). Reads the confirmed team-config.yaml by reference; if none exists or required fields are unconfirmed, hands back to ftc-team-config rather than generating against a guess — this skill never re-elicits a config itself. Does not review or audit code that already exists in the repo (ftc-code-review) and does not establish or change the config itself (ftc-team-config).'
+description: 'Config-gated FTC robot code generation, grounded in library documentation, the elite-team pattern corpus, and the hardware catalog: scaffolds new OpModes, subsystems, and mechanisms from the quickstart interface template (Drivetrain plus the ACTIVE season's mechanism interfaces) once a team config is confirmed, and runs a mandatory rule-check and code-review verification pass on everything it writes before declaring anything done. Use whenever the user wants NEW robot code written from scratch — a new OpMode, subsystem, or mechanism feature ("write a teleop", "add an intake subsystem", "generate the launcher code"). Reads the confirmed team-config.yaml by reference; if none exists or required fields are unconfirmed, hands back to ftc-team-config rather than generating against a guess — this skill never re-elicits a config itself. Does not review or audit code that already exists in the repo (ftc-code-review) and does not establish or change the config itself (ftc-team-config).'
 ---
 
 # FTC Construct
@@ -24,7 +24,7 @@ unless stated otherwise.
 | `team-config.yaml` (team's project root) | the confirmed config this generation is *against* — read first, never re-elicited here |
 | `.claude/skills/ftc-team-config/scripts/validate_config.py` | authoritative `generation_allowed` gate — read by path, not re-implemented |
 | `refract-suite/ftc-shared-foundation/quickstart-template/` | the interface-based scaffolding source (Drivetrain fixed + per-mechanism interfaces derived from `season_mechanisms`) |
-| `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/`, `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/`, `ticktree/` (Phase G — pre-alpha, API unstable) |
+| `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/`, `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `andymark/` (BIOBUZZ StarterBot summary, tier 2), `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/`, `ticktree/` (Phase G — pre-alpha, API unstable) |
 | `.claude/skills/ftc-corpus-builder/references/patterns/*.yaml` | provenance-tagged elite-team patterns — cited with confidence/provenance displayed faithfully, same discipline as ftc-code-review |
 | `.claude/skills/ftc-hardware-lookup/references/catalogs/` + `scripts/motor_math.py` | any spec/tuning value used in generated code — read by path, never guessed |
 | `.claude/skills/ftc-code-review/scripts/{config_lint.py,failure_mode_lint.py}` | mandatory post-generation verification (step 5 below) |
@@ -48,7 +48,7 @@ python3 .claude/skills/ftc-team-config/scripts/validate_config.py <team-config.y
 false` with a populated `unconfirmed_mandatory` means one exists but isn't ready. Either way — if
 `generation_allowed` is not `true` — **stop and hand back to ftc-team-config.** State plainly
 what's missing (the exact `unconfirmed_mandatory` list the script returns); do not ask the missing
-questions yourself, and do not generate against a guess. This is this skill's version of the R58
+questions yourself, and do not generate against a guess. This is this skill's version of the REQ-58
 gate ftc-team-config already carries: a wrong guess that compiles is worse than a handback that
 costs one turn.
 
@@ -62,9 +62,13 @@ not a memory of what any one season happens to have.
 ### 2. Scaffold from the quickstart template
 
 Copy and adapt from `refract-suite/ftc-shared-foundation/quickstart-template/` — it already ships
-one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelShooter`,
-`SingleAxisTurret`, `RollerIntake`) plus a telemetry-by-default `TeamOpMode` base and
-`RobotConstants`. Match what the config actually selects:
+example implementations written for the **DECODE (2025-26)** mechanism set (`MecanumDrivetrain`,
+`FlywheelShooter`, `SingleAxisTurret`, `RollerIntake`) plus a telemetry-by-default `TeamOpMode` base and
+`RobotConstants`. Those examples are season-scoped: the template's `ExampleTeleOp` wires a shooter and
+turret unconditionally, which is only right for a config that selects both. Mechanism keys and class
+names follow the ACTIVE season file (BIOBUZZ's launcher is `hive_launcher`, not `shooter`); reuse a
+DECODE example's *structure* (velocity-controlled flywheel, subsystem ownership) only after checking
+it against the new season's rules and `code_constraints`. Match what the config actually selects:
 
 - config value matches an existing template example → adapt that example directly (rename, wire
   to the team's actual `hardwareMap` device names);
@@ -147,8 +151,8 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   parking call's name and the one-line doc comment both suggested it was safe, and the real source
   showed a live bug in that exact branch.
 - **Template-inherited domains — read before extending, not just before adopting.** The quickstart
-  template already wires FTC Dashboard (telemetry via `RobotTelemetry`, tunables via
-  `RobotConstants`'s `@Config`). Adapting that existing pattern needs no fresh read. But the moment
+  template ships FTC Dashboard support (tunables via `RobotConstants`'s `@Config`; graphing via
+  `tuning/DashboardTelemetry`, practice OpModes only — competition telemetry is Driver Station only). Adapting that existing pattern needs no fresh read. But the moment
   a request EXTENDS the baseline — a new tunable, a new graphable field, a custom dashboard widget —
   read `ftc-dashboard/` first: a `@Config` field alone does not make a value graphable, and other
   FTC-Dashboard-specific mechanics don't fall out of the template's existing wiring by inspection
@@ -188,7 +192,7 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   **(b) The config has no tuned value** (`origin: untuned`, or `tuning_status` is `untuned` /
   `not_yet_tunable`) — generate a **correctly-structured scaffold** with every tuning-dependent
   field loudly marked, using the same fail-fast convention this suite already applies elsewhere
-  (the R92/R93 pattern shown publicly on the docs site), now extended to this domain:
+  (the REQ-92/REQ-93 pattern shown publicly on the docs site), now extended to this domain:
 
   ```java
   // TODO(UNTUNED): produced by Pedro's ForwardZeroPowerAccelerationTuner — see
@@ -261,6 +265,31 @@ one example implementation per DECODE mechanism (`MecanumDrivetrain`, `FlywheelS
   here as an ask-don't-guess abstention (ship a fail-safe placeholder with a TODO, per
   standing-principles), not something to keep searching the guide for.
 
+### 3b. Season code constraints — read them, apply them
+
+Read `code_constraints` from the ACTIVE season file (`season-extensions/<ACTIVE>.yaml`). Each entry
+is a manual rule (or an SDK release note, labeled as such) that changes what generated code may do,
+with the rule ID to re-verify via `rules.py lookup --season`. Apply every one that touches what you're
+generating, and name the rule in a comment where the code enforces it. Currently significant for
+BIOBUZZ (re-read the file — this list is not the source):
+
+- **R704 — third-party streaming (FTC Dashboard, FTControl Panels) is prohibited.** The template's
+  `RobotTelemetry` is Driver-Station-only; Dashboard graphing lives in `tuning/DashboardTelemetry`
+  and Pedro's tuning flow uses Panels. Generated competition OpModes never call either — tuning
+  tools stay in tuning OpModes — and the report says so (config_lint flags any streaming call).
+- **R102 / G403 — no motion before START or during the AUTO→TELEOP transition.** No flywheel
+  pre-spin or servo moves in INIT.
+- **R105 — expansion must be physically limited.** Software soft-limits are fine as protection but
+  never presented as rule compliance.
+- **G410 — NECTAR into a FLOWER only in the last 60 s**, **G407 — at most 4 CONTROLLED elements.**
+  Automation that places NECTAR is gated on match time; intake logic that counts elements stops at 4.
+- **SDK v12.0 AprilTag clusters.** The base `AprilTagDetection` no longer has `.id`, `.metadata` or
+  `.center` (compile-verified; `.ftcPose`/`.robotPose` still compile) — check/cast to
+  `AprilTagSingleDetection` / `AprilTagClusterDetection` before reading tag identity, and BIOBUZZ
+  tags sit on the tipping HIVE — never generate AprilTag-based absolute field relocalization for it.
+
+A season with no `code_constraints` block isn't "no constraints" — it's an unreviewed season; say so.
+
 ### 4. Structural rules — non-negotiable, same as ftc-team-config
 
 - No code for a mechanism the config declares `none` or leaves absent.
@@ -286,10 +315,12 @@ python3 .claude/skills/ftc-code-review/scripts/failure_mode_lint.py <repo_path>
 alone is not enough, and a config being *confirmed* is not the same claim as a mechanism being
 *legal*:**
 
-0. **Freshness first, not skipped.** Run `python3 scripts/check_freshness.py` (suite root) before
+0. **Freshness first, not skipped.** Run `python3 scripts/check_freshness.py --season <config _meta.season>` (suite root) before
    anything else in this step — same script, same call, `ftc-rule-check` itself runs as its own
    step 0. If it reports `STALE` or `UNVERIFIABLE`, that caveat travels into the final report
-   verbatim; do not silently proceed as if the corpus is guaranteed current.
+   verbatim; do not silently proceed as if the corpus is guaranteed current. `WRONG_SEASON` blocks:
+   legality of new code is never judged against a prior season's manual. Pass the same
+   `--season` to every `rules.py` call below.
 1. **Retrieve.** For anything the generated code touches that has a rules dimension (mechanism
    restrictions, size/expansion limits if relevant), run
    `python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup <id>` — rule text plus one hop of

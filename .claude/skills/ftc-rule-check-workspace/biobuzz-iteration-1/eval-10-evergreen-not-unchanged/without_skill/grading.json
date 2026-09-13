@@ -1,0 +1,18 @@
+{
+  "assertions": [
+    {
+      "name": "evergreen-meaning",
+      "passed": true,
+      "evidence": "The answer rejects the 'unchanged' reading and calls the asterisk Evergreen: \"Rules with a green headline and a leading asterisk are 'evergreen' rules. FIRST says the rule's intent and presence stay roughly the same each season, but the wording can be updated... It does not promise that the specific parts, part numbers or referenced tables inside the rule are unchanged.\" It backs this with a FIRST source, 'Competition Manual Preview Release (evergreen rule notation)'. This matches rules.py asterisk_meaning for biobuzz-2026-27: \"Evergreen: subject and presence constant season to season, but game-specific details may change (manual \u00a71.7.1) \u2014 NOT 'unchanged'\". The weak spot: it cites a FIRST community post, not manual \u00a71.7.1 or rules.py. It does cite FIRST's published notation convention, so I passed it."
+    },
+    {
+      "name": "reads-current-table",
+      "passed": false,
+      "evidence": "files_read is [] and scripts_run holds only WebSearch calls. rules.py and the table-12-1.json file were never used. The answer never mentions Table 12-1 and gives no verdict: \"I couldn't confirm that a 'WATTOS Stingray' motor exists or is legal... I found no Stingray product page and nothing putting it on an FTC legal-motor list.\" It hands the check back to the user (\"Can you paste the current R501 text\"). It never finds that BIOBUZZ Table 12-1 lists the motor ('WATTOS Stingray 12V DC', WDM12) and the DECODE table does not."
+    }
+  ],
+  "factual_errors": [
+    "The answer says it couldn't confirm the WATTOS Stingray exists or is legal, and found 'nothing putting it on an FTC legal-motor list'. The corpus says otherwise: BIOBUZZ Table 12-1 (manual-tables/biobuzz-2026-27/table-12-1.json, referenced by R501) lists 'WATTOS Stingray 12V DC', part number WDM12. So under the current BIOBUZZ V1 manual it is a listed legal motor, and the question the answer left open is settled.",
+    "Minor mismatch: the answer describes Evergreen as only the 'wording can be updated'. The manual's convention (\u00a71.7.1, rules.py asterisk_meaning) says game-specific details may change. That covers the content of the rule, including the motor table, not just wording. The answer's next sentence, about part numbers and tables not being guaranteed unchanged, partly fixes this."
+  ]
+}

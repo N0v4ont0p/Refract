@@ -10,7 +10,7 @@
 # (AutoAimSubsystem's fielded status was a genuine open question — F1's finding #3 — resolved here
 # by the user directly: "the genuine autoaimer... yes as real") and two (wheel diameter/durometer)
 # resolved by fetching the actual goBILDA product page rather than recalling a spec from memory.
-_meta: {schema: 1, updated: 2026-08-06, suite_generated_code: true}
+_meta: {schema: 1, season: decode-2025-26, updated: 2026-08-06, suite_generated_code: true}
 team: {number: 19859, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}
@@ -64,7 +64,7 @@ device_map:
   light_left:        {value: "ll", source: asked, confirmed: true}       # no core/season axis declares lights; recorded rather than dropped
   light_right:       {value: "rl", source: asked, confirmed: true}
 reference_frames:
-  # Added 2026-08-06 via a live ftc-team-config session, after the frame dimension (R123) landed.
+  # Added 2026-08-06 via a live ftc-team-config session, after the frame dimension (REQ-123) landed.
   # This team has FOUR frames genuinely in play — established by reading the real code, not assumed:
   # the follower's, the raw Pinpoint driver's (read directly in Drivetrain.java:101/118/212 for
   # field-oriented teleop drive), a 180-degree-mirrored teleop frame the auto writes its handoff in,

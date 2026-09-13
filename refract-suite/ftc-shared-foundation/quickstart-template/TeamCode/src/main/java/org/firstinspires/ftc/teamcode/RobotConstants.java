@@ -20,6 +20,11 @@ import com.acmerobotics.dashboard.config.Config;
  * (that's what @Config is for). OpMode and subsystem code may only READ them.
  * If a value needs to change during a run, make it an instance field on the
  * subsystem that owns it, not a static here.
+ *
+ * Competition: {@code @Config} only exposes these fields to FTC Dashboard for
+ * editing between runs; it streams nothing on its own. BIOBUZZ R704 prohibits
+ * Dashboard streaming during events, and the ftc-dashboard competition docs say
+ * to disable Dashboard ("Disable Dashboard" menu item / op mode) during gameplay.
  */
 @Config
 public class RobotConstants {

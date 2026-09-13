@@ -20,9 +20,11 @@ question list gets built and ordered. Once confirmed, it isn't asked again.
 `ftc-team-config` if it isn't. See [`skills-guide.md`](skills-guide.md).
 
 **Does this work for seasons other than DECODE (2025-26)?**
-The shipped data reflects DECODE specifically, but the architecture is built to carry forward — see
-[`architecture.md`](architecture.md)'s note on the core-model/season-extension split. A season
-transition replaces one file, not the whole system.
+Yes — the BIOBUZZ (2026-27) manual is ingested alongside DECODE, and every lookup names its season.
+The core model (drivetrain, localization, tuning, frames) carries across seasons unchanged. A season
+transition is *not* a one-file swap, though: the first real one (DECODE → BIOBUZZ) showed that rules
+corpora, manual tables, ballistics constants, lint tokens, template examples and team configs are
+all season-scoped. They now live per season, keyed by the same slug as `season-extensions/<slug>.yaml`.
 
 **Is my code or repo data sent anywhere?**
 The skills read your repo locally (to infer config, to review existing code) and read Refract's own

@@ -1,0 +1,36 @@
+{
+  "table_id": "6-8",
+  "caption": "Control Award Criteria Control Award Criteria Required 1 Team must submit a PORT",
+  "rows": [
+    [
+      "Control Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must submit a PORTFOLIO. The PORTFOLIO must include all of the following: A. hardware or software control COMPONENTS on the ROBOT, B. the challenges each COMPONENT or system solves, and C. the function of each COMPONENT or system."
+    ],
+    [
+      "Required",
+      "2",
+      "The team must use one or more hardware or software solutions that use external feedback to control the ROBOT and improve how it performs."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "The control solution(s) should work consistently during most MATCHES."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "The team can explain how reliable their solution is. They can show this by demonstrating that it works, or by explaining how it could be improved."
+    ],
+    [
+      "Encouraged",
+      "5",
+      "The team should describe what they learned while using the engineering process to develop their control solutions (sensors, hardware, algorithms, or a combination)."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-8]] pointer (\u00a78<->\u00a79)"
+}

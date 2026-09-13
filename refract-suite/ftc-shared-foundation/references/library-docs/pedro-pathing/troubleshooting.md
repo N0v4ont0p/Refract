@@ -1,3 +1,10 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): only the header note's remark that the AprilTag/Motif
+> examples are "DECODE-relevant" is season-specific (DECODE motif tags 21/22/23); the troubleshooting
+> list itself is generic. The BIOBUZZ game has no MOTIF. It does not describe BIOBUZZ (2026-27). For
+> BIOBUZZ facts read `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ AprilTags
+> (IDs 30-45) are clusters of 4 on the underside of the tipping HIVE's CELLs and, per the FTC SDK
+> v12.0 README, move and are not suitable for absolute field localization.
+
 > Source: https://pedropathing.com/docs/pathing/troubleshooting · Fetched: 2026-07-17
 > Completeness-audit addition: Pedro Pathing's real docs have ~30 pages under /docs/pathing;
 > this was one of ~15 missing before this pass. Remaining known gaps (dashboard, constants,

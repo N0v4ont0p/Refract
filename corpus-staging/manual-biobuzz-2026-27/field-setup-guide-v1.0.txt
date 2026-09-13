@@ -1,0 +1,713 @@
+   2026-2027 FIRST® Tech Challenge
+
+Event Field Setup Guide
+Event Field Setup Guide
+This guide includes instructions to complete the assembly of the BIOBUZZ field on-site at an event after
+previously assembling the Field Elements (such as the Flowers, Hives, and Frame). Please refer to the
+companion “Initial Field Element Assembly Guide” for instructions on assembling the Field Elements.
+
+This guide also provides instructions for re-assembly of a previously built and disassembled field.
+
+
+                 Reminder: If at any time during the assembly process you get confused,
+                remember you can reference the full 3D Onshape Field CAD Assembly of
+                the BIOBUZZ field and all its components. This is useful for assistance in
+               identifying parts, checking how things fit together, confirming dimensions,
+                                                and more.
+
+
+To ensure correct performance of a BIOBUZZ field, builders should follow the quality checks provided
+as part of the Field Acceptance Checklist (coming soon) and follow the instructions for fixing field
+issues found in the Field Mitigation Guide (coming soon).
+
+These and other resources can be found in the Playing Field section of the FIRST Tech Challenge 2026-
+2027 Game & Season Materials.
+
+
+
+
+                                                  V1.0                                          2 of 30
+Contents
+1    Recommended Tools ................................................................................................................................ 4
+2    Parts List – Individual Components......................................................................................................... 5
+3    Parts List – Pre-Built Assemblies ............................................................................................................ 6
+4    Fasteners & Tightness .............................................................................................................................. 7
+5    Initial Arena Planning ................................................................................................................................ 7
+6    Tile Coordinates ........................................................................................................................................ 8
+7    Field & Perimeter Assembly...................................................................................................................... 9
+8    Tape Placement....................................................................................................................................... 13
+9    Frame & Hive Installation ........................................................................................................................ 16
+10       Flower Installation .............................................................................................................................. 20
+11       Field Setup .......................................................................................................................................... 23
+12       Hive Calibration .................................................................................................................................. 26
+13       Element Disassembly for Storage & Transport ................................................................................ 29
+
+
+
+                                                                  Revision History
+Revision                Date                       Description
+1.0                     9/12/2026                  Kickoff Release
+
+
+
+
+                                                                           V1.0                                                                     3 of 30
+1 Recommended Tools
+
+              Component                    Quantity   Photo
+
+               Utility Knife                      1
+
+
+
+              Tape Measure                        1
+
+
+
+
+   5/32 in. Hex Driver or Allen Wrench
+                                                  1
+        (ball-end recommended)
+
+
+       3/8 in. Combination Wrench                 1
+
+            3/8 in. Nut Driver                    1
+
+
+   3/8 in. Impact Nutsetter / Nut Driver          1
+
+
+
+
+        Drill or Power Screwdriver                1
+
+
+
+
+              Safety Gloves                       1
+
+
+
+              Flush Cutters                       1
+
+
+
+      Phillips #2 (PH2) Screwdriver               1
+
+
+
+
+                                           V1.0               4 of 30
+2 Parts List – Individual Components
+
+             Component                      Part #        Quantity   Photo
+                                            am-
+                Pollen                                      40
+                                         5851_yellow
+
+
+             Nectar (Red)               am-5852_red          8
+
+
+
+            Nectar (Blue)               am-5852_blue         8
+
+           1 in. (2.5 cm) or
+         2 in. (5.1 cm) Wide            am-5850_tape       1 roll
+     Gaffers Tape - Red, and Blue       (or equivalent)    each
+     (consumed with each build)
+May be Pre-Installed in Assemblies:
+          10-32 Nylock Nut
+                                          am-1042            2
+     (may be on Frame Assembly)
+ 10-32 x 2.0 in. (5.1 cm) Long Screws
+                                          am-1049            2
+    (may be on Frame Assembly)
+ 10-32 x 0.75 in. (1.9 cm) Long Screw
+                                          am-1047            4
+    (may be on Flower Assembly)
+          Under Tile Mount
+                                          am-5872            4
+    (may be on Flower Assembly)
+           1/4-20 Wing Nut
+                                          am-1705            4
+     (may be on Frame Assembly)
+           10-32 Wing Nut
+    (may be on Frame and/or Hive          am-1483            6
+             Assembly)
+           Ballast Washer
+          #10 Flat Washer
+       0.75 in. OD (1.9 cm) OD            am-1523           20
+    (may be on Frame and/or Hive
+              Assembly)
+
+
+
+
+                                         V1.0                                5 of 30
+3 Parts List – Pre-Built Assemblies
+
+        Component             Quantity      Photo
+
+
+
+
+      Frame Assembly             1
+
+
+
+
+       Under Tile Strips
+                                 2
+ (may be on Frame Assembly)
+
+
+
+
+         Hive (Red)              1
+
+
+
+
+         Hive (Blue)             1
+
+
+
+
+      Flower Assembly            4
+
+
+
+
+    Scoring Element Tray         2
+
+
+
+
+                                     V1.0           6 of 30
+4 Fasteners & Tightness
+There are no specifications for torquing the various fasteners used on the FIRST Tech Challenge field.
+Unless otherwise noted, all fasteners should be fully tightened as part of the assembly process.
+
+For general reference:
+
+   •   No fasteners should deform the objects being connected.
+   •   Thread-forming screws should be tightened until no threads are visible and the objects being
+       connected can no longer rotate when spun by hand.
+   •   Screws threading into nylock nuts should be tightened until no threads are visible between the
+       screw head and nut, and the nut/screw combination can no longer rotate when spun by hand.
+   •   Nuts being installed into molded hexagonal pockets should be installed “flat side” first.
+   •   Initial assembly may require loosely attaching Cable Ties to enable correct assembly.
+            o Fully secured Cable Ties should be tightened until they can no longer be pulled further by
+                hand, and the objects being connected do not move relative to each other.
+   •   After full assembly, all Cable Ties should have their tails trimmed using flush cutters such that
+       none of the tail protrudes from the Cable Tie head. It is important to use flush cutters to ensure
+       the tail is fully trimmed.
+
+5 Initial Arena Planning
+Before beginning field setup, planning for the arena area should take place. This can mean different
+things depending on whether the field is being set up in a school classroom or as part of a multi-
+division Regional Championship.
+
+When doing arena layout, it is important to consider things beyond the field itself. Event planners
+should include team/spectator/volunteer walkways, a scorekeeper’s table, timing screens, volunteer
+snack cart, audience displays, queuing tables & paths, cart parking at the field, and more.
+
+                 Refer to the Tournament Guide for more info on planning and layout.
+                 This can be found in the Event Resources and Materials section of the
+                      FIRST Tech Challenge 2026-2027 Game & Season Materials
+
+Field Surface Considerations
+While every field uses tiles, robots will perform differently depending on the surface under the field. We
+recommend that wherever possible, tiles are placed on top of a hard, level, and uniform surface. This
+will enable the most consistent robot performance.
+We also recommend that whatever the surface conditions are for the fields in the official competition
+arena, similar conditions are available at any practice fields which are available.
+Consistency is most important (e.g., if you must place the practice fields in a carpeted area, consider
+putting carpet under the fields in the arena, and vice versa).
+
+
+
+                                                   V1.0                                           7 of 30
+6 Tile Coordinates
+Tile coordinates are used to assist with field setup. Figure 6-1 below defines the intersections/seams
+of each of the tiles on the field where the tile tabs interlock. Figure 6-2 defines the grid coordinate
+system for the tiles.
+
+
+       Figure 6-1 Tile seam/tab-line locations                     Figure 6-2 Tile locations
+
+
+
+
+                                                  V1.0                                           8 of 30
+7 Field & Perimeter Assembly
+The primary version of the field perimeter is the AndyMark FIRST Tech Challenge Perimeter Kit (am-
+0481), but other equivalent perimeters may be used.
+Detailed information about what field components may be used for official FIRST Tech Challenge
+events is found in “Section 9 ARENA” of the BIOBUZZ Competition Manual.
+
+7.1 Perimeter Assembly
+ If you’re using the AndyMark “FTC Field Perimeter”, follow the FTC
+ Field Perimeter Setup Guide to construct your field perimeter.
+ Scan or tap the QR code or tap the link above to view.
+
+ For a different perimeter, follow its associated assembly guide.
+       Compatibility Warning: different field perimeters may have
+      dimensions that differ from the primary design. Builders are
+ responsible for determining the correct compatibility of their perimeter
+      and may need to make adjustments to adapt it for BIOBUZZ.
+
+
+7.2 Tile Size Check
+This step is only needed for new tiles that have not been part of a FIRST Tech Challenge field.
+Confirm the correct size of your foam tiles. Do this by assembling a [6 by 6] grid of tiles inside (or
+below) the field perimeter. The tiles will likely be wider than the inside of the perimeter.
+
+    Tile Sizes Vary: In the next step you will need to cut some of each “tab” off some tiles. Measure
+       how much material needs to be removed so your tiles will be centered inside the perimeter.
+
+
+
+
+                               Note: Tiles may be different than the ones shown.
+
+
+
+
+                                                    V1.0                                            9 of 30
+7.3 Trim Edge Tiles
+Make [16] Edge Tiles: From [16] tiles, remove material from [1] side. These will be used on the edges of
+the field.
+
+
+               Keep Tiles Centered: Make sure to cut an equal amount from both sides
+                of the field to ensure tiles are approximately centered in the perimeter.
+               The amount needed will vary based on the measurements from Step 7.2
+
+
+
+     Make
+
+   [16x]
+   per Field
+
+
+
+
+7.4 Trim Corner Tiles
+Make [4] Corner Tiles: From [4] tiles, remove material from [2] adjacent edges. These will be used in the
+four corners of the field.
+
+
+     Make
+
+    [4x]
+   per Field
+
+
+
+
+7.5 Install Tiles & Perimeter Straps
+
+
+
+                                                  V1.0                                         10 of 30
+Install the field perimeter straps 6 in. away from the field centerline on the perimeter walls as shown
+(Note the position of the field straps relative to the “audience” side of the field).
+
+Use the cut tiles ([16] Edge Tiles, [4] Corner Tiles) to form the outer border of the field surface inside the
+perimeter. Fill in the rest of the grid with uncut tiles. In total there are [36] tiles placed in a [6 by 6] grid.
+
+
+
+
+                                                      V1.0                                             11 of 30
+7.6 Tighten Perimeter Straps
+It is important to correctly thread the Perimeter Strap through the Strap Clip. This can be done in
+several ways; some are more effective than others, as shown below.
+
+
+
+
+7.7 OPTIONAL: Anchor Field
+Once the field is in the correct location, some events will anchor it in place, either by attaching the field
+perimeter to the surface on which it rests, clamping it onto something, or by bracing it in place.
+
+
+                 Warning: Be careful when the field is placed directly on a surface where
+                  damage is a concern. (Don’t drive screws into a gymnasium floor!)
+
+
+In this setup teams should be aware that the perimeter will be more rigid and may behave differently.
+
+Events using the AndyMark Perimeter Kit that choose to anchor their field in place do not need to install
+the Perimeter Straps that are part of the AndyMark Perimeter.
+
+
+
+
+                                                    V1.0                                            12 of 30
+8 Tape Placement
+
+8.1 Tape Specification and Variance
+The tape used to mark lines and zones throughout the field is ProGaff® Premium Professional Grade
+Gaffer Tape, or comparable gaffers tape in red, and electric blue. The BIOBUZZ field is designed such
+that the tape can be either 1 in. (2.50 cm) wide or 2 in. (5.1 cm) wide. The outside perimeter of each
+zone should be consistent with the specifications, but the tape width may vary.
+
+While in some games the tape lines are permitted to be applied in segments, this is not necessary this
+season. On the BIOBUZZ field, none of the tape lines span across tile seams. Events are encouraged to
+apply the tape lines continuously as shown in the specifications.
+
+8.2 Anti-Static Spray & Applying Tape
+Before applying tape to the foam tiles, ensure the tile are dry and clean of any debris, dust, or
+contaminants.
+
+Tape will more effectively stick to the foam tiles if it is applied before any anti-static compound is
+sprayed on the tile. FIRST recommends that tape is installed before anti-static spray is applied. If anti-
+static compound has already been sprayed on a tile, it is important to ensure it is fully dry before
+applying any tape. Vacuuming or cleaning the tiles may negate the effects of anti-static spray.
+
+On the BIOBUZZ field, all of the tape can be installed before or after the other Field Elements.
+
+
+
+
+                                                   V1.0                                             13 of 30
+8.3 Install Tape: Loading Zones
+There are [2] Loading Zones: [1] Red (on tile A5) and [1] Blue (on tile F2) each composed of [3]
+segments of tape. Installation begins by installing [2] segments that are each 11 in. (27.95 cm) long
+along the tile side seams. Then connect them with a third segment that spans between them.
+
+Repeat this for both Red and Blue Loading Zones.
+
+
+               Note: Different tape widths can be used as long as the outer edges of the
+                          Loading Zone remain unchanged, as shown below.
+
+
+
+
+                                                  V1.0                                         14 of 30
+8.4 Install Tape: Gardens
+There are [2] Gardens on the field, [1] Red Garden (on Tile A1) and [1] Blue Garden (on Tile F6), each
+comprised of [1] or [2] segments of tape, totaling approximately 2 in. (5.1 cm) in width.
+
+
+
+
+8.5 Install Tape: Alliance Areas
+There are [2] Alliance Areas positioned adjacent to the field perimeter, [1] Red Alliance Area and [1] Blue
+Alliance Area each comprised of [3] segments of tape. The Alliance Areas are 54 in. (137.15 cm) deep,
+and approximately 97 in. (~246 cm) wide. The width is set based on Tile Seam 1 and Tile Seam 5, as
+shown below.
+
+
+
+
+                                                   V1.0                                          15 of 30
+9 Frame & Hive Installation
+
+9.1 Under Tile Strips
+Remove the [4] tiles at the center of the field (as shown below). If they’re already installed, detach the
+[2] Under Tile Strips from the pre-built Frame Assembly by removing [4] 1/4-20 Wingnuts.
+
+Install [2] Under Tile Strips below the tiles such that the [4] 1/4-20 x 1.25 in. (3.15 cm) Long Elevator
+Bolts are positioned in the locations shown relative to the tile tabs.
+
+The exact position may vary depending on the specific tiles being used. If needed, adjust the placement
+later so the Frame Assembly is centered on the field.
+
+Once the Under Tile Strips are in place, re-install the [4] tiles.
+
+
+
+
+                                                      V1.0                                        16 of 30
+9.2 Install Frame Assembly
+Install the Frame Assembly onto the field: Align the [4] holes in the Frame Foot Bars that are part of the
+Frame Assembly with the [4] Elevator Bolts protruding from under the tiles.
+
+Once the Frame Assembly is in position use [4] 1/4-20 Wing Nuts to attach it to the Frame Foot Bars
+and clamped onto the tiles. Each Wing Nut should be tightened until both Frame Foot Bars sink into the
+foam surface of the tiles. It may help to place downward force on each corner of the Frame as you
+tighten its respective Wing Nuts.
+
+
+
+
+                                                  V1.0                                          17 of 30
+9.3 Install Hives
+If they’re already installed, start by removing the [2] 10-32 x 2.0 in. (5.1 cm) Long Screws used as Axle
+Bolts from the Top Frame Corners of the pre-built Frame Assembly.
+
+Position [2] pre-built Hive Assemblies in their correct positions. Note: The AprilTag Stickers on each
+Hive Assembly are labeled to show whether they should be on the Audience or Scoring side of the field,
+as shown below.
+
+The Frame Assembly includes [2] Axle Pivot Cradles built into the injection molded pieces. Both Hive
+Assemblies should be placed such that their respective Stepped Axles rest in the Axle Pivot Cradles in
+the correct locations.
+
+
+
+
+                                                  V1.0                                          18 of 30
+9.4 Attach Hives
+With the Hive Assembly sitting in the Axle Pivot Cradle, attach [1] Hive Assembly to the Frame
+Assembly by inserting [1] 10-32 x 2.0 in. (5.1 cm) Long Screw through the injection molded parts and
+the Stepped Axle into [1] 10-32 Nylock Nut in the hexagonal pocket of the injection molded Axle
+Holder.
+
+Repeat for [2] Hive Assemblies: [1] Red Hive and [1] Blue Hive.
+
+
+
+
+                                                 V1.0                                       19 of 30
+10 Flower Installation
+
+10.1 Place Flower Assembly
+If they’re already installed, detach the Under Tile Mount from one of the [4] pre-built Flower Assemblies
+by removing [1] 10-32 x 0.75 in. (1.9 cm) Long Screw.
+The Flower Assemblies need to be installed in [4] locations around the Field Perimeter. At [1] of these
+locations, remove the [4] Perimeter Pins that hold the perimeter walls together
+
+
+
+
+Install [1] Flower Assembly at the location where the Perimeter Pins were removed: Slide the Field Wall
+Bracket upwards out of the way. Insert the metal Flower Base Bracket under the Field Perimeter and
+ensure the Flower Bottom Ring sits on top of the tiles. Then slide the Field Wall Bracket down so it
+rests on top of the Field Perimeter.
+
+
+
+
+                                                  V1.0                                         20 of 30
+10.2 Install Bottom Flower Mounts
+To help access the attachment points under the Flower Assembly, lift the Field Perimeter
+approximately 2 in (5.1 cm) off the ground. If possible, it is recommended to prop the perimeter up on a
+tool or other available object. Once the Field Perimeter is lifted, align the mounting holes of the Flower
+Base Bracket with those on the Field Perimeter. Re-install the Perimeter Pins in a “1 up, 1 down”
+configuration as shown. Ensure the venue floor is protected! Alternate fastener solutions that replace
+the bottom Perimeter Pins (such as high-strength cable ties) are acceptable variations if the Flower
+Assembly is robustly attached.
+
+
+
+
+Before lowering the Field Perimeter, locate and install [1] Under Tile Mount in approximately the
+location shown. The threaded standoff on the Under Tile Mount must align with the screw hole in the
+Flower Bottom Ring. A 5/32 in. Ball End Hex Driver or 5/32 in. Allen Wrench is recommended.
+
+
+
+
+Once the Under Tile Mount is in position, remove the tool or object being used to prop up the Field
+Perimeter and lower it back to the ground.
+
+
+
+
+                                                  V1.0                                          21 of 30
+10.3 Attach Flower
+Attach the Flower Bottom Ring to the Under Tile Mount using [1] 10-32 x 0.75 in. (1.9 cm) Long Screw.
+Attach the Field Wall Bracket to the Field Perimeter by reinstalling [2] Perimeter Pins, as shown.
+
+
+
+
+10.4 Repeat for [4] Flowers
+Repeat Steps 10.1 through 10.3 to attach [4] Flower Assemblies to the Field Perimeter.
+
+
+
+
+                                                V1.0                                       22 of 30
+11 Field Setup
+
+11.1 Hive Setup
+At the start of each match, the Hives should be tipped with the Cell of the Red Hive on the “Audience”
+side of the field tilted up, and the Cell of the Blue Hive on the “Scoring” side of the field tilted up, as
+shown.
+
+Each upward tilted Cell has [3] Nectar in it. These Nectar start adjacent to the Hive Back Skin,
+approximately adjacent to the Cell Wall closest to the Field Perimeter and approximately adjacent to
+each other, as shown.
+
+
+
+
+                                                    V1.0                                           23 of 30
+11.2 Flower Setup
+At the start of each match, each Flower should have [4] Pollen placed in it, with the bottom most Pollen
+sitting on the tiles inside the Flower Bottom Ring and each subsequent Pollen resting on the one below.
+It is expected that Pollen will “zig-zag” inside the Flower depending on how they come to rest, the exact
+configuration of these Pollen is not specified.
+
+
+
+
+                                                  V1.0                                         24 of 30
+11.3 Remaining Scoring Elements
+Each Alliance Areas has one Scoring Element Tray that belongs to it. These trays each contain [5]
+Nectar of the corresponding color of that Alliance Area (Red or Blue) and [4] Pollen.
+Note: these [4] Pollen are only staged here for field reset purposes. They will be used as Robot Preloads
+by teams and must start the match on the field per Section 11 of the BIOBUZZ Competition Manual.
+
+[8] Pollen are placed in the [2] Gardens: [4] in the Red Garden, and [4] in the Blue Garden. The [4] Pollen
+in each Garden are placed in a line such that they contact the Tape Lines of the Garden, are
+approximately adjacent to both nearby Field Perimeter Walls and are approximately adjacent to each
+other.
+
+
+
+
+                                                   V1.0                                           25 of 30
+12 Hive Calibration
+A consistent Hive tipping point is important to the BIOBUZZ gameplay. While teams should expect
+some amount of variation, Field Staff must make every effort to ensure each Hive is correctly
+calibrated. Once a Hive is calibrated, it should not need to be calibrated again unless something
+changes. After moving a Hive from one location to another, it is important to confirm that the
+calibration has not changed, but it is likely that recalibration is not needed.
+
+Each Hive should be calibrated to tip when [2] combinations of scoring elements are placed in an
+upward facing Cell (See Section 12.3):
+- [8] Pollen + [0] Nectar, and
+- [3] Pollen + [3] Nectar.
+
+12.1 Calibration & Tuning Methods
+The Hives are calibrated by adding to or removing Ballast Washers from the 10-32 x 2.0 in. (5.1 cm)
+Long Screw at the end of each Cell nearest its opening. They are retained by [1] 10-32 Wing Nut.
+Unused Ballast Washers are similarly stored on the Frame near each Hive pivot.
+
+
+
+
+Even though two Cells are linked as one Hive, each individual Cell needs to be calibrated. Due to
+variations in Hive construction, some Hives are “tricky” to calibrate. If during the calibration process
+adding a Ballast Washer causes the Hive to tip “too easily”, and removing a Ballast Washer causes it to
+“not tip”, it may be necessary to “tweak” the attachment of a Cell.
+Each Hive should be built “flat” (see Step 7.7 in the Initial Field Element Assembly Guide), but
+adjustments can be made by loosening the screws that attach the Cell to the Pivot Bearing Plates and
+“tweaking” the Cell by hand before re-tightening the screws, as shown below.
+
+
+
+
+                                                  V1.0                                         26 of 30
+12.2 Calibration & Tuning Suggestions/Notes:
+  •   Confirm your Hives are built correctly. Missing parts (or extra parts) will affect calibration.
+  •   It makes things go faster to have scoring elements prepared. This can be done using the
+      Scoring Element Trays; place [8] Pollen in one and [3] Pollen + [3] Nectar in another.
+  •   To ensure correct calibration, every time you tip the Hive, ensure the Damper is FULLY
+      compressed before performing the next test.
+  •   A Wing Nut is approximately the same mass as a Ballast Washer. To save time uninstalling /
+      reinstalling Wing Nuts, it is recommended to use an “extra” Ballast Washer instead of a Wing
+      Nut until the end of the process. Be sure to validate the final calibration after the Wing Nuts are
+      installed!
+  •   Pollen & Nectar should be “gently placed” in the back of the Cell contacting the Hive Back Skin.
+  •   [3] Pollen + [3] Nectar has less mass than [8] Pollen. If the Hive is “too hard to tip” perform
+      tuning with [3] Pollen + [3] Nectar. If the Hive “tips too easily” perform tuning with [8] Pollen.
+      (Then validate your tuning with the other combination of scoring elements!)
+  •   The Cell being calibrated is referred to as the “Test Cell,” and
+      the Cell on the other side of the Hive is referred to as the “Opposite Cell.”
+  •   When testing a Hive, the calibration of one Cell affects the other. The Ballast Washers added to
+      make the Test Cell tip with less weight will slightly increase the weight required to tip the
+      Opposite Cell. (But this is not 1:1.)
+
+
+12.3 Calibration Requirements:
+Hive State                   Test Action                              Desired Result       Requirement
+[3] Nectar + [1] Pollen      2nd Pollen is “Tossed In”                    No Tip             Necessary
+[3] Nectar + [2] Pollen      3rd Pollen is Gently Placed                    Tip              Preferred
+[3] Nectar + [2] Pollen      3rd Pollen is “Tossed In”                      Tip              Necessary
+
+
+[0] Nectar + [6] Pollen      7th Pollen is “Tossed In”                    No Tip             Necessary
+[0] Nectar + [7] Pollen      8th Pollen is Gently Placed                    Tip              Preferred
+[0] Nectar + [7] Pollen      8th Pollen is “Tossed In”                      Tip              Necessary
+
+
+
+
+                                                   V1.0                                            27 of 30
+12.4 Calibration Process:
+The process below is provided as a reference. The result is more important than the specific process.
+Iterate to achieve the results specified in the Calibration Requirements shown above for ALL Cells.
+- Add Ballast Washers to Cells to make them easier to tip.
+- Remove Ballast Washers or add Ballast Washers to Opposite Cells to make them harder to tip.
+- “Tweak” a Cell’s attachment (as described in Section 12.1) if you’re “stuck in a loop.”
+- If it seems impossible to tune to the correct tipping point, reconfirm everything is built correctly.
+   1. Start by removing all the Ballast Washers and Wing Nuts from both Cells of a Hive.
+   2. Add [1] Washer to both Cells, to simulate the missing Wing Nuts.
+   3. Tip the Hive so the Cell being calibrated (the “Test Cell”) is facing “upwards.”
+   4. Gently Place [3] Nectar and [2] Pollen in the Test Cell. The Hive should NOT tip. (See above.)
+           a.   If the Hive tips: for a big adjustment, remove [1] Washer from the Test Cell (if possible) OR for a
+                small adjustment, add [1] Washer to the Opposite Cell and return to the beginning of Step 4.
+           b. If the Hive does NOT tip: Gently place a 3rd Pollen into the Test Cell.
+                     i. If the Hive does NOT tip, remove the 3rd Pollen and “Toss” it into the Test Cell.
+                            1. If the Hive does NOT tip after “tossing” the 3rd Pollen: add [1] Washer and return
+                                 to the beginning of Step 4.
+                            2. If the Hive tips after “tossing” the 3rd Pollen: move onto Step 5.
+                    ii. If the Hive tips after placing the 3rd Pollen: move onto Step 5.
+           c.   If you think you’re stuck in a loop – “tweak” the Cell to make it easier or harder to tip (as
+                described in Section 12.1). If it seems impossible to tune, reconfirm everything is built correctly.
+   5. Gently place [6] Pollen in the Test Cell. The Hive should NOT tip. (See above.)
+           a.   If the Hive tips… repeat Step 4, since [6] Pollen has less mass than [3] Nectar + [2] Pollen.
+           b. If the Hive does NOT tip: move onto Step 6.
+   6. Gently place [7] Pollen in the Test Cell. The Hive should NOT tip. (See above.)
+           a.   If the Hive tips: for a big adjustment, remove [1] Washer from the Test Cell (if possible) OR for a
+                small adjustment, add [1] Washer to the Opposite Cell and return to the beginning of Step 4.
+                     i. If you think you’re stuck in a loop – “tweak” the Cell to make it easier or harder to tip (as
+                        described in Section 12.1). If it seems impossible to tune, reconfirm everything is built
+                        correctly.
+           b. If the Hive does NOT tip: Gently place an 8th Pollen into the Test Cell.
+                     i. If the Hive does NOT tip, remove the 8th Pollen and “Toss” it into the Test Cell.
+                            1. If the Hive does NOT tip after “tossing” the 8th Pollen: add [1] Washer and return
+                                 to the beginning of Step 6.
+                            2. If the Hive tips after “tossing” the 8th Pollen: move onto Step 7.
+                    ii. If the Hive tips after placing the 8th Pollen: move onto Step 7.
+   7. Move to the other side of the Hive. The Opposite Cell should now become the Test Cell. Return to Step 3
+      with the new Test Cell.
+      Continue until you reach this step again with both cells without adding/removing any Ballast Washers.
+   8. Congratulations! The Hive is calibrated. Repeat this process for all Hives.
+
+
+
+
+                                                        V1.0                                                28 of 30
+13 Element Disassembly for Storage & Transport
+During the season, a FIRST Tech Challenge field will be set up, taken down, moved, and re-assembled
+multiple times. These fields are designed to be partially disassembled for transport without needing to
+fully disassemble every component. Below are the steps to prepare the field for movement:
+
+
+13.1 Remove [4] Flowers from the Field Perimeter
+
+
+
+
+13.2 Remove [2] Hive Assemblies
+
+
+
+
+                                                 V1.0                                         29 of 30
+13.3 Remove Frame Assembly
+
+
+
+
+13.4 Prep for Transport
+Ship It! No additional disassembly is required or recommended. The [4] Flowers, [2] Hives, and [1]
+Frame can be packed and transported with the rest of the “loose” Field Elements.
+
+
+
+
+                                                 V1.0                                         30 of 30
+

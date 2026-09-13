@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "identifies-moving-tags",
+      "passed": true,
+      "evidence": "Answer: \"In BIOBUZZ the AprilTags sit on the underside of the HIVE's CELLs, and the HIVE moves. The FTC SDK v12.0 README says these tags are \"not suitable for absolute Field Localization\". That's recorded in `season-extensions/biobuzz-2026-27.yaml` as code constraint `no-apriltag-absolute-localization`\" and \"Each TIP flips the HIVE and changes which tags face the floor... a position that jumps whenever the HIVE tips.\" Grounded: season file was in files_read and grepped; the season file (lines 91-93, 202-205) contains exactly this constraint and quote."
+    },
+    {
+      "name": "no-decode-pattern-endorsement",
+      "passed": true,
+      "evidence": "The answer cites corpus pattern 19043-C-ekf-localizer but explicitly scopes it out: \"Seen in DECODE (decode-2025-26)... the AprilTag update step 'relies on DECODE fixed field tags, which BIOBUZZ lacks.'\" and \"What carries over to BIOBUZZ is the structure, not the tag source... An ungated, unlagged hard reset every loop is the opposite of that structure.\" The verdict remains \"no\"; it also notes the season file says not to port DECODE goal-AprilTag assumptions. Not used as evidence endorsing HIVE-tag relocalization."
+    }
+  ],
+  "factual_errors": []
+}

@@ -16,6 +16,8 @@ meta:
 
 patterns:
   - id: 12808-A-shooter-empirical-bilinear-fielded
+    season_scope: decode-2025-26
+    season_scope_basis: "Bilinear-interpolation + gradient feedforward + Lambert SOTM lead structure transfers; the 3x3 flywheel/hood/turret/airtime grids are measured Artifact shots at DECODE goal coordinates (blueX/redX)."
     finding_ref: shooter-empirical-vs-physics   # FIFTH empirical leg (see references/cross-team-findings.yaml)
     problem: >
       Produce flywheel-velocity / hood / turret setpoints for a variable-distance turreted shooter,
@@ -67,6 +69,8 @@ patterns:
       constructed). Do not let "they have ProjectileMathWithDrag" read as "they fielded physics."
 
   - id: 12808-B-ivy-command-adoption
+    season_scope: invariant
+    season_scope_basis: "Provenance guard on the com.pedropathing.ivy command-library import; concerns software lineage only, no DECODE element, field or scoring dependence."
     # NOT an orchestration-nonblocking leg. Recorded as a PROVENANCE / false-convergence GUARD.
     problem: >
       (Provenance) 12808's command/orchestration layer LOOKS like an independent cooperative-command
@@ -100,6 +104,8 @@ patterns:
       distinguishes the two — same surface shape, opposite provenance.
 
   - id: 12808-C-multimodal-sensing
+    season_scope: decode-2025-26
+    season_scope_basis: "Match-sensor-to-question principle transfers; the questions answered (purple/green Artifact colour blobs, obelisk motif and Limelight pose from DECODE fixed AprilTags) are DECODE-specific, and BIOBUZZ tags move."
     finding_ref: sensing-modality   # breadth leg (see references/cross-team-findings.yaml)
     problem: >
       Answer several DIFFERENT game-state questions — is an artifact intaken? what colour/where are

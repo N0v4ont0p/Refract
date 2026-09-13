@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "retrieves-section-note",
+      "passed": true,
+      "evidence": "The answer quotes the 10.5.2 note word for word: \"Placing SCORING ELEMENTS into the top of the FLOWER is the only allowable way to score\". It also quotes G418 correctly: robots may \"only put POLLEN and NECTAR in through the top and only take POLLEN out through the bottom\", with a VERBAL WARNING, or a MAJOR FOUL + YELLOW CARD per MATCH if STRATEGIC. scripts_run shows both came from the official V1 manual PDF (\"sed -n (sections 8, 9.7, 10.1, 10.5.x) manual.txt\" and \"grep -n -E 'G418|G410|LAUNCH|PLACE'\"). rules.py section 10.5.2 was never run, so the method differs from the parenthetical. The retrieved text is identical to the corpus output of rules.py section 10.5.2 and lookup G418, so the content requirement is met."
+    },
+    {
+      "name": "ambiguous-verdict",
+      "passed": false,
+      "evidence": "The answer does recommend Q&A (\"the official Q&A opens September 28, 2026 at 12:00 p.m. ET\", with a suggested question), but its verdict is a confident one, not ambiguous. It opens with \"Short answer: no, plan on placing it.\", says a shot ball \"is very unlikely to be counted\", calls launching \"not allowed to score\", and advises \"keep the 'not allowed to score' answer\" for a long-range shot. It only hedges for a gentle release from just above the ring. The expected output wants an ambiguous verdict, because the text does not settle whether a launched entry counts as placing. The answer instead presents launched scoring as disallowed."
+    }
+  ],
+  "factual_errors": []
+}

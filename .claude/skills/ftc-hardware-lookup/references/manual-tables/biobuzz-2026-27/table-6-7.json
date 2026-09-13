@@ -1,0 +1,31 @@
+{
+  "table_id": "6-7",
+  "caption": "Innovate Award Criteria Innovate Award Criteria Required 1 The team demonstrates",
+  "rows": [
+    [
+      "Innovate Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "The team demonstrates their engineering competency by showing examples of their engineering work that explain how the team developed their design."
+    ],
+    [
+      "Required",
+      "2",
+      "The design of the ROBOT or ROBOT MECHANISM is creative, unique, or both."
+    ],
+    [
+      "Required",
+      "3",
+      "The creative design must be stable and reliable. It must help the team reach its game goals most of the time."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "Designs often involve risks. The team should explain how they reduced those risks."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-7]] pointer (\u00a78<->\u00a79)"
+}

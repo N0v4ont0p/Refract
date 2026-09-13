@@ -1,0 +1,2639 @@
+{
+  "meta": {
+    "season": "biobuzz-2026-27",
+    "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+    "game_name": "BIOBUZZ",
+    "incorporates_through": "Team Update 00",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "tu_index_url": "https://ftc-resources.firstinspires.org/ftc/game",
+    "retrieved": "2026-09-13",
+    "asterisk_meaning": "Evergreen: subject and presence constant season to season, but game-specific details may change (manual \u00a71.7.1) \u2014 NOT 'unchanged'",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "rules": [
+    {
+      "rule_id": "I101",
+      "series": "I",
+      "short_title": "Teams must be registered with FIRST",
+      "text": "Teams must be \u201ccompetition ready\u201d in order to compete in FIRST Tech Challenge official events and earn MATCH points or be eligible for judged awards. A. North America - competition ready requirements: i. complete annual registration process through the FIRST dashboard ii. pay annual registration fee iii. 2 adults must be assigned in the Lead Coach 1/Lead Coach 2 roles and have passed Youth Protection Program (YPP) screening, iv. complete any additional Youth Protection screening requirements (may vary from region to region), and v. register all youth team members on the FIRST dashboard. B. outside North America - competition ready requirements: i. complete annual registration process through the FIRST dashboard and ii. complete any additional requirements by the local FIRST Program Delivery Partner with regards to program fees, registrations and youth protection screening. The local Program Delivery Partner may, in rare cases, make exceptions for delayed payment on a case-by-case basis. Teams who have not paid annual registration fees will not earn any official season record and will not be allowed to advance.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.1 Team Eligibility Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I102",
+      "series": "I",
+      "short_title": "Check-in at the event on time",
+      "text": "An adult team member must check-in at the Pit Administration station, or designated check-in location, no later than 45 minutes before Qualification MATCHES are scheduled to start, unless otherwise specified or approved by the Event Director. Check-in must be completed by a team adult and at least one STUDENT must be present at the venue before check-in can be completed. Additional check-in requirements will vary by region but may require one or more of the following items: A. A current, completed team roster from the team\u2019s FIRST dashboard as specified by the local Program Delivery Partner, B. local Program Delivery Partner team member registration or consent forms (varies by region), C. a ROBOT built to specifications in Section 12 ROBOT Construction Rules (R), if they intend to participate in MATCHES, and D. a printed team PORTFOLIO (optional, see Section 6 Awards (A)). Teams should be aware of the competition schedule and note any key activities (such as inspection or judging) that may occur prior to the check-in deadline. All teams, regardless of how \u201cready\u201d they think they are, are encouraged to participate in gameplay and judging. Teams are encouraged to reach out to their Program Delivery Partner and other teams to request help getting their ROBOT ready to compete before attending an event.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.1 Team Eligibility Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I103",
+      "series": "I",
+      "short_title": "A responsible adult must be present for the whole event",
+      "text": "At least 1, preferably 2, adult(s) responsible for the STUDENT team members must be present at all times during the event. Responsible adult(s) are recommended to be listed on the team roster.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.1 Team Eligibility Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I301",
+      "series": "I",
+      "short_title": "Bring the complete ROBOT and supporting equipment to inspection",
+      "text": "Teams should present the ROBOT and OPERATOR CONSOLE with all COMPONENTS, including decorative parts, that will be used during MATCHES. Teams are not required to use all inspected COMPONENTS in every MATCH, but they should not add any un-inspected COMPONENTS to the ROBOT without re-inspection. Teams should demonstrate to INSPECTORS all ways the ROBOT will be configured for a MATCH.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.3 MATCH Eligibility Rules",
+        "3.3.1 Inspection"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I302",
+      "series": "I",
+      "short_title": "Certain limits apply to all configurations",
+      "text": "The total number of electronics (motors, servos, Android Devices, etc.) used to build all MECHANISMS and base ROBOT, whether they are used on the ROBOT at the same time or not, may not exceed the constraints specified in Section 12 ROBOT Construction Rules (R).",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.3 MATCH Eligibility Rules",
+        "3.3.1 Inspection"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I303",
+      "series": "I",
+      "short_title": "Request re-inspection for most changes to the ROBOT",
+      "text": "A team should request re-inspection when it makes changes to a ROBOT that may cause it to not comply with safety and competition guidelines or when requested by the Head REFEREE or FTA. Re-inspection is generally not necessary for the scenarios listed below (unless they result in a significant change to the ROBOT\u2019S size, legality, or safety): A. addition, relocation, or removal of fasteners (e.g., cable ties, tape, and rivets), B. addition, relocation, or removal of labeling or marking, C. addition, relocation, or replacement of the team SIGN, D. revision of ROBOT code, E. replacement of a COMPONENT with an identical COMPONENT, F. replacement of a MECHANISM with an identical MECHANISM (size, weight, material), and G. additions, removals, or reconfiguration of ROBOT with a subset of MECHANISMS already inspected. All teams should make a good faith effort to comply with ROBOT construction rules if they make changes to their ROBOT during an event. If a team is unclear if reinspection is required, they should confirm with the LRI or FIELD STAFF. For example, if a team is unsure if reassembling a part changes their ROBOT\u2019S size, they should have it checked.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.3 MATCH Eligibility Rules",
+        "3.3.2 Re-Inspection"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "I304",
+      "series": "I",
+      "short_title": "Do not exploit re-inspection",
+      "text": "Teams may not use the re-inspection process to circumvent any other rules.",
+      "asterisk_marked": true,
+      "section_path": [
+        "3 Competition Eligibility and Inspection (I)",
+        "3.3 MATCH Eligibility Rules",
+        "3.3.2 Re-Inspection"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E101",
+      "series": "E",
+      "short_title": "Personal safety comes first",
+      "text": "All team members must observe the following safety practices throughout the event: A. wear safety glasses or safety rated glasses with side shields (ANSI-approved, UL Listed, CE EN166 rated, AS/NZS certified, or CSA rated) in specified areas. There is a 10-minute grace period when the venue opens each day of the event for teams to find and distribute safety glasses. Clear or lightly tinted safety glasses are preferred. Shaded glasses are allowed for those who need them and do not require a specific accommodation request. B. wear closed toed/heeled shoes, C. control entanglement risks by tying back long hair and removing other dangling decorations including lanyards, spirit wear, and rings as needed while working on or around a ROBOT or ROBOT related materials or tools, D. wear appropriate clothing, E. walk in the venue, and F. comply with government and venue-specific health and safety requirements in place for that event (i.e., mask wearing). Teams are responsible for bringing their own personal protective equipment. For more information about safety at FIRST events, please reference the FIRST Safety Manual.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E102",
+      "series": "E",
+      "short_title": "Be Respectful",
+      "text": "All participants should follow the framework of behaviors listed in Section 1.4 The Spirit of the Competition while attending a FIRST Tech Challenge event. Uncivil behavior toward any participants is not tolerated. Examples of inappropriate behavior include, but are not limited to: A. use of offensive language or other uncivil conduct towards someone, B. \u201cweaponizing Gracious Professionalism\u201d by accusing another person or team of being \u201cnot GP\u201d, C. intentionally blocking the view of other participants or spectators for an extended period (Team members momentarily holding up team signs while directly supporting their team is not considered a violation of this rule.), and D. anything that interferes with a ROBOT or the ARENA operations. Examples of particularly contemptible behavior that may result in ejection from the event include, but are not limited to, the following: E. assault, e.g., throwing something that hits another person (even if unintended), F. threat, e.g., saying something like \u201cif you don\u2019t reverse that call, I\u2019ll make you regret it,\u201d G. harassment, e.g., badgering someone with no new information after a decision has been made or a question has been answered, H. bullying, e.g., using body or verbal language to cause another person to feel inadequate or unsafe, I. insulting, e.g., telling someone they do not deserve to be on a team, J. swearing at another person (versus swearing under one\u2019s breath or at oneself), and K. yelling at another person(s) in anger or frustration.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E103",
+      "series": "E",
+      "short_title": "Children with adults, please",
+      "text": "Children under 12 must be accompanied in the pits by an adult at all times.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E104",
+      "series": "E",
+      "short_title": "Respect the venue",
+      "text": "Teams may not damage the venue, including but not limited to bleachers, floors, walls, and railings, in any way. This includes littering with team giveaways including candies, flyers, and stickers or items thrown from the stands.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E105",
+      "series": "E",
+      "short_title": "Event resources are for competing teams only",
+      "text": "Only teams registered for an event may use that event\u2019s competition FIELD, practice FIELD, and inspection unless pre-approved by the Event Director or the Program Delivery Partner. Host teams supplying practice FIELD elements and/or machine shop resources may use them; however, teams registered for that event must be granted priority.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E106",
+      "series": "E",
+      "short_title": "Practice only when/where permitted",
+      "text": "Teams may only practice with their ROBOT in their pit space, in the designated event practice areas, or while in a Practice MATCH. Teams may not set up their own practice equipment outside their pit in other areas of the event venue. If the Event Director determines a pit practice setup is unsafe or interferes with activity in adjacent pits or aisles, the team must discontinue the activity. Demonstrating robot functionality to guests or JUDGES is not considered practice.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E107",
+      "series": "E",
+      "short_title": "Work in designated areas only",
+      "text": "At the event venue, teams may only produce FABRICATED ITEMS as follows: A. in their pit area, B. in another team\u2019s pit area with permission from that team, C. while queued for a MATCH or practice FIELD (given space constraints, extra scrutiny regarding safety is required), D. any area designated by event staff (e.g., playoff pit area), or E. as permitted at provided machine shops that are available to all teams.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E108",
+      "series": "E",
+      "short_title": "Some things do not belong at events",
+      "text": "Do not bring or use the following: A. Skateboards, B. \u2018hoverboards,\u2019 C. drones, D. bottled gas tanks (e.g., helium), E. noisy devices or noisemakers, such as floor stompers, whistles and/or air horns, F. scooters, except for those used for accommodations. G. any item with bright lights which flash faster than approximately 5 times per second",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E109",
+      "series": "E",
+      "short_title": "Do not arrange for additional services or utilities",
+      "text": "Do not arrange for power, internet access, or phone lines from venue service providers or attempt to use venue internet connections reserved for event purposes (e.g., FIRST event management software or webcasting).",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E110",
+      "series": "E",
+      "short_title": "Do not sell stuff",
+      "text": "Teams may not conduct sales at an event. This includes, but is not limited to, raffle tickets, food, hats, shirts, candy, water, soft drinks, fruit, or any promotional products unless specifically allowed by the Event Director.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E111",
+      "series": "E",
+      "short_title": "No Loud Music",
+      "text": "Do not invite or bring live bands to play in the audience. Do not play loud music.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E112",
+      "series": "E",
+      "short_title": "Hang banners with care",
+      "text": "Be respectful when hanging your banners. A. Do not cover or move other team or sponsor signs already in place. B. Share the available space fairly with other teams. C. Do not obstruct the view of spectators. D. Get permission from the Event Director before hanging banners outside of your pit. E. Hang signs and banners in a safe manner. F. Banners hung outside team pits must not be larger than 25 ft.2 (~2.3 m2). We encourage teams to bring team flags and/or signs for display in their pits and/or the ARENA. Respect venue-specific rules regarding sign location and hanging methods. At the end of the event, safely remove all signs and anything used to hang the signs (tape, string, etc.).",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E113",
+      "series": "E",
+      "short_title": "Limit flag and flagpole size if used in the ARENA",
+      "text": "Flags and flagpoles may not be of unreasonable size and weight if they are going to be used around the FIELD. As a guideline, reasonable flags are less than 3 ft. by 5 ft. (~91 cm by 152 cm) in size and weigh less than 2 lbs. (~907g). Reasonable flagpoles may not be more than 8 ft. (~243 cm) long and must weigh less than 3 lbs. (~1360g).",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E114",
+      "series": "E",
+      "short_title": "No firearms or other weapons",
+      "text": "Firearms or other weapons are prohibited at all FIRST events for all FIRST programs, including without limitation, all official FIRST Events posted here. This rule includes prop or simulated weapons which appear to be real. This policy does not apply to law enforcement or venue security personnel.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E115",
+      "series": "E",
+      "short_title": "Inspection required for practice FIELD access",
+      "text": "A team may only use a practice FIELD with a ROBOT that has passed an initial, complete inspection. This rule only applies to events not using scheduled inspection times.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E116",
+      "series": "E",
+      "short_title": "Do not record anyone at the event without their consent",
+      "text": "Do not record interactions with anyone at an event, without the person\u2019s consent. FIRST event staff and volunteers are empowered to excuse themselves from an interaction in which they are being recorded after declining consent. Please note that many FIRST events are livestreamed and FIRST participants have given permission to appear in footage from FIRST. This does not mean that people can record specific interactions without additional consent. Laws regarding recording of conversations vary state-to-state and country-to country, and, in some cases, recording without consent may be criminal. Introducing the idea of recording a conversation with an implied reason of proving someone\u2019s error can escalate a discussion and is likely to increase its adversarial nature.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E117",
+      "series": "E",
+      "short_title": "Enter only 1 ROBOT in the tournament",
+      "text": "At a given FIRST Tech Challenge event, each team may only inspect and play MATCHES with 1 ROBOT. FIRST Tech Challenge teams may only participate in 1 concurrent event at a time. The intent of this rule is to use tournament resources responsibly by not requiring volunteers to inspect multiple ROBOTS and to prevent loopholes around having multiple inspected ROBOTS that can be switched out between MATCHES. This rule does not prohibit teams from bringing other ROBOTS or robot-like assemblies into the venue for other purposes such as awards presentations or pit displays. It is expected that teams will update, make changes and even build multiple ROBOTS during a season; this rule only applies to bringing multiple different ROBOTS to a single event to play MATCHES.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E118",
+      "series": "E",
+      "short_title": "No saving seats",
+      "text": "Teams are not permitted to save or designate seats for team members that are not actively using them. Teams may not hang banners or ribbons or otherwise designate seating. (Event staff will remove and discard any banners, roping, etc., used to designate seating.) Please take turns sitting in the bleachers/stands if seating is limited. If there is a crowding problem, we ask that you kindly leave after your team's MATCH and return later, if possible. The Event Director may reserve seats for attendees who require accessible seating, for certain volunteers, or to ensure teams in the Playoffs have seats to watch their teams play.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.1 General Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E301",
+      "series": "E",
+      "short_title": "No wireless communication",
+      "text": "Teams may not set up their own Wi-Fi (802.11a/b/g/n/ac/ax/be) wireless communication (e.g., access points or ad-hoc networks), Bluetooth, or any other communications systems using 2.4GHz or 5GHz wireless in the venue. A wireless hot spot created by a cellular device, camera, smart TV, etc. is considered an access point. Some smart TVs have access points enabled by factory default. Please make sure that functionality is disabled for any TVs brought to the event. Bluetooth uses 2.4GHz frequencies to communicate which can interfere with venue and ROBOT systems. Many R/C toys (including drones, wireless vehicles, FPV systems) use 2.4GHz and 5GHz communications. Do not operate these in the venue.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.3 Wireless Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E302",
+      "series": "E",
+      "short_title": "Don\u2019t interfere with wireless networks",
+      "text": "Participants may not interfere, attempt to interfere, or attempt to connect with any other team or FIRST wireless network without expressed permission. Teams are encouraged to report suspected wireless security vulnerabilities to the FIRST Technical Advisor (FTA) or Event Director if at the event or to FIRST via customerservice@firstinspires.org to report a suspected issue after the event.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.3 Wireless Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E501",
+      "series": "E",
+      "short_title": "Pits are unavailable if closed",
+      "text": "Teams may not access their pit area outside the designated hours.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E502",
+      "series": "E",
+      "short_title": "Pit set ups should be self-contained within the space assigned by the Event Organizers",
+      "text": "Teams should set up their allowed equipment fully within their assigned pit space. Teams may not: A. run power or internet lines from their team pit to any other area except as instructed or allowed by the Event Director, B. swap team pits with other teams if pits have assigned team numbers, or C. move themselves to empty team pits without Event Director approval.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E503",
+      "series": "E",
+      "short_title": "Keep aisles and exit pathways clear",
+      "text": "Teams may not block aisles and pathways.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E504",
+      "series": "E",
+      "short_title": "Open flames and spark emitting devices must be limited and carefully controlled",
+      "text": "Tools that throw sparks or produce open flames are generally prohibited, except in limited and safely controlled instances. The Event Director may impose additional restrictions on open flames or sparks. Examples which are generally acceptable: limited use of a lighter to melt strings or strap to prevent fraying, using a sander to shorten a bolt as long as the sparks are directed safely and is limited in duration. Examples of tools that violate this rule include, but are not limited to: welders, bench and angle grinders, and gas torches.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E505",
+      "series": "E",
+      "short_title": "Only small benchtop machinery is permitted in team pits",
+      "text": "Small machinery is allowed but floor standing power tools are prohibited. The Event Director may impose additional limitations. \u2018Small\u2019 machinery is machinery that can be easily lifted by one person and examples include, but are not limited to: 3D printers, small band saws, small drill presses, desktop CNC mills, and sanders. Examples of prohibited machinery include, but are not limited to: full-size free standing drill presses, and band saws.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E506",
+      "series": "E",
+      "short_title": "No brazing or welding",
+      "text": "Brazing/welding is prohibited.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E507",
+      "series": "E",
+      "short_title": "Solder with specific tools only",
+      "text": "Soldering may be done using an electric iron/gun only.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E508",
+      "series": "E",
+      "short_title": "Pit structures must be safe",
+      "text": "Teams may not build any structure that supports the weight of people or stores items overhead. Structures may not block or inhibit fire sprinkler systems or otherwise be unsafe. The Event Director may impose additional restrictions. Popup tents may be used assuming they comply with E502, but the coverings may violate this rule if they interfere with fire suppression systems.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E509",
+      "series": "E",
+      "short_title": "Only use aerosol or other chemicals with noxious fumes in approved areas",
+      "text": "Any aerosol or chemical that produces noxious fumes or sprays particulates should only be used in approved areas. Not all venues will allow the use of these products anywhere on site.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E510",
+      "series": "E",
+      "short_title": "Don\u2019t heat or cool ROBOT components to gain an advantage",
+      "text": "Teams may not attempt to gain a competitive advantage by heating or cooling ROBOT parts above or below the ambient temperature of the venue. The intent of this rule is that ROBOTS should compete as if they were left alone for an extended period of time in the competition venue at ambient temperature. Behaviors that are against the spirit of this rule include, but are not limited to: - Cooling fuses so they take longer to trip than normal, - Heating batteries to increase their performance, and - Freezing heatsinks so they are more effective at cooling other components. Examples of behaviors that would not violate this rule include, but are not limited to: - Heating or cooling components for reasons unrelated to ROBOT performance (e.g., warming up heat shrink tubing during installation) - Using a battery that is slightly above ambient temperature as a result of its regular charging cycle, and - Using a ROBOT with components that are warm as a result of prior use.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E511",
+      "series": "E",
+      "short_title": "Charge batteries in a safe and fair manner",
+      "text": "When charging batteries teams must: A. Charge batteries at a safe rate, following all manufacturer recommendations, B. Never charge batteries on a battery charger that exceeds a 3-amp average channel current, and C. Charge batteries using safe connectors. Safe connectors are those with a polarized connector corresponding to the connector on the battery itself. Batteries must never be charged using alligator clips or similar.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.5 Pits"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E601",
+      "series": "E",
+      "short_title": "Carts must not be a nuisance",
+      "text": "Teams may use carts to transport their ROBOT throughout an event. Carts must: A. be easy to control and maneuver, B. pose no risk to bystanders, C. fit through a standard 30-inch (762mm) door, D. remain in the team pit when not in use, E. not be equipped with music or other sound generating device, and F. not use powered propulsion.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.6 ROBOT Carts"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E701",
+      "series": "E",
+      "short_title": "Quiet in the pits during ceremonies",
+      "text": "During ceremonies outside of Playoff MATCHES, team members may not: A. use power tools, B. use loud hand tools (hammers, saws, etc.), or C. shout, yell, or use loud voices in a way that\u2019s disruptive to the ceremony.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.7 Ceremonies"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E702",
+      "series": "E",
+      "short_title": "Pit person limit during ceremonies is 5",
+      "text": "No more than 5 team members may be in the pits during ceremonies outside of Playoff MATCHES. Each team must have at least 1 representative observing ceremonies to be responsible for relaying important information to the entire team. All teams are encouraged to have as many people in the stands for ceremonies as possible. This is important both to celebrate all who are recognized during ceremonies, but also to listen for important day-of information from event organizers which might be critical for your team.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.7 Ceremonies"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "E703",
+      "series": "E",
+      "short_title": "Be respectful during anthems",
+      "text": "Team members, including any remaining in the pits, should exhibit peaceful behavior during the presentation of all national anthems. If team members wish to abstain from traditional anthem observance behaviors, they have a right to do so, as long as they remain silent and non-disruptive.",
+      "asterisk_marked": true,
+      "section_path": [
+        "5 Event Rules (E)",
+        "5.7 Ceremonies"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A201",
+      "series": "A",
+      "short_title": "Team PORTFOLIOS have limits",
+      "text": "Teams have the opportunity to submit a team PORTFOLIO to be used as part of the judging process. Other printed or digital content outside this document will not be collected by the JUDGES for consideration during deliberations. Team PORTFOLIOS must meet the following requirements: A. must consist of 1 cover page including the team number and optionally: team name, PORTFOLIO table of contents, team organizations, sponsors, logo, motto, and picture of the ROBOT and/or team, B. no more than 15 pages of content, C. use only US Letter (8.5\u201d x 11\u201d) or A4 (210 x 297 mm) size pages, D. if submitted digitally, the complete submission must be less than 15MB in size, and E. must only include progress, challenges, and accomplishments which have taken place since January 1, 2026. None of the content of the cover page will be used by JUDGES to evaluate any awards criteria. Any content beyond the allowed 15 pages will not be reviewed by the JUDGES. Teams must strictly minimize Personally Identifying Information (PII) in the PORTFOLIO. For student privacy, use only first names and last initials. While student photographs are permitted, full names must not be disclosed. The JUDGES use the cover page to identify the team associated with the PORTFOLIO. Teams who forget to include a cover page may be disqualified from judging if the JUDGES cannot determine what team the PORTFOLIO is associated with. Design your PORTFOLIO for readability. Avoid fonts under 10 pt and low-contrast text on images-JUDGES cannot evaluate what they cannot read. Use free tools like the WebAIM Contrast Checker to ensure your font size, color, and design choices are clear. JUDGES will not click on links, websites, or videos in a PORTFOLIO. They also cannot take extra printed papers from an interview back to their judging room. Teams should put everything they want JUDGES to see directly in their PORTFOLIO. Teams may use AI and research aids to compose their PORTFOLIOS, provided they respect intellectual property rights and include a footnote or endnote credit. Example Credit: \u201cPortfolio created by Team XXXXX and ChatGPT\u201d A team may reference previous seasons (for example, in a team or organizational plan) to demonstrate growth, but the emphasis must be on the current season.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A202",
+      "series": "A",
+      "short_title": "PORTFOLIOS must be submitted on time and as requested",
+      "text": "Teams must submit their PORTFOLIO as instructed by the Event Director and by the stated deadline if they wish to have it considered during the judging process. If no other instructions are provided, teams should submit 1 printed copy of their PORTFOLIO during the Initial Interview. Instructions about when and how teams should submit their PORTFOLIOS should be communicated by the Event Director before the event. If circumstances prevent a team from following the PORTFOLIO submission instructions, the Event Director should work with the JUDGE Advisor to make reasonable accommodations to accept all team PORTFOLIOS unless doing so poses an undue burden to the judging process. Teams are encouraged to have an additional copy (digital or physical) of their PORTFOLIO available in their pit to assist with interviews they have with the JUDGES.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A203",
+      "series": "A",
+      "short_title": "Teams must participate in an Initial Interview session",
+      "text": "To be considered for any judged awards the team must participate in an Initial Interview session. If scheduled, teams should be informed of their assigned time by the Event Director or local Program Delivery Partner in advance of the event. If there is a schedule conflict or the team misses their Initial Interview slot due to unforeseen circumstances the team should work with the Event Director or local Program Delivery Partner to make reasonable alternate accommodations for an Initial Interview at the event if possible.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A204",
+      "series": "A",
+      "short_title": "Have the right resources available for your Initial Interview",
+      "text": "Teams should be prepared for their Initial Interview by having: A. no fewer than 2 STUDENT representatives for teams of 2 STUDENTS and larger, B. a copy of their team PORTFOLIO for reference during the interview, C. \u201cshow and tell\u201d demonstration items which may include the team\u2019s ROBOT (encouraged, but optional), D. 1 silent observer per A208 (optional), and E. 1 support person to fill accommodation needs per A209 (optional, as needed). Teams are encouraged to have as many STUDENTS as possible involved in the Initial Interview process. A team does not have to have a ROBOT to participate in judging or be eligible for judged awards. Teams may power on and demonstrate their ROBOT functions during the Initial Interview but may not cause significant delays during the interview.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A205",
+      "series": "A",
+      "short_title": "Everyone gets equal Initial Interview time",
+      "text": "All teams will be scheduled for the same length Initial Interview of at least 10 minutes.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A206",
+      "series": "A",
+      "short_title": "The Initial Interview timer starts when the team starts",
+      "text": "The timer starts after the JUDGES have introduced themselves and either, the team begins their presentation, or the Q&A portion of the interview begins. Teams who take an extended amount of time to begin will be warned by the JUDGES to begin promptly and then the Initial Interview timer will be started regardless of the readiness of the presenting team.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A207",
+      "series": "A",
+      "short_title": "Prepared initial presentation time should not be interrupted",
+      "text": "The first 5 minutes of the Initial Interview are reserved for the team to present a prepared oral presentation uninterrupted, if they choose. The uninterrupted presentation time may be ended early by the team. Any remaining time should be a question and answer conversation with the STUDENTS and led by the JUDGES.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A208",
+      "series": "A",
+      "short_title": "One adult silent observer is welcome",
+      "text": "One adult may attend the judging session and be present for any interaction between the JUDGES and the STUDENT team members. Adult coach(es) may be present for any interactions between the JUDGES and the STUDENT team members outside of the Initial Interview. The adult observer and coach(es) may not interact or actively coach during any interaction between the JUDGES and the STUDENT team members. The purpose of the adult silent observer is to provide silent confidence to the STUDENT team members presenting in an unknown environment with new people.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A209",
+      "series": "A",
+      "short_title": "Translator and/or Sign Language Interpreter accommodations will be made for teams who need it",
+      "text": "Teams who need to use a translator to communicate with the JUDGES may provide one if the team\u2019s native language does not match that of the JUDGES. This includes sign language or other adaptive technology. Teams who intend to interview with the assistance of a translator must work with the Event Director in advance to request additional interview time of between 2 and 5 minutes, if needed. The translator may be an adult and can be in addition to the silent observer in A208. In most cases the translator will need to be provided by the team. If other accommodation is needed, the team should contact your local leadership to discuss options.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A210",
+      "series": "A",
+      "short_title": "No Photos, Video or Audio recording during Initial Interview",
+      "text": "In addition to the restrictions of E116, no recording of video or audio, or photos may be taken during the Initial Interview.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A211",
+      "series": "A",
+      "short_title": "The number of awards given scales with event size",
+      "text": "The total number of awards given is based on the number of teams checked in at the event. Not all awards are given at every competition. Only the awards specified in Table 6-1, based on the event size are, points-eligible for advancement. Table 6-1: Total judged awards available based on all event participating teams [[TABLE:6-1]] *Discretionary awards See Section 13.8 Dual Division Events for the modified dual division version of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "6-1"
+      ]
+    },
+    {
+      "rule_id": "A212",
+      "series": "A",
+      "short_title": "Judging feedback is provided to all teams",
+      "text": "All teams will receive feedback from their Initial Interview session. The JUDGES complete a form immediately following the Initial Interview based on their initial impression of the team. This feedback form is not used during deliberations and does not include any updated feedback based on later interactions by the JUDGES with the team. The feedback form will either be returned with the PORTFOLIO for in-person judging, near the end of the event, or the Lead Coach 1 will receive access to a digital version in FTC-Scoring following the event.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A213",
+      "series": "A",
+      "short_title": "Teams are only eligible to win the Inspire Award in their own region",
+      "text": "Teams are only eligible to be considered for the Inspire Award (1st, 2nd, or 3rd place) when competing at a tournament within their HOME REGION. FIRST Championship and FIRST Premier Events are an exception to this rule. At these events, all teams may be considered for the Inspire Award.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A214",
+      "series": "A",
+      "short_title": "Teams cannot win the Inspire Award at multiple Qualifying or League Tournaments",
+      "text": "Teams are only eligible to win 1st place Inspire Award once per season from any Qualifying or League Tournament. Teams who have won 1st Place Inspire are eligible to win 2nd or 3rd place Inspire Award at subsequent Qualifying or League Tournaments. Teams who have won 1st Place Inspire at a Qualifying or League Tournament are eligible to win it at their Regional Super Qualifying Tournament (where applicable) and Regional Championship.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "A215",
+      "series": "A",
+      "short_title": "Teams can only get one judged award",
+      "text": "Teams are only eligible to win or be a runner-up for a single team judged award at the event. This rule does not prevent a team from winning additional awards listed in Section 6.4 Tournament ALLIANCE Awards and Section 6.5 Individual Awards.",
+      "asterisk_marked": true,
+      "section_path": [
+        "6 Awards (A)",
+        "6.2 Team Judged Award Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G101",
+      "series": "G",
+      "short_title": "Humans, stay off the FIELD during the MATCH",
+      "text": "A team member may not enter the FIELD during a MATCH. Violation: VERBAL WARNING. The intent of this rule is that team members should stay outside of the FIELD perimeter during a MATCH and not impact a MATCH except as allowed in Section 11.4.6 Human. A team member stepping onto the FIELD or hanging a large portion of their body over the FIELD is a violation of this rule. A team member pointing their arm, waving, or leaning over the FIELD perimeter wall without impacting the MATCH are not violations of the rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.1 Personal Safety"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G102",
+      "series": "G",
+      "short_title": "Be careful when interacting with ARENA elements",
+      "text": "A team member is prohibited from the following actions with regards to interaction with ARENA elements: A. climbing on, B. hanging from, C. manipulating such that it does not return to its original shape without human intervention, and D. damaging. Violation: VERBAL WARNING. DRIVE TEAM members may brace the FIELD perimeter at any point during the MATCH. Moving the FIELD perimeter out of position is considered a violation of G102.C.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.1 Personal Safety"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G201",
+      "series": "G",
+      "short_title": "Be a good person",
+      "text": "All teams must be civil toward everyone and respectful of team and event equipment while at a FIRST Tech Challenge event. Please review the FIRST Code of Conduct, Core Values, and the rest of Section 1.4.2 Framework of Behaviors for more information. Violation: VERBAL WARNING. YELLOW CARD if subsequent violations occur during the event. Particularly contemptible behavior may result in ARENA ejection for individuals, disqualification for teams, and may be subject to further escalation as described in the Escalation Guidelines (coming soon).",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.2 Conduct"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G202",
+      "series": "G",
+      "short_title": "Follow the Competition Integrity Contract (CIC)",
+      "text": "When playing BIOBUZZ, teams must follow the rules and follow the Competition Integrity Contract (CIC) described in Section 1.5 Competition Integrity Contract (CIC) during every MATCH. Examples of behaviors that would violate this rule include, but are not limited to: A. deliberately violating the spirit of the rules, B. throwing MATCHES, deliberately missing RPs, or playing beneath your ability to manipulate rankings, C. asking other teams to throw MATCHES, deliberately miss RPs, or play beneath their ability to manipulate rankings, D. asking teams to not show up to their MATCH, E. distracting, disrupting, and/or taunting opponents, or F. disrupting ARENA operations. Violation: VERBAL WARNING. YELLOW or RED CARD if subsequent violations occur during the event. These rules are not intended to prevent an ALLIANCE, who intends to play the game and follow the rules, from planning and/or executing strategies in specific MATCHES in which teams play specific and potentially unconventional roles that contribute to their ALLIANCE. Playing with integrity is required in FIRST; YELLOW or RED CARDS will be given at the discretion of the Head REFEREE based on severity of the infraction and impact on the MATCH.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.2 Conduct"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G203",
+      "series": "G",
+      "short_title": "Show up to your MATCHES",
+      "text": "If a ROBOT has passed initial, complete inspection, at least 1 member of its DRIVE TEAM must report to the ARENA and participate in each of their assigned Qualification MATCHES. Violation: DISQUALIFIED from the current MATCH. The team should inform the Lead Queuer if the team\u2019s ROBOT is not able to participate. If there are extenuating circumstances which prevent at least 1 member of a team from attending each of their MATCHES, that team should discuss with FIELD STAFF whether an accommodation is available.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.2 Conduct"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G204",
+      "series": "G",
+      "short_title": "Do not expect to gain by doing others harm",
+      "text": "Actions clearly aimed at forcing the opponent ALLIANCE to violate a rule are not in the spirit of FIRST Tech Challenge and not allowed. Violations forced in this manner will not result in an assignment of a penalty or penalties, to the targeted ALLIANCE. Violation: MAJOR FOUL per instance. MAJOR FOUL per instance and YELLOW CARD per MATCH if REPEATED. The ALLIANCE that was forced to break a rule will not be assessed a penalty. This rule does not apply for strategies consistent with standard gameplay. This rule requires a deliberate act with limited or no opportunity for the team being acted on to avoid the penalty, such as: A. a red ALLIANCE ROBOT deliberately drives into a blue ALLIANCE ROBOT that is lined up to score NECTAR into a FLOWER with 65 seconds left in the MATCH, causing them drop the NECTAR into the FLOWER early in violation of G410. B. a red ALLIANCE ROBOT drives through the blue LOADING ZONE while a blue DRIVE TEAM member is introducing NECTAR to the FIELD, deflecting the blue NECTAR before it contacts the TILE in the LOADING ZONE, in violation of G426.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.2 Conduct"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G205",
+      "series": "G",
+      "short_title": "Egregious or exceptional violations",
+      "text": "Egregious behavior beyond what is listed in the rules or subsequent violations of any rule or procedure during the event is prohibited. In addition to rule violations explicitly listed in this manual and witnessed by a REFEREE, the Head REFEREE may assign a YELLOW or RED CARD for egregious ROBOT actions or team member behavior at any time during the event. Continued violations will be brought to FIRST Headquarters\u2019 attention. FIRST Headquarters will work with event staff to determine if further escalations are necessary, which can include removal from award consideration and removal from the event. Deliberately violating a rule because the benefit of the violation outweighs the penalty is not in the spirit of FIRST and is an example of egregious behavior. For example, multiple violations of rules without an escalation path because the cumulative benefit outweighs the cumulative penalty. Violating a rule that only results in a YELLOW CARD in an ALLIANCE\u2019S potential last MATCH prior to cards clearing per Section 10.6.1 YELLOW and RED CARDS or the end of an event (such as a team\u2019s last qualification MATCH, a lower bracket MATCH) will be under increased scrutiny and will likely result in a RED CARD. Please see Section 10.6.1 YELLOW and RED CARDS for additional detail. Violation: YELLOW or RED CARD. The intent of this rule is to provide the Head REFEREES with the flexibility necessary to keep the event running smoothly, as well as keep the safety of all the participants as the highest priority. The Head REFEREE may assign a YELLOW or RED CARD for a single instance of a rule violation or for multiple instances of any single rule violation. Teams should be aware that any rule in this manual could escalate to a YELLOW or RED CARD. The Head REFEREE has final authority on all rules and violations at an event.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.2 Conduct"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G301",
+      "series": "G",
+      "short_title": "Don\u2019t delay MATCHES",
+      "text": "DRIVE TEAM members may not cause significant delays to the start of their MATCH. Both of these conditions must be met prior to team actions being considered: A. the expected MATCH start time has passed, and B. the DRIVE TEAM has access to the ARENA. In order for a team to cause a significant delay, the Head REFEREE must perceive that the team is neither MATCH ready (G303) nor making a good faith effort to quickly become MATCH ready. During Qualification MATCHES, the expected start time of the MATCH is the time indicated on the MATCH schedule or ~3 minutes after the end of the previous MATCH on the same FIELD, whichever is later. During Playoff MATCHES, the expected start time of the MATCH is the time indicated on the MATCH schedule or 8 minutes from either ALLIANCE\u2019S previous MATCH, whichever is later During back-to-back MATCHES, T406 is in effect, and teams may have a longer minimum break. Teams that have 1 DRIVE TEAM member present and have informed FIELD STAFF that their ROBOT will not be participating in the MATCH are considered MATCH ready and not in violation of this rule. Violation: VERBAL WARNING. MAJOR FOUL for the upcoming MATCH if a subsequent violation occurs within the tournament phase. In a Playoff MATCH, the VERBAL WARNING is issued to the entire ALLIANCE. If the team/ALLIANCE is not MATCH ready within 2 minutes of the VERBAL WARNING/MAJOR FOUL having been issued, and the Head REFEREE perceives no good faith effort by the DRIVE TEAM(S) to quickly become MATCH ready, the offending team\u2019s ROBOT is DISABLED. The intent of this rule is to provide an equitable amount of time for both ALLIANCES to prepare for each MATCH and give DRIVE TEAMS grace given extenuating circumstances that cause them to be late. Teams should avoid disrupting ARENA operations and proactively communicate with the Head REFEREE and FIELD STAFF to let them know their status. FIELD STAFF will make a good faith effort to wait for missing or unprepared teams and will avoid beginning any MATCH when teams are not present or not MATCH ready and making good faith effort to become MATCH ready. Once a VERBAL WARNING/MAJOR FOUL is issued, the Head REFEREE starts a 2-minute timer and makes a good faith effort to share the timer\u2019s status with the delaying DRIVE TEAM. In general, good faith efforts to quickly become MATCH ready are entirely for the purposes of transitioning the ROBOT into a MATCH ready state (i.e., not attempts to significantly alter a ROBOT\u2019S capabilities). Examples of good faith efforts to quickly become MATCH ready that would not be a violation include but are not limited to: A. walking safely towards the FIELD with a ROBOT that a team is not actively modifying, B. applying quick fixes such as tape or cable ties to make the ROBOT compliant with STARTING CONFIGURATION requirements, C. waiting for a DRIVER STATION device to boot, D. actively working with field technical staff, including the FTA, to resolve an issue in a reasonable amount of time, or E. performing a MOMENTARY \u201cwiggle test\u201d to confirm communication between the DRIVER STATION and the ROBOT CONTROLLER. The ROBOT should not drive or interact with SCORING ELEMENTS (except contact with pre-loaded POLLEN) while performing this test.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.3 Pre-MATCH"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G302",
+      "series": "G",
+      "short_title": "Limit what you bring to the FIELD",
+      "text": "Items brought to the FIELD to be used for a MATCH, in addition to the ROBOT and OPERATOR CONSOLE, must fit in the team\u2019s designated ALLIANCE AREA, be worn or held by members of the DRIVE TEAM, or be an item used as an accommodation (e.g., crutches, cushions, kneeling mats, or single-step stools no more than 12 in. tall (30.5 cm) that are designed to be stood on and are locked such that they do not roll/fold). Regardless of whether the equipment fits the criteria above, it may not: A. be employed in a way that disrupts normal ARENA operations or introduces a safety hazard, B. extend more than 6 ft. 6 in. (~198 cm) above the TILES, C. communicate with anything or anyone outside of the ARENA with the exception of medically required equipment, D. block visibility for FIELD STAFF or audience members, or E. jam or interfere with the remote sensing capabilities of another team. Exceptions to G302.B are granted for MOMENTARY extensions above 6 ft. 6in. and for individuals wearing PPE or reasonable decorative apparel such as hats, headbands, etc. Violation: MATCH will not start until the situation is remedied. VERBAL WARNING, if discovered or used inappropriately during a MATCH. YELLOW CARD if subsequent violations occur during the event. It is not a violation of this rule to bring an alignment device to the FIELD to aid pre-MATCH ROBOT set-up and alignment. The use of any alignment devices should not delay MATCH start in violation of G301. Examples of equipment that may be considered a safety hazard in the confined space of the ALLIANCE AREA include but are not limited to: a ladder or a large signaling device. Using an item that has wireless communications disabled complies with G302.C above. Examples of jamming or interfering with remote sensing capabilities include but are not limited to: mimicking the FIELD AprilTags and shining bright lighting or laser pointers onto the FIELD during a MATCH.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.3 Pre-MATCH"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G303",
+      "series": "G",
+      "short_title": "ROBOTS on the FIELD must come ready to play a MATCH",
+      "text": "A ROBOT must meet all following MATCH-start requirements: A. does not pose a hazard to humans, ARENA elements, or other ROBOTS, B. meets all the requirements from Section 3.3 MATCH Eligibility Rules including those regarding inspection/re-inspection, C. is the only team-provided item left in the FIELD, and D. has ROBOT SIGNS that indicate the correct ALLIANCE color (see R402). Violation: The MATCH will not start until all requirements are met if there is a quick remedy. DISABLED if it is not a quick remedy, and, at the discretion of the Head REFEREE, ROBOT must be re-inspected. RED CARD if a team\u2019s ROBOT is not compliant with G303.B participates in the MATCH. For assessment of many of the items listed above, the Head REFEREE is likely to consult with the LRI.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.3 Pre-MATCH"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G304",
+      "series": "G",
+      "short_title": "ROBOTS must be set up correctly on the FIELD",
+      "text": "A ROBOT must be positioned on the FIELD such that it meets all of the following requirements: A. fully contained on its own ALLIANCE\u2019s side of the FIELD (FIELD columns A, B, C for red, or FIELD columns D, E, F for blue) (Figure 9-4), B. not attached to, entangled with, or suspended from any FIELD element, C. touching the FIELD perimeter wall, D. not contacting or in the scoring volume of a FLOWER, E. not in the LOADING ZONE, F. confined to its STARTING CONFIGURATION (see R102 and R103), G. in contact with exactly 4 POLLEN pre-loads as described in Section 10.3.1 SCORING ELEMENTS, and H. fully motionless following completion of OpMode initialization, Violation: The MATCH will not start until all requirements are met, if there is a quick remedy. DISABLED or removed from FIELD, if it is not a quick remedy. G304.A requires the ROBOT to be fully contained within the FIELD perimeter and not overhang the FIELD perimeter wall. Each ROBOT must start contacting 4 POLLEN either located in or on the ROBOT, or on the TILES contacting the ROBOT. ROBOTS that are no-shows for their MATCH will have their POLLEN placed in the LOADING ZONE against the perimeter wall. Figure 11-1 shows examples of several possible legal ROBOT starting locations. Figure 11-1: Examples of allowed ROBOT starting locations",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.3 Pre-MATCH"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G305",
+      "series": "G",
+      "short_title": "Teams must select an OpMode",
+      "text": "An OpMode must be selected on the DRIVER STATION app and initialized by pressing the INIT button. If this OpMode is an AUTO OpMode, the 30 second AUTO timer must be enabled. Violation: MATCH will not start until the situation is remedied. DISABLED if ROBOT cannot initialize an OpMode or the situation cannot be remedied quickly. This rule requires all teams to select and INIT an OpMode, regardless of whether or not an AUTO OpMode is planned to be used during AUTO. FIELD STAFF will use this as an indication that a team is ready to start the MATCH. Teams without an AUTO OpMode should consider creating a default AUTO OpMode using the BasicOpMode sample and use the auto-loading feature to automatically queue up their TELEOP OpMode.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.3 Pre-MATCH"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G401",
+      "series": "G",
+      "short_title": "Don\u2019t interact with a ROBOT during AUTO",
+      "text": "As soon as the countdown to start the MATCH begins and until the end of AUTO, DRIVE TEAM members may not directly or indirectly interact with a ROBOT or an OPERATOR CONSOLE, with the following exceptions: A. to press the (\u25b6) start button within a MOMENTARY margin of the start of the MATCH, B. to press the (\u25a0) stop button either at the team\u2019s discretion or instruction of the Head REFEREE per T402, or C. for personal safety or OPERATOR CONSOLE safety. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. Teams do not have to start an OpMode if they choose not to run an AUTO OpMode. The intent of G401.A is for teams to start AUTO on time, accounting for some variability due to human factors.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.1 AUTO"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G402",
+      "series": "G",
+      "short_title": "No AUTO opponent interference",
+      "text": "During AUTO, a team may not disrupt AUTO for the opposing ALLIANCE. Violation: MAJOR FOUL per MATCH. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. During AUTO, FIELD columns A, B, C constitute the red side of the FIELD, and columns D, E, F (Figure 9-5) constitute the blue side of the FIELD. Each ALLIANCE has priority over those FIELD and SCORING ELEMENTS on their side of the FIELD. Navigating into the opposing ALLIANCE\u2019S side of the FIELD during AUTO is a risky gameplay strategy that may be seen as STRATEGIC. SCORING ELEMENTS that happen to enter the other side of the FIELD after being deflected by another object in the FIELD (e.g., FIELD element, ROBOT) will likely not be penalized.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.1 AUTO"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G403",
+      "series": "G",
+      "short_title": "ROBOTS are motionless between AUTO and TELEOP",
+      "text": "Any powered movement of the ROBOT or any of its MECHANISMS is not allowed during the transition period between AUTO and TELEOP. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. Movement due to inertia, gravity, or de-energizing of actuators, etc. is not considered powered movement. Teams may press buttons on their DRIVER STATION app to stop the AUTO OpMode, initialize or start a TELEOP OpMode during the AUTO to TELEOP transition period. If the INIT portion of the OpMode causes the ROBOT to violate this rule (powering actuators such that they move or twitch in any way), then the team should wait until TELEOP begins before pressing INIT.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.2 TELEOP"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G404",
+      "series": "G",
+      "short_title": "ROBOTS are motionless at the end of TELEOP",
+      "text": "ROBOTS must no longer have powered movement after the end of TELEOP until the Head REFEREE or their designee signals that teams may retrieve their ROBOTS. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. DRIVE TEAMS should make it obvious that the ROBOTS are no longer being controlled by pressing the (\u25a0) stop button on the DRIVER STATION app or by discontinuing any operation of the ROBOT by the end of the MATCH period and setting down their controllers. Movement due to inertia, gravity, or de-energizing of actuators, etc. is not considered powered movement.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.2 TELEOP"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G405",
+      "series": "G",
+      "short_title": "Keep SCORING ELEMENTS In bounds",
+      "text": "A ROBOT may not deliberately eject a SCORING ELEMENT from the FIELD (either directly or by bouncing it off a FIELD element or another ROBOT). Violation: MAJOR FOUL per SCORING ELEMENT. SCORING ELEMENTS that leave the FIELD during scoring attempts or as the result of ROBOT-to-ROBOT interactions are not considered deliberate ejections and are not violations of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G406",
+      "series": "G",
+      "short_title": "Do not damage or make a mess in the ARENA",
+      "text": "Neither a ROBOT nor a DRIVE TEAM member may make a mess or damage any part of the ARENA. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. DISABLED if the damage is caused by a ROBOT, and the Head REFEREE perceives that further damage is likely to occur. Corrective action (such as eliminating sharp edges, removing the damaging MECHANISM, and/or reinspection) may be required before the ROBOT may compete in subsequent MATCHES. The intent of this rule is that DRIVE TEAM members and ROBOTS negatively impact the ARENA, including FIELD elements and SCORING ELEMENTS in a way that would result in significant repair or extensive cleanup that disrupts ARENA operations. Rule R201 describes examples of ROBOT features related to this rule that are scrutinized during inspection. SCORING ELEMENTS are expected to undergo a reasonable amount of wear and tear as they are handled by ROBOTS and humans, such as scratching, marking, and eventually damage due to fatigue. Routinely gouging, tearing off pieces, or marking SCORING ELEMENTS are violations of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G407",
+      "series": "G",
+      "short_title": "No more than 4 at a time",
+      "text": "A ROBOT may not simultaneously CONTROL more than 4 SCORING ELEMENTS. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. The intent of this rule is that ROBOTS play MATCHES while only CONTROLLING a maximum of 4 SCORING ELEMENTS at a time. ROBOTS that CONTROL 5 or more SCORING ELEMENTS at any time during the MATCH will be under scrutiny to determine whether it is STRATEGIC. Examples of actions that are likely to be perceived as STRATEGIC include, but are not limited to: A. A ROBOT that picks up and CONTROLS 6 or more SCORING ELEMENTS, moving them to a scoring location. B. Multiple instances of greater than MOMENTARY CONTROL of 5 or more SCORING ELEMENTS by a ROBOT throughout a MATCH. Examples of actions that are likely to not be perceived as STRATEGIC include, but are not limited to: C. A ROBOT MOMENTARILY CONTROLS 5 SCORING ELEMENTS which they \u201creverse\u201d quickly so that at least one SCORING ELEMENT returns to approximately its original state. Teams are encouraged to design their ROBOTS to prevent inadvertent or deliberate CONTROL of more than 4 SCORING ELEMENTS. This could involve guards to prevent SCORING ELEMENTS from accidentally becoming stuck on top of the ROBOT and systems to prevent active pickup/intaking of more than 4 SCORING ELEMENTS. Examples of interaction with a SCORING ELEMENT that are not \u201cCONTROL\u201d and would not be a violation of this rule include, but are not limited to: D. \u201cbulldozing\u201d (inadvertent contact with a SCORING ELEMENT while in the path of the ROBOT moving about the FIELD) E. \u201cdeflecting\u201d (being hit by a SCORING ELEMENT that bounces into or off a ROBOT), or F. SCORING ELEMENTS that have been LAUNCHED by a ROBOT that are no longer in contact with the ROBOT.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G408",
+      "series": "G",
+      "short_title": "Don\u2019t CONTROL opponent NECTAR",
+      "text": "A ROBOT may not CONTROL the opponent\u2019s NECTAR. Violation: VERBAL WARNING. YELLOW CARD per MATCH, if STRATEGIC.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G409",
+      "series": "G",
+      "short_title": "Don\u2019t catch SCORING ELEMENTS",
+      "text": "A ROBOT may not catch or deflect a SCORING ELEMENT released by a TIPPED HIVE unless and until that SCORING ELEMENT contacts anything else besides that ROBOT. Violation: VERBAL WARNING. YELLOW CARD per MATCH, if STRATEGIC. The intent of this rule is for the POLLEN and NECTAR that spills out of a TIPPED HIVE to hit the TILE floor before it is collected by any ROBOT. It is not the intent to penalize accidental catches of SCORING ELEMENTS of ROBOTS that happen to be under a TIPPING HIVE. Teams are encouraged to design their ROBOTS such that they are unable to accidentally catch SCORING ELEMENTS. This could involve guards to prevent SCORING ELEMENTS from accidentally becoming stuck on top of the ROBOT. ROBOT features of this type will make it more obvious to REFEREES that the team is not employing catching as a strategy and avoid being determined to be in violation of this rule. Examples of actions that are likely to be perceived as STRATEGIC include, but are not limited to: A. A ROBOT REPEATEDLY is stopped underneath the HIVE waiting for a TIP to occur and collect SCORING ELEMENTS that fall. B. A ROBOT has a MECHANISM at the top of their ROBOT that opens wide to accept SCORING ELEMENTS, and it is used to catch falling SCORING ELEMENTS as the ROBOT drives under the HIVE. C. A ROBOT REPEATEDLY positions itself so multiple SCORING ELEMENTS that fall from the HIVE hit the ROBOT and move with an advantageous vector before contacting anything else. Examples of actions that are likely to not be perceived as STRATEGIC include, but are not limited to: D. A ROBOT drives under the HIVE and has one or two POLLEN land on a flat surface of their ROBOT while driving by. E. A ROBOT that is no longer functioning remains stationary under the HIVE and has SCORING ELEMENTS collect on the top of their ROBOT.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G410",
+      "series": "G",
+      "short_title": "NECTAR only goes into FLOWERS with one minute left",
+      "text": "ROBOTS may not enter NECTAR into the FLOWER scoring volume until the last 60 seconds of the MATCH. Violation: MAJOR FOUL per NECTAR. See Section 10.5.2 FLOWER Scoring Criteria for details on the FLOWER scoring volume. The primary FIELD timer display is the cue to indicate when there is 60 seconds left in the MATCH. Teams are encouraged to make it obvious and unambiguous to REFEREES that they are not placing NECTAR into a FLOWER too early.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G411",
+      "series": "G",
+      "short_title": "Do not hoard SCORING ELEMENTS",
+      "text": "An ALLIANCE may not STRATEGICALLY prevent the opposing ALLIANCE from accessing SCORING ELEMENTS. Violation: MAJOR FOUL and YELLOW CARD per MATCH. An ALLIANCE using their own NECTAR and/or POLLEN for scoring is not a violation of this rule. Corralling relevant SCORING ELEMENTS into a limited portion of the FIELD and/or actively positioning a ROBOT to prevent opposing ALLIANCE access is a violation of this rule. A GARDEN is not a protected zone.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.3 SCORING ELEMENT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G412",
+      "series": "G",
+      "short_title": "ROBOTS must be under control",
+      "text": "A ROBOT must not pose an undue hazard to a human or an ARENA element during a MATCH in the following ways: A. the ROBOT or anything it CONTROLS, i.e., a SCORING ELEMENT, disrupts anything outside the FIELD or contacts a human that is outside the FIELD, or B. the ROBOT operation is dangerous. Violation: DISABLED and VERBAL WARNING. YELLOW CARD per MATCH, if subsequent violations occur during the event. Please be conscious of REFEREES and other FIELD STAFF working around the ARENA who may be in close proximity to your ROBOT. Examples of violations include, but are not limited to: A. wildly flailing outside the FIELD, B. knocking over a DRIVER STATION stand, C. moving/damaging the FIELD timer display, or D. contacting FIELD STAFF or a DRIVE TEAM member outside the FIELD. ROBOT contact with ARENA elements outside the FIELD, such as a DRIVER STATION stand, the floor outside the FIELD, or the FIELD wall perimeter outside of the FIELD is not a violation of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G413",
+      "series": "G",
+      "short_title": "ROBOTS must stop when instructed",
+      "text": "If a team is instructed to DISABLE their ROBOT by a REFEREE per T402, a DRIVE TEAM member must press the (\u25a0) stop button on the DRIVER STATION app and set down their controllers. Violation: VERBAL WARNING. RED CARD, if STRATEGIC.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G414",
+      "series": "G",
+      "short_title": "ROBOTS must be identifiable",
+      "text": "A ROBOT\u2019S team number and ALLIANCE color must not become indeterminate, as perceived by the Head REFEREE. Violation: VERBAL WARNING. YELLOW CARD, if STRATEGIC. Teams are encouraged to robustly affix their ROBOT SIGNS to their ROBOT in highly visible locations such that they do not easily fall off or become obscured during normal gameplay. Corrective action such as revising ROBOT SIGNS may be requested before the ROBOT participates in a subsequent MATCH.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G415",
+      "series": "G",
+      "short_title": "Watch your ARENA interaction",
+      "text": "A ROBOT is prohibited from the following interactions with an ARENA element, except for SCORING ELEMENTS: A. grabbing, B. grasping, C. attaching to, D. becoming entangled with, or E. suspending from. Violation: VERBAL WARNING. YELLOW CARD per MATCH, if STRATEGIC. DISABLED if the Head REFEREE perceives that damage is likely. Corrective action (such as removing the offending MECHANISM, and/or re-inspection) may be required before the ROBOT will be allowed to compete in subsequent MATCHES. ROBOTS with a concave shape that wraps partially around a FLOWER for purposes such as to aid in alignment would not be in violation of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G416",
+      "series": "G",
+      "short_title": "ROBOTS have construction limits",
+      "text": "ROBOTS may not violate the limits outlined in R105 during the MATCH. ROBOTS may not: A. expand such that they exceed the expansion limits noted in R105.A or R105.B, or B. deliberately detach parts per R105.C. Violation: VERBAL WARNING. MAJOR FOUL per instance, if STRATEGIC. A ROBOT is allowed to have parts that move after the start of a MATCH that extend outside its STARTING CONFIGURATION, but these extensions must stay within the expansion limit and not deliberately detach COMPONENTS as described in R105.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G417",
+      "series": "G",
+      "short_title": "ROBOTS may not meddle with the HIVE Structure",
+      "text": "ROBOTS may not manipulate the motion of the HIVE in any way other than by LAUNCHING SCORING ELEMENTS into an upward-facing CELL. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. HIVES are designed and intended to only have a TIP induced by LAUNCHING POLLEN and NECTAR into an upward-facing CELL. Any other interaction with the HIVE that causes or could cause or impeding a TIP is a violation of this rule. Examples of ROBOT actions that are likely to be perceived as STRATEGIC include, but are not limited to: A. ramming into the HIVE frame at high-speed, B. ramming into the HIVE frame multiple times in a short time period, C. deliberately LAUNCHING NECTAR or POLLEN into the external bottom, sides, or top faces of a CELL, D. impeding the TIP of an opponent\u2019s HIVE by LAUNCHING NECTAR or POLLEN at it, E. contacting a HIVE directly or transitively through a CONTROLLED SCORING ELEMENT, or F. actions that are REPEATED after a warning has been given. Examples of actions that are likely to not be perceived as STRATEGIC include, but are not limited to: G. A ROBOT accidentally bumping into a HIVE frame while attempting to pick up POLLEN, or H. A ROBOT attempting to LAUNCH POLLEN or NECTAR into the upward-facing CELL and missing in a way that hits the bottom, sides, or top of the CELL.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G418",
+      "series": "G",
+      "short_title": "ROBOTS may not meddle with FLOWERS",
+      "text": "ROBOTS may not enter SCORING ELEMENTS into or remove SCORING ELEMENTS from a FLOWER except: A. only enter POLLEN and NECTAR into the top of a FLOWER, and B. only remove POLLEN from the bottom of a FLOWER. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. The FLOWERS are designed and intended to only allow POLLEN and NECTAR to enter through the top of the top ring and only allow POLLEN (not NECTAR) to be removed from the bottom of the middle ring. Any other actions to score or remove SCORING ELEMENTS from the FLOWER are considered a violation of this rule. The intent is not to disallow ROBOTS from contacting the FLOWER or interactions that occur when attempting allowed scoring actions. Examples of ROBOT actions that are not violations of this rule include: A. contacting the FLOWER while attempting to enter or remove SCORING ELEMENTS, B. contacting POLLEN or NECTAR scored in a FLOWER while attempting to score, or C. driving into a FLOWER and contacting the POLLEN or NECTAR inside it. Examples of actions that are likely to be perceived as STRATEGIC include, but are not limited to: D. A ROBOT attempts to pull POLLEN through the side of the FLOWER, E. A ROBOT grabs onto the FLOWER and shakes it, F. A ROBOT forces NECTAR out of the middle ring with a MECHANISM, G. A ROBOT deliberately drives into the perimeter wall at high-speed causing a SCORING ELEMENT to fall out of a FLOWER, or H. A ROBOT deliberately holds a NECTAR up to the side of the FLOWER pipes such that it meets the FLOWER scoring criteria. Examples of actions that are likely to not be perceived as STRATEGIC include but are not limited to: I. A ROBOT drives into a FLOWER while attempting to pick up POLLEN off the TILES and causes a POLLEN to fall out the top of a FLOWER, or J. A ROBOT knocks out a scored POLLEN while attempting to score another POLLEN.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.4 ROBOT"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G419",
+      "series": "G",
+      "short_title": "Do not damage an opponent ROBOT",
+      "text": "A ROBOT may not damage or functionally impair an opponent ROBOT. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per instance, if STRATEGIC. MAJOR FOUL and RED CARD per instance if STRATEGIC and opponent ROBOT is unable to drive. BIOBUZZ is a highly interactive game and may include defensive and high-contact gameplay. While this rule prevents teams from damaging their opponents STRATEGICALLY and aims to limit severe damage to ROBOTS, teams should design their ROBOTS to be robust. The damage or functional impairment of exposed or unprotected COMPONENTS or MECHANISMS in the course of normal gameplay is not likely to be considered a violation of this rule. This includes, but is not limited to: A. an exposed or unprotected main power switch (see R603), B. exposed or unprotected wiring, or C. a delicately constructed MECHANISM (such as an intake). When a team\u2019s ROBOT is interacting with an opponent ROBOT that is in a precarious or disadvantaged position, that team should make it obvious and unambiguous that they are trying to avoid damaging their opponent. Examples of actions that are likely to be perceived as STRATEGIC include, but are not limited to: D. A ROBOT high-speed rams and/or REPEATEDLY smashes an opponent ROBOT and causes damage. Examples of functionally impairing another ROBOT include, but are not limited to: E. disconnecting wires inside the ROBOT CHASSIS required for operation of a COMPONENT, F. disconnecting the opponent ROBOT\u2019S battery (this example also clearly results in a RED CARD because the ROBOT is no longer able to drive), or G. powering off an opponent\u2019s ROBOT by contacting their reasonably well-protected power switch. (This example also clearly results in a RED CARD because the ROBOT is no longer able to drive.) At the conclusion of the MATCH, the Head REFEREE may elect to visually inspect a ROBOT to confirm violations of this rule made during a MATCH and remove the violation if the damage cannot be verified. \"Unable to drive\" means that because of the incident, the DRIVER can no longer drive to a desired location in a reasonable time (generally). For example, if a ROBOT can only move in circles, or can only move extremely slowly, the ROBOT is considered unable to drive.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.5 Opponent Interaction"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G420",
+      "series": "G",
+      "short_title": "Do not tip or entangle",
+      "text": "A ROBOT may not attach to, tip over, or entangle an opponent ROBOT. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per instance, if STRATEGIC. MAJOR FOUL and RED CARD per instance, if STRATEGIC and either CONTINUOUS or opponent ROBOT is unable to drive. Examples of actions that are likely to be perceived as STRATEGIC include, but are not limited to: A. using a wedge-like MECHANISM to tip over an opponent ROBOT, B. making frame-to-frame contact with an opponent ROBOT that is attempting to right itself after previously falling over and causing them to fall over, or C. causing an opponent ROBOT to tip over by contacting the ROBOT after it starts to tip if, as determined by the REFEREE, that contact could have been avoided. Tipping as an unintended consequence of normal ROBOT-to-ROBOT interaction, including single frame-to-frame hits that result in a ROBOT tipping, as perceived by the REFEREE, is not a STRATEGIC violation of this rule. \"Unable to drive\" means that because of the incident, the DRIVER can no longer drive to a desired location in a reasonable time (generally). For example, if a ROBOT can only move in circles or can only move extremely slowly, the ROBOT is considered unable to drive.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.5 Opponent Interaction"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G421",
+      "series": "G",
+      "short_title": "There is a 3-count on PINS",
+      "text": "A ROBOT may not PIN an opponent\u2019s ROBOT for more than 3 seconds. A ROBOT is PINNING if it is preventing the movement of an opponent ROBOT by contact, either direct or transitive (such as against a FIELD element). A PIN count ends once any of the following criteria below are met: A. the ROBOTS have separated by at least 2 ft. (~61 cm) from each other for more than 3 seconds, B. either ROBOT has moved 2 ft. from where the PIN initiated for more than 3 seconds, or C. the PINNING ROBOT gets PINNED. For the criteria in G421.A, the PIN count pauses once ROBOTS are separated by 2 ft. until either the PIN ends or the PINNING ROBOT moves back within 2 ft., at which point the PIN count is resumed. For the criteria in G421.B, the PIN count pauses once either ROBOT has moved 2 ft. from where the PIN initiated until the PIN ends or until both ROBOTS move back within 2 ft., at which point the PIN count is resumed. Violation: MAJOR FOUL per instance and an additional MAJOR FOUL for every 3 seconds in which the situation is not corrected.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.5 Opponent Interaction"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G422",
+      "series": "G",
+      "short_title": "DRIVE TEAM stays in the ALLIANCE AREA",
+      "text": "Once a MATCH starts, DRIVE TEAM members may not leave their designated ALLIANCE AREA. Violation: VERBAL WARNING. MINOR FOUL per instance, if STRATEGIC. The intent of this rule is to prevent DRIVE TEAM members from leaving their assigned ALLIANCE AREA during a MATCH to gain a competitive advantage. For example, moving to another part of the FIELD for better viewing or reaching into the FIELD. Simply breaking the plane of the AREA during normal MATCH play is not a violation. DRIVE TEAMS may be anywhere in their ALLIANCE AREA during a MATCH. DRIVE TEAM members may retrieve their own ALLIANCE\u2019S NECTAR that has left the FIELD that they can reach while remaining in the ALLIANCE AREA. Exceptions are granted in cases concerning safety.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G423",
+      "series": "G",
+      "short_title": "DRIVE COACHES and other teams: hands off the controls",
+      "text": "Once the MATCH starts, DRIVE COACHES or members of another team may not handle the gamepads of the OPERATOR CONSOLE. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. If a team is facing extenuating circumstances due to a major conflict (i.e., religious holidays, major testing, transportation issues), that team should discuss with FIELD STAFF whether an accommodation is available. DRIVE COACHES, if desired, may help the DRIVERS in the following ways: A. holding the DRIVER STATION device, B. troubleshooting the DRIVER STATION device, C. selecting OpModes on the DRIVER STATION app, D. pressing the INIT button on the DRIVER STATION app, E. pressing the (\u25b6) start button on the DRIVER STATION app, or F. pressing the (\u25a0) stop button on the DRIVER STATION app.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G424",
+      "series": "G",
+      "short_title": "DRIVE COACHES, SCORING ELEMENTS are off limits",
+      "text": "DRIVE COACHES may not contact SCORING ELEMENTS, except for safety purposes. Violation: VERBAL WARNING. MINOR FOUL per instance, if STRATEGIC.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G425",
+      "series": "G",
+      "short_title": "DRIVE TEAMS, watch your reach",
+      "text": "Once a MATCH starts, a DRIVE TEAM member may not directly or indirectly: A. contact a ROBOT, B. contact a SCORING ELEMENT in contact with a ROBOT or TILE, C. disrupt SCORING ELEMENT scoring, or D. contact a FIELD element. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC. Hand-held controllers, hanging wires, items of clothing, and other objects in the ALLIANCE AREA can all result in DRIVE TEAM members indirectly contacting a ROBOT, and would be violations of this rule. Exceptions are granted in cases concerning safety. For G425.A and G425.B, the penalty is applied to the DRIVE TEAM member regardless of whether the DRIVE TEAM member or ROBOT initiates contact. Disrupting scoring includes, but is not limited to: A. blocking a ROBOT from scoring in a FLOWER, or B. deliberately hitting or shaking the perimeter wall to descore NECTAR or POLLEN from the FLOWER.",
+      "asterisk_marked": true,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G426",
+      "series": "G",
+      "short_title": "Humans may not enter NECTAR onto the FIELD early",
+      "text": "DRIVE TEAM members may not enter NECTAR onto the FIELD except: A. each time the HIVE of their corresponding ALLIANCE color is TIPPED, one NECTAR may be entered for that ALLIANCE, or B. when 60 seconds or less remain in the MATCH, all remaining NECTAR can be entered whichever comes first. Violation: MINOR FOUL per NECTAR. The primary FIELD timer is the cue to indicate when there is 60 seconds left in the MATCH. DRIVE TEAMS are encouraged to ensure the remaining NECTAR in their ALLIANCE AREA is visible and make it obvious and unambiguous to REFEREES that they are not entering NECTAR too early.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G427",
+      "series": "G",
+      "short_title": "Humans, only enter NECTAR via the LOADING ZONE",
+      "text": "NECTAR may not be introduced to the FIELD, except as follows: A. without the use of a tool, B. by a DRIVE TEAM member of the ALLIANCE of the corresponding color, and C. such that NECTAR contacts the TILE within the LOADING ZONE before contacting a ROBOT or a FIELD element. Violation: MINOR FOUL per NECTAR. The intent of this rule is to only allow DRIVE TEAM members to introduce their own NECTAR into the LOADING ZONE. While there are limited restrictions on how that is done, teams should not attempt to push the boundaries of this rule to gain competitive advantage. Humans scoring into a HIVE or FLOWER is never allowed and subject to G202 violations. If DRIVE TEAM members come into possession of any POLLEN or opposing ALLIANCE NECTAR that has exited the FIELD, they should pass it to the nearest FIELD STAFF for reintroduction into the FIELD per Section 10.8 Other Logistics. Note: When introducing NECTAR, DRIVE TEAM members must avoid contacting a SCORING ELEMENT that is also in contact with a TILE to avoid violating G425.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "G428",
+      "series": "G",
+      "short_title": "Humans, don\u2019t remove SCORING ELEMENTS from the FIELD",
+      "text": "DRIVE TEAM members may not remove SCORING ELEMENTS from the FIELD. Violation: MINOR FOUL per SCORING ELEMENT. A SCORING ELEMENT is considered on the FIELD if it is contacting a TILE, or in and/or on a ROBOT, FIELD element, or SCORING ELEMENT.",
+      "asterisk_marked": false,
+      "section_path": [
+        "11 Game Rules (G)",
+        "11.4 In-MATCH",
+        "11.4.6 Human"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R101",
+      "series": "R",
+      "short_title": "It is your team\u2019s ROBOT",
+      "text": "The ROBOT and its MAJOR MECHANISMS must be built by the FIRST Tech Challenge team that has registered for the event and intends to use the ROBOT to participate in MATCHES or as part of judged awards. A MAJOR MECHANISM is a group of COMPONENTS and/or MECHANISMS assembled together to address at least 1 game challenge: ROBOT movement, SCORING ELEMENT manipulation, FIELD element manipulation, or performance of a scorable task without the assistance of another ROBOT. This rule requires that the ROBOT and its MAJOR MECHANISMS were built by its team but is not intended to prohibit or discourage assistance from other teams (e.g., fabricating elements, supporting construction, writing software, developing game strategy, contributing COMPONENTS, and/or MECHANISMS). Examples that would generally not be considered MAJOR MECHANISMS, and thus are not subject to this rule include, but are not limited to: A. a gearbox assembly, B. a COMPONENT or MECHANISM that is part of a MAJOR MECHANISM, or C. COTS items. The intent of this rule is that a team\u2019s ROBOT is a product that\u2019s representative of the current team members\u2019 experience and is intended to discourage complete solutions which are provided wholly by outside organizations or companies. Also see R301 and R303.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.1 General ROBOT Design"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R102",
+      "series": "R",
+      "short_title": "STARTING CONFIGURATION is limited to an 18-inch Cube",
+      "text": "In the STARTING CONFIGURATION (the physical configuration in which a ROBOT starts a MATCH), all parts of the ROBOT must be fully stationary, and the ROBOT must be fully self-contained within an 18 in. (45.70 cm) wide, by 18 in. (45.70 cm) long, by 18 in. (45.70 cm) high volume. If a ROBOT uses interchangeable MECHANISMS per 3.3 MATCH Eligibility Rules, teams should be prepared to show compliance with this rule and R105 in all configurations. Any pre-loaded SCORING ELEMENTS may extend outside the starting size constraint.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.1 General ROBOT Design"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R103",
+      "series": "R",
+      "short_title": "ROBOTS may assist in holding the STARTING CONFIGURATION",
+      "text": "In the STARTING CONFIGURATION, ROBOTS must be fully self-supported (i.e., does not exert force on the sides or top of a sizing tool). ROBOTS may accomplish this using any combination of: A. mechanical means while powered-off, and/or B. initializing an OpMode that pre-positions servos and motors to a desired stationary position. OpMode may control motors and servos to hold their position to maintain the STARTING CONFIGURATION. ROBOTS holding STARTING CONFIGURATION during inspection or waiting for a MATCH to start may have to do so for several minutes and should limit the possibility of thermal failure (e.g., not having motors stalled against a hard stop). Teams should be especially cautious when operating a running ROBOT during inspection, please notify the INSPECTOR that the ROBOT is live.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.1 General ROBOT Design"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R104",
+      "series": "R",
+      "short_title": "There is no ROBOT weight limit",
+      "text": "There is no explicit weight limit for FIRST Tech Challenge ROBOTS playing BIOBUZZ. While there is no official weight limit, teams should still consider the impact of a ROBOT\u2019S weight on various factors including, but not limited to: - FIELD TILE damage - battery consumption - ROBOT transportation - overall ROBOT performance",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.1 General ROBOT Design"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R105",
+      "series": "R",
+      "short_title": "A ROBOT must stay as one assembly, and there are limits to how much it can expand",
+      "text": "After the MATCH has started, ROBOTS may expand beyond the STARTING CONFIGURATION but are still subject to sizing constraints relative to the ROBOT, based on the initial STARTING CONFIGURATION. The sizing constraints are: A. After the start of the MATCH, ROBOTS may expand beyond the STARTING CONFIGURATION but at all times must remain within a 18 in. (45.70 cm) by 24 in. (61.0 cm) by 29 in. (73.65 cm) tall sizing volume when fully expanded per G416, B. ROBOTS must be physically constrained to fit within these limits without the use of software, and C. ROBOTS may not be designed to deliberately detach COMPONENTS. The sizing limit volume is defined relative to the FIELD surface and is oriented such that the 29 in. (73.65 cm) dimension is always the vertical height above the FIELD surface. Figure 12-1: Expansion Limit - Top View Figure 12-2: Expansion Limit - Side View The sizing volume is defined relative to the FIELD surface and is oriented such that the 29 in. (73.65 cm) dimension is always the vertical height above the FIELD surface. ROBOTS are measured in \u201cstable\u201d configurations they would use during normal gameplay on the FIELD (i.e., with their wheels all touching the TILES). If a ROBOT is \u201ctilted\u201d slightly due to interactions on the FIELD, this is not a violation of this rule if the ROBOT would still be within the sizing volume when it is returned to a stable configuration. Teams should be prepared to demonstrate to INSPECTORS that their ROBOT has no configurations where it is outside the sizing volume. ROBOTS must show their maximum mechanical extensions during the inspection process. A ROBOT that can mechanically exceed the sizing limit would be in violation even if the ROBOT has software limiting the position of the extension during the MATCH. (Figure 12-3) Figure 12-3: Expansion Limit - Sizing Limit Violation A ROBOT with a single MECHANISM that can extend out of both sides of a ROBOT would be allowed as long as the overall dimension at maximum mechanical extension does not exceed the sizing limit. (Figure 12-4) Figure 12-4: Expansion Limit - Allowable Extension A ROBOT with multiple MECHANISMS that are not mechanically linked that can extend out of both sides of a ROBOT simultaneously would NOT be allowed if the overall horizontal dimension at maximum mechanical extension exceeds the sizing limit (Figure 12-5). Figure 12-5: Expansion Limit - Simultaneous Extension A ROBOT with an extension on a pivot that rotates in the horizontal plane would be allowed as long as the overall dimension does not exceed the sizing limit at any point in its travel (Figure 12-6). Figure 12-6: Expansion Limit - Rotating Extension",
+      "asterisk_marked": false,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.1 General ROBOT Design"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R201",
+      "series": "R",
+      "short_title": "ROBOTS should be designed so they don\u2019t damage anything or make a mess in the ARENA",
+      "text": "The ROBOT must not pose a risk of making a mess or pose a hazard to anything in the ARENA. The intent of this rule is that teams should design their ROBOTS in a way that will avoid damage to the ARENA and minimize the risk of ROBOTS releasing materials that would require cleanup and may result in damage and/or MATCH delays. SCORING ELEMENTS are expected to undergo a reasonable amount of wear and tear as they are handled by ROBOTS, such as scratching or marking. Gouging, tearing off pieces, or routinely and repeatedly marking SCORING ELEMENTS are violations of this rule and G406. Examples of \u201cdamage risk\u201d ROBOT features include, but are not limited to: A. traction devices with features that are known to damage the TILE floor, B. COMPONENTS with exposed sharp edges or sharp protrusions, and C. features with abrasive surfaces that scratch objects that rub across them. Examples of ROBOT features \u201cat risk of making a mess\u201d include, but are not limited to: D. excessive use of lubricants that may spin off or drip during ROBOT operation, E. any COMPONENT not secured sufficiently, including loose ballast such as sand, coffee beans, kitty litter, glitter, or ball bearings, such that it may be released on the FIELD during a MATCH, F. liquid or gel materials, G. tire sealant, and H. other lubricants including graphite powder.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.2 Fair Play & Damage Prevention"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R202",
+      "series": "R",
+      "short_title": "Design ROBOTS and OPERATOR CONSOLES for safety and fair play",
+      "text": "ROBOT and OPERATOR CONSOLE parts shall not be made from hazardous materials, be unsafe, cause an unsafe condition, or interfere with the operations of other ROBOTS or FIELD STAFF. Examples of items that may violate this rule include, but are not limited to: A. shields, curtains, or any other devices solely designed or used to limit the vision of any DRIVE TEAM members, B. audio devices that generate sound at a level sufficient to be a distraction or mimic MATCH sounds, C. any devices or decorations specifically intended to interfere with the remote sensing capabilities of another ROBOT, including vision systems, acoustic range finders, sonars, infrared proximity detectors, etc. This includes imagery on your ROBOT that utilizes or closely mimics 36h11 AprilTags, D. flammable gasses or any device intended to produce flames or pyrotechnics, E. hazardous materials like liquid mercury or lead, F. high intensity light sources used on the ROBOT should only be illuminated for a brief time while targeting and may invite additional scrutiny, and teams may be asked to disable or modify their lighting at the discretion of the Head REFEREE and/or LRI, G. animal based materials, H. any device designed to damage or flip competing ROBOTS, I. devices or conditions that pose an unnecessary risk of entanglement, J. decorative or functional lighting which flashes at greater than 5Hz will invite additional scrutiny and teams may be asked to disable or modify their lighting at the discretion of the Head REFEREE and/or LRI, and K. other items not listed which violate the spirit of the rule regarding safe and fair play.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.2 Fair Play & Damage Prevention"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R203",
+      "series": "R",
+      "short_title": "ROBOTS must be designed to be quickly removed from the FIELD without requiring power",
+      "text": "ROBOTS must allow removal of SCORING ELEMENTS from the ROBOT and the ROBOT from FIELD elements while powered off. Some events may allow teams to use ROBOT power during FIELD reset (e.g., driving a ROBOT to the edge of the FIELD) but ROBOTS should be designed such that this is not required.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.2 Fair Play & Damage Prevention"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R204",
+      "series": "R",
+      "short_title": "No grabbing the floor",
+      "text": "ROBOTS may not use any MECHANISM which is designed to increase downforce by either grabbing FIELD surfaces or by using some form of generated airflow to provide downward suction.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.2 Fair Play & Damage Prevention"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R301",
+      "series": "R",
+      "short_title": "COTS MECHANISMS are legal but have limits",
+      "text": "COTS MAJOR MECHANISMS purposefully designed to complete a game task are prohibited. Allowed exceptions to this rule are: A. COTS drive CHASSIS, provided none of the individual parts violate any other rules, and B. COTS MAJOR MECHANISMS created as part of the official FIRST Tech Challenge StarterBots. COTS parts are intended to help teams design and build ROBOT MECHANISMS to complete game tasks and solve challenges but are not intended to be purpose-built solutions to complete game objectives. A vendor selling \u201cbuild to print\u201d manufacturing of publicly available, purpose-built solutions is against the spirit of this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.3 Fabrication"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R302",
+      "series": "R",
+      "short_title": "Legal COTS parts and raw materials can be modified",
+      "text": "Allowed raw materials and legal COTS parts can be modified (drilled, cut, painted, etc.) as long as no other rules are violated. Raw materials refers to unfinished building stock including, but not limited to: A. sheet stock, B. extruded shapes, C. metals, plastic, rubber, and wood, and D. magnets.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.3 Fabrication"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R303",
+      "series": "R",
+      "short_title": "COTS must be single DoF",
+      "text": "COTS COMPONENTS and MECHANISMS must not exceed a single degree of mechanical freedom (DoF). Examples of allowed COTS single degree of freedom MECHANISMS and COMPONENTS are as follows: A. linear slide kit, B. linear actuator kit, C. single speed (non-shifting) gearboxes, D. pulley, E. turntable, F. lead screw, and G. single DoF gripper. Allowed exceptions to this rule are: H. ratcheting devices (wrenches, bearings, etc.), I. holonomic wheels (omni or mecanum), J. dead-wheel odometry kits, K. items that transfer motion between misaligned COMPONENTS (such as universal joints, flexible shaft couplers, and similar items), and L. items that connect structures at variable angles (such as ball joint linkages, rod ends, and similar items). The intent of this rule also extends to disallow highly specialized individual COMPONENTS only designed to assemble into a multiple DoF COTS COMPONENT. The general test for a single degree of freedom MECHANISM is whether the orientation and position of each COMPONENT in the MECHANISM can be generally predicted based on the orientation and position of a single COMPONENT (such as the input) of the system. Example 1: A mecanum drivetrain is made up of 4 independent drive modules, each with a single DoF (ignoring the DoF of the mecanum wheels as allowed by this rule), attached to a common structure (e.g., CHASSIS). The overall MECHANISM is still a single DoF. Example 2: Dead wheel odometry modules, allowed by this rule, are typically composed of a 1 DoF wheel (ignoring the effect of the holonomic wheel) providing forward/backwards motion and a spring force providing an additional unique rotational or vertical motion, creating a 2 DoF system. Example 3: Simple gripper claws, comprised of a single actuator moving 2 gripper jaws simultaneously or double actuators each controlling an independent gripper jaw, are by and large a single DoF. However, grippers that incorporate additional actuators providing additional twisting and/or bending actions (like a wrist) add degrees of freedom that are prohibited in COTS MECHANISMS.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.3 Fabrication"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R304",
+      "series": "R",
+      "short_title": "Custom software, designs, and parts can be reused year-to-year",
+      "text": "ROBOT software, designs, and FABRICATED ITEMS created before Kickoff are permitted.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.3 Fabrication"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R305",
+      "series": "R",
+      "short_title": "SCORING ELEMENTS are not allowed for ROBOT construction",
+      "text": "Current season SCORING ELEMENTS or replicas of SCORING ELEMENTS are not allowed to be used as part of ROBOT construction.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.3 Fabrication"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R401",
+      "series": "R",
+      "short_title": "Minimum of two ROBOT SIGNS per ROBOT",
+      "text": "ROBOT SIGNS must be placed in at least 2 separate locations on the ROBOT. These locations must be on opposite or adjacent surfaces of the ROBOT, \u226590 degrees apart. All ROBOT surfaces visible to FIELD STAFF can be used for placing ROBOT SIGNS including the top of the ROBOT. ROBOT SIGNS must meet the following criteria: A. be made of a robust material, B. minimally be 6.5 inches (16.5 cm) wide, C. minimally be 2.5 inches (6.4 cm) tall (Figure 12-7), and D. be supported by the structure/frame of the ROBOT. The intent of this rule is for FIELD STAFF to easily view ROBOT SIGNS from at least 12 feet (3.65 meters) away before, during, and after the MATCH. ROBOT SIGNS should be robust enough to withstand the rigors of MATCH play, but there is no specific guidance on what is robust enough. Teams should make a good faith effort with whatever they have available. Figure 12-7: Team Number ROBOT SIGN Sizing",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.4 ROBOT SIGN Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R402",
+      "series": "R",
+      "short_title": "ROBOT SIGNS indicate your ALLIANCE",
+      "text": "Each ROBOT SIGN must contain a rectangle with a solid red or blue opaque background at least 6.5 in. by 2.5 in. (16.50 cm by 6.35 cm) in size to indicate their ALLIANCE color (Figure 12-7), as assigned in the MATCH schedule at the event. Visible markings on ROBOT SIGNS when installed on the ROBOT, other than the following, are prohibited: A. those required per R403, B. small amounts of hook-and-loop tape, hard fasteners, or functional equivalents, C. narrow areas of differing colors exposed at corners, folds, or cutouts, D. narrow markings on background solely for template purposes, and E. cannot be powered or rely on power from any sources to illuminate/reveal ALLIANCE color. ROBOT SIGNS that are reversible or configurable must not allow the opposite ALLIANCE color to be visible to FIELD STAFF, except where permitted by this rule. Figure 12-8: Minimum sized ALLIANCE rectangle",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.4 ROBOT SIGN Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R403",
+      "series": "R",
+      "short_title": "Team number on ROBOT SIGNS",
+      "text": "Team numbers must be displayed and positioned on the ROBOT SIGN as shown in Figure 12-7, Figure 12-9, and Figure 12-10 and meet the following additional criteria: A. consist of solid opaque white Arabic numbers (e.g., 1,2,3,4) which are approximately 2.25 in. (5.70 cm) tall, B. there must be a minimum of approximately 0.25 in. (0.60 cm) of background surrounding the numbers, C. numbers may not be vertically stacked (Figure 12-10), D. be made of robust materials, and E. cannot be powered or rely on power from any sources to illuminate/reveal numbers. Figure 12-9: Legal number for team 21001 playing on the blue ALLIANCE Figure 12-10: Team number orientation examples for team 1355 playing on the blue ALLIANCE If a team at an event does not have completely legal ROBOT SIGNS, and there is no color printer or other means available at the event to create a legal ROBOT SIGN, the Head REFEREE may approve an alternate substitute for use at the event. Team numbers should be robust enough to withstand the rigors of MATCH play, but there is no specific guidance on what is robust enough. Teams should make a good faith effort with whatever they have available. If there are limited materials available at an event, substitute ROBOT SIGNS may be simply handwritten on plain paper. Examples of prohibited team numbers on ROBOT SIGNS include, but not limited to: - team numbers only visible by edge lit engraved plastic - LED Display numbers",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.4 ROBOT SIGN Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R501",
+      "series": "R",
+      "short_title": "Only specific motors are allowed",
+      "text": "The only allowed motor actuators are: Table 12-1: Motor allowances [[TABLE:12-1]] Additional motors may be added to the legal motor list in future Competition Manual updates. Many legal gearmotors are sold with labeling based on the entire assembly. These motors may be used with or without the provided gearbox, and/or with any other compatible gearbox.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-1"
+      ]
+    },
+    {
+      "rule_id": "R502",
+      "series": "R",
+      "short_title": "Servo usage is restricted",
+      "text": "Servo actuators must meet the requirements below. Servos must be compatible with the power regulation devices they are ultimately used with (per R505) and may include additional servo position output interfaces (e.g., 4th Wire Position Feedback). Table 12-2: Servo Requirements at 6V [[TABLE:12-2]] Servos must meet both requirements to be legal for use. Refer to the Inspection Quick Reference document for a list of servos that are pre-approved, otherwise teams must be able to provide documentation verifying servo specifications. Use the online calculator to verify output power compliance. If a manufacturer does not provide 6V specs, any specs for voltages that exceed 6V are allowed to be used. Stall current is the maximum stall current possible for the device at the specified voltage, regardless of any user or VENDOR adjustable software limits that may be available within the servo. It is important to ensure the voltage provided by the intended power regulation device is within the operating voltage range of the desired servo. The REV Control Hub and REV Expansion Hub provide 5V to servos, and the goBILDA Servo Power Injector, REV Servo Power Module, Studica Servo Power Block, and REV Servo Hub provide 6V to servos. While virtually all servos are compatible with 6V, servos with an operating voltage range of 6-8.4 DCV, for example, may not work properly when only provided 5V.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-2"
+      ]
+    },
+    {
+      "rule_id": "R503",
+      "series": "R",
+      "short_title": "ROBOTS are limited to a total of 8 motors and 8 servos",
+      "text": "A ROBOT may not have more than 8 motors and 8 servos from the allowable actuator lists per R501 and R502 for all MECHANISMS used in all configurations. If a ROBOT has multiple configurations used at a single event which use different MECHANISMS, the sum total of all motors and servos must be less than or equal to the limit set in this rule.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R504",
+      "series": "R",
+      "short_title": "Do not modify actuators unless explicitly allowed",
+      "text": "The integral mechanical and electrical system of any motor or servo must not be modified. Motors and servos used on the ROBOT shall not be modified in any way, except as follows: A. the mounting brackets and/or output shaft/interface (including pinion gears) may be modified to facilitate the physical connection of the motor to the ROBOT and actuated part, B. the electrical leads may be trimmed to length as necessary and connectors or splices to additional wiring may be added (per R609), and purely electrical enclosures can be substituted with functionally equivalent replacements, C. servos may be modified as specified by the manufacturer (e.g., setting soft limits or modification for continuous rotation), D. labeling may be applied to indicate device purpose, connectivity, functional performance, etc. as long as the team applied label does not obstruct the markings used to identify the device, E. insulation may be applied to electrical terminals, F. repairs, provided the original performance and specifications are unchanged, and G. maintenance recommended by the manufacturer.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R505",
+      "series": "R",
+      "short_title": "All actuators must be controlled and powered through approved devices",
+      "text": "With the exception of servos, fans, or motors integral to sensors of COTS computing devices permitted in R501, all actuator control signals must originate from a power regulating device. The only power regulating devices for actuators permitted on the ROBOT are: Table 12-3: Power Regulators and Limits [[TABLE:12-3]]",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-3"
+      ]
+    },
+    {
+      "rule_id": "R506",
+      "series": "R",
+      "short_title": "The use of relays, electromagnets, and electrical solenoid actuators is prohibited",
+      "text": "The application of electromechanical actuation through the use of additional relays, electromagnets, electrical solenoid actuators, or related systems is prohibited. In addition, the use of relays and electromagnets is also prohibited.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.5 Motors & Actuators"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R601",
+      "series": "R",
+      "short_title": "ROBOTS can contain only 1 main battery",
+      "text": "ROBOTS must contain 1 and only 1 approved 12V NiMH main battery. This battery is only legal source of electrical energy for the ROBOT control system and actuation during the competition and must be unaltered from the battery manufacturer state except as follows: A. the fuse may be replaced with a COTS equivalent in-line 20A ATM mini blade fuse installed per R610, and B. installed connectors may be replaced with other popular connectors such as Anderson Powerpole, XT30, or any connector with a comparable power rating. The only allowed ROBOT main power battery packs are: Table 12-4: Legal ROBOT Main Power Battery Packs [[TABLE:12-4]] There are many other similar style batteries available from multiple VENDORS, but only the listed manufactures and part numbers are legal for use at FIRST Tech Challenge Events. Other batteries may be used for self-contained devices as listed in R602.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-4"
+      ]
+    },
+    {
+      "rule_id": "R602",
+      "series": "R",
+      "short_title": "Other batteries are only allowed for self-contained peripheral devices and LEDs only",
+      "text": "COTS USB battery packs with a capacity of 100Wh or less (27,000mAh at 3.7V), with 5V/5A max output or 12V/5A max output using USB-PD per port, and batteries integral to a self-contained devices such as camera (e.g., GoPro-style camera) may be used provided they are: A. not supplying power to any of the ROBOT actuators, and B. not used by any devices receiving control signals from the ROBOT control system (i.e., COTS USB battery packs must remain electrically isolated from the ROBOT power systems.). Exceptions to part B of this rule are: i. powered USB Hubs, and ii. ROBOT CONTROLLER smartphones. Any device receiving signals from a REV Control or Expansion Hub must be powered by the main ROBOT battery.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R603",
+      "series": "R",
+      "short_title": "Connect the ROBOT battery though the Main Power Switch",
+      "text": "Exactly one main power switch must control all power provided by the ROBOT battery pack to all power regulating devices on the ROBOT (except as specified by R602) such that all the following conditions are met: A. must be one of the following approved power switches: Table 12-5: Legal Power Switches [[TABLE:12-5]] B. must be mounted or located where it is accessible to the team, away from high-speed moving parts and pinch hazards, and C. secondary power switches can be used on the 12V line downstream of the main power switch. There are no specific location requirements for the main power switch, but it should be located clear of any high-speed moving parts and pinch hazards. Teams are permitted to mount the main power switch behind removable panels. The main power switch should be mounted on the ROBOT such that it is protected from ROBOT-to-ROBOT contact to avoid inadvertent actuation or damage.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-5"
+      ]
+    },
+    {
+      "rule_id": "R604",
+      "series": "R",
+      "short_title": "Fuses must be used as directed and must not be modified",
+      "text": "The intent of this rule is that teams utilize fuses as directed by a device manufacturer, and do not attempt to gain a competitive advantage by modifying the fuses, replacing the fuses with ones that have a higher trip point, or replacing them with fuses that are self-resetting.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R605",
+      "series": "R",
+      "short_title": "The ROBOT frame cannot be used as a current path",
+      "text": "All wiring and electrical devices shall be electrically isolated from the ROBOT frame. The ROBOT frame must not be used to carry electrical current. Electrically grounding the control system electronics to the frame of the ROBOT is only permitted such that all of the following conditions are met: A. straps/cables used must be from the following approved parts: Table 12-6: Legal ROBOT Grounding Straps [[TABLE:12-6]] B. the strap/cable must directly connect to a fully COTS COMPONENT with an XT30 connector, and also must connect directly to the frame of the ROBOT (via the resistive terminal), and C. no ROBOT COMPONENTS or MECHANISMS are designed to electrically ground the ROBOT frame to the FIELD. For additional details on installation of the grounding strap, please see the ROBOT Wiring Guide.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-6"
+      ]
+    },
+    {
+      "rule_id": "R606",
+      "series": "R",
+      "short_title": "ROBOT CONTROLLER and the ROBOT electrical system must be inspectable",
+      "text": "ROBOT electrical COMPONENTS must be mounted with accessibility in mind, as follows: A. all power regulating devices (per R505), associated wiring, and all fuses must be able to be made visible for inspection, and B. the ROBOT CONTROLLER device must be mounted on the ROBOT such that the diagnostic lights, or device screen if applicable, can be visible for inspection. \u201cVisible for inspection\u201d does not require that the items be visible when the ROBOT is in STARTING CONFIGURATION or normally during a MATCH, provided the team can make the items viewable during the inspection process if necessary. Teams are strongly encouraged to make the diagnostic lights visible in all ROBOT configurations used during normal MATCH play. If diagnostic LEDs are not visible during a MATCH, FIELD STAFF may not be able to provide comprehensive support to the team.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R607",
+      "series": "R",
+      "short_title": "Custom Circuits must not provide regulated power above 5V unless they are only powering LEDs",
+      "text": "Any active electrical item that is not an actuator (specified in R501) or power regulation device (specified in R505) is considered a CUSTOM CIRCUIT. CUSTOM CIRCUITS shall not provide regulated output voltages exceeding 5V, except if solely used for powering LEDs. CUSTOM CIRCUITS may pass through unregulated battery voltage.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R608",
+      "series": "R",
+      "short_title": "All Power regulating devices must be connected and powered through approved ports",
+      "text": "All power regulating devices (R505) must be powered per the manufacturer\u2019s instructions and the following table must be true: Table 12-7: Power Regulation Device Power Requirements [[TABLE:12-7]]",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-7"
+      ]
+    },
+    {
+      "rule_id": "R609",
+      "series": "R",
+      "short_title": "Use appropriately sized wire",
+      "text": "All circuits shall be wired with appropriately sized insulated wire: Table 12-8: Wire sizing requirements [[TABLE:12-8]] Integrated wires originally attached to legal COTS devices or wires included/sold by the manufacturer are considered part of the device and by default legal. Such wires are exempt from this rule. In order to show compliance with these rules, teams should use wire with clearly labeled sizes if possible. If unlabeled wiring is used, teams should be prepared to demonstrate that the wire used meets the requirements of this rule (e.g., wire samples and evidence that they are the required size). Combining multiple smaller wires in parallel cannot be used to create an equivalent larger wire which meets minimum wire cross section requirements.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-8"
+      ]
+    },
+    {
+      "rule_id": "R610",
+      "series": "R",
+      "short_title": "Use specified wire colors for specific buses",
+      "text": "The 12V main power bus and +5V auxiliary bus wires must be color-coded along their entire length. The following colors must be used: A. positive (e.g., +12VDC / +5V Aux): red, yellow, white, brown, or black-with-stripe, and B. negative (e.g., common/GND): black or blue. Note: this rule does not apply to other types of wires including, but not limited to: motor wiring, signal level wiring (e.g., encoder and sensor wires), servo cables, and extensions, or wires originally attached to legal devices by their manufacturer.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R611",
+      "series": "R",
+      "short_title": "Powered USB hubs must draw energy from approved sources",
+      "text": "Powered USB hubs used on the ROBOT can only be powered through one of the following ways: A. an approved COTS USB battery Pack per R602, or B. the 5V auxiliary power port on the REV Expansion Hub or REV Control Hub.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R612",
+      "series": "R",
+      "short_title": "Do not modify critical power paths",
+      "text": "CUSTOM CIRCUITS must not directly alter the power or control pathways between: A. the ROBOT battery and main power switch, B. the main power switch and a power regulating device (per R603), C. any two power regulating devices (per R607), or D. power regulating devices and actuators. Custom high impedance voltage monitoring or low impedance current monitoring circuitry connected to the ROBOT\u2019S electrical system is acceptable if the effect on power pathways is inconsequential. Altering a power pathway includes, but is not limited to, altering the voltage of the power pathway using a boost (DC voltage step-up) or buck (DC voltage step-down) converter or otherwise altering the natural variable DC voltage provided by the ROBOT battery to create a constant DC voltage. Devices that modify actuator control signals or power (except those allowed by R505) are prohibited, such as the goBILDA Servo Travel Tuner.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R613",
+      "series": "R",
+      "short_title": "Do not mix and match power on or between power regulation devices",
+      "text": "The following rules must be adhered to when using power on any power regulation device (per R505): A. sensors, encoders, and other devices must be powered solely by the power regulation device they are connected to. Do not use outside power sources (e.g., custom circuits or a second hub) to power them, B. power from a specific port may only power devices plugged into that exact port. Do not cross-wire power to other ports, and do not combine power from multiple ports into a single power bus/line, C. 6V power from approved Servo Power modules/injectors may only be used to power servos, and D. the +5V Aux port on a REV hub may be used to power devices not connected to other power regulation devices except via USB.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.6 Power Distribution"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R701",
+      "series": "R",
+      "short_title": "Control the ROBOT with a single ROBOT CONTROLLER",
+      "text": "ROBOTS must be controlled via 1 programmable ROBOT CONTROLLER. The ROBOT CONTROLLER is the only source of control for the ROBOT actuators and must be comprised of: A. a REV Control Hub (REV-31-1595), or B. a smartphone Android device connected to a REV Expansion Hub (REV-31-1153). In addition to A or B, a ROBOT may also contain: C. no more than one additional REV Expansion Hub (REV-31-1153). We recommend teams always keep all control system device software up to date. Check the FIRST Tech Challenge Firmware Update Page for release announcements and most recent software versions. Due to unpredictable variations in Android software across different manufacturers and updates, the REV Control Hub is the only officially supported ROBOT CONTROLLER device. Teams choosing to use any other unsupported device (e.g., smartphones) are responsible for testing and verifying its compatibility, functionality, and performance.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R702",
+      "series": "R",
+      "short_title": "Teams may not alter coprocessor software",
+      "text": "Modifying software on coprocessors, unless explicitly permitted in this rule, is not allowed by teams. Firmware updates in binary form provided by the manufacturer may be applied as directed by the manufacturer. Programmable vision coprocessors natively supported by the FTC SDK are an exception to this rule, and reprogramming them is permitted. A list of programmable vision coprocessors is found in Table 12-9. Table 12-9: Supported programmable vision coprocessors [[TABLE:12-9]] The following are examples of allowed and disallowed devices: Example 1: The Adafruit BNO055 Absolute Orientation Sensor is an IMU package with an onboard ARM Cortex-M0 based coprocessor to crunch sensor data and produce composite output. Its coprocessor contains software that is not intended by the manufacturer to be modified by users. This device is allowed. Example 2: The SparkFun Optical Tracking Odometry Sensor is a laser and IMU tracking device that uses an onboard microcontroller to perform complex calculations and produce simplified results. SparkFun does provide the source code and toolchain for advanced users to modify/update the software, which is not permitted by this rule. Firmware updates provided by SparkFun are allowed to be applied to the device. This device is allowed. Example 3: The Digital Chicken Labs OctoQuad FTC Edition is an 8-channel encoder/PWM interface, utilizing a Raspberry Pi Pico coprocessor. Teams are not permitted to modify software running on the device, including replacing the software with their own. Updates provided in binary form by the manufacturer (Digital Chicken Labs) may be applied to the device. This device is allowed. Example 4: Optical Flow sensors are an example of a sensor that utilizes a vision coprocessor that is treated no differently than other coprocessors per R702. These devices are allowed. Example 5: The DFRobot HuskyLens and the Charmed Labs Pixy2 are examples of vision coprocessors that are configurable but not programmable and are treated no differently than other coprocessors per R702. These devices are allowed. Example 6: The OpenMV Cam, Luxonis OAK-1, and LimeLight Vision Limelight 3G are examples of programmable vision coprocessors that are prohibited.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "12-9"
+      ]
+    },
+    {
+      "rule_id": "R703",
+      "series": "R",
+      "short_title": "Smartphone Android devices used as a ROBOT CONTROLLER must connect to the REV Expansion Hub using USB",
+      "text": "If used as a ROBOT CONTROLLER, the smartphone Android device must be connected via its integrated USB port to a REV Expansion Hub with any combination of USB cables (including USB OTG cables) and/or USB hubs (powered or unpowered, with or without OTG integrated into the hub).",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R704",
+      "series": "R",
+      "short_title": "Use networks and bandwidth as directed",
+      "text": "Teams and ROBOTS must use Wi-Fi networks and bandwidth in a way that enables fair play and does not interfere with other teams or ARENA operations. Teams must abide by the following guidelines: A. Teams may not use any other form of wireless communication, except those offered by the provided official tools, to communicate to, from, or within the ROBOT. B. Teams may not interfere with the ROBOT networks. All communication signals must originate from only the ROBOT CONTROLLER device or the DRIVER STATION device using the ROBOT CONTROLLER Wi-Fi network. No other devices may attempt to connect to, interfere with, or alter the ROBOT CONTROLLER Wi-Fi network. C. Ensure all programming laptops and other devices (other than the DRIVER STATION device) are disconnected from the ROBOT CONTROLLER Wi-Fi network during MATCH play. D. Software with access to the ROBOT CONTROLLER Wi-Fi network must limit the amount of data being streamed (i.e., continuous transmission of data) over Wi-Fi. Software may only stream robot control data, debugging data, and telemetry to and from the ROBOT using the FTC Driver Station Application. Additional logging/streaming services, such as those hosted by third party plugins and tools such as FTC Dashboard, FTControl Panels, and others are prohibited. No continuous video stream is allowed. E. Some events may assign Wi-Fi bands and/or channels to teams. If requested by event staff, teams must use the specific frequency band or channel on the day of the competition.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R705",
+      "series": "R",
+      "short_title": "Configure devices for your team number",
+      "text": "The ROBOT CONTROLLER, DRIVER STATION, and any spares used must be configured/named to correspond to the correct team number as follows: A. ROBOT CONTROLLER should be named <team number>-RC (e.g., 12345-RC), B. DRIVER STATION should be named <team number>-DS (e.g., 12345-DS), and C. If a spare ROBOT CONTROLLER or DRIVER STATION is configured, a letter designator may be added <team number>-<letter>-RC/DS (e.g., 12345-A-DS, 12345-B-DS) See the DRIVER STATION Instructions and ROBOT CONTROLLER Instructions for a detailed procedure for updating DRIVER STATION and ROBOT CONTROLLER \u201cnames.\u201d",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R706",
+      "series": "R",
+      "short_title": "Only specified modifications to core control system devices are permitted",
+      "text": "The DRIVER STATION device and software, Android-based ROBOT CONTROLLER device, main and secondary power switch(es), power regulation devices, fuses, and batteries shall not be tampered with, modified, or adjusted in any way (tampering includes drilling, cutting, machining, rewiring, disassembling, painting, removing enclosures and replacing with custom enclosures, etc.), with the following exceptions: A. wires, cables, and signal lines may be connected via the standard connection points provided on the devices, B. fasteners (including adhesives) may be used to attach devices to the OPERATOR CONSOLE or ROBOT or to secure cables to the device, C. thermal interface material may be used to improve heat conduction, D. labeling may be applied to indicate device identification, purpose, connectivity, functional performance, etc. as long as they do not cover labels or markings used to identify the product, E. jumpers or switches may be moved to configure devices per the manufacturer\u2019s manual, F. device firmware may be updated with manufacturer supplied firmware, G. integral wires on motor controllers and batteries may be cut, stripped, and/or connectorized, H. devices except batteries may be repaired, provided the performance and specifications of the device after the repair are identical to those before the repair, I. insulating material may be added to exposed conductors, J. tape may be applied for debris protection, and K. power switch mounting brackets can be modified or replaced. Please note that while repairs are permitted, the allowance is independent of any manufacturer\u2019s warranty. Teams make repairs at their own risk and should assume that any warranty or return options are forfeited. Repairs must be functionally equivalent to original device condition. Be aware that diagnosing and repairing COMPONENTS such as these can be difficult. For example, \u201crepairs\u201d that change connector types, include device footprint modifications, or provide mechanical enhancements, are prohibited.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R707",
+      "series": "R",
+      "short_title": "USB is for vision",
+      "text": "Only the following devices may be connected to the ROBOT control system using USB: A. webcams and optical vision sensors per R708, B. USB hub or USB switch, and C. a REV Expansion Hub.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R708",
+      "series": "R",
+      "short_title": "Use only supported USB vision",
+      "text": "Only single image sensor vision devices that are natively supported by the ROBOT CONTROLLER app are allowed to connect to USB (stereoscopic cameras are not allowed). This includes the following: A. all UVC compatible USB webcams (Logitech C270, and related), and B. Vision coprocessors allowed per R702. UVC compatible USB webcams may only use the UVC provided stream / data. No other interfaces or data provided by the webcam may be used. To request support (or to provide sample drivers) for alternate USB vision devices for inclusion in future FIRST Tech Challenge seasons, please send an email to customerservice@firstinspires.org with the following details: - Subject of email should be: \u201cUSB Vision Future Support Request\u201d - Contact details for providing feedback or clarifications - Details on the device requesting support",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R709",
+      "series": "R",
+      "short_title": "Recording devices are okay",
+      "text": "Self-contained video recording devices (GoPro or similar) are allowed providing they are used only for non-functional post-MATCH viewing and the wireless capability is turned off.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R710",
+      "series": "R",
+      "short_title": "Lasers are only allowed if they\u2019re part of a sensor, low-energy, and non-visible",
+      "text": "Lasers are not allowed unless they meet all of the following criteria: A. must be part of a sensor, B. must be rated as IEC/EN 60825-1 \u201dClass I\u201d or IEC/EN 62471 \u201cExempt,\u201d and C. must use non-visible spectrum.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R711",
+      "series": "R",
+      "short_title": "Configure Android devices appropriately",
+      "text": "ROBOT CONTROLLER and DRIVER STATION Android devices (smartphones, REV Control Hub, REV Driver Hub) must additionally be configured in the following ways: A. REV Control Hub users must change the Wi-Fi password to a non-default password, B. smartphone users must enable Airplane Mode, C. on ROBOT CONTROLLER and DRIVER STATION Android devices, Wi-Fi must be enabled and Bluetooth must be disabled, and D. on DRIVER STATION Android devices, remove all remembered Wi-Fi Direct Groups and Wi-Fi connections, leaving only the ROBOT CONTROLLER Wi-Fi connection.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.7 Control, Command & Signals System"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R801",
+      "series": "R",
+      "short_title": "No Pneumatic Actuators, High-Speed Blowers, or Vacuums",
+      "text": "ROBOTS are restricted in their use of air in the following ways: A. ROBOTS may only use sealed, COTS closed-air systems which are pre-charged by the manufacturer (such as gas shocks), B. ROBOTS may not use any stored pressure COMPONENTS that are actuated by a device like a solenoid and/or are able to change their stable state, C. ROBOTS may not generate pressure or vacuum, D. ROBOTS may not use any user-adjustable gas storage vessels, except air-filled (pneumatic) COTS wheels, and E. ROBOTS may not use any device which creates high-speed airflow, except cooling fans integrated into COTS computing devices. The intent of this rule is that ROBOTS may not use pneumatic actuators, pressure or vacuum storage devices, compressors, vacuum generators, or air blowers, but they may use \u201cclosed air\u201d systems which were sealed by their manufacturer. This includes items such as gas springs, and dampers. Examples of a \u201cdevice which creates high-speed airflow\u201d include but are not limited to a fan designed to move SCORING ELEMENTS on the FIELD. High-speed flywheels or rollers used for manipulating SCORING ELEMENTS would not on their own be considered a high-speed airflow device.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.8 Pneumatic Systems & Airflow Devices"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R901",
+      "series": "R",
+      "short_title": "Use only a specified DRIVER STATION device",
+      "text": "The OPERATOR CONSOLE may only have one approved Android-based DRIVER STATION device connected and powered on. The OPERATOR CONSOLE must have at least one of the following: A. REV Driver Hub (REV-31-1596), or B. Any Android Device with or without any combination of USB cables (including USB OTG cables) and/or USB hubs (powered or unpowered, with or without OTG integrated into the hub) for connecting one or more gamepads. Due to unpredictable variations in Android software across different manufacturers and updates, the REV Driver Hub is the only officially supported DRIVER STATION device. Teams choosing to use any other unsupported device (e.g., smartphones) are responsible for testing and verifying its compatibility, functionality, and performance. Teams who wish to have a spare DRIVER STATION device as part of their OPERATOR CONSOLE may do so as long as only one DRIVER STATION device is connected and powered on at a time.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.9 OPERATOR CONSOLE"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R902",
+      "series": "R",
+      "short_title": "The OPERATOR CONSOLE must make the touch screen accessible",
+      "text": "The OPERATOR CONSOLE, the set of COMPONENTS and MECHANISMS used by the DRIVE TEAM to relay commands to the ROBOT, must make the touch screen of the DRIVER STATION device accessible. The DRIVER STATION device must be positioned within the OPERATOR CONSOLE so that the screen display can be clearly seen during inspection and in a MATCH. The DRIVER STATION device touch screen must be functional without the requirement of additional aides (e.g., mouse) in order to be used.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.9 OPERATOR CONSOLE"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R903",
+      "series": "R",
+      "short_title": "OPERATOR CONSOLE physical requirements",
+      "text": "The OPERATOR CONSOLE, including all power sources (e.g., power banks), must not exceed a volume of 3ft wide, 1ft 6in deep and 2 ft tall (91.4 cm by 45.7 cm by 61.0 cm), excluding any items that are held or worn by the DRIVERS during the MATCH. Also refer to R203 for restrictions on designing OPERATOR CONSOLES for fair play and ARENA safety. Please note that while there is no hard weight limit, OPERATOR CONSOLES that weigh more than 20 lbs. (~9 kg.) will invite extra scrutiny as they are likely to disrupt normal ARENA operations. Teams who wish to have a spare external USB hub as part of the OPERATOR CONSOLE may do so as long as only one USB hub is connected at any time. The intent of this rule is to allow teams to use a container to store, organize, and transport the DRIVER STATION device and support electronics. The OPERATOR CONSOLE rules are not intended to allow systems that function as a ROBOT cart or replace a competition-provided OPERATOR CONSOLE stand, table, etc.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.9 OPERATOR CONSOLE"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "R904",
+      "series": "R",
+      "short_title": "ROBOT application wireless communication only",
+      "text": "Other than the connection controlled by the ROBOT CONTROLLER app running on the ROBOT and the DRIVER STATION app running on the DRIVER STATION device, no other form of wireless communications shall be used to communicate to, from, or within the OPERATOR CONSOLE during a MATCH. Examples of prohibited wireless systems include, but are not limited to, active wireless network cards, wireless gamepad communication, and Bluetooth devices.",
+      "asterisk_marked": true,
+      "section_path": [
+        "12 ROBOT Construction Rules (R)",
+        "12.9 OPERATOR CONSOLE"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T201",
+      "series": "T",
+      "short_title": "Replays are allowed, but rare",
+      "text": "MATCH replays are only allowed in extreme circumstances due to an ARENA FAULT or for MATCHES which are stopped because FIELD STAFF anticipated FIELD damage or personal injury. An ARENA FAULT is an error in ARENA operation that includes, but is not limited to: A. broken FIELD elements due to normal, expected gameplay, B. broken FIELD elements due to ROBOT abuse of FIELD elements that affects the outcome of the MATCH for their opponents, A broken FIELD element caused by ROBOT abuse that affects the outcome of the MATCH for their ALLIANCE is not an ARENA FAULT. C. FIELD elements moving beyond normal tolerances (not as the result of ROBOT interaction), D. Wide-spread wireless interference affecting multiple ROBOTS typically at the same time and on both ALLIANCES, E. failure of the MATCH timer display, or F. errors by FIELD STAFF (except those listed in Section 10.8 Other Logistics). If, as determined by the Head REFEREE, an ARENA FAULT occurs that affects the outcome of the MATCH and any team on the affected ALLIANCE desires a replay, the MATCH will be replayed. In addition, FIRST Headquarters reserves the right to, with consultation of the Head REFEREE and FIELD STAFF, replay any MATCH in which an ARENA FAULT impacts the outcome of an event. Unexpected ROBOT behaviors which are the fault of the team are not justifications for a replay. Conditions such as, but not limited to, low ROBOT battery, programming issues, or ROBOT mechanical problems are not grounds for a replay. The outcome of the MATCH is affected if an error occurs that, as perceived by the Head REFEREE, changes which ALLIANCE would have won the MATCH and/or the assignment of RANKING POINTS. The outcome of an event is affected if an error occurs that, in the judgement of FIRST Headquarters, changes the assignment of RANKING POINTS or has a dramatic effect on points used for ranking criteria. Note that an ARENA FAULT that does not affect MATCH outcome, as perceived by the Head REFEREE, does not lead to a MATCH replay. Examples include, but are not limited to: A. a piece of FIELD plastic falls into the FIELD, far away from any human or ROBOT activity, and in such a way that it does not affect MATCH outcome, B. delay in the playing of an ARENA sound, and C. any adjustment or delay in assignment of a penalty or scoring achievement (including those made after the MATCH).",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.2 MATCH Replays"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T202",
+      "series": "T",
+      "short_title": "Replays will replicate the conditions of the original MATCH",
+      "text": "All reasonable effort is made to create the same conditions when replaying a MATCH caused by an ARENA FAULT or FIELD damage. This includes: A. a ROBOT that was not present for the MATCH or DISABLED prior to the start of the original MATCH, which is to be replayed, is DISABLED for the replay MATCH B. the same FIELD will be used unless otherwise deemed necessary by the Head REFEREE due to severity of FIELD damage Exceptions to this rule are: C. ROBOT and DRIVE TEAM starting locations and pre-loaded SCORING ELEMENTS do not need to be replicated when replaying a MATCH While efforts will be made to replicate the same conditions of the original MATCH, there are environmental factors, such as changes to ambient lighting, that may be outside the control of the event.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.2 MATCH Replays"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T301",
+      "series": "T",
+      "short_title": "Head REFEREE interactions",
+      "text": "A team may only address the Head REFEREE with a maximum of 2 people, 1 of which must be a STUDENT. Violation: The Head REFEREE will not address additional, non-compliant team members or peripheral conversations. Some events may restrict ARENA access to members of the DRIVE TEAM. Team members are permitted to swap buttons within their team as needed to access the Question Box. As much as possible, the STUDENT should be an active participant in the conversation. Teams should not record interactions without consent (see E116).",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.3 Clarifications on MATCH Play Results (\u201cQuestion Box\u201d)"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T302",
+      "series": "T",
+      "short_title": "MATCH questions must be timely",
+      "text": "If a team would like to clarify or dispute the results of a MATCH using the process per T301 they must present their STUDENT representative in the question box in a timely manner as outlined below: A. questions regarding events in a Qualification MATCH may be asked at any time before ALLIANCE selection begins, or within 5 minutes of the last Qualification MATCH at events without Playoff MATCHES, and B. questions regarding events in a Playoff MATCH must be asked before the start of the next Playoff round or, for the last Playoff MATCH, immediately following the MATCH. Please keep in mind that our REFEREES are human, and the more time has passed between the MATCH in question, the less likely they are to remember the details of a specific MATCH. It is best to ask for clarification or to dispute the results of a MATCH within 3 MATCHES. Teams are encouraged to ask questions as soon as possible. Questions asked more than 5 minutes after the last Playoff MATCH will likely not be addressed.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.3 Clarifications on MATCH Play Results (\u201cQuestion Box\u201d)"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T303",
+      "series": "T",
+      "short_title": "Keep questions factual and constructive",
+      "text": "Teams coming to the Question Box should think through their requests in advance and are encouraged to have relevant references to rules or the Q&A website available to aid discussions. There should be no negative implications for teams using the question box to advocate for themselves, but everyone should keep in mind it can be a high stress situation for team youth and for volunteers alike and it is important to remember FIRST Core Values during these discussions. At some events, MATCH results may be available on the FTC-Events page.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.3 Clarifications on MATCH Play Results (\u201cQuestion Box\u201d)"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T401",
+      "series": "T",
+      "short_title": "The Head REFEREE has ultimate and final authority regarding gameplay during the event",
+      "text": "The Head REFEREE may receive input from additional sources, e.g., FIRST personnel, FTA, Event Director, Program Delivery Partner, and other event staff. The Head REFEREE rulings are final. No event staff, including the Head REFEREE, will review video, photos, artistic renderings, etc. of any MATCH, from any source, under any circumstances. A. When issuing a RED CARD or YELLOW CARD the Head REFEREE must record the rule violation. B. Event Directors and Program Delivery Partners may not overrule a Head REFEREE decision. C. Framework of Behaviors and Competition Integrity Contract (CIC) violations may involve escalation beyond the Head REFEREE\u2019S initial ruling. D. Every Qualification and Playoff MATCH must be observed by a certified Head REFEREE. Head REFEREES may only watch 1 MATCH at a time. Rules in this manual are written for human Head REFEREES to enforce. Some have clear unambiguous criteria which can be easily checked, but other rules will rely on human judgement. Head REFEREES are asked to make the best call they can in the moment with what they or other REFEREES observed during the MATCH. When there is an ambiguous situation or controversial call it is human instinct to wonder what was the \u201cright call\u201d or \u201cwhat-if...\u201d - for the purposes of FIRST Tech Challenge gameplay, the right call is the one that was made in good faith by the Head REFEREE with the information they had available at the time.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T402",
+      "series": "T",
+      "short_title": "Only REFEREES can declare a ROBOT DISABLED",
+      "text": "A ROBOT is only considered DISABLED once a REFEREE has declared the ROBOT DISABLED during a MATCH. A ROBOT may be DISABLED as a consequence of a rule violation or due to a ROBOT failure. If a REFEREE DISABLES a ROBOT as a consequence for a rule violation, the REFEREE may instruct the team to drive the ROBOT to a specific neutral position on the FIELD before DISABLING.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T403",
+      "series": "T",
+      "short_title": "The Event Director has ultimate authority regarding all non-gameplay decisions during an event",
+      "text": "The Competition Manual is intended to provide a set of rules for the competition including gameplay and judging but it is not an exhaustive compilation of guidelines for running a FIRST Tech Challenge event. Issues outside of specific gameplay rules which are under the authority of the Head REFEREE per T401 are at the discretion of the Event Director such as, but not limited to: A. venue access as published via the public schedule, B. pit sizes and utility access, C. health and safety, D. team registration and competition eligibility, and E. team conduct away from the ARENA.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T404",
+      "series": "T",
+      "short_title": "All competition FIELDS at an event must be consistent with each other",
+      "text": "Events which have multiple competition FIELDS (as indicated by the MATCH schedule Figure 13-1) will be consistent with each other. Examples of set-up which must be considered includes, but is not limited to: A. elevation of the FIELD off the floor, B. FIELD display monitors, C. FIELD perimeter type, and D. FIELD TILE size and type. Other FIELDS (e.g., practice FIELDS) at the event do not need to be consistent with each other or competition FIELDS.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T405",
+      "series": "T",
+      "short_title": "During optional FIELD measurement and calibration time(s) ROBOTS may not practice on the FIELD",
+      "text": "During any period when the ARENA is open for measurement, ROBOTS may run OpModes but cannot move the ROBOT (e.g., CHASSIS) under its own power around the FIELD. Violation: VERBAL WARNING. YELLOW CARD if subsequent violations occur during the event. At the discretion of the Event Director at the event, the ARENA may be open for at least 30 minutes prior to the start of Qualification MATCHES, during which time teams may survey and/or measure the ARENA and bring ROBOTS on the FIELD to perform sensor calibration. The specific time that the FIELD is open will be communicated to teams at the event. Teams may bring specific questions or comments to the Head REFEREE or FTA. Allowed activities during ROBOT calibration and measurement time(s) include: A. ROBOT may be powered on, B. team may initialize an OpMode, C. ROBOT may operate or extend MECHANISMS outside the ROBOT CHASSIS, D. ROBOT may CONTROL SCORING ELEMENTS, E. ROBOT may be connected to programming laptops and other devices, F. team members may be on the FIELD with the ROBOT, G. team members may manually move the ROBOT to multiple positions around the FIELD (e.g., without driving the ROBOT under its own power), and H. team members or ROBOTS may measure the FIELD with tools (e.g., tape measures) or sensors. Activities not allowed during ROBOT calibration and measurement time(s) include: I. ROBOT CHASSIS may not move under its own power around the FIELD (i.e., \u201cdriving\u201d as part of AUTO or TELEOP), J. ROBOT may not LAUNCH SCORING ELEMENTS, and K. team members may not practice (e.g., repetitive actions by a team member in the ALLIANCE AREA placing SCORING ELEMENTS).",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T406",
+      "series": "T",
+      "short_title": "No team timeouts, but MATCHES have breaks",
+      "text": "Teams playing in back-to-back MATCHES will have a minimum break between their MATCHES as follows: A. In Qualification MATCHES, each team will have a minimum of 5 minutes from when the MATCH results are posted from their previous MATCH until the expected start time of their next MATCH for the purpose of G301. B. In Playoff MATCHES, each team will have a minimum of 8 minutes from when MATCH results are posted from their previous MATCH until the expected start time of their next MATCH for the purpose of G301. If a MATCH\u2019S results will not be posted, (e.g., due to an immediate replay) each team will be afforded a reasonable time to reset at the Head REFEREE\u2019S discretion. These breaks are automatically tracked by the FIRST event management system. FIELD STAFF will communicate expected start times with teams as appropriate. Teams may ask the FTA, Head REFEREE, or their designee about the timing of affected MATCHES.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T407",
+      "series": "T",
+      "short_title": "MATCHES are played in order",
+      "text": "Qualification and Playoff MATCHES will be played in numerical order except for extenuating circumstances at the discretion of the Head REFEREE in consultation with the Event Director. All Qualification MATCHES must be played before the start of ALLIANCE selection and all Playoff MATCHES for the current round must be played before the start of the next round. The timing of MATCHES played out of order or replayed MATCHES will be communicated by FIELD STAFF or event personnel to the teams involved. Extenuating circumstances that might lead to a MATCH being played out of order include, but are not limited to: A. A MATCH replay occurring at the next available break, end of day, at the conclusion of other Qualification MATCHES, or the end of the current playoff round. B. A lengthy repair on one competition FIELD preventing MATCH play from continuing on that FIELD, but other FIELDS may continue to be used. C. Urgent and/or extenuating circumstances related to a team. The intent of this rule is to ensure that MATCHES are played in an orderly fashion while providing flexibility for unforeseen circumstances. Regardless of play order, T406 and G301 remain in effect.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.4 General Tournament Rules"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T601",
+      "series": "T",
+      "short_title": "DISQUALIFICATION applies only to the DISQUALIFIED team in Qualifications",
+      "text": "During Qualification MATCHES, a team DISQUALIFICATION has no effect on their ALLIANCE partner.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.6 Qualification MATCHES",
+        "13.6.3 Qualification Ranking"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T701",
+      "series": "T",
+      "short_title": "Send one or two STUDENT representatives",
+      "text": "Each team must choose and send a minimum of one and a maximum of two STUDENT team representatives to the ARENA at the designated ALLIANCE selection time (typically just after the last scheduled Qualification MATCH) to represent their team. Violation: Teams who do not send a representative are ineligible for the playoff tournament If an absent team would have been an ALLIANCE lead, all lower ranked ALLIANCE leads are promoted 1 spot. If a team is planning to not participate in the playoff tournament, they should proactively inform the Event Director and Head REFEREE as soon as possible.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.7 Playoff MATCHES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T702",
+      "series": "T",
+      "short_title": "Declining teams cannot be picked",
+      "text": "An ALLIANCE CAPTAIN may not invite a team that has declined another ALLIANCE\u2019S invitation to participate in the playoff tournament. Violation: The ALLIANCE CAPTAIN must make another selection An ALLIANCE lead that declines an invitation from another ALLIANCE is able to invite teams to join their ALLIANCE but may not be invited to join another ALLIANCE.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.7 Playoff MATCHES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T703",
+      "series": "T",
+      "short_title": "There are no backup teams in Playoff MATCHES",
+      "text": "An ALLIANCE may not request a backup team in a Playoff MATCH. Teams are encouraged to consider reliability when selecting partners because all teams on an ALLIANCE must play in each round of the playoff tournament.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.7 Playoff MATCHES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T704",
+      "series": "T",
+      "short_title": "During Playoff MATCHES, teams may have more ARENA access",
+      "text": "At the direction of the Event Director, during the Playoff MATCHES teams may need extra team members to maintain the ROBOT between MATCHES in a timely manner. Each team is permitted to have up to 3 additional pit crew members to help with needed ROBOT repairs. These team members should be granted the same ARENA access as the DRIVE TEAM but may not participate in any MATCH play. This allocation of additional pit crew members is venue specific and at the discretion of the Event Director.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.7 Playoff MATCHES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T705",
+      "series": "T",
+      "short_title": "Multiple DISQUALIFICATION is handled specially",
+      "text": "During Playoff MATCHES, 1 or more ALLIANCE DISQUALIFICATIONS are handled accordingly: A. if an ALLIANCE is DISQUALIFIED, the DISQUALIFIED ALLIANCE loses B. if both ALLIANCES are DISQUALIFIED, the one that is DISQUALIFIED first chronologically loses C. if, as perceived by the Head REFEREE, both ALLIANCES are simultaneously DISQUALIFIED, the MATCH results in a tie",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.7 Playoff MATCHES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T801",
+      "series": "T",
+      "short_title": "Divisions will use the same size playoff brackets",
+      "text": "The number of playoff ALLIANCES will be determined based on the number of playoff eligible teams in the smaller division as shown in Table 13-2.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.8 Dual Division Event s",
+        "13.8.1 Dual Division Advancement Points"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T802",
+      "series": "T",
+      "short_title": "Dual Division awards are given at the event level",
+      "text": "All awards are judged and awarded at the tournament level, not the division level.",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.8 Dual Division Event s",
+        "13.8.1 Dual Division Advancement Points"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    },
+    {
+      "rule_id": "T803",
+      "series": "T",
+      "short_title": "Dual Division award counts are based on total teams",
+      "text": "The number of awards distributed at a Dual Division event is determined using Table 6-1. 13.8.1 Dual Division Advancement Points For Dual Division events, advancement points are calculated per Table 4-1 except for playoff advancement points which are instead calculated as described in Table 13-7 below. Table 13-7: Dual Division Playoff Advancement Points [[TABLE:13-7]]",
+      "asterisk_marked": true,
+      "section_path": [
+        "13 Tournament (T)",
+        "13.8 Dual Division Event s",
+        "13.8.1 Dual Division Advancement Points"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": [
+        "13-7"
+      ]
+    },
+    {
+      "rule_id": "C301",
+      "series": "C",
+      "short_title": "Replays use the same ROBOTS",
+      "text": "If a Playoff MATCH must be replayed, the 2 ROBOTS used in the replay must be the same as in the original MATCH. The sole exception is: if, in the opinion of the Head REFEREE, the ARENA FAULT rendered a ROBOT inoperable, in which case the ROBOTS can be changed. If an additional MATCH is played due to a tie, any 2 of the 3 ROBOTS may be played in the additional MATCH. FIRST Tech Challenge teams play significantly more MATCHES at the FIRST Championship than they do at most events, and there are significantly more teams at the event. Drafting a 3rd ROBOT provides each ALLIANCE with a built-in backup ROBOT and flexibility to draft for different MATCH strategies in mind.",
+      "asterisk_marked": true,
+      "section_path": [
+        "15 FIRST Championship (C)",
+        "15.3 3-ROBOT ALLIANCES"
+      ],
+      "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+      "tier": "rule",
+      "effective_date": "base-manual",
+      "table_pointers": []
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "skill_name": "ftc-rule-check",
+  "season": "biobuzz-2026-27",
+  "_design_note": "Season-transition break-it evals (PLAN \u00a720: each Season Transition run gets its own eval refresh). Every expected answer was checked with `rules.py lookup/verify/section/term --season biobuzz-2026-27` against BIOBUZZ Competition Manual V1 + TU00 on 2026-09-13. FAILS to hunt, new this season: answering with last season's rule NUMBER (numbers were reused with new text), carrying a DECODE limit forward (10 servos, software-limited height), trusting another official document's rule number (TU00's 'R510'), resolving figure-only geometry from prose, and reading an Evergreen asterisk as 'unchanged'. ACTIVE became biobuzz-2026-27 on 2026-09-13; eval 9 (explicit DECODE question) and eval 1 (last-season number) are the season-pinning tests.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "renumbered-rule-trap",
+      "prompt": "new season question: our BIOBUZZ bot is 19 inches wide sitting on the field before the match. do we pass? last year it was R101 i think",
+      "expected_output": "Illegal. BIOBUZZ R102 (STARTING CONFIGURATION is limited to an 18-inch cube, all parts fully stationary). Explicitly corrects that R101 in BIOBUZZ is a different rule ('It is your team's ROBOT'). Answer names the BIOBUZZ manual/season it used.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "season-pinned",
+          "text": "Answer is grounded in the BIOBUZZ corpus (rules.py output with season biobuzz-2026-27, via ACTIVE or --season) and names that season \u2014 not the DECODE corpus"
+        },
+        {
+          "name": "cites-R102-not-R101",
+          "text": "Governing citation is R102 with its verbatim BIOBUZZ text; R101 is not cited as the size rule"
+        },
+        {
+          "name": "flags-number-reuse",
+          "text": "Tells the user the rule number changed from last season (does not silently accept 'R101')"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "carried-forward-limit",
+      "prompt": "we're reusing our robot from last season in BIOBUZZ, it has 8 motors and 10 servos. any problem?",
+      "expected_output": "Illegal: BIOBUZZ R503 limits a ROBOT to 8 motors and 8 servos across all configurations used at an event (DECODE allowed 10 servos; TU00 notes the servo max was reduced to 8). Must cut 2 servos.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "verdict-illegal-R503",
+          "text": "Verdict is illegal, citing R503 with BIOBUZZ text stating 8 motors and 8 servos"
+        },
+        {
+          "name": "no-decode-limit",
+          "text": "Does not state or rely on a 10-servo limit as current"
+        },
+        {
+          "name": "citations-verified",
+          "text": "Every cited ID passes rules.py verify --season biobuzz-2026-27"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "dashboard-streaming",
+      "prompt": "we use FTC Dashboard to graph our flywheel velocity. can we leave it running at competition this year (BIOBUZZ)?",
+      "expected_output": "No. BIOBUZZ R704.D: software may only stream control/debug/telemetry via the FTC Driver Station app; third-party logging/streaming such as FTC Dashboard and FTControl Panels is prohibited; no continuous video stream. (New explicit wording vs DECODE's bandwidth rule.)",
+      "files": [],
+      "assertions": [
+        {
+          "name": "cites-R704",
+          "text": "Cites R704 and quotes the clause naming FTC Dashboard / FTControl Panels as prohibited"
+        },
+        {
+          "name": "verdict-not-allowed",
+          "text": "Verdict: not allowed at events (practice use is not what the rule governs; answer doesn't say it's fine at competition)"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "official-doc-wrong-number",
+      "prompt": "Team Update 00 says R510 is the allowed motors rule. Is the WATTOS Stingray legal under R510?",
+      "expected_output": "The WATTOS Stingray 12V DC is legal \u2014 it is listed in Table 12-1, referenced by R501 'Only specific motors are allowed'. R510 does not exist in the V1 manual (verify fails); TU00's 'R510' reference corresponds to R501. Cite R501 + [[TABLE:12-1]], not R510.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "does-not-cite-R510",
+          "text": "The answer does not present R510 as a valid citation; it notes R510 fails verify / doesn't exist in V1"
+        },
+        {
+          "name": "cites-R501-table",
+          "text": "Legality grounded in R501 and Table 12-1 read by pointer (manual-tables/biobuzz-2026-27/table-12-1.json), naming the WATTOS Stingray row"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "expansion-physical-not-software",
+      "prompt": "BIOBUZZ: our arm can reach 32 inches tall but we software-limit it to 28 during matches. legal?",
+      "expected_output": "Illegal as described: R105.A caps the fully expanded sizing volume at 18 x 24 x 29 in tall and R105.B requires ROBOTS be physically constrained to fit without the use of software. G416 enforces construction limits in-match. (DECODE allowed software-limited vertical expansion \u2014 no longer.)",
+      "files": [],
+      "assertions": [
+        {
+          "name": "physical-constraint",
+          "text": "States the limit must be physical, not software, citing R105 text"
+        },
+        {
+          "name": "traverses-G416",
+          "text": "Includes the one-hop in-match rule G416 alongside R105"
+        },
+        {
+          "name": "height-29",
+          "text": "Uses 29 in as the height limit from retrieved text, not a DECODE value (18/38 in)"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "herding-is-control",
+      "prompt": "in BIOBUZZ can we bulldoze a pile of like 6 pollen across the field with the front of our drivetrain? we're not picking them up",
+      "expected_output": "Likely a violation: G407 \u2014 a ROBOT may not simultaneously CONTROL more than 4 SCORING ELEMENTS; the Glossary's CONTROL includes intentionally pushing elements to a desired location (herding). G407's notes distinguish incidental bulldozing/deflection from intentional herding, so the verdict depends on intent; VERBAL WARNING, MAJOR FOUL + YELLOW if STRATEGIC.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "uses-glossary-control",
+          "text": "Pulls the CONTROL definition (rules.py term CONTROL or equivalent retrieved text) and applies its herding clause"
+        },
+        {
+          "name": "cites-G407",
+          "text": "Cites G407 with its limit of 4 and its violation ladder"
+        },
+        {
+          "name": "not-overconfident",
+          "text": "Acknowledges the intent/STRATEGIC distinction rather than a flat 'legal because not picked up'"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "figure-only-ambiguous",
+      "prompt": "which corner is the red GARDEN in for BIOBUZZ, near our alliance area or the opposite side? we're planning auto paths",
+      "expected_output": "Partly answerable, partly figure-only. The manual text (\u00a79.3) only says GARDENs are ~23 x 2 in zones 'in opposite corners of the FIELD'. The Event Field Setup Guide V1.0 (an official field document, not rule text; recorded in the season yaml's field.tile_positions) places the red GARDEN on tile A1 and the red LOADING ZONE on tile A5. Which physical corner A1 is (which way the A-F / 1-6 grid runs relative to the audience and alliance area) is defined only in the tile-grid figures, which the corpus doesn't store. Answer: tile A1 per the setup guide, orientation from Figure 9-4/9-5 \u2014 not inferred from prose.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "cites-tile-with-tier",
+          "text": "Gives tile A1 for the red GARDEN and labels its source as the Field Setup Guide (field document, not a manual rule)"
+        },
+        {
+          "name": "orientation-figure-only",
+          "text": "Does not assert which physical corner/side A1 is from prose; points to the tile-grid figure"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "launch-vs-place-flower",
+      "prompt": "BIOBUZZ: can our launcher shoot pollen into the top of a FLOWER for points instead of placing it?",
+      "expected_output": "Ambiguous \u2014 worth a Q&A (opens 2026-09-28). \u00a710.5.2 note: 'Placing SCORING ELEMENTS into the top of the FLOWER is the only allowable way to score'; G418 requires entry into the top only; LAUNCH is a defined term. Whether a launched entry counts as placing isn't resolved by text.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "retrieves-section-note",
+          "text": "Retrieves the \u00a710.5.2 'only allowable way to score' text (rules.py section 10.5.2) and G418"
+        },
+        {
+          "name": "ambiguous-verdict",
+          "text": "Verdict is ambiguous with a Q&A recommendation, not a confident legal/illegal"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "prior-season-question",
+      "prompt": "settle an argument from last season: in DECODE, what was G416 about?",
+      "expected_output": "Answered from the DECODE corpus with --season decode-2025-26: G416 'LAUNCHING in the LAUNCH ZONE only'. Notes the DECODE corpus is a prior season (freshness WRONG_SEASON is expected and not a reason to refuse an explicitly-DECODE question), and that BIOBUZZ G416 is a different rule (construction limits).",
+      "files": [],
+      "assertions": [
+        {
+          "name": "decode-corpus",
+          "text": "Uses the DECODE corpus explicitly and quotes G416's DECODE headline"
+        },
+        {
+          "name": "season-labeled",
+          "text": "States the answer is about DECODE (prior season) and does not present it as a current rule"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "evergreen-not-unchanged",
+      "prompt": "R501 has the green asterisk so it's the same motor list as last year right? we have a WATTOS Stingray question from a DECODE-era thread",
+      "expected_output": "No. In the BIOBUZZ manual the asterisk marks an Evergreen rule \u2014 its subject recurs but game-specific details may change (\u00a71.7.1). The BIOBUZZ Table 12-1 adds the WATTOS Stingray; the DECODE table didn't list it. Read the current table.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "evergreen-meaning",
+          "text": "Explains the asterisk as Evergreen (details can change), citing the manual convention or rules.py asterisk_meaning \u2014 not 'unchanged'"
+        },
+        {
+          "name": "reads-current-table",
+          "text": "Resolves the answer from the BIOBUZZ Table 12-1 file, not from the DECODE-era thread"
+        }
+      ]
+    }
+  ]
+}

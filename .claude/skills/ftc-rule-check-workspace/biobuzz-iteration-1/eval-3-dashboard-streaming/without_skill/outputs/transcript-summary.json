@@ -1,0 +1,14 @@
+{
+  "scripts_run": [
+    "mkdir -p .../scratchpad/evalruns && pdftotext -layout <fetched manual PDF> manual.txt; grep -n -i -E \"wi-?fi|wireless|dashboard|laptop|telemetry|802\\.11|hotspot|bluetooth\" manual.txt",
+    "sed -n '1,12p;1270,1300p;4800,4900p' manual.txt; grep for Team Update/version and remaining wireless matches",
+    "grep -n -i -E \"dashboard|panels|third party|stream\" manual.txt",
+    "WebSearch: FTC BIOBUZZ competition manual 2026-2027 robot wireless communication rule",
+    "WebSearch: FTC competition manual FTC Dashboard laptop Wi-Fi prohibited",
+    "WebSearch: FTC BIOBUZZ Team Update R704 FTC Dashboard",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game/manual"
+  ],
+  "files_read": [
+    "/Users/georgehu/.claude/projects/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/tool-results/webfetch-1789273660725-476u38.pdf (official manual fetched from web, extracted to /private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/manual.txt)"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "assertions": [
+    {
+      "name": "core-carried",
+      "passed": true,
+      "evidence": "The core axes are carried over and re-confirmed with a single yes/no question, not asked again from scratch: \"1. Is the core robot the same? (one line) 'Still 4-module custom-built swerve, Pinpoint odometry, Limelight 3A, 1 Expansion Hub, Pedro Pathing, FTCLib command-based, CNC fabrication?' Yes: I mark these confirmed as asked, keeping the same values.\" The answer also says \"What carries over, pending your OK: your drivetrain, control hub, sensors, software stack...\" The scratch copy (carry-core.yaml) keeps these values marked unconfirmed until the user answers, which fits a re-confirmation."
+    },
+    {
+      "name": "no-silent-translation",
+      "passed": true,
+      "evidence": "Question 2 uses the BIOBUZZ file's own keys and options (intake, hive_launcher, turret, aim_vision, element_color_sensing, capacity_limiter, flower_placer, flower_pollen_retrieval, endgame_parking). These match lines 118-127 of season-extensions/biobuzz-2026-27.yaml. DECODE values appear only as context (\"Last season: flywheel shooter\", \"last season's robot is shown for reference only\"). The answer explicitly refuses the mapping: \"I won't turn old mechanisms into new names (your shooter is not automatically a BIOBUZZ launcher).\" It also drops fixed_shooter_on_swerve, and the scratch copy has no season_mechanisms or archetypes."
+    },
+    {
+      "name": "season-stamp",
+      "passed": true,
+      "evidence": "The answer commits to the stamp and the history entry, and will write them only after the user confirms (the skill requires confirmation before writing): \"write team-config.yaml with _meta.season: biobuzz-2026-27 and a history entry noting the move from DECODE 2025-26 to BIOBUZZ 2026-27.\" The scratch copy it validated already has `_meta: {schema: 1, season: biobuzz-2026-27}`. Caveat: no final config was written this turn, and the scratch copy has no config_history block yet. The history entry exists only as a stated plan naming both seasons."
+    },
+    {
+      "name": "draft-respected",
+      "passed": true,
+      "evidence": "The condition does not apply. season-extensions/ACTIVE = biobuzz-2026-27, and the BIOBUZZ file has `_meta.status: live` with the note \"Step 6 sign-off given 2026-09-13\". The run checked this first (`cat season-extensions/ACTIVE`, and it read biobuzz-2026-27.yaml). It correctly reported \"The active season is BIOBUZZ (`biobuzz-2026-27`)\" and did not wrongly claim the transition was unsigned. Eliciting against a signed-off, active season file is the correct behavior."
+    }
+  ],
+  "factual_errors": []
+}

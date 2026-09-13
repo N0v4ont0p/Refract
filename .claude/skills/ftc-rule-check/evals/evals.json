@@ -1,5 +1,5 @@
 {
-  "skill_name": "ftc-rule-check",
+  "skill_name": "ftc-rule-check", "season": "decode-2025-26",
   "_design_note": "Break-it evals. FAIL to hunt: a rule verdict citing a rule number NOT verified to exist (or from memory), a verdict that misses the cross-referenced rule the real answer depends on, table specs paraphrased instead of resolved by pointer, or a confident verdict where the honest answer is 'ambiguous/file a Q&A'.",
   "evals": [
     {

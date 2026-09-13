@@ -27,19 +27,26 @@ def _run(*args):
 
 
 @mcp.tool()
-def rule_check(ids: list[str] | None = None, query: str | None = None) -> dict:
+def rule_check(ids: list[str] | None = None, query: str | None = None, season: str | None = None) -> dict:
     """FTC rules legality check, grounded in the tagged Competition Manual — runs
     the same flow ftc-rule-check itself runs: freshness gate first, then rule
     lookup with one-hop cross-references, then citation verification. Pass known
     rule IDs (e.g. ["R207"]) or a plain-language `query` (e.g. "pneumatic
     flywheel") to find candidate IDs first. Never a verdict from memory — this
-    always resolves through the real, current corpus."""
+    always resolves through the real, current corpus. `season` (slug, e.g.
+    "biobuzz-2026-27") defaults to season-extensions/ACTIVE — rule numbers are
+    reused across seasons with different text, so every result names its season."""
     rules_script = str(ROOT / ".claude/skills/ftc-rule-check/scripts/rules.py")
-    freshness = _run(str(ROOT / "scripts/check_freshness.py"))
+    season = season or (ROOT / "season-extensions/ACTIVE").read_text().strip()
+    sargs = ["--season", season]
+    freshness = _run(str(ROOT / "scripts/check_freshness.py"), *sargs)
 
     resolved_ids = list(ids) if ids else []
     if not resolved_ids and query:
-        corpus = json.loads((ROOT / ".claude/skills/ftc-rule-check/references/rules/rules.json").read_text())
+        corpus_path = ROOT / ".claude/skills/ftc-rule-check/references/rules" / season / "rules.json"
+        if not corpus_path.is_file():
+            return {"freshness": freshness, "season": season, "abstain": f"no rules corpus ingested for season '{season}'"}
+        corpus = json.loads(corpus_path.read_text())
         terms = query.lower().split()
         for r in corpus["rules"]:
             hay = (r["short_title"] + " " + r["text"]).lower()
@@ -48,13 +55,14 @@ def rule_check(ids: list[str] | None = None, query: str | None = None) -> dict:
         resolved_ids = resolved_ids[:5]
 
     if not resolved_ids:
-        return {"freshness": freshness, "error": "no rule IDs given or found for query", "query": query}
+        return {"freshness": freshness, "season": season, "error": "no rule IDs given or found for query", "query": query}
 
     return {
         "freshness": freshness,
+        "season": season,
         "resolved_ids": resolved_ids,
-        "lookup": _run(rules_script, "lookup", *resolved_ids),
-        "verify": _run(rules_script, "verify", *resolved_ids),
+        "lookup": _run(rules_script, "lookup", *resolved_ids, *sargs),
+        "verify": _run(rules_script, "verify", *resolved_ids, *sargs),
     }
 
 
@@ -64,13 +72,13 @@ def hardware_lookup(
     driver: int | None = None, driven: int | None = None,
     ext: float | None = None, wheel_mm: float | None = None,
     distance: float | None = None, height: float | None = None, speed: float | None = None,
-    high_arc: bool = False,
+    high_arc: bool = False, season: str | None = None, element: str | None = None,
 ) -> dict:
     """FTC hardware specs and deterministic math — same scripts
     ftc-hardware-lookup itself calls, never a value from memory. action:
     "spec"/"external"/"wheel-speed"/"ticks" (needs `part`, a catalog SKU) or
-    "trajectory" (needs distance/height/speed — the DECODE launch-angle
-    solver). Abstains rather than fabricates if a part isn't in the seeded
+    "trajectory" (needs distance/height/speed; optional season/element —
+    drag-aware angle abstains when that season's element constants don't exist). Abstains rather than fabricates if a part isn't in the seeded
     catalog — surface that abstention, don't fill the gap."""
     if action == "trajectory":
         args = [str(ROOT / ".claude/skills/ftc-hardware-lookup/scripts/trajectory_solver.py")]
@@ -82,6 +90,10 @@ def hardware_lookup(
             args += ["-v", str(speed)]
         if high_arc:
             args += ["--high-arc"]
+        if season:
+            args += ["--season", season]
+        if element:
+            args += ["--element", element]
         return _run(*args)
 
     args = [str(ROOT / ".claude/skills/ftc-hardware-lookup/scripts/motor_math.py"), action, part]

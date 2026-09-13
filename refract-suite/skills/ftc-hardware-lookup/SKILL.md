@@ -27,11 +27,11 @@ its deterministic-first, abstention, and Rule-7 sections are the backbone of eve
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/catalogs/{motors,servos}.json` | verified part specs, each value carrying its own `_source` |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/catalogs/INDEX.json` | coverage map + the **abstain rule** for gaps |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/motor_math.py` | ALL gear/torque/speed/tick arithmetic; abstains on unseeded parts |
-| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/manual-tables/*.json` + `INDEX.json` | the game manual's legal-parts tables (§9 side of the §8↔§9 pointer) |
-| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/physics/decode-artifact-ballistics.json` + `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py` | projectile/ballistics constants + solver |
+| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/manual-tables/<season>/*.json` + `INDEX.json` | the game manual's legal-parts tables, one directory per season slug (§9 side of the §8↔§9 pointer) |
+| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/physics/{invariants.json,<season>/<element>.json}` + `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py` | gravity (season-invariant) + per-season scoring-element constants + solver |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/hub-generations/*.md` | control-system briefings — **hosted here, read by ftc-team-config** on its time gate |
 
-Other skills read these by path directly (the R77 canonical path table in standing-principles);
+Other skills read these by path directly (the REQ-77 canonical path table in standing-principles);
 this skill never restates their content when *it* needs another skill's data either.
 
 ## Answering a hardware question — route by type
@@ -45,7 +45,7 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/motor_math.py s
 ```
 
 This returns the record **and its source**. Surface the value *with* its citation — a spec without
-its source is not a finished answer here (that's R68, and the catalog is structured so you can't
+its source is not a finished answer here (that's REQ-68, and the catalog is structured so you can't
 honestly give one without the other). If the part isn't in the catalog, the script abstains (exit 3)
 and so do you: *"I don't have a verified spec for that part — it's not in the catalog"* plus the
 manufacturer link. **Do not fill the gap from memory.** The seed is deliberately small; a gap is a
@@ -77,23 +77,35 @@ guess (standing-principles §4).
 ### 3. "Is this part legal" tables (motors, batteries, wire gauge, power)
 
 The competition manual embeds legal-parts tables. Those live here as structured files keyed by
-manual table ID (`${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/manual-tables/table-12-1.json` etc.; see `INDEX.json`). A legality
+manual table ID (`${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/manual-tables/<season>/table-12-1.json` etc.; see that season's `INDEX.json`). A legality
 *verdict* is ftc-rule-check's job — but when its reasoning turns on a table, it resolves the pointer
 into these files (the §8↔§9 mechanism). When *you* answer a "what parts are allowed" question, read
 the table file; never paraphrase legal-parts data from memory or from the rule prose.
 
+**Tables are season data.** Table IDs and rows change between manuals (BIOBUZZ added the WATTOS
+Stingray motor to Table 12-1, dropped DECODE's Tables 12-10…12-12, and cut the servo cap from 10 to 8
+in R503 — a limit that lives in rule text, not a table). Read the directory for the season the
+question is about (`season-extensions/ACTIVE` unless the user names another) and say which manual the
+answer came from.
+
 ### 4. Physics / ballistics (launch angle, projectile, shoot-on-the-move)
 
-Use the solver, which reads its constants from the physics JSON (gravity is 386.4 in/s², corrected
-and stored there, not hardcoded):
+Use the solver. Gravity (386.4 in/s², corrected from the source team's 385) is read from
+`physics/invariants.json`; the scoring element's diameter/mass/drag are **season data** read from
+`physics/<season>/<element>.json`:
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py -d 120 -t 24 -v 400   # distance, target height, launch speed (in, in/s)
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py -d 120 -t 24 -v 400 [--season <slug>] [--element <name>]   # in, in, in/s
 ```
 
 It returns both no-drag and drag-aware launch angles (report the drag-aware one if the user acts on
 it), the gravity value and its source, and abstains (exit 3) if distance or speed is missing rather
-than guessing. It carries the same not-fielded caveat the corpus does: a correct solver proves the
+than guessing. **If the season has no constants file for the element, the drag-aware angle is
+`null` with `drag_aware_abstain` — surface that; never substitute another season's ball.** DECODE's
+constants model a 5 in hollow 75 g Artifact; BIOBUZZ launches ~2.8 in POLLEN and ~3.6 in NECTAR whose
+mass the manual does not state (manufacturer listings exist but are tier-2 and don't say which
+diameter is which — measure before adding a constants file). The no-drag angle needs only gravity and
+stays valid. It carries the same not-fielded caveat the corpus does: a correct solver proves the
 math is tractable, it is not evidence any team fields physics-based power.
 
 ### 5. Control-system generation (REV Control Hub vs SystemCore)

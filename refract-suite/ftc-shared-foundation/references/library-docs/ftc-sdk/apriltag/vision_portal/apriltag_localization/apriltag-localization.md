@@ -1,3 +1,18 @@
+> SDK VERSION SCOPE (added by Refract, 2026-09-13): the code below predates FTC SDK v12.0 (2026-09-12). In
+> v12.0 the base `AprilTagDetection` type no longer has `.id`, `.metadata` or `.center` — verified by compiling
+> the SDK 11.1 AprilTag samples against the 12.0.0 libraries (compile errors on exactly those fields);
+> `.ftcPose` / `.robotPose` still compile. Check `instanceof AprilTagSingleDetection` /
+> `AprilTagClusterDetection` and cast before reading tag identity (v12.0 README, Breaking Changes).
+
+> SEASON SCOPE (added by Refract, 2026-09-13): this localization method is not DECODE-specific (its
+> examples use INTO THE DEEP), but it depends on game tags with fixed field poses from the tag
+> library. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ AprilTags (IDs 30-45) are
+> clusters of 4 on the underside of the tipping HIVE's CELLs and, per the FTC SDK v12.0 README, move
+> and are not suitable for absolute field localization. Inspection of the v12.0 Vision library shows
+> BIOBUZZ clusters carry no field pose (origin 0,0,0, identity rotation), so this method cannot
+> localize the robot from BIOBUZZ game tags.
+
 > Source: https://github.com/FIRST-Tech-Challenge/ftcdocs/blob/372e6b4150be6b69a687e737e7b345eaa65112e6/docs/source/apriltag/vision_portal/apriltag_localization/apriltag-localization.rst · Fetched: 2026-08-06 · Ref: main @ 372e6b4150be · Original format: rst, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

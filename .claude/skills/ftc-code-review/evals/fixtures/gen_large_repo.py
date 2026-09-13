@@ -44,7 +44,7 @@ def subsystem(name, hw_lines, methods):
 
 def main():
     w("../team-config.yaml",
-      "_meta: {schema: 1}\nteam: {number: 45021, experience: veteran}\n"
+      "_meta: {schema: 1, season: decode-2025-26}\nteam: {number: 45021, experience: veteran}\n"
       "drivetrain: {type: {value: mecanum, confirmed: true}}\n"
       "software_stack: {opmode_style: {value: raw_linear_opmode, confirmed: true}, pathing: {value: none, confirmed: true}}\n"
       "fabrication: {capability: {value: cnc_aluminum_or_carbon, confirmed: true}}\n"

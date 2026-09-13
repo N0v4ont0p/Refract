@@ -8,7 +8,7 @@
 # Deliberately NOT a copy of 19859's config: this team is `untuned`, so the same run also exercises
 # the Phase H untuned-scaffold path (emit_tuning render -> Double.NaN + procedure, never a number)
 # rather than only the carry-forward-verbatim path a fully-tuned config takes.
-_meta: {schema: 1, updated: 2026-08-06, suite_generated_code: true}
+_meta: {schema: 1, season: decode-2025-26, updated: 2026-08-06, suite_generated_code: true}
 team: {number: 99999, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}

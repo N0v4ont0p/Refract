@@ -1,0 +1,22 @@
+{
+  "scripts_run": [
+    "python3 scripts/check_freshness.py",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py --help",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term LAUNCH/LAUNCHING FLOWER POLLEN CONTROL --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.2 9.7 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G416 G418 G410 G409 G407 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py section 10.5.1 11.4.3 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py lookup G417 G405 --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py term PLACE PLACED SCORED --season biobuzz-2026-27",
+    "python3 .claude/skills/ftc-rule-check/scripts/rules.py verify G418 G417 G405 --season biobuzz-2026-27",
+    "inline python3 keyword scans (LAUNCH/FLOWER/placing) over references/rules/biobuzz-2026-27/rules.json, sections.json, glossary.json"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/sections.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/glossary.json"
+  ]
+}

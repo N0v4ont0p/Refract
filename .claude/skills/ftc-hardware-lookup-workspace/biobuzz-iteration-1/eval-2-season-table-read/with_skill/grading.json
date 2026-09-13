@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "reads-biobuzz-table",
+      "passed": true,
+      "evidence": "scripts_run includes 'cat .../biobuzz-2026-27/table-12-1.json' (refract-suite copy, byte-identical to .claude/skills copy) and 'cat season-extensions/ACTIVE'; answer cites 'Table 12-1 \"Motor allowances\" in the BIOBUZZ Competition Manual V1 (2026-2027). It is the active season (season-extensions/ACTIVE = biobuzz-2026-27)' and lists the table path under Files used."
+    },
+    {
+      "name": "no-memory",
+      "passed": true,
+      "evidence": "Answer quotes the exact table row '\"WATTOS Stingray 12V DC\", part number WDM12, with no notes', which matches table-12-1.json; the DECODE comparison came from reading decode-2025-26/table-12-1.json (grep confirms 0 Stingray rows). It also declines to give specs from memory: 'I won't give them from memory' after motor_math.py spec WDM12 exit 3."
+    }
+  ],
+  "factual_errors": []
+}

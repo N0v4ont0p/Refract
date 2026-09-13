@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "uses-glossary-control",
+      "passed": true,
+      "evidence": "scripts_run includes 'rules.py term CONTROL --season biobuzz-2026-27'. The answer quotes the herding clause word for word, \"intentionally pushes a SCORING ELEMENT to a desired location or in a preferred direction (i.e., herding)\", plus the transitive-contact and flat-face wording. It applies both: \"The front of a drivetrain is a flat face. Balls pushed by other balls in the pile count too. So all 6 POLLEN ... are CONTROLLED.\" All of this matches the corpus glossary."
+    },
+    {
+      "name": "cites-G407",
+      "passed": true,
+      "evidence": "The verdict JSON cites G407 with its full text: \"A ROBOT may not simultaneously CONTROL more than 4 SCORING ELEMENTS. Violation: VERBAL WARNING. MAJOR FOUL and YELLOW CARD per MATCH, if STRATEGIC.\" The penalty section repeats it: \"a verbal warning at minimum. If the refs judge it STRATEGIC ... it's a MAJOR FOUL and a YELLOW CARD per match.\" This matches rules.py lookup G407, and rules.py verify shows G407 exists."
+    },
+    {
+      "name": "not-overconfident",
+      "passed": true,
+      "evidence": "The answer draws the intent line explicitly: \"G407's 'bulldozing' exception (item D) only covers inadvertent contact ... not a deliberate push\" and \"Contact that really is accidental while you drive ... is fine.\" It also handles STRATEGIC separately: \"If the refs judge it STRATEGIC, which a planned push across the field almost certainly is\", and it covers the MOMENTARY carve-out (item C). It rejects 'legal because not picked up': \"not picking them up doesn't get you out of it.\" The verdict is 'illegal' where the expected output says 'likely a violation'. That is still fine, because the question says the push is deliberate and any violation earns at least a VERBAL WARNING."
+    }
+  ],
+  "factual_errors": []
+}

@@ -1,0 +1,21 @@
+{
+  "table_id": "6-3",
+  "caption": "Think Award Criteria Think Award Criteria Required 1 Team must submit a PORTFOLI",
+  "rows": [
+    [
+      "Think Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must submit a PORTFOLIO. The PORTFOLIO must include at least one of these engineering topics: A. evidence of use of the engineering process, B. lessons learned and applied relating to the design of their ROBOT, C. comparing choices: Show how you looked at different ideas and explain why you chose one over the other, and/or D. math choices: Show how you used math to make decisions about your ROBOT or programming design."
+    ],
+    [
+      "Encouraged",
+      "2",
+      "Information in the PORTFOLIO should be easy to read and easy to find."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-3]] pointer (\u00a78<->\u00a79)"
+}

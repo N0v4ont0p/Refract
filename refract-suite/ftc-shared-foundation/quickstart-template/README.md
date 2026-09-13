@@ -23,8 +23,10 @@ looks the way it does, not incidental style choices:
    mixing drivetrain, shooter, turret, and intake logic together (the exact
    shape `ftc-code-review`'s `failure_mode_lint.py` flags as `god_opmode`).
    This template gives every mechanism its own interface
-   (`Drivetrain`, `Shooter`, `Turret`, `Intake`) and one example concrete
-   implementation. An OpMode built on `TeamOpMode` (see
+   (`Drivetrain`, `Intake`, plus DECODE (2025-26) season examples `Shooter` and
+   `Turret`) and one example concrete implementation. Season mechanisms come
+   from the ACTIVE season file and the team's confirmed config -- BIOBUZZ's
+   launcher is `hive_launcher`; a robot gets only the mechanisms it declares. An OpMode built on `TeamOpMode` (see
    `opmodes/TeamOpMode.java`) has nowhere to put per-mechanism logic inline --
    it constructs subsystems in `onInit()` and lets the FTCLib
    `CommandScheduler` run them. See `opmodes/ExampleTeleOp.java` for what
@@ -33,9 +35,10 @@ looks the way it does, not incidental style choices:
    every other one undiagnosable -- an intermittent fault (brownout, stale
    static, dropped sensor read) looks like an unreproducible hardware flake
    unless something recorded state at the time. `TeamOpMode` wires
-   `telemetry/RobotTelemetry.java` (Driver Station + FTC Dashboard, via FTC
-   Dashboard's own `MultipleTelemetry`) into every OpMode automatically and
-   flushes it every loop. A subclass has to actively avoid using
+   `telemetry/RobotTelemetry.java` (Driver Station only -- the channel BIOBUZZ
+   R704 allows at events) into every OpMode automatically and flushes it every
+   loop. FTC Dashboard graphing for practice lives in
+   `tuning/DashboardTelemetry.java`, used only by tuning OpModes. A subclass has to actively avoid using
    `telemetry` to end up with none -- not the other way around.
 
 ## Layout
@@ -44,15 +47,17 @@ looks the way it does, not incidental style choices:
 TeamCode/src/main/java/org/firstinspires/ftc/teamcode/
 ├── RobotConstants.java          -- @Config tunables (read-only from code; see the class's own doc comment)
 ├── telemetry/
-│   └── RobotTelemetry.java      -- Driver Station + FTC Dashboard fan-out
+│   └── RobotTelemetry.java      -- Driver Station telemetry (competition-legal default)
+├── tuning/
+│   └── DashboardTelemetry.java  -- PRACTICE ONLY: Driver Station + FTC Dashboard fan-out (R704)
 ├── drivetrain/
 │   ├── Drivetrain.java          -- interface
 │   └── MecanumDrivetrain.java   -- example implementation (FTCLib MecanumDrive)
 ├── mechanisms/
-│   ├── shooter/
+│   ├── shooter/                 -- DECODE (2025-26) season example
 │   │   ├── Shooter.java         -- interface
 │   │   └── FlywheelShooter.java -- example implementation (FTCLib Motor, velocity control)
-│   ├── turret/
+│   ├── turret/                  -- DECODE (2025-26) season example
 │   │   ├── Turret.java          -- interface
 │   │   └── SingleAxisTurret.java -- example implementation (FTCLib SimpleServo)
 │   └── intake/
@@ -80,7 +85,9 @@ TeamCode/src/main/java/org/firstinspires/ftc/teamcode/
 ## RobotConstants and static tunables
 
 `RobotConstants.java` uses the FTC Dashboard `@Config` idiom (carried over
-from FTCLib-Quickstart's `DriveConstants.java`). Read that file's doc comment
+from FTCLib-Quickstart's `DriveConstants.java`). `@Config` exposes fields for
+editing between runs; it streams nothing by itself -- still disable Dashboard
+during matches (BIOBUZZ R704). Read that file's doc comment
 before adding a field: these are for the **dashboard** to write between runs
 and for **code to only read** -- writing to a mutable static field from
 OpMode/subsystem lifecycle code is exactly the failure class

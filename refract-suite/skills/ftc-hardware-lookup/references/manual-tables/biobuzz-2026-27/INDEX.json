@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "season": "biobuzz-2026-27",
+    "manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+    "game_name": "BIOBUZZ",
+    "incorporates_through": "Team Update 00",
+    "source_url": "https://ftc-resources.firstinspires.org/ftc/game/cm-html",
+    "tu_index_url": "https://ftc-resources.firstinspires.org/ftc/game",
+    "retrieved": "2026-09-13",
+    "asterisk_meaning": "Evergreen: subject and presence constant season to season, but game-specific details may change (manual \u00a71.7.1) \u2014 NOT 'unchanged'",
+    "tier": "rule",
+    "effective_date": "base-manual"
+  },
+  "tables": [
+    {
+      "table_id": "10-1",
+      "caption": "DRIVE TEAM roles",
+      "rows": 4
+    },
+    {
+      "table_id": "10-2",
+      "caption": "BIOBUZZ Point Values",
+      "rows": 14
+    },
+    {
+      "table_id": "10-3",
+      "caption": "BIOBUZZ RP thresholds",
+      "rows": 4
+    },
+    {
+      "table_id": "10-4",
+      "caption": "Rule violations",
+      "rows": 8
+    },
+    {
+      "table_id": "10-5",
+      "caption": "YELLOW and RED CARD application",
+      "rows": 5
+    },
+    {
+      "table_id": "10-6",
+      "caption": "Violation examples",
+      "rows": 10
+    },
+    {
+      "table_id": "12-1",
+      "caption": "Motor allowances",
+      "rows": 16
+    },
+    {
+      "table_id": "12-2",
+      "caption": "Servo Requirements at 6V",
+      "rows": 12
+    },
+    {
+      "table_id": "12-3",
+      "caption": "Power Regulators and Limits",
+      "rows": 8
+    },
+    {
+      "table_id": "12-4",
+      "caption": "Legal ROBOT Main Power Battery Packs",
+      "rows": 8
+    },
+    {
+      "table_id": "12-5",
+      "caption": "Legal Power Switches",
+      "rows": 7
+    },
+    {
+      "table_id": "12-6",
+      "caption": "Legal ROBOT Grounding Straps",
+      "rows": 4
+    },
+    {
+      "table_id": "12-7",
+      "caption": "Power Regulation Device Power Requirements",
+      "rows": 7
+    },
+    {
+      "table_id": "12-8",
+      "caption": "Wire sizing requirements",
+      "rows": 9
+    },
+    {
+      "table_id": "12-9",
+      "caption": "Supported programmable vision coprocessors",
+      "rows": 2
+    },
+    {
+      "table_id": "13-1",
+      "caption": "Qualification MATCH Ranking Criteria",
+      "rows": 6
+    },
+    {
+      "table_id": "13-2",
+      "caption": "Number of playoff ALLIANCES based on all Qualification Match participating teams",
+      "rows": 5
+    },
+    {
+      "table_id": "13-3",
+      "caption": "2-ALLIANCE playoff bracket typical timing",
+      "rows": 9
+    },
+    {
+      "table_id": "13-7",
+      "caption": "Dual Division Playoff Advancement Points",
+      "rows": 2
+    },
+    {
+      "table_id": "15-1",
+      "caption": "FIRST Championship Awards",
+      "rows": 4
+    },
+    {
+      "table_id": "4-1",
+      "caption": "Advancement Point Assignment",
+      "rows": 6
+    },
+    {
+      "table_id": "4-2",
+      "caption": "Advancement Sorting Criteria Including Tiebreakers",
+      "rows": 11
+    },
+    {
+      "table_id": "4-3",
+      "caption": "Sample Qualification Round Point Assignments",
+      "rows": 2
+    },
+    {
+      "table_id": "6-1",
+      "caption": "Total judged awards available based on all event participating teams Total Event",
+      "rows": 11
+    },
+    {
+      "table_id": "6-10",
+      "caption": "Compass Award Criteria Compass Award Criteria Required 1 Team must be able to cl",
+      "rows": 3
+    },
+    {
+      "table_id": "6-2",
+      "caption": "Inspire Award Criteria Inspire Award Criteria Required 1 Team must submit a PORT",
+      "rows": 5
+    },
+    {
+      "table_id": "6-3",
+      "caption": "Think Award Criteria Think Award Criteria Required 1 Team must submit a PORTFOLI",
+      "rows": 3
+    },
+    {
+      "table_id": "6-4",
+      "caption": "Connect Award Criteria Connect Award Criteria Required 1 Team demonstrates profe",
+      "rows": 4
+    },
+    {
+      "table_id": "6-5",
+      "caption": "Reach Award Criteria Reach Award Criteria Required 1 Team demonstrates outreach",
+      "rows": 5
+    },
+    {
+      "table_id": "6-6",
+      "caption": "Sustain Award Criteria Sustain Award Criteria Required 1 Team demonstrates organ",
+      "rows": 5
+    },
+    {
+      "table_id": "6-7",
+      "caption": "Innovate Award Criteria Innovate Award Criteria Required 1 The team demonstrates",
+      "rows": 5
+    },
+    {
+      "table_id": "6-8",
+      "caption": "Control Award Criteria Control Award Criteria Required 1 Team must submit a PORT",
+      "rows": 6
+    },
+    {
+      "table_id": "6-9",
+      "caption": "Design Award Criteria Design Award Criteria Required 1 Team must describe or dem",
+      "rows": 6
+    },
+    {
+      "table_id": "9-1",
+      "caption": "Audio cues",
+      "rows": 9
+    }
+  ]
+}

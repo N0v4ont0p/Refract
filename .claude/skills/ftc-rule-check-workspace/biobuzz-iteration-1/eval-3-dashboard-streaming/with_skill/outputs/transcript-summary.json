@@ -1,0 +1,19 @@
+{
+  "scripts_run": [
+    "cd \"/Users/georgehu/Desktop/FTC Training AI\" && python3 scripts/check_freshness.py",
+    "cd \"/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check\" && grep -rhoiE \".{0,200}(wi-?fi|wireless|dashboard|bluetooth|laptop|personal electronic).{0,200}\" references/rules/biobuzz-2026-27/",
+    "python3 scripts/rules.py lookup R704 R904 E301 --season biobuzz-2026-27",
+    "python3 scripts/rules.py section 12 --season biobuzz-2026-27",
+    "python3 scripts/rules.py section 12.7 --season biobuzz-2026-27",
+    "python3 scripts/rules.py term MATCH --season biobuzz-2026-27",
+    "python3 scripts/rules.py lookup T405 --season biobuzz-2026-27",
+    "python3 scripts/rules.py verify R704 R904 E301 T405 --season biobuzz-2026-27"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/SKILL.md",
+    "/Users/georgehu/Desktop/FTC Training AI/references/standing-principles.md",
+    "/Users/georgehu/Desktop/FTC Training AI/season-extensions/ACTIVE",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/sections.json",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-rule-check/references/rules/biobuzz-2026-27/rules.json"
+  ]
+}

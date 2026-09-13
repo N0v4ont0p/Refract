@@ -1,3 +1,10 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the "FTC DECODE Field Map" download listed below is
+> DECODE (2025-26)-specific; no BIOBUZZ field map was listed at capture time. It does not describe
+> BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ AprilTags (IDs 30-45) are
+> clusters of 4 on the underside of the tipping HIVE's CELLs and, per the FTC SDK v12.0 README, move
+> and are not suitable for absolute field localization.
+
 > Source: https://docs.limelightvision.io/docs/resources/downloads · Fetched: 2026-08-06 · Retrieved as rendered HTML, converted to text
 > Exhaustive mirror (I2 sweep). All sitemap doc pages, unfiltered.
 > No public/current doc repo exists for this source, so this is an HTML capture

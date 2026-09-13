@@ -32,6 +32,8 @@ meta:
 
 patterns:
   - id: 24089-A-shooter-empirical-linear-regression
+    season_scope: decode-2025-26
+    season_scope_basis: "Live-tunable linear distance->RPM/hood regression structure transfers; the coefficients (14, 1800, 70, 1) are tuned to Artifact shots at DECODE goals."
     finding_ref: shooter-empirical-vs-physics   # FOURTH empirical leg (see references/cross-team-findings.yaml)
     problem: >
       Convert measured distance-to-goal into a flywheel-RPM and hood-angle setpoint for
@@ -75,6 +77,8 @@ patterns:
       continuous distance model. Both are true at once.
 
   - id: 24089-B-moving-shot-lead-compensation
+    season_scope: decode-2025-26
+    season_scope_basis: "Normal/tangential velocity decomposition with cross-product-signed lead transfers; the saturating lead and RPM gains are tuned against a fixed DECODE goal with Artifact flight, and the BIOBUZZ HIVE tips."
     # DISTINCT CAPABILITY — deliberately NOT filed on the empirical-vs-physics axis.
     # This is the real physics 24089 fields, and it is on a DIFFERENT axis (shoot-on-the-move),
     # one no other corpus team occupies. See shooter-empirical-vs-physics: moving_shot_lead_layer.
@@ -112,6 +116,8 @@ patterns:
       empirical/physics power debate — it is orthogonal.
 
   - id: 24089-C-projmotion-abandoned-ballistics
+    season_scope: decode-2025-26
+    season_scope_basis: "Offline ballistics prelim models a hollow 5 in ball (the Artifact); the corpus feasibility artifact reads decode-artifact-ballistics.json."
     # The ONLY genuinely broken/offline/unintegrated piece. Recorded as an abandoned attempt,
     # NOT as fielded evidence. This time "abandoned" is CORRECT — verified so.
     problem: >

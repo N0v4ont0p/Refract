@@ -13,9 +13,27 @@ meta:
   team: "15993"
   season_scope_note: "Batch 1 = season-agnostic architecture/infrastructure. Batch 2 (season-specific mechanisms + evolution insights) tracked separately."
   paths_root: "TeamCode/src/main/java/org/firstinspires/ftc/teamcode"
+  tuning_state_caveat: >
+    TEAM-LEVEL LIMITATION, recorded 2026-08-05 (Phase H) — carried forward explicitly rather than
+    left implicit, same as every other limitation in this corpus. This team's repo is NOT fully
+    tuned, and one specific gap is deterministically verifiable, not an impression:
+    roadrunner/MecanumDrive.java line 68 still carries the RoadRunner quickstart's own unchanged
+    expression `lateralInPerTick = inPerTick`, which means LateralPushTest was never run and the
+    robot's strafe distance scaling is the forward scaling by default. Found by
+    failure_mode_lint.py's template_default_tuning_constant check (Phase H), on the LIVE drive class
+    (TuningOpModes.DRIVE_CLASS == MecanumDrive), not on vendored scaffolding.
+    WHAT THIS DOES AND DOES NOT MEAN: it does not weaken any ARCHITECTURAL pattern below — the task
+    framework, telemetry, and lifecycle patterns are structural and independent of tuning state, and
+    this team's competitive record stands on its own (§12: record is context, never a confidence
+    input). It DOES mean this repo must never be cited as an exemplar of tuning practice, and that
+    any pattern whose behavior depends on odometry ACCURACY (rather than odometry architecture)
+    inherits an untuned-strafe caveat — see 15993-I's own notes.
+    Standing-principles §13 is the governing rule; REQ-107 applies to the check's default tables.
 
 patterns:
   - id: 15993-A-task-framework
+    season_scope: invariant
+    season_scope_basis: "Task state machine + Serial/Parallel/Conditional combinators + builder DSL sequence arbitrary actions; nothing references DECODE elements, field or scoring (Batch 1)."
     problem: >
       Sequence autonomous/teleop actions (movement + mechanism actuation) with
       sequencing, parallelism, and conditional branching WITHOUT blocking the main
@@ -49,6 +67,8 @@ patterns:
       recommended approach and G as a documented alternative, not co-equal.
 
   - id: 15993-D-autobase-lifecycle
+    season_scope: invariant
+    season_scope_basis: "Template-method AutoBase centralizing init/follower/telemetry/loop takes only a start Pose; no DECODE element, field or scoring logic (Batch 1)."
     problem: >
       Avoid duplicating hardware init, follower/localizer setup, alliance-relative
       pose, telemetry, and the main loop across every autonomous routine.
@@ -69,6 +89,8 @@ patterns:
     notes: "Common idiom; kept as a concrete reference instance, not a novel invention."
 
   - id: 15993-E-gamepadex
+    season_scope: invariant
+    season_scope_basis: "Edge-detecting wrapper over the SDK Gamepad; no game dependence (Batch 1)."
     problem: >
       Debounce raw Gamepad input into edge-triggered (justPressed/justReleased)
       signals with named lookups, reusable across driver and operator gamepads.
@@ -92,6 +114,8 @@ patterns:
       class); recorded neutrally.
 
   - id: 15993-F-log-multitelemetry
+    season_scope: invariant
+    season_scope_basis: "MultipleTelemetry fan-out to Driver Station + FTC Dashboard; no game dependence (Batch 1)."
     problem: >
       Send the same telemetry to both the Driver Station and FTC Dashboard without
       each subsystem/opmode constructing its own sink.
@@ -114,10 +138,12 @@ patterns:
       refract-suite/ftc-shared-foundation/quickstart-template/TeamCode/.../telemetry/RobotTelemetry.java
       (wired in via TeamOpMode), countering the Measurement/"no telemetry" failure mode in
       known-failure-modes.md. Originally scoped to a standalone ftc-quickstart-builder skill
-      (superseded — see TRACEABILITY.md R61). Kept in the corpus specifically to make that
+      (superseded — see TRACEABILITY.md REQ-61). Kept in the corpus specifically to make that
       link explicit, not coincidental.
 
   - id: 15993-G-actionqueue
+    season_scope: invariant
+    season_scope_basis: "Delayed/conditional Runnable queue ticked once per loop; no game dependence (Batch 1)."
     problem: >
       Run deferred/delayed one-shot or conditionally-triggered actions inline in a
       loop without Thread.sleep.
@@ -144,6 +170,8 @@ patterns:
   # ---- Batch 2 (season-specific mechanisms + evolution insights), approved 2026-07-03 ----
 
   - id: 15993-H-autobase-evolution
+    season_scope: decode-2025-26
+    season_scope_basis: "Hoisting per-loop aiming into a shared auto base transfers; the turretLock/hood/shooter math is distance to DECODE per-alliance goals (Batch 2)."
     problem: >
       Make alliance-relative goal math (turret aim, hood angle, shooter RPM, all a
       function of distance-to-goal which differs RED vs BLUE) available to every
@@ -167,6 +195,8 @@ patterns:
       Colours.BLUE (param not exercised there) — does not affect provenance.
 
   - id: 15993-I-turret-odometry-aiming
+    season_scope: decode-2025-26
+    season_scope_basis: "Odometry-first, vision-disabled targeting decision transfers; atan2 aim at hardcoded DECODE goal coordinates (BLUE 14,130 / RED 130,130) does not, and the BIOBUZZ HIVE tips (Batch 2)."
     problem: >
       Aim a turret at a fixed field goal using robot ODOMETRY pose rather than
       continuous vision, while a vision subsystem exists but is disabled.
@@ -192,8 +222,18 @@ patterns:
       The TRANSFERABLE part is the "odometry-first targeting, vision-as-disabled-
       fallback" DESIGN DECISION (the DECODE goal coordinates themselves are
       season-specific). Carry verbatim: vision present-but-disabled.
+      TUNING CAVEAT (added 2026-08-05, Phase H — see meta.tuning_state_caveat): this pattern's
+      aiming accuracy is downstream of odometry accuracy, and this team's repo has a verified
+      untuned strafe scalar (`lateralInPerTick = inPerTick`, the quickstart default expression
+      unchanged). The DESIGN — trust odometry pose over live vision — is what transfers and is
+      unaffected. The IMPLICIT ARGUMENT that odometry was accurate enough here to beat vision is
+      NOT independently established by this repo, because the localization it depends on was never
+      fully tuned. Cite the design decision; do not cite this as evidence that odometry-first
+      targeting outperforms vision in general.
 
   - id: 15993-J-shooter-curve-fit-evolution
+    season_scope: decode-2025-26
+    season_scope_basis: "Empirical-curve-over-physics choice transfers only as a hypothesis; the 4-parameter logistic coefficients are fit to Artifact shots at DECODE goals (Batch 2)."
     finding_ref: shooter-empirical-vs-physics   # see references/cross-team-findings.yaml (empirical leg)
     problem: >
       Convert a measured distance-to-goal into a hood-angle / shooter-RPM setpoint
@@ -231,6 +271,8 @@ patterns:
       tractable" — explicitly NOT evidence any team fielded physics-based power.
 
   - id: 15993-K-declarative-autos
+    season_scope: decode-2025-26
+    season_scope_basis: "Declarative serial-tree auto authoring on the Task DSL has no DECODE dependence itself; scope follows meta.season_scope_note Batch 2 because its waypoint Poses and fixed sleepms timings are DECODE-routine data (flagged)."
     problem: >
       Author long multi-segment autonomous as a single declarative structure
       rather than an imperative sequence of blocking calls.
@@ -254,6 +296,8 @@ patterns:
       Documented as 15993's ACTUAL approach, NOT endorsed — a mild anti-pattern.
 
   - id: 15993-L-breakbeam-intake
+    season_scope: decode-2025-26
+    season_scope_basis: "Break-beam presence gating transfers; top+bottom beam placement and isFull = both broken are sized to the 5 in Artifact and the DECODE intake load (Batch 2)."
     finding_ref: sensing-modality   # see references/cross-team-findings.yaml (presence-only leg)
     problem: >
       Detect how many/which game pieces are held in an intake to gate shooter

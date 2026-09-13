@@ -1,0 +1,32 @@
+{
+  "table_id": "10-3",
+  "caption": "BIOBUZZ RP thresholds",
+  "rows": [
+    [
+      "RP Type",
+      "FIRST Championship",
+      "Regional Championships",
+      "All Other Events*"
+    ],
+    [
+      "SWARM RP",
+      "TBA",
+      "TBA",
+      "16 Points"
+    ],
+    [
+      "POLLINATOR 1 RP",
+      "TBA",
+      "TBA",
+      "4 TIPS"
+    ],
+    [
+      "POLLINATOR 2 RP",
+      "TBA",
+      "TBA",
+      "7 TIPS"
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:10-3]] pointer (\u00a78<->\u00a79)"
+}

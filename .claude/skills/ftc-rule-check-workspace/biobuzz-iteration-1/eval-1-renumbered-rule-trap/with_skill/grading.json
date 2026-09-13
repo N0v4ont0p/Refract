@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "season-pinned",
+      "passed": true,
+      "evidence": "scripts_run includes `rules.py lookup R101 R102 --season biobuzz-2026-27`, `lookup R103 --season biobuzz-2026-27`, `term \"STARTING CONFIGURATION\" --season biobuzz-2026-27`, `verify R102 G304 R105 --season biobuzz-2026-27`, and `cat season-extensions/ACTIVE`. The answer names the season: \"Season: BIOBUZZ 2026-27, which is the active season. The corpus is BIOBUZZ Competition Manual V1, updated through Team Update 00.\" It looked up DECODE R101 only to explain the renumbering, and the verdict rests on BIOBUZZ text."
+    },
+    {
+      "name": "cites-R102-not-R101",
+      "passed": true,
+      "evidence": "The citations are R102 and G304. The R102 citation text matches the corpus text word for word, starting \"In the STARTING CONFIGURATION (the physical configuration in which a ROBOT starts a MATCH), all parts of the ROBOT must be fully stationary...\" and ending \"Any pre-loaded SCORING ELEMENTS may extend outside the starting size constraint.\" R101 is not cited as the size rule. The answer says \"In BIOBUZZ, R101 is 'It is your team's ROBOT'\"."
+    },
+    {
+      "name": "flags-number-reuse",
+      "passed": true,
+      "evidence": "\"You remembered right for last year. In DECODE 2025-26, R101 was 'STARTING CONFIGURATION is limited to an 18-inch Cube'. FIRST reuses rule numbers each season with different text... The 18-inch cube rule is now **R102**. Use R102 in your inspection notes.\""
+    }
+  ],
+  "factual_errors": []
+}

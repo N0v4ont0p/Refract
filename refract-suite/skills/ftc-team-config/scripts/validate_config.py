@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Deterministic team-config validator (R3, R7, R50, R55 support).
+"""Deterministic team-config validator (REQ-3, REQ-7, REQ-50, REQ-55 support).
 
 Validates a team-config.yaml against:
-  1. core-feature-model.yaml axes            — every value must come from a declared axis (R3)
+  1. core-feature-model.yaml axes            — every value must come from a declared axis (REQ-3)
   2. the ACTIVE season extension's mechanisms — season mechanism values from its declared lists
-  3. constraints_on_core                      — e.g. fixed_shooter_on_swerve requires swerve (R7)
-  4. the mandatory-ask set                    — present AND confirmed before generation (R50/R55)
+  3. constraints_on_core                      — e.g. fixed_shooter_on_swerve requires swerve (REQ-7)
+  4. the mandatory-ask set                    — present AND confirmed before generation (REQ-50/REQ-55)
 
 Output: JSON {valid, errors, warnings, unconfirmed_mandatory} on stdout. Exit 1 if invalid.
-Usage: validate_config.py <team-config.yaml> [--suite-root <path>]
+Usage: validate_config.py <team-config.yaml> [--suite-root <path>] [--active <season slug>]
 
 Field values may be plain scalars (treated as UNCONFIRMED) or dicts:
   {value: mecanum, source: inferred|asked, confirmed: true|false}
@@ -96,6 +96,8 @@ def main():
 
     core = yaml.safe_load((suite / "core-feature-model.yaml").read_text())
     active_slug = (suite / "season-extensions" / "ACTIVE").read_text().strip()
+    if "--active" in args:  # regression runs of a prior season's fixtures: validate as if that season were ACTIVE
+        active_slug = args[args.index("--active") + 1]
     season = yaml.safe_load((suite / "season-extensions" / f"{active_slug}.yaml").read_text())
 
     # No team-config.yaml yet is a normal, expected state (a fresh repo, before any elicitation) —
@@ -106,9 +108,16 @@ def main():
     cfg = (yaml.safe_load(cfg_path.read_text()) or {}) if config_found else {}
     errors, warnings, unconfirmed = [], [], []
 
+    # --- 0. the ACTIVE season extension itself must be live, not a draft (§19 step 6) ---
+    smeta = season.get("_meta") or {}
+    if smeta.get("not_active") or str(smeta.get("status", "")).upper().startswith("DRAFT"):
+        errors.append(f"season-extensions/ACTIVE points at '{active_slug}', which is marked "
+                      f"status={smeta.get('status')!r} not_active={smeta.get('not_active')!r} — a draft "
+                      f"season layer cannot validate a config (Season Transition Protocol step 6 sign-off)")
+
     core_axes = {k: v for k, v in core.items() if not k.startswith("_")}
 
-    # --- 1. core-axis validation (R3) ---
+    # --- 1. core-axis validation (REQ-3) ---
     for axis, fields in cfg.items():
         if axis in ("_meta", "team", "season_mechanisms", "archetypes", "config_history",
                     "device_map", "tuning_constants", "reference_frames", "device_ownership",
@@ -145,8 +154,29 @@ def main():
             if allowed is not None and value not in allowed:
                 errors.append(f"'{axis}.{field}' = {value!r} not in declared axis {allowed}")
 
+    # --- 2a. season stamp: the season layer is only valid for the season it was confirmed in ---
+    # Core axes (drivetrain, localization, tuning, frames...) are season-agnostic and carry over a
+    # season boundary. season_mechanisms/archetypes do not: a value legal in both seasons (e.g.
+    # intake: roller) would otherwise pass silently as confirmed for a game nobody asked about.
+    cfg_season, _ = unwrap((cfg.get("_meta") or {}).get("season"))
+    season_layer_stale = False
+    if cfg.get("season_mechanisms") or cfg.get("archetypes"):
+        if not cfg_season:
+            unconfirmed.append(f"_meta.season (not stamped — can't tell which season season_mechanisms "
+                               f"were confirmed for; active season is {active_slug})")
+        elif cfg_season != active_slug:
+            season_layer_stale = True
+            # slugs end in the season years (decode-2025-26), so the trailing years order them
+            newer = cfg_season.split("-")[-2:] > active_slug.split("-")[-2:]
+            unconfirmed.append(
+                f"season_mechanisms/archetypes confirmed for {cfg_season}, but the active season is {active_slug} — "
+                + ("ACTIVE is behind this config: the new season's transition hasn't been signed off yet "
+                   "(season-extensions/ACTIVE), so don't re-elicit — resolve the season pointer first"
+                   if newer else
+                   "re-elicit the season layer for the new game (core axes carry over)"))
+
     # --- 2. season mechanisms ---
-    mechs = cfg.get("season_mechanisms", {})
+    mechs = {} if season_layer_stale else cfg.get("season_mechanisms", {})
     declared = season.get("season_mechanisms", {})
     for mech, node in (mechs or {}).items():
         value, _ = unwrap(node)
@@ -154,13 +184,17 @@ def main():
         opts = decl if isinstance(decl, list) else (decl or {}).get("options") if isinstance(decl, dict) else None
         if decl is None:
             errors.append(f"season mechanism '{mech}' not declared in {active_slug}.yaml")
+        elif not opts:
+            # e.g. `turret: UNKNOWN` — no declared option list means nothing can be checked, so the
+            # value cannot count as confirmed (previously a string declaration let any value pass)
+            unconfirmed.append(f"season_mechanisms.{mech} (declared {decl!r} in {active_slug}.yaml — no options to confirm against)")
         elif opts and value not in opts:
             errors.append(f"season_mechanisms.{mech} = {value!r} not in {opts}")
 
-    # --- 3. constraints_on_core (R7) ---
+    # --- 3. constraints_on_core (REQ-7) ---
     for c in season.get("constraints_on_core", []) or []:
         arch = c.get("archetype")
-        if arch and arch in (cfg.get("archetypes") or []):
+        if arch and not season_layer_stale and arch in (cfg.get("archetypes") or []):
             for path, required in (c.get("requires") or {}).items():
                 # path like core.drivetrain.type
                 parts = path.split(".")[1:]  # drop leading 'core'
@@ -188,7 +222,7 @@ def main():
             return actual != expected["not"]
         return actual == expected
 
-    for c in season.get("constraints_on_mechanisms", []) or []:
+    for c in ([] if season_layer_stale else season.get("constraints_on_mechanisms", []) or []):
         conds = c.get("if") or {}
         resolved = {k: resolve(k) for k in conds}
         if any(v is None for v in resolved.values()):
@@ -201,9 +235,11 @@ def main():
                         f"{json.dumps(v)}, config has {resolve(k)!r}"
                     )
 
-    # --- 4. mandatory-ask set confirmed (R50/R55) ---
+    # --- 4. mandatory-ask set confirmed (REQ-50/REQ-55) ---
     for m in MANDATORY:
         if m == "season_mechanisms":
+            if season_layer_stale:
+                continue  # already reported by 2a with the actual reason
             if not mechs:
                 unconfirmed.append("season_mechanisms (none recorded)")
             else:
@@ -324,7 +360,7 @@ def main():
             warnings.append(f"tuning_constants.tuning_status = {status!r} but {len(measured)} constant(s) "
                             f"are marked `measured` — if real values exist, status is probably 'tuned'")
 
-    # --- 7. reference_frames + frame tagging (R123) ---
+    # --- 7. reference_frames + frame tagging (REQ-123) ---
     # A coordinate's correctness is a property of the number AND the frame it is stated in.
     # `origin: measured` covers the first and is silent on the second.
     frames = cfg.get("reference_frames") or {}
@@ -382,7 +418,7 @@ def main():
                 f"{', '.join(missing[:4])}{' ...' if len(missing) > 4 else ''}. Generation will refuse "
                 f"to cross an undeclared conversion rather than guess one.")
 
-    # --- 8. device_ownership: exactly one owner per (device, opmode_type) (R125) ---
+    # --- 8. device_ownership: exactly one owner per (device, opmode_type) (REQ-125) ---
     own = cfg.get("device_ownership") or []
     if own and not isinstance(own, list):
         errors.append("device_ownership must be a list of {device, owner, opmode_type} entries")
@@ -405,7 +441,7 @@ def main():
         if not bool(e.get("confirmed", False)):
             unconfirmed.append(f"device_ownership.{dev}[{ot}]")
 
-    # --- 9. cross_opmode_state: the handoff channel (R126) ---
+    # --- 9. cross_opmode_state: the handoff channel (REQ-126) ---
     xstate = cfg.get("cross_opmode_state") or []
     if xstate and not isinstance(xstate, list):
         errors.append("cross_opmode_state must be a list")

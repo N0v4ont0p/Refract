@@ -1,3 +1,11 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the pattern below (relocalize the follower with
+> `setPose` from a camera AprilTag pose) is season-agnostic, but it assumes game AprilTags with fixed,
+> known field poses. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. BIOBUZZ AprilTags (IDs 30-45) are
+> clusters of 4 on the underside of the tipping HIVE's CELLs and, per the FTC SDK v12.0 README, move
+> and are not suitable for absolute field localization. Do not apply this relocalization pattern to
+> BIOBUZZ game tags.
+
 > Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/examples/apriltags.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

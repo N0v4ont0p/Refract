@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Config-constraint check (R40/R34): flag robot code that references a mechanism the team's
+"""Config-constraint check (REQ-40/REQ-34): flag robot code that references a mechanism the team's
 CONFIRMED config declares absent. A team with turret:none should have no turret code — if it does,
 it's either dead weight (stale) or a config mismatch. Either way the human confirms, not the model.
 
@@ -18,11 +18,18 @@ try:
 except ImportError:
     print(json.dumps({"error": "pyyaml not installed"})); sys.exit(2)
 
-# mechanism key -> identifier tokens that would appear in code for it
-TOKENS = {
-    "turret": ["Turret"], "shooter": ["Shooter", "Flywheel", "Launcher"],
-    "intake": ["Intake"], "gate_mechanism": ["Gate"], "classifier_interaction": ["Classifier"],
-}
+
+
+def season_file(slug):
+    """(slug, parsed season-extensions/<slug>.yaml or {}). slug None -> ACTIVE."""
+    here = Path(__file__).resolve()
+    for d in here.parents:
+        for base in (d / "season-extensions", d / "ftc-shared-foundation" / "season-extensions"):
+            if not slug and (base / "ACTIVE").is_file():
+                slug = (base / "ACTIVE").read_text().strip()
+            if slug and (base / f"{slug}.yaml").is_file():
+                return slug, yaml.safe_load((base / f"{slug}.yaml").read_text()) or {}
+    return slug, {}
 
 
 def val(node):
@@ -57,7 +64,14 @@ def find_config(explicit, code_dir="."):
 def check(code_dir, config_path):
     cfg = yaml.safe_load(Path(config_path).read_text()) or {}
     mechs = cfg.get("season_mechanisms", {})
-    absent = {k: TOKENS[k] for k, node in mechs.items() if k in TOKENS and val(node) == "none"}
+    # mechanism key -> identifier tokens come from the season file's `code_tokens` (season data: a
+    # hardcoded DECODE map made a BIOBUZZ `hive_launcher: none` + LauncherSubsystem report clean)
+    slug, season = season_file(val((cfg.get("_meta") or {}).get("season")))
+    tokens = season.get("code_tokens") or {}
+    declared_none = [k for k, node in mechs.items() if val(node) == "none"]
+    absent = {k: tokens[k] for k in declared_none if tokens.get(k)}
+    # a `none` mechanism with no token entry at all is UNCHECKED, not clean (explicit [] = not lintable by name)
+    unchecked = [k for k in declared_none if k not in tokens]
     files = [p for p in Path(code_dir).rglob("*") if p.suffix in (".java", ".kt")]
     findings = []
     for mech, tokens in absent.items():
@@ -73,21 +87,62 @@ def check(code_dir, config_path):
             findings.append({"mechanism": mech, "tokens": tokens, "files": hits[mech],
                              "note": f"config declares {mech}: none, but code references it — "
                                      f"not referenced by current config; confirm if stale or a config mismatch"})
-    return {"config": str(config_path), "code_dir": str(code_dir),
-            "declared_absent": list(absent), "findings": findings, "clean": not findings}
+    # season code constraints with a `detect` regex (e.g. BIOBUZZ R704: no FTC Dashboard/Panels
+    # streaming) — flagged for human confirmation like everything here, never auto-fixed
+    for c in season.get("code_constraints") or []:
+        det = c.get("detect")
+        if not det:
+            continue
+        pat, unless = re.compile(det["pattern"]), det.get("unless") and re.compile(det["unless"])
+        hit = []
+        for f in files:
+            try:
+                txt = f.read_text(errors="ignore")
+            except Exception:
+                continue
+            if pat.search(txt) and not (unless and unless.search(txt)):
+                hit.append(str(f))
+        if hit:
+            findings.append({"season_constraint": c.get("id"), "rule": c.get("rule"), "files": hit,
+                             "note": f"{slug}: {c.get('text')} — applies to {c.get('applies_to')}. "
+                                     f"Confirm against rules.py lookup --season {slug} before acting"})
+
+    return {"config": str(config_path), "code_dir": str(code_dir), "season": slug,
+            "declared_absent": list(absent), "findings": findings,
+            "unchecked_mechanisms": unchecked, "clean": not findings and not unchecked}
 
 
 def _self_test():
     import tempfile, os
     d = tempfile.mkdtemp()
     Path(d, "team-config.yaml").write_text(
-        "season_mechanisms:\n  turret: {value: none, confirmed: true}\n  shooter: {value: flywheel, confirmed: true}\n")
+        "_meta: {season: decode-2025-26}\nseason_mechanisms:\n  turret: {value: none, confirmed: true}\n  shooter: {value: flywheel, confirmed: true}\n")
     src = Path(d, "src"); src.mkdir()
     (src / "TurretSubsystem.java").write_text("class TurretSubsystem {}")
     (src / "Shooter.java").write_text("class Shooter {}")
     r = check(src, Path(d, "team-config.yaml"))
     assert not r["clean"] and r["findings"][0]["mechanism"] == "turret", r
     assert all(f["mechanism"] != "shooter" for f in r["findings"]), "shooter is declared, must not flag"
+
+    # season data, not a DECODE map: a BIOBUZZ launcher declared none but present in code must flag,
+    # and a `none` mechanism the season file has no token entry for must be reported unchecked
+    Path(d, "bb.yaml").write_text("_meta: {season: biobuzz-2026-27}\nseason_mechanisms:\n"
+                                  "  hive_launcher: {value: none, confirmed: true}\n  made_up_mech: {value: none, confirmed: true}\n")
+    (src / "LauncherSubsystem.java").write_text("class LauncherSubsystem {}")
+    r = check(src, Path(d, "bb.yaml"))
+    assert r["season"] == "biobuzz-2026-27" and r["findings"][0]["mechanism"] == "hive_launcher", r
+    (src / "Telem.java").write_text("import com.acmerobotics.dashboard.FtcDashboard; t = new MultipleTelemetry(ds, FtcDashboard.getInstance().getTelemetry());")
+    (src / "Tunables.java").write_text("import com.acmerobotics.dashboard.config.Config; @Config class Tunables {}")  # exposure, not streaming
+    (src / "Vision.java").write_text("for (AprilTagDetection d : dets) { use(d.id); }")
+    (src / "Vision2.java").write_text("if (d instanceof AprilTagSingleDetection) {} AprilTagDetection d; use(d.id);")
+    (src / "Vision3.java").write_text("for (AprilTagDetection d : dets) { use(d.ftcPose.x); }")  # still compiles on 12
+    r = check(src, Path(d, "bb.yaml"))
+    sc = {f["season_constraint"]: f["files"] for f in r["findings"] if "season_constraint" in f}
+    assert [Path(x).name for x in sc["no-dashboard-streaming"]] == ["Telem.java"], sc
+    assert [Path(x).name for x in sc["sdk-12-apriltag-cluster-api"]] == ["Vision.java"], sc
+    # the same code under DECODE carries no such constraint
+    assert not any("season_constraint" in f for f in check(src, Path(d, "team-config.yaml"))["findings"])
+    assert r["unchecked_mechanisms"] == ["made_up_mech"] and not r["clean"], r
 
     # real bug regression: config lives at the PROJECT ROOT, a SIBLING of code_dir, not nested
     # inside it -- find_config must find that sibling by walking UP, not miss it by searching down.

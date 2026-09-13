@@ -1,3 +1,8 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the example repositories listed below are DECODE
+> (2025-26) team codebases; their mechanisms (shooter, turret, intake states) and autos target DECODE.
+> Use them only for Ivy command-structure patterns, not game logic. It does not describe BIOBUZZ
+> (2026-27). For BIOBUZZ facts read `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+
 > Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/ivy/example-repos.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

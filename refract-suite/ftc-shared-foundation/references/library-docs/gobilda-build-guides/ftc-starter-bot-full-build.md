@@ -1,3 +1,10 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): this whole build guide is goBILDA's DECODE (2025-26)
+> Starter Bot (kit 3200-4008-2526): the Artifact ramps, 3-Artifact capacity and endgame-positioning
+> claims are DECODE game features. The part-level assembly techniques (e.g. the 19.2:1-to-1:1 Yellow
+> Jacket conversion) are generic. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. goBILDA's BIOBUZZ StarterBot is
+> summarized in `gobilda-build-guides/biobuzz-2026-27/starter-bot-biobuzz.md`.
+
 > Source: https://www.gobilda.com/content/user_manuals/3200-2526-0001_assembly-instructions.min.pdf · Fetched: 2026-07-12
 
 # FTC Starter Bot Assembly Guide (for DECODE™ season)

@@ -1,3 +1,8 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): this variant delta is for goBILDA's DECODE (2025-26)
+> Starter Bot. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. goBILDA's BIOBUZZ StarterBot is
+> summarized in `gobilda-build-guides/biobuzz-2026-27/starter-bot-biobuzz.md`.
+
 > Source: https://www.gobilda.com/content/user_manuals/3200-2526-0003_assembly-instructions.min.pdf · Fetched: 2026-07-12
 
 # FTC Starter Bot with Mecanum Wheels (for DECODE™) — variant delta

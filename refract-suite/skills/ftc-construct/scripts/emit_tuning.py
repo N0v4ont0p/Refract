@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ftc-construct — physical tuning constants: emit them, then prove nothing else got in (R114).
+ftc-construct — physical tuning constants: emit them, then prove nothing else got in (REQ-114).
 
 WHY THIS SCRIPT EXISTS. `core-feature-model.yaml` + `validate_config.py` already make a fabricated
 tuning constant unrepresentable IN THE CONFIG (standing-principles §13: `origin` is a closed set of
@@ -59,7 +59,7 @@ _PLACEHOLDER = re.compile(
     r'\{\{\s*(tuning|device)\.([A-Za-z0-9_.]+)\s*(?:\|\s*in_frame\s*:\s*([A-Za-z0-9_]+)\s*)?\}\}')
 
 
-# --- name reconciliation: Java camelCase vs config snake_case (R122) ---------------------------
+# --- name reconciliation: Java camelCase vs config snake_case (REQ-122) ---------------------------
 # A gate that is wrong most of the time is worse than no gate: it trains people to stop reading it.
 # Run against a real team's repo, `verify` reported 8 violations of which 5 were the SAME constants
 # the config already confirmed, spelled differently — `forwardZeroPowerAcceleration` in Java against
@@ -257,7 +257,7 @@ def cmd_render(args):
                 errors.append(f"tuning_constants has no entry '{key}' — a tuning field with no "
                               f"config provenance must not be generated (standing-principles §13)")
             return m.group(0)
-        # --- frame reconciliation, before any number is emitted (R123) ---
+        # --- frame reconciliation, before any number is emitted (REQ-123) ---
         stated = entry.get("frame")
         if want_frame and stated and want_frame != stated:
             if (stated, want_frame) not in declared_conv:

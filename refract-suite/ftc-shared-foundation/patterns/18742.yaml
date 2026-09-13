@@ -26,6 +26,8 @@ meta:
 
 patterns:
   - id: 18742-A-collector-attach-module
+    season_scope: invariant
+    season_scope_basis: "Collector + attachX lifecycle-delegate subsystem architecture; no game dependence."
     problem: >
       Coupling OpMode control flow to hardware/subsystem logic yields monolithic
       God-OpMode classes hard to test or reuse across TeleOp/Auto.
@@ -47,6 +49,8 @@ patterns:
     notes: "Composition-over-inheritance subsystem convention; strong subsystem-separation signal (thin OpModes, no God-OpMode) per the failure-mode taxonomy lens."
 
   - id: 18742-B-eventbus
+    season_scope: invariant
+    season_scope_basis: "KClass-keyed request/response EventBus; messaging infrastructure, no game dependence."
     problem: >
       Modules must query/notify each other's state without hard dependencies or
       import cycles.
@@ -77,6 +81,8 @@ patterns:
       one team's design.
 
   - id: 18742-C-iaction-actionrunner
+    season_scope: invariant
+    season_scope_basis: "Cooperative IAction queue + ParallelActions + DriveAction; orchestration infrastructure, no game dependence."
     problem: >
       Autonomous must interleave drive-to-point motion with mechanism actions,
       sequentially or in parallel, without blocking the single OpMode loop.
@@ -118,6 +124,8 @@ patterns:
       principle, not necessarily this wiring.
 
   - id: 18742-D-guarded-phase-state-machines
+    season_scope: invariant
+    season_scope_basis: "Guarded enum-phase state machine with idle-guarded entry points transfers as-is; the cited SortingPhase/ShootingPhase instance is DECODE sort/shoot content, not the pattern (per its notes)."
     problem: >
       Multi-step, hardware-timed scoring sequences must run in strict order, be
       interruptible-safe, and reject new commands while busy, without blocking.
@@ -143,6 +151,8 @@ patterns:
       than 18742-C's cooperative-scheduler convergence.
 
   - id: 18742-E-pid-segment-runner
+    season_scope: invariant
+    season_scope_basis: "x/y/heading PID segment runner against live odometry publishing drive velocity; drivetrain control, no game dependence."
     problem: >
       An on-robot autonomous path/point follower decoupled from PID tuning and
       reusable between TeleOp (driver-relative power) and Auto (field-relative
@@ -167,6 +177,8 @@ patterns:
       spline/motion-profiled follower is a real design trade-off — flag, not endorse.
 
   - id: 18742-F-pidf-regulator
+    season_scope: invariant
+    season_scope_basis: "Shared PIDF + gravity + voltage-compensation Regulator class; control infrastructure, no game dependence."
     problem: >
       Apply battery-voltage compensation consistently across every subsystem's
       PID/feedforward output without each module re-reading/converting voltage.
@@ -193,6 +205,8 @@ patterns:
   # ---- Batch 2 (infra / UX / sensing), approved 2026-07-03 ----
 
   - id: 18742-G-logmanager
+    season_scope: invariant
+    season_scope_basis: "Per-module leveled log config fanning to Driver Station + Dashboard; telemetry infrastructure, no game dependence."
     problem: >
       Debug/telemetry needs per-module, per-severity filtering toggleable without
       recompiling or littering call sites with if-checks, while driving both
@@ -215,6 +229,8 @@ patterns:
     notes: "STRONG observability signal (Phase 9 taxonomy positive) — genuinely-used, not token telemetry. Fully transferable, season-agnostic. Signal-quality ≠ provenance breadth → single-source."
 
   - id: 18742-H-gamepad-wake-start
+    season_scope: invariant
+    season_scope_basis: "Gamepad-activity wake via OpModeManagerImpl.startActiveOpMode; SDK lifecycle trick, no game dependence."
     problem: >
       Let the driver "wake" the OpMode into RUNNING via controller input instead of
       the physical INIT/START buttons (e.g. re-run after a crash/reset).
@@ -239,6 +255,8 @@ patterns:
       anti-pattern, flagged not endorsed.
 
   - id: 18742-I-auto-config-select-chain
+    season_scope: invariant
+    season_scope_basis: "Pre-START bumper-cycled start-config enum + auto-chain into TeleOp; the enum start/park poses are season data, the selection and chaining mechanism is game-independent."
     problem: >
       Give the drive team a pre-match, on-field way to pick a start position/strategy
       without reflashing, and auto-continue into TeleOp at match end.
@@ -263,6 +281,8 @@ patterns:
       the specific pose-enum + init-chaining realization is one team's design.
 
   - id: 18742-J-gamepad-listener-registry
+    season_scope: invariant
+    season_scope_basis: "Click/Hold/Analog gamepad listener registry on the EventBus; input infrastructure, no game dependence."
     problem: >
       Reuse gamepad edge/hold/analog handling across many subsystems without each
       re-implementing "old button state" bookkeeping.
@@ -293,6 +313,8 @@ patterns:
     notes: "Convergence is on the CAPABILITY (edge/hold/analog abstraction), not on the design. WoEN's EventBus-registered listener-object design remains single-team. Transferable, season-agnostic."
 
   - id: 18742-K-odometry-republish
+    season_scope: invariant
+    season_scope_basis: "Wrap Pinpoint once with pod-offset/zeroing and republish pose+velocity each tick; the DECODE shooting-zone triangles sit in notes, not the pattern."
     problem: >
       Provide field-relative pose+velocity for driver-relative TeleOp and closed-loop
       Auto from a dedicated odometry computer, not drivetrain encoders.
@@ -318,6 +340,8 @@ patterns:
       field-name quirk, carried not evaluated.)
 
   - id: 18742-L-camera-pattern-latch
+    season_scope: decode-2025-26
+    season_scope_basis: "Latch-once-and-broadcast camera result structure transfers; the content maps DECODE obelisk tag IDs 21/22/23 to GPP/PGP/PPG motifs, which have no BIOBUZZ equivalent."
     problem: >
       Latch a one-time camera (Limelight AprilTag) "pattern discovered" result and
       broadcast it to whichever subsystem needs it, tolerating a disabled camera.

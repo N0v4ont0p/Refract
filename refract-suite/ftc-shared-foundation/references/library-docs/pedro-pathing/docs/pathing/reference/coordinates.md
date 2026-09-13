@@ -1,3 +1,12 @@
+> SEASON SCOPE (added by Refract, 2026-09-13): the field images labelled "Decode" and the paragraph
+> converting FTC coordinates "for the Decode game" via `InvertedFTCCoordinates` ("inverted for
+> decode") below are DECODE (2025-26)-specific. Pedro's own coordinate system (0-144, CCW-positive
+> heading) is generic. It does not describe BIOBUZZ (2026-27). For BIOBUZZ facts read
+> `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`. No BIOBUZZ field-axis definition has
+> been published on ftc-docs as of 2026-09-13; the BIOBUZZ manual (§9.5) only says the red ALLIANCE
+> AREA is on the left from the audience. Do not infer BIOBUZZ axes or pick a coordinate conversion
+> from the DECODE material.
+
 > Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/reference/coordinates.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "evergreen-meaning",
+      "passed": true,
+      "evidence": "Answer: \"In the current BIOBUZZ manual, the `*` on R501 marks an 'Evergreen' rule. The stored definition says the subject and presence stay the same each season, 'but game-specific details may change (manual \u00a71.7.1) \u2014 NOT unchanged'\". This matches rules.py's asterisk_meaning for biobuzz-2026-27 word for word. It also correctly separates this from DECODE's meaning, \"relatively unchanged\" (\u00a71.6)."
+    },
+    {
+      "name": "reads-current-table",
+      "passed": true,
+      "evidence": "scripts_run includes `cat .claude/skills/ftc-hardware-lookup/references/manual-tables/biobuzz-2026-27/table-12-1.json`, and files_read includes the same file. Answer: \"BIOBUZZ Table 12-1 (V1 manual, through Team Update 00) includes 'WATTOS Stingray 12V DC', part number WDM12\". The verdict rests on that table and tells the user not to reuse the thread: \"Don't carry its conclusion into this season.\""
+    }
+  ],
+  "factual_errors": []
+}

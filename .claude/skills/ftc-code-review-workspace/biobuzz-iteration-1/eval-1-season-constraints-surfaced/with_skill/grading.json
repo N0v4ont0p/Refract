@@ -1,0 +1,25 @@
+{
+  "assertions": [
+    {
+      "name": "dashboard-R704",
+      "passed": true,
+      "evidence": "The answer flags TelemetryHelper.java lines 3-4 and 9 (`new MultipleTelemetry(ds, FtcDashboard.getInstance().getTelemetry())`) under R704.D. It quotes the retrieved text \"Additional logging/streaming services, such as those hosted by third party plugins and tools such as FTC Dashboard, FTControl Panels, and others are prohibited.\" scripts_run includes `rules.py lookup R704 --season biobuzz-2026-27` and `rules.py verify R704`. I re-ran the lookup and the quote matches the BIOBUZZ corpus text word for word (section 12.7, no one-hop cross-references)."
+    },
+    {
+      "name": "sdk12-cluster",
+      "passed": true,
+      "evidence": "F1: \"Line 12 reads `detection.id` straight off the base `AprilTagDetection`. In SDK v12.0 (Breaking Changes) the base type no longer has `.id`, `.metadata` or `.center`\". Fix given: \"check `instanceof AprilTagSingleDetection` or `AprilTagClusterDetection` and cast before reading the tag ID.\" This matches config_lint's sdk-12-apriltag-cluster-api finding and the SDK VERSION SCOPE note in apriltag-id-code.md."
+    },
+    {
+      "name": "turret-config-mismatch",
+      "passed": true,
+      "evidence": "F3: \"Config says `turret: none` (confirmed), but this class exists. It isn't referenced by your current config. I can't tell whether the code is left over or the config is out of date, and I'm not assuming either (see Q1).\" Q1 then asks \"Is `TurretAim` left over, or did you add a turret?\""
+    },
+    {
+      "name": "launcher-not-flagged",
+      "passed": true,
+      "evidence": "\"`LauncherSubsystem` is correctly declared in your config and matches it.\" No config or season finding is raised against it. The only mention is a Tier 3 note, explicitly labelled \"heuristic, not verdicts\", suggesting an at-speed check. It does not flag a config mismatch, and config_lint output confirms no launcher finding."
+    }
+  ],
+  "factual_errors": []
+}

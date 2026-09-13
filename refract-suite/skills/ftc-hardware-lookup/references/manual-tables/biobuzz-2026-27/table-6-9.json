@@ -1,0 +1,36 @@
+{
+  "table_id": "6-9",
+  "caption": "Design Award Criteria Design Award Criteria Required 1 Team must describe or dem",
+  "rows": [
+    [
+      "Design Award Criteria"
+    ],
+    [
+      "Required",
+      "1",
+      "Team must describe or demonstrate that their ROBOT is elegant, efficient (simple to build and operate), and/or practical to maintain."
+    ],
+    [
+      "Required",
+      "2",
+      "The design of the entire ROBOT, or the detailed process used to create it, must be considered - not just one COMPONENT."
+    ],
+    [
+      "Encouraged",
+      "3",
+      "The ROBOT stands out from other ROBOTS because of its appearance and how well it functions."
+    ],
+    [
+      "Encouraged",
+      "4",
+      "The team has clearly thought through the reasons behind their design choices, such as inspiration or function."
+    ],
+    [
+      "Encouraged",
+      "5",
+      "The design works consistently and aligns with the team's game plan or strategy."
+    ]
+  ],
+  "source_manual": "BIOBUZZ Competition Manual V1 (2026-2027)",
+  "note": "structured copy of a manual table; rules reference this by [[TABLE:6-9]] pointer (\u00a78<->\u00a79)"
+}

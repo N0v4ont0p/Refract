@@ -6,6 +6,7 @@
 findings:
   - id: orchestration-nonblocking
     title: "Cooperative per-tick non-blocking orchestration (over blocking sleeps)"
+    seasons_observed: [decode-2025-26]
     confidence: medium-high
     member_patterns:
       - { id: 15993-A-task-framework, team: "15993", mechanism: "hand-rolled Task state-machine + Serial/Parallel combinators + TaskBuilder DSL", platform: FTC }
@@ -50,6 +51,8 @@ findings:
 
   - id: shooter-empirical-vs-physics
     title: "Empirical distance->power for FTC shooters (with a preset alternative and an orthogonal moving-shot axis)"
+    seasons_observed: [decode-2025-26]
+    cross_season_transfer: "Evidence is DECODE-only (5 in Artifact, fixed goals); BIOBUZZ launches smaller, different balls (2.8 in POLLEN, 3.6 in NECTAR) into a moving, tipping HIVE - treat as a hypothesis to re-verify, not current-season evidence."
     confidence: high
     finding_type: convergence-on-empirical-power-solve
     confidence_revision:
@@ -217,6 +220,8 @@ findings:
 
   - id: moving-shot-compensation
     title: "Shoot-on-the-move lead compensation — a real capability tier with an OPEN method space"
+    seasons_observed: [decode-2025-26]
+    cross_season_transfer: "Evidence is DECODE-only (leads computed against fixed goals with Artifact flight times); BIOBUZZ launches smaller, different balls into a moving, tipping HIVE - treat as a hypothesis to re-verify, not current-season evidence."
     confidence: medium
     finding_type: capability-with-open-design-space   # descriptive, NOT a single-answer convergence
     member_patterns:
@@ -295,6 +300,8 @@ findings:
 
   - id: sensing-modality
     title: "Game-piece sensing modality is driven by the information NEED, not just robustness"
+    seasons_observed: [decode-2025-26]
+    cross_season_transfer: "Evidence is DECODE-only (Artifact green/purple colour, obelisk motif, fixed field AprilTags); BIOBUZZ has smaller, different POLLEN/NECTAR balls and HIVE tags that move - treat as a hypothesis to re-verify, not current-season evidence."
     finding_type: design-principle
     confidence: medium
     demonstrated_by:

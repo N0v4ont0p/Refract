@@ -1,0 +1,20 @@
+{
+  "assertions": [
+    {
+      "name": "verdict-illegal-R503",
+      "passed": true,
+      "evidence": "Answer opens \"10 servos is 2 too many for BIOBUZZ\" and says it \"fails inspection as the robot is now\". It quotes R503: \"ROBOTS are limited to a total of 8 motors and 8 servos.\" That matches the BIOBUZZ R503 short title in the corpus exactly (rules.py lookup R503 --season biobuzz-2026-27). The answer also covers summing across configurations, which matches the R503 body text."
+    },
+    {
+      "name": "no-decode-limit",
+      "passed": true,
+      "evidence": "10 servos appears only as the old limit: \"Last season (DECODE) allowed 10 servos\". The current limit is stated as 8, and the analysis rests entirely on 8. DECODE R503 in the corpus does say 10 servos, so the history is right and is not presented as the current rule."
+    },
+    {
+      "name": "citations-verified",
+      "passed": true,
+      "evidence": "The answer cites R101, R102, R105, R501, R502, R503 and R505. Running rules.py verify on all seven with --season biobuzz-2026-27 returned all_valid: true, missing: []."
+    }
+  ],
+  "factual_errors": []
+}

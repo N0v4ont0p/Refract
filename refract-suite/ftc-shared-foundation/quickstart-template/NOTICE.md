@@ -84,8 +84,11 @@ telemetry-by-default wiring, and no documentation scaffolding:
 - The interface-based restructuring itself -- `Drivetrain` / `Shooter` /
   `Turret` / `Intake` as the unit of architecture, each with an example
   concrete implementation (`MecanumDrivetrain`, `FlywheelShooter`,
-  `SingleAxisTurret`, `RollerIntake`) chosen to match this season's actual
-  mechanism options (`season-extensions/decode-2025-26.yaml`).
+  `SingleAxisTurret`, `RollerIntake`) chosen in July 2026 to match the DECODE
+  (2025-26) season's mechanism options (`season-extensions/decode-2025-26.yaml`).
+  Shooter/Turret are DECODE season examples; the BIOBUZZ transition (2026-09)
+  made `ExampleTeleOp` drivetrain+intake only and moved FTC Dashboard telemetry
+  into `tuning/` (BIOBUZZ R704).
 - `opmodes/TeamOpMode.java`: a base OpMode class that seals FTCLib's
   `CommandOpMode.initialize()`/`run()` so telemetry wiring can't be skipped
   or bypassed, and so there's no override point left for mechanism logic to

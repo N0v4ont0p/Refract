@@ -1,0 +1,15 @@
+{
+  "scripts_run": [
+    "find \"/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/\" -type f | head -100",
+    "WebSearch: FTC SDK 12.0 AprilTag HIVE BIOBUZZ localization README",
+    "WebSearch: FTC 2026-2027 BIOBUZZ game AprilTag",
+    "WebFetch: https://github.com/FIRST-Tech-Challenge/FtcRobotController (v12.0 AprilTag notes)"
+  ],
+  "files_read": [
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/HiveRelocalizer.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/team-config.yaml",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TurretAim.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/LauncherSubsystem.java",
+    "/Users/georgehu/Desktop/FTC Training AI/.claude/skills/ftc-code-review/evals/fixtures/biobuzz-robot/TeamCode/TelemetryHelper.java"
+  ]
+}

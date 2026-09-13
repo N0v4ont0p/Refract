@@ -1,3 +1,17 @@
+> SDK VERSION SCOPE (added by Refract, 2026-09-13): the code below predates FTC SDK v12.0 (2026-09-12). In
+> v12.0 the base `AprilTagDetection` type no longer has `.id`, `.metadata` or `.center` — verified by compiling
+> the SDK 11.1 AprilTag samples against the 12.0.0 libraries (compile errors on exactly those fields);
+> `.ftcPose` / `.robotPose` still compile. Check `instanceof AprilTagSingleDetection` /
+> `AprilTagClusterDetection` and cast before reading tag identity (v12.0 README, Breaking Changes).
+
+> SEASON SCOPE (added by Refract, 2026-09-13): this whole example is DECODE (2025-26)-specific: it
+> reads the DECODE MOTIF AprilTags (IDs 21/22/23 = GPP/PGP/PPG; 20/24 = goals) and drives to DECODE
+> Artifact rows. Only the Pedro follower/path API usage is generic. It does not describe BIOBUZZ
+> (2026-27). For BIOBUZZ facts read `ftc-shared-foundation/season-extensions/biobuzz-2026-27.yaml`.
+> BIOBUZZ has no MOTIF; BIOBUZZ AprilTags (IDs 30-45) are clusters of 4 on the underside of the
+> tipping HIVE's CELLs and, per the FTC SDK v12.0 README, move and are not suitable for absolute field
+> localization.
+
 > Source: https://github.com/Pedro-Pathing/Docs/blob/531ad19facd351052d3353edacf96d4a1c489e4c/content/docs/pathing/examples/apriltagpatternauto.mdx · Fetched: 2026-08-06 · Ref: master @ 531ad19facd3 · Original format: mdx, content verbatim
 > Exhaustive mirror (I2 sweep): every reachable doc file from this source is
 > present, not a selection. Completeness is checked by corpus-input-scan.py.

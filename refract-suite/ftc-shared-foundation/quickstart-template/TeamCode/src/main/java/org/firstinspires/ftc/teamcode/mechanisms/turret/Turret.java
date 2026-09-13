@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.mechanisms.turret;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
- * DECODE mechanism interface: aims a {@link org.firstinspires.ftc.teamcode.mechanisms.shooter.Shooter}
+ * DECODE (2025-26) mechanism interface -- a season-scoped EXAMPLE, generated only
+ * for a config that declares a turret. Aims a {@link org.firstinspires.ftc.teamcode.mechanisms.shooter.Shooter}
  * independently of drivetrain heading (season-extensions/decode-2025-26.yaml's
  * {@code turret: [none, single_axis, multi_axis]} axis; this interface fits
  * single_axis, the case this template ships an example for). A turret only

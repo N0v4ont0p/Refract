@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """
-Deterministic trajectory + launch-angle solver for the DECODE artifact (§9; Phase-1; team 24089).
+Deterministic trajectory + launch-angle solver, per season and scoring element (§9; Phase-1; team 24089).
+
+  --season <slug> (default season-extensions/ACTIVE)  --element <name> (file stem in physics/<season>/)
+  No-drag angle needs only gravity (season-invariant, physics/invariants.json). The drag-aware angle
+  needs the element's diameter/mass/drag — if physics/<season>/<element>.json doesn't exist it
+  ABSTAINS (null + reason) instead of borrowing another season's ball: DECODE's constants model a 5 in
+  hollow 75 g Artifact; BIOBUZZ launches ~2.8 in POLLEN / ~3.6 in NECTAR whose mass the manual does
+  not state.
 
 This is the WORKING artifact of the shooter-finding's PHYSICS counterexample leg. Team 24089
 (Iron Lions) took the physics route (proj_motion.py) rather than an empirical table — but their
 launch-angle solver (proj_motion.py:39) is broken WIP and their gravity constant was wrong.
 Per Phase-1 this script:
-  * CONSUMES structured constants from references/physics/decode-artifact-ballistics.json, with
+  * CONSUMES structured constants from references/physics/decode-2025-26/artifact.json, with
     gravity CORRECTED at the source (385 -> 386.4 in/s^2) — G below is read FROM that file, not
     hardcoded, so the correction is wired in, not just noted.
   * Provides a CORRECT closed-form launch-angle solver (replacing the broken proj_motion.py:39).
@@ -18,9 +25,36 @@ Deterministic-first (operating rule 1): the model reads these numbers; it never 
 import json, math, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CONST_PATH = os.path.join(HERE, "..", "references", "physics", "decode-artifact-ballistics.json")
-CONST = json.load(open(CONST_PATH))
-G = CONST["gravity_in_s2"]   # 386.4 in/s^2 — corrected value, read FROM the constants file
+PHYS = os.path.join(HERE, "..", "references", "physics")
+G = json.load(open(os.path.join(PHYS, "invariants.json")))["gravity_in_s2"]   # 386.4 in/s^2, read FROM data
+CONST = None  # element constants, set by load_element()
+
+
+def active_season():
+    d = HERE
+    while True:
+        for cand in (os.path.join(d, "season-extensions", "ACTIVE"),
+                     os.path.join(d, "ftc-shared-foundation", "season-extensions", "ACTIVE")):
+            if os.path.isfile(cand):
+                return open(cand).read().strip()
+        if os.path.dirname(d) == d:
+            return None
+        d = os.path.dirname(d)
+
+
+def load_element(season, element=None):
+    """Returns (path, reason). Sets CONST when an element constants file exists for the season."""
+    global CONST
+    sdir = os.path.join(PHYS, season or "")
+    have = sorted(f[:-5] for f in os.listdir(sdir) if f.endswith(".json")) if season and os.path.isdir(sdir) else []
+    if element is None and len(have) == 1:
+        element = have[0]
+    if element is None or element not in have:
+        return None, (f"no ballistics constants for element {element!r} in season {season!r} (have: {have}) — "
+                      f"drag-aware angle withheld; measure the element's mass/diameter and add physics/{season}/<element>.json")
+    path = os.path.join(sdir, element + ".json")
+    CONST = json.load(open(path))
+    return path, None
 
 
 def solve_launch_angle(d, h, v0, high_arc=False):
@@ -132,7 +166,8 @@ def solve_with_drag(d, h, v0, high_arc=False, tol=0.5):
 
 
 def _demo():
-    print(f"gravity consumed by solver: {G} in/s^2  (corrected from 24089's 385.0)")
+    load_element("decode-2025-26", "artifact")
+    print(f"gravity consumed by solver: {G} in/s^2  (corrected from 24089's 385.0); demo element: DECODE artifact")
     print(f"{'d(in)':>6} {'h(in)':>6} {'v0':>5} | {'no-drag':>9} {'drag-aware':>11}")
     # mix of reachable and out-of-range cases (out-of-range correctly reports 'unreach' —
     # where 24089's broken solver would crash). max level range = v0^2/g.
@@ -147,7 +182,9 @@ def _demo():
 if __name__ == "__main__":
     import argparse, sys
     ap = argparse.ArgumentParser(
-        description="Deterministic DECODE launch-angle solver. Model calls this; it never computes the angle itself.")
+        description="Deterministic launch-angle solver. Model calls this; it never computes the angle itself.")
+    ap.add_argument("--season", help="season slug (default: season-extensions/ACTIVE)")
+    ap.add_argument("--element", help="scoring element constants file stem, e.g. artifact")
     ap.add_argument("-d", "--distance", type=float, help="horizontal distance to target (in)")
     ap.add_argument("-t", "--height", type=float, default=0.0, help="target height above launch point (in)")
     ap.add_argument("-v", "--speed", type=float, help="launch speed v0 (in/s)")
@@ -163,17 +200,23 @@ if __name__ == "__main__":
                           "reason": "need both --distance and --speed; height defaults to 0. Without them the angle is undetermined — I will not guess it."}))
         sys.exit(3)
 
+    season = a.season or active_season()
+    epath, why = load_element(season, a.element)
     nod = solve_launch_angle(a.distance, a.height, a.speed, a.high_arc)
-    drg = solve_with_drag(a.distance, a.height, a.speed, a.high_arc)
+    drg = solve_with_drag(a.distance, a.height, a.speed, a.high_arc) if epath else None
     out = {
         "inputs": {"distance_in": a.distance, "height_in": a.height, "v0_in_s": a.speed, "arc": "high" if a.high_arc else "low"},
         "gravity_in_s2": G,
-        "gravity_source": "references/physics/decode-artifact-ballistics.json (corrected 385->386.4)",
+        "gravity_source": "references/physics/invariants.json",
+        "season": season,
+        "element_constants": epath and os.path.relpath(epath, os.path.join(HERE, "..")),
         "no_drag_angle_deg": None if nod is None else round(math.degrees(nod), 2),
         "drag_aware_angle_deg": None if drg is None else round(math.degrees(drg), 2),
         "reachable": nod is not None,
         "caveat": "A correct solver proves the physics is tractable; it is NOT evidence any team fields physics-based power. Report drag-aware if acting on it.",
     }
+    if why:
+        out["drag_aware_abstain"] = why
     if nod is None:
         out["note"] = "Target unreachable at this speed (need higher v0). Max level range = v0^2/g."
     print(json.dumps(out, indent=2))

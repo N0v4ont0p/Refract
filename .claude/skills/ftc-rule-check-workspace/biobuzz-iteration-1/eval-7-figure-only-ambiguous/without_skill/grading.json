@@ -1,0 +1,15 @@
+{
+  "assertions": [
+    {
+      "name": "cites-tile-with-tier",
+      "passed": false,
+      "evidence": "The answer never mentions a tile coordinate. There is no 'A1' anywhere, so it gives no tile for the red GARDEN and no tier label saying the Field Setup Guide is a field document rather than a manual rule. The Event Field Setup Guide appears only as a 'check this' pointer and in Sources. The corpus (season-extensions/biobuzz-2026-27.yaml field.tile_positions) records garden: {red: A1, blue: F6}, sourced from Event Field Setup Guide V1.0 \u00a78.3-8.4 as an 'official field doc, not rule text'. No command read that file."
+    },
+    {
+      "name": "orientation-figure-only",
+      "passed": false,
+      "evidence": "The answer asserts a physical corner outright: 'The red GARDEN is in the bottom-left corner, running along the bottom wall' and 'It's on your side'. It also gives LOADING ZONE and blue GARDEN positions. These come from its own reading of rendered Figures 9-2 and 9-3 (pg-065.png, pg-066.png), not from the tile-grid figures (Fig 9-4/9-5) the eval requires. A late hedge says to 'check the Event Field Setup Guide or look at a real field', but that does not undo the definite corner claims and never points to the tile-grid figure."
+    }
+  ],
+  "factual_errors": []
+}

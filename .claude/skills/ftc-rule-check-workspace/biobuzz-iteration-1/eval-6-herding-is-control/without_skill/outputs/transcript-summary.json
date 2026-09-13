@@ -1,0 +1,15 @@
+{
+  "scripts_run": [
+    "WebSearch: FTC BIOBUZZ 2026-2027 competition manual pollen control possession herding",
+    "WebFetch: https://ftc-resources.firstinspires.org/ftc/game/manual",
+    "mkdir -p .../scratchpad/evalruns && pdftotext -layout <downloaded manual pdf> manual.txt && grep -n -i CONTROL manual.txt",
+    "grep -n -E \"CONTROL(LING|S)?\\b|herd|plow|bulldoz|push\" manual.txt",
+    "sed -n 3500,3550p manual.txt; sed -n 5905,5945p manual.txt; grep -n MOMENTARY manual.txt",
+    "grep -n G4xx rule headers and STRATEGIC definition in manual.txt",
+    "sed -n 3482,3489p; sed -n 3591,3604p; sed -n 3696,3712p manual.txt"
+  ],
+  "files_read": [
+    "/Users/georgehu/.claude/projects/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/tool-results/webfetch-1789273664923-awwgvg.pdf",
+    "/private/tmp/claude-501/-Users-georgehu-Desktop-FTC-Training-AI/95cb109b-9a3f-4bed-97ed-a0ec2881d9b9/scratchpad/evalruns/manual.txt"
+  ]
+}
