@@ -36,7 +36,7 @@ BIOBUZZ manual changed three of these, see SEASONS notes):
 import argparse, re, json, os, sys
 from html.parser import HTMLParser
 
-ROOT = "/Users/georgehu/Desktop/FTC Training AI"
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))  # repo root (was a stale absolute path)
 RULES_BASE  = f"{ROOT}/.claude/skills/ftc-rule-check/references/rules"
 TABLES_BASE = f"{ROOT}/.claude/skills/ftc-hardware-lookup/references/manual-tables"
 
@@ -48,6 +48,7 @@ SEASONS = {
         "in_dir": f"{ROOT}/corpus-staging/manual",
         # DECODE ingest predates legend parsing; its verified definition inventory was A,E,G,I,R,T.
         "series_override": "AEGIRT",
+        "s126_baseline": ("R619", 14),   # §12.6 R601-R619, 14 edges (original hand-checked sample)
         "non_rule_tokens": {},
         "meta": {
             "season": "decode-2025-26",
@@ -64,6 +65,9 @@ SEASONS = {
     "biobuzz-2026-27": {
         "in_dir": f"{ROOT}/corpus-staging/manual-biobuzz-2026-27",
         "series_override": None,
+        # §12.6 R601-R613 in V1; 12 edges, spot-checked 2026-10-03 against each rule's text (every
+        # R/G id named in R601-R613 = the edge set, no extras, no misses)
+        "s126_baseline": ("R613", 12),
         "non_rule_tokens": {
             "C270": "Logitech C270 webcam model named in the USB-vision rule's lettered list, not a Section 15 rule",
         },
@@ -470,11 +474,13 @@ def main():
     cited = set(re.findall(r'Table (\d+-\d+)', work))
     P(f"TABLES cited, not extracted (figure/image or caption mis-aligned — REVIEW): {sorted(cited - set(tbl_by_id), key=lambda x: [int(n) for n in x.split('-')])}")
     P(f"LONGEST rule chunk   : {max((len(r['text']), r['rule_id']) for r in rules)}")
-    # regression check vs known sample (the §12.6 sample is DECODE's; informational elsewhere)
+    # regression check vs this season's hand-checked §12.6 baseline (re-baseline per season, never reuse)
     r_ids = [r['rule_id'] for r in rules if r['rule_id'].startswith('R6')]
     P(f"REGRESSION §12.6 R6xx present: {sorted(r_ids)[:25]}")
-    s126 = [e for e in edges if e['from_rule'].startswith('R6') and e['from_rule']<='R619' and e['from_rule']>='R601']
-    P(f"REGRESSION §12.6 edges count : {len(s126)} (sample had 14)")
+    last, expected = cfg.get("s126_baseline") or ("R699", None)
+    s126 = [e for e in edges if 'R601' <= e['from_rule'] <= last]
+    P(f"REGRESSION §12.6 edges count : {len(s126)} (R601-{last} baseline: {expected if expected is not None else 'NONE — spot-check and add s126_baseline'})"
+      + ("" if expected in (None, len(s126)) else "  <-- MISMATCH, review"))
     if dangling:
         sample = sorted({d['from_rule'] + "->" + d['to_rule'] for d in dangling})[:20]
         P("DANGLING sample: " + ", ".join(sample))

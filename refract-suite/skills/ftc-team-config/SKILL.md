@@ -21,7 +21,7 @@ standing-principles) — never by handing off mid-turn to another skill.
 | File | Role |
 |---|---|
 | `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/core-feature-model.yaml` | season-invariant axes — the only legal vocabulary for config values |
-| `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/season-extensions/ACTIVE` → `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/season-extensions/<slug>.yaml` | the current season's mechanism set and constraints |
+| `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/season-extensions/ACTIVE` → `${CLAUDE_PLUGIN_ROOT}/ftc-shared-foundation/season-extensions/<slug>.yaml` | the season's mechanism set and constraints — selected by the config's `_meta.season`, else ACTIVE |
 | `team-config.yaml` (team's project root) | **written by this skill** — the confirmed config, with per-field provenance |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-team-config/scripts/extract_feature_vector.py` | deterministic inference from the team's repo |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-team-config/scripts/validate_config.py` (this skill) | deterministic validation: axis membership, season constraints, mandatory-set confirmation |
@@ -189,7 +189,10 @@ The block's *shape* follows `software_stack.pathing`, and the shapes genuinely d
 three builder-chained constants objects, RoadRunner's single flat `Params` class with entirely
 different field names and no `mass` at all, and no standard container whatsoever for a team running
 `custom`/`none`. Read the relevant `library-docs/<library>/` before naming fields; don't assume one
-library's shape from another's.
+library's shape from another's. Pedro 3.0 (`com.pedropathing:revhub:3.x` in `build.dependencies.gradle`)
+replaced the three builder-chained objects with lambda configs (`MecanumConfig`, `PinpointConfig`,
+`ForesightConfig`) — read `library-docs/pedro-pathing-3/` for its field names and tuner result keys;
+`library-docs/pedro-pathing/` is 2.x only.
 
 **Hub generation is time-gated.** Read the season start year from the ACTIVE slug (e.g.
 `biobuzz-2026-27` → 2026). Through the 2026-27 season, the REV Control Hub is the sole legal
@@ -219,7 +222,7 @@ This is the line that governs the whole skill:
 Write `team-config.yaml` to the team's project root. Schema:
 
 ```yaml
-_meta: {schema: 1, season: <ACTIVE slug>, updated: <date>, suite_generated_code: true}   # season stamp + lineage marker — see below
+_meta: {schema: 1, season: <slug>, updated: <date>, suite_generated_code: true}   # season: <slug> (e.g. biobuzz-2026-27) — season stamp + lineage marker, see below
 team: {number: 19859, experience: veteran}
 drivetrain:
   type: {value: mecanum, source: asked, confirmed: true}
@@ -248,8 +251,9 @@ control for physical constants. A number may only appear under `measured`; `untu
 
 **`_meta.season` is mandatory whenever `season_mechanisms` or `archetypes` are recorded** — write the
 ACTIVE slug at confirmation time. The season layer is only true for the game it was confirmed for;
-`validate_config.py` blocks generation on an unstamped config and on one stamped for a different
-season than ACTIVE.
+`validate_config.py` validates mechanisms against the config's `_meta.season` extension (else ACTIVE),
+reports it as `season_used`, blocks generation on an unstamped config, and warns when `season_used`
+differs from ACTIVE.
 
 `source` records how each value arrived (`inferred` vs `asked`); `config_history` appends — a
 mechanism added in week 6 must not silently overwrite what was true in week 1, because "when did
@@ -257,9 +261,9 @@ the config change" is exactly the question that matters when behavior changes at
 
 ### 5b. Season boundary — carry the core, re-elicit the season layer
 
-When `validate_config.py` reports `season_mechanisms/archetypes confirmed for <old>, but the active
-season is <new>`, the team is moving to a new game. Do **not** start from scratch and do **not**
-translate old mechanisms into new names ("shooter" → "hive_launcher" is a guess about the team's new
+When `validate_config.py` warns `validated against <old>, but season-extensions/ACTIVE is <new>`
+(and the team is building for the new game), the team is moving to a new game. Do **not** start from scratch and do **not**
+translate old mechanisms into new names ("shooter" → "launcher" is a guess about the team's new
 robot, not a fact):
 
 1. Keep every core axis (drivetrain, localization, software_stack, device_map entries for hardware
@@ -288,7 +292,7 @@ Three structural rules that shape what `generation_allowed` actually authorizes,
 here too even though ftc-construct is the one that enforces them:
 
 - **Interfaces are derived, not enumerated.** `Drivetrain` is the one always-present interface.
-  Every other mechanism interface comes from the keys of the ACTIVE season extension's
+  Every other mechanism interface comes from the keys of the season extension's (config `_meta.season`, else ACTIVE)
   `season_mechanisms` block — one interface per declared mechanism the config actually selects.
   No hardcoded mechanism list anywhere: when the season changes, the interface set changes with
   the season file, not with a code edit.

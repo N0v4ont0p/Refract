@@ -35,6 +35,15 @@ def tu_num(s):
     return max(nums) if nums else None
 
 
+def stored_tu(incorporates_through):
+    """TU number the stored corpus incorporates. A base manual with no Team Update marker
+    ("base V1", "base manual") is TU 0 — comparable, so a live TU >= 1 reads STALE, not UNVERIFIABLE."""
+    n = tu_num(incorporates_through)
+    if n is None and re.search(r"\bbase\b", incorporates_through or "", re.I):
+        return 0
+    return n
+
+
 def names_game(page, game, min_mentions=5):
     """Visible-text, whole-word, case-sensitive count of the game name. A substring test is fooled:
     the BIOBUZZ manual HTML carries a reused photo whose alt attribute reads "...DECODE Presented by
@@ -58,7 +67,7 @@ def check(season, live_tu=None, live_game=None):
         return {"status": "UNVERIFIABLE", "flag": True, "season": season,
                 "reason": f"no stored corpus registered for season '{season}' — cannot judge currency"}
     meta = json.loads(corpus.read_text())["meta"]
-    stored = tu_num(meta.get("incorporates_through"))
+    stored = stored_tu(meta.get("incorporates_through"))
     err = None
     game = meta.get("game_name")
     if live_tu is None or live_game is None:
@@ -105,6 +114,8 @@ def _self_test():
     assert check("biobuzz-2026-27", live_tu=3, live_game="BIOBUZZ")["status"] == "STALE"
     assert check("no-such-season", live_tu=1)["status"] == "UNVERIFIABLE"
     assert tu_num("incorporates Team Update 09 and Team Update 32") == 32
+    assert stored_tu("base V1 (no Team Updates yet)") == 0 and stored_tu("Team Update 00") == 0
+    assert stored_tu("") is None  # no marker and not a base manual: still unverifiable
     assert not names_game('<img alt="DECODE Presented by RTX playing field">' + "BIOBUZZ " * 40, "DECODE")
     assert names_game("<p>BIOBUZZ</p> " * 6, "BIOBUZZ")
     print("self-test OK")

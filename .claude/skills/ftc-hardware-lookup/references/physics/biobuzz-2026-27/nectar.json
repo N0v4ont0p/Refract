@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "source": "BIOBUZZ Competition Manual V1 (2026-09-12) \u00a79.8",
+    "verified": "diameter and material only \u2014 quoted from the manual",
+    "not_in_manual": "mass, hollow/solid, drag coefficient \u2014 solver abstains until measured on a real element",
+    "manual_caveat": "not perfectly spherical and may vary in size; no numeric tolerance (\u00a79.8)"
+  },
+  "ball": {
+    "diameter_in": 3.6,
+    "diameter_note": "approximately 3.6 in (\u00a79.8)",
+    "material": "Gopher ResisDent polyethylene ball, red (am-5852_red) / blue (am-5852_blue)"
+  }
+}

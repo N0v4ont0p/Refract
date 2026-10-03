@@ -26,7 +26,7 @@
         },
         {
           "name": "launcher-not-flagged",
-          "text": "LauncherSubsystem.java is NOT flagged \u2014 hive_launcher is declared flywheel"
+          "text": "LauncherSubsystem.java is NOT flagged \u2014 launcher is declared flywheel"
         }
       ]
     },

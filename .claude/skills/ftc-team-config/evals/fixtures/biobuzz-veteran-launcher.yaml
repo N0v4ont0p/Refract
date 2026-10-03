@@ -19,13 +19,14 @@ fabrication:
   capability: {value: stock_gobilda_rev, source: asked, confirmed: true}
 season_mechanisms:
   intake: {value: roller, source: asked, confirmed: true}
-  hive_launcher: {value: flywheel, source: asked, confirmed: true}
+  element_handling: {value: pollen_and_nectar, source: asked, confirmed: true}
+  element_sorting: {value: active, source: asked, confirmed: true}
+  launcher: {value: flywheel, source: asked, confirmed: true}
+  launcher_count: {value: 1, source: asked, confirmed: true}
   turret: {value: none, source: asked, confirmed: true}
-  aim_vision: {value: none, source: asked, confirmed: true}
-  element_color_sensing: {value: present, source: asked, confirmed: true}
-  capacity_limiter: {value: present, source: asked, confirmed: true}
-  flower_placer: {value: none, source: asked, confirmed: true}
-  flower_pollen_retrieval: {value: none, source: asked, confirmed: true}
-  endgame_parking: {value: loading_zone_park, source: asked, confirmed: true}
+  flower_placement: {value: none, source: asked, confirmed: true}
+  flower_retrieval: {value: none, source: asked, confirmed: true}
+  garden_herding: {value: none, source: asked, confirmed: true}
+  endgame_parking: {value: loading_zone, source: asked, confirmed: true}
 tuning_constants:
   tuning_status: {value: untuned, source: asked, confirmed: true}

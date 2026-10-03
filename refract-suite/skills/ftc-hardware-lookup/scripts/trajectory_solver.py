@@ -28,6 +28,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PHYS = os.path.join(HERE, "..", "references", "physics")
 G = json.load(open(os.path.join(PHYS, "invariants.json")))["gravity_in_s2"]   # 386.4 in/s^2, read FROM data
 CONST = None  # element constants, set by load_element()
+NEEDED = ["ball.diameter_in", "ball.mass_slug", "drag.Cd", "drag.effective_area_factor",
+          "air.density_slug_in3", "sim.dt_s"]   # everything simulate() reads
 
 
 def active_season():
@@ -49,11 +51,18 @@ def load_element(season, element=None):
     have = sorted(f[:-5] for f in os.listdir(sdir) if f.endswith(".json")) if season and os.path.isdir(sdir) else []
     if element is None and len(have) == 1:
         element = have[0]
+    if element is None and have:
+        return None, f"season {season!r} has several elements {have} — pass --element; drag-aware angle withheld"
     if element is None or element not in have:
         return None, (f"no ballistics constants for element {element!r} in season {season!r} (have: {have}) — "
                       f"drag-aware angle withheld; measure the element's mass/diameter and add physics/{season}/<element>.json")
     path = os.path.join(sdir, element + ".json")
-    CONST = json.load(open(path))
+    c = json.load(open(path))
+    missing = [k for k in NEEDED if (c.get(k.split(".")[0]) or {}).get(k.split(".")[1]) is None]
+    if missing:  # manual-verified size alone is not enough to simulate drag — never default the rest
+        return None, (f"{season}/{element}.json lacks {missing} — drag-aware angle withheld until measured "
+                      f"(the manual gives size/material only)")
+    CONST = c
     return path, None
 
 
@@ -166,6 +175,8 @@ def solve_with_drag(d, h, v0, high_arc=False, tol=0.5):
 
 
 def _demo():
+    # a size-only element file (no measured mass/drag) must abstain, never simulate on defaults
+    assert load_element("biobuzz-2026-27", "pollen")[0] is None and CONST is None
     load_element("decode-2025-26", "artifact")
     print(f"gravity consumed by solver: {G} in/s^2  (corrected from 24089's 385.0); demo element: DECODE artifact")
     print(f"{'d(in)':>6} {'h(in)':>6} {'v0':>5} | {'no-drag':>9} {'drag-aware':>11}")

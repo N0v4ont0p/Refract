@@ -28,7 +28,7 @@ its deterministic-first, abstention, and Rule-7 sections are the backbone of eve
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/catalogs/INDEX.json` | coverage map + the **abstain rule** for gaps |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/motor_math.py` | ALL gear/torque/speed/tick arithmetic; abstains on unseeded parts |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/manual-tables/<season>/*.json` + `INDEX.json` | the game manual's legal-parts tables, one directory per season slug (§9 side of the §8↔§9 pointer) |
-| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/physics/{invariants.json,<season>/<element>.json}` + `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py` | gravity (season-invariant) + per-season scoring-element constants + solver |
+| `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/physics/{invariants.json,<season>/<element>.json}` + `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/scripts/trajectory_solver.py` | gravity (season-invariant) + per-season scoring-element constants + solver. Season = `--season`, else ACTIVE. `decode-2025-26/artifact.json` (full ballistics); `biobuzz-2026-27/{pollen,nectar}.json` = manual-verified diameter/material only — no mass/drag, so the drag-aware angle **abstains** until measured |
 | `${CLAUDE_PLUGIN_ROOT}/skills/ftc-hardware-lookup/references/hub-generations/*.md` | control-system briefings — **hosted here, read by ftc-team-config** on its time gate |
 
 Other skills read these by path directly (the REQ-77 canonical path table in standing-principles);

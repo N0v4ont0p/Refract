@@ -29,8 +29,8 @@ report, you do not modify the codebase.
 These files live at the repo root, OUTSIDE any skill's reference tree, so nothing
 pulls them in for you automatically. At the start of every review, read:
 1. `core-feature-model.yaml` (the season-invariant schema),
-2. `season-extensions/ACTIVE` (one line: the live season slug), then
-3. `season-extensions/<that-slug>.yaml` (the active season's mechanisms).
+2. the team config's `_meta.season`, else `season-extensions/ACTIVE` (one line: the live season slug), then
+3. `season-extensions/<that-slug>.yaml` (that season's mechanisms).
 
 Review the codebase *against the team's declared/confirmed config*. Code that
 references a feature the config doesn't declare is a finding ("not referenced by

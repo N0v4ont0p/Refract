@@ -8,6 +8,5 @@ drivetrain: {type: {value: mecanum, confirmed: true}}
 software_stack: {opmode_style: {value: raw_linear_opmode, confirmed: true}, pathing: {value: pedro_pathing, confirmed: true}}
 season_mechanisms:
   intake: {value: roller, confirmed: true}
-  hive_launcher: {value: flywheel, confirmed: true}
+  launcher: {value: flywheel, confirmed: true}
   turret: {value: none, confirmed: true}
-  aim_vision: {value: none, confirmed: true}

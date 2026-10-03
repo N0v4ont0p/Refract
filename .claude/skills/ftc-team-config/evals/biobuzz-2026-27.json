@@ -7,7 +7,7 @@
       "id": 1,
       "name": "season-boundary-carry-core",
       "prompt": "it's kickoff! we want to start our BIOBUZZ robot code. here's our config from last season.",
-      "expected_output": "validate_config reports the season layer was confirmed for decode-2025-26. The skill keeps core axes (swerve, Limelight, Pinpoint, Pedro, command-based) and re-confirms them in one line; re-asks season mechanisms from the BIOBUZZ file's keys (intake, hive_launcher, turret, aim_vision, ...) without mapping 'shooter: flywheel' to 'hive_launcher: flywheel' on its own; drops the DECODE archetype fixed_shooter_on_swerve; restamps _meta.season and appends config_history. If ACTIVE still points at DECODE or the BIOBUZZ file is DRAFT, it says the season transition isn't signed off rather than eliciting against it.",
+      "expected_output": "validate_config reports the season layer was confirmed for decode-2025-26. The skill keeps core axes (swerve, Limelight, Pinpoint, Pedro, command-based) and re-confirms them in one line; re-asks season mechanisms from the BIOBUZZ file's keys (intake, launcher, turret, element_handling, ...) without mapping 'shooter: flywheel' to 'launcher: flywheel' on its own; drops the DECODE archetype fixed_shooter_on_swerve; restamps _meta.season and appends config_history. If ACTIVE still points at DECODE or the BIOBUZZ file is DRAFT, it says the season transition isn't signed off rather than eliciting against it.",
       "files": [
         "evals/fixtures/veteran-swerve-turret.yaml"
       ],

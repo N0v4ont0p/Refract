@@ -24,7 +24,7 @@ unless stated otherwise.
 | `team-config.yaml` (team's project root) | the confirmed config this generation is *against* — read first, never re-elicited here |
 | `.claude/skills/ftc-team-config/scripts/validate_config.py` | authoritative `generation_allowed` gate — read by path, not re-implemented |
 | `refract-suite/ftc-shared-foundation/quickstart-template/` | the interface-based scaffolding source (Drivetrain fixed + per-mechanism interfaces derived from `season_mechanisms`) |
-| `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/`, `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `andymark/` (BIOBUZZ StarterBot summary, tier 2), `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/`, `ticktree/` (Phase G — pre-alpha, API unstable) |
+| `refract-suite/ftc-shared-foundation/references/library-docs/<library>/` | grounded API usage — `pedro-pathing/` (2.x), `pedro-pathing-3/` (3.0), `ftclib/`, `roadrunner/`, `rev-robotics/`, `limelight/`, `gobilda-build-guides/`, `andymark/` (BIOBUZZ StarterBot summary, tier 2), `ftc-sdk/`, `easyopencv/`, `ftc-dashboard/`, `ticktree/` (Phase G — pre-alpha, API unstable) |
 | `.claude/skills/ftc-corpus-builder/references/patterns/*.yaml` | provenance-tagged elite-team patterns — cited with confidence/provenance displayed faithfully, same discipline as ftc-code-review |
 | `.claude/skills/ftc-hardware-lookup/references/catalogs/` + `scripts/motor_math.py` | any spec/tuning value used in generated code — read by path, never guessed |
 | `.claude/skills/ftc-code-review/scripts/{config_lint.py,failure_mode_lint.py}` | mandatory post-generation verification (step 5 below) |
@@ -56,7 +56,8 @@ costs one turn.
 
 Same rule as ftc-team-config's generation-rules section: `Drivetrain` is the one always-fixed
 interface; every other mechanism interface comes from the confirmed config's `season_mechanisms`
-keys, resolved through `season-extensions/ACTIVE`. No hardcoded mechanism list — read the config,
+keys, resolved through the config's `_meta.season`, else `season-extensions/ACTIVE` (the
+validator's `season_used`). No hardcoded mechanism list — read the config,
 not a memory of what any one season happens to have.
 
 ### 2. Scaffold from the quickstart template
@@ -66,7 +67,7 @@ example implementations written for the **DECODE (2025-26)** mechanism set (`Mec
 `FlywheelShooter`, `SingleAxisTurret`, `RollerIntake`) plus a telemetry-by-default `TeamOpMode` base and
 `RobotConstants`. Those examples are season-scoped: the template's `ExampleTeleOp` wires a shooter and
 turret unconditionally, which is only right for a config that selects both. Mechanism keys and class
-names follow the ACTIVE season file (BIOBUZZ's launcher is `hive_launcher`, not `shooter`); reuse a
+names follow the ACTIVE season file (BIOBUZZ's launcher is `launcher`, not `shooter`); reuse a
 DECODE example's *structure* (velocity-controlled flywheel, subsystem ownership) only after checking
 it against the new season's rules and `code_constraints`. Match what the config actually selects:
 
@@ -116,6 +117,11 @@ it against the new season's rules and `code_constraints`. Match what the config 
   relevant axis actually selects:
   - `software_stack.pathing` / `software_stack.opmode_style` → Pedro Pathing / RoadRunner / FTCLib's
     command framework / raw SDK;
+  - **Pedro version comes from the team's `build.dependencies.gradle`, not memory:**
+    `com.pedropathing:ftc:2.x` → `pedro-pathing/` (2.x: `FollowerBuilder`, `FollowerConstants`,
+    `MecanumConstants`, `PinpointConstants`); `com.pedropathing:revhub:3.x` → `pedro-pathing-3/`
+    (3.0: `new Follower(localizer, drivetrain, algorithm)`, lambda configs). The two APIs do not mix;
+    no Pedro dependency found → ask, don't pick;
   - `sensing.vision` → `limelight/` when `limelight_3a`, **`easyopencv/` when `webcam_easyopencv`**
     — this axis is in scope exactly like `software_stack` is; never skip grounding a vision pipeline
     just because vision isn't `software_stack`.

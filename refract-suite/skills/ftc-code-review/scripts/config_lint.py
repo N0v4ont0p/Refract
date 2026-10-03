@@ -65,7 +65,7 @@ def check(code_dir, config_path):
     cfg = yaml.safe_load(Path(config_path).read_text()) or {}
     mechs = cfg.get("season_mechanisms", {})
     # mechanism key -> identifier tokens come from the season file's `code_tokens` (season data: a
-    # hardcoded DECODE map made a BIOBUZZ `hive_launcher: none` + LauncherSubsystem report clean)
+    # hardcoded DECODE map made a BIOBUZZ `launcher: none` + LauncherSubsystem report clean)
     slug, season = season_file(val((cfg.get("_meta") or {}).get("season")))
     tokens = season.get("code_tokens") or {}
     declared_none = [k for k, node in mechs.items() if val(node) == "none"]
@@ -127,10 +127,10 @@ def _self_test():
     # season data, not a DECODE map: a BIOBUZZ launcher declared none but present in code must flag,
     # and a `none` mechanism the season file has no token entry for must be reported unchecked
     Path(d, "bb.yaml").write_text("_meta: {season: biobuzz-2026-27}\nseason_mechanisms:\n"
-                                  "  hive_launcher: {value: none, confirmed: true}\n  made_up_mech: {value: none, confirmed: true}\n")
+                                  "  launcher: {value: none, confirmed: true}\n  made_up_mech: {value: none, confirmed: true}\n")
     (src / "LauncherSubsystem.java").write_text("class LauncherSubsystem {}")
     r = check(src, Path(d, "bb.yaml"))
-    assert r["season"] == "biobuzz-2026-27" and r["findings"][0]["mechanism"] == "hive_launcher", r
+    assert r["season"] == "biobuzz-2026-27" and r["findings"][0]["mechanism"] == "launcher", r
     (src / "Telem.java").write_text("import com.acmerobotics.dashboard.FtcDashboard; t = new MultipleTelemetry(ds, FtcDashboard.getInstance().getTelemetry());")
     (src / "Tunables.java").write_text("import com.acmerobotics.dashboard.config.Config; @Config class Tunables {}")  # exposure, not streaming
     (src / "Vision.java").write_text("for (AprilTagDetection d : dets) { use(d.id); }")

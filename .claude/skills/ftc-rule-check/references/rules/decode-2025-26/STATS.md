@@ -16,5 +16,5 @@ GLOSSARY terms       : 76
 TABLES cited, not extracted (figure/image or caption mis-aligned — REVIEW): ['13-2', '13-4', '13-5', '13-6', '13-8']
 LONGEST rule chunk   : (3339, 'G301')
 REGRESSION §12.6 R6xx present: ['R601', 'R602', 'R603', 'R604', 'R605', 'R606', 'R607', 'R608', 'R609', 'R610', 'R611', 'R612', 'R613', 'R614', 'R615', 'R616', 'R617', 'R618', 'R619']
-REGRESSION §12.6 edges count : 14 (sample had 14)
+REGRESSION §12.6 edges count : 14 (R601-R619 baseline: 14)
 ```

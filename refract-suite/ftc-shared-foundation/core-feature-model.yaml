@@ -162,6 +162,12 @@ tuning_constants:                             # [generative] — shape follows t
   #     (motor names + directions, xVelocity, yVelocity), and a localizer constants object whose
   #     TYPE follows `sensing.odometry` (e.g. PinpointConstants: forwardPodY, strafePodX,
   #     encoderResolution, per-encoder directions).
+  #     That is Pedro 2.x (com.pedropathing:ftc:2.x). Pedro 3.0 (com.pedropathing:revhub:3.x) is a
+  #     different shape: lambda configs MecanumConfig (motor names + directions), a localizer config
+  #     whose TYPE follows `sensing.odometry` (e.g. PinpointConfig: name, podType or ticksPerUnit,
+  #     x/yPodOffset, x/yPodDirection), and ForesightConfig (translational/heading controllers,
+  #     coast/brake kV, brake coefficients, maxAchievable*Velocity, natural*Deceleration) — keys =
+  #     the tuner result names in library-docs/pedro-pathing-3/. Pick by build.dependencies.gradle.
   #   roadrunner   — does NOT mirror Pedro. One flat `Params` inner class on the drive class:
   #     inPerTick, lateralInPerTick, trackWidthTicks, kS, kV, kA, maxWheelVel, min/maxProfileAccel,
   #     maxAngVel, maxAngAccel, axial/lateral/headingGain, axial/lateral/headingVelGain, plus IMU

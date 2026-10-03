@@ -3,11 +3,11 @@
 
 Validates a team-config.yaml against:
   1. core-feature-model.yaml axes            — every value must come from a declared axis (REQ-3)
-  2. the ACTIVE season extension's mechanisms — season mechanism values from its declared lists
+  2. the season extension's mechanisms     — config _meta.season, else ACTIVE; values from its declared lists
   3. constraints_on_core                      — e.g. fixed_shooter_on_swerve requires swerve (REQ-7)
   4. the mandatory-ask set                    — present AND confirmed before generation (REQ-50/REQ-55)
 
-Output: JSON {valid, errors, warnings, unconfirmed_mandatory} on stdout. Exit 1 if invalid.
+Output: JSON {valid, season_used, errors, warnings, unconfirmed_mandatory} on stdout. Exit 1 if invalid.
 Usage: validate_config.py <team-config.yaml> [--suite-root <path>] [--active <season slug>]
 
 Field values may be plain scalars (treated as UNCONFIRMED) or dicts:
@@ -83,10 +83,7 @@ def main():
         suite = find_suite_root(Path(__file__).resolve())
 
     core = yaml.safe_load((suite / "core-feature-model.yaml").read_text())
-    active_slug = (suite / "season-extensions" / "ACTIVE").read_text().strip()
-    if "--active" in args:  # regression runs of a prior season's fixtures: validate as if that season were ACTIVE
-        active_slug = args[args.index("--active") + 1]
-    season = yaml.safe_load((suite / "season-extensions" / f"{active_slug}.yaml").read_text())
+    pointer_slug = (suite / "season-extensions" / "ACTIVE").read_text().strip()
 
     # No team-config.yaml yet is a normal, expected state (a fresh repo, before any elicitation) —
     # not a crash. Treat it as an empty config: every mandatory field falls out as unconfirmed via
@@ -96,12 +93,35 @@ def main():
     cfg = (yaml.safe_load(cfg_path.read_text()) or {}) if config_found else {}
     errors, warnings, unconfirmed = [], [], []
 
-    # --- 0. the ACTIVE season extension itself must be live, not a draft (§19 step 6) ---
+    # --- season selection: --active (fixture regression) > config _meta.season (if its extension
+    # exists) > season-extensions/ACTIVE. `active_slug` below = the season actually used.
+    stamped, _ = unwrap((cfg.get("_meta") or {}).get("season")) if isinstance(cfg.get("_meta"), dict) else (None, False)
+    if "--active" in args:  # regression runs of a prior season's fixtures: validate as if that season were ACTIVE
+        active_slug = pointer_slug = args[args.index("--active") + 1]
+    elif stamped and (suite / "season-extensions" / f"{stamped}.yaml").exists():
+        active_slug = stamped
+    else:
+        active_slug = pointer_slug
+    if active_slug != pointer_slug:
+        warnings.append(f"validated against {active_slug}, but season-extensions/ACTIVE is {pointer_slug} — "
+                        f"this config's season layer is for a different game than the current one")
+    season = yaml.safe_load((suite / "season-extensions" / f"{active_slug}.yaml").read_text()) or {}
+
+    # --- 0. the selected season extension itself must be live, not a draft (§19 step 6) ---
     smeta = season.get("_meta") or {}
     if smeta.get("not_active") or str(smeta.get("status", "")).upper().startswith("DRAFT"):
-        errors.append(f"season-extensions/ACTIVE points at '{active_slug}', which is marked "
+        errors.append(f"season extension '{active_slug}' is marked "
                       f"status={smeta.get('status')!r} not_active={smeta.get('not_active')!r} — a draft "
                       f"season layer cannot validate a config (Season Transition Protocol step 6 sign-off)")
+    declared = season.get("season_mechanisms")
+    if not isinstance(declared, dict):
+        errors.append(f"{active_slug}.yaml season_mechanisms must be a mapping of mechanism -> [options], "
+                      f"got {declared!r}")
+        declared = {}
+    for mech, opts in declared.items():
+        if not isinstance(opts, list):
+            errors.append(f"{active_slug}.yaml season_mechanisms.{mech} = {opts!r} is not a list of options "
+                          f"(a draft/UNKNOWN axis cannot validate a config)")
 
     core_axes = {k: v for k, v in core.items() if not k.startswith("_")}
 
@@ -165,18 +185,14 @@ def main():
 
     # --- 2. season mechanisms ---
     mechs = {} if season_layer_stale else cfg.get("season_mechanisms", {})
-    declared = season.get("season_mechanisms", {})
     for mech, node in (mechs or {}).items():
         value, _ = unwrap(node)
-        decl = declared.get(mech)
-        opts = decl if isinstance(decl, list) else (decl or {}).get("options") if isinstance(decl, dict) else None
-        if decl is None:
+        opts = declared.get(mech)
+        if opts is None:
             errors.append(f"season mechanism '{mech}' not declared in {active_slug}.yaml")
-        elif not opts:
-            # e.g. `turret: UNKNOWN` — no declared option list means nothing can be checked, so the
-            # value cannot count as confirmed (previously a string declaration let any value pass)
-            unconfirmed.append(f"season_mechanisms.{mech} (declared {decl!r} in {active_slug}.yaml — no options to confirm against)")
-        elif opts and value not in opts:
+        elif not isinstance(opts, list):
+            continue  # already an error in check 0
+        elif value not in opts:
             errors.append(f"season_mechanisms.{mech} = {value!r} not in {opts}")
 
     # --- 3. constraints_on_core (REQ-7) ---
@@ -452,7 +468,8 @@ def main():
     result = {
         "valid": not errors,
         "generation_allowed": not errors and not unconfirmed,
-        "active_season": active_slug,
+        "active_season": pointer_slug,
+        "season_used": active_slug,
         "config_found": config_found,
         "errors": errors,
         "warnings": warnings,
